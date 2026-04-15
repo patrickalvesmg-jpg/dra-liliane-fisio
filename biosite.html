@@ -283,7 +283,7 @@
   .hero-nome {
     font-weight: 800;
     font-size: clamp(26px, 7vw, 34px);
-    color: var(--escuro);
+    color: #7B5EA7;
     letter-spacing: -0.025em;
     line-height: 1.1;
     margin-bottom: 4px;
@@ -420,6 +420,35 @@
   .dot.on {
     background: var(--roxo);
     transform: scale(1.3);
+  }
+
+  /* Botões prev/next do carrossel */
+  .carrossel-nav {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 16px;
+    margin-top: 18px;
+  }
+
+  .carr-btn {
+    width: 40px; height: 40px;
+    border-radius: 50%;
+    border: 2px solid var(--roxo-claro);
+    background: var(--branco);
+    color: var(--roxo);
+    font-size: 1.3rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s, color 0.2s, border-color 0.2s;
+    line-height: 1;
+  }
+  .carr-btn:hover {
+    background: var(--roxo);
+    color: var(--branco);
+    border-color: var(--roxo);
   }
 
   .galeria-legenda {
@@ -660,7 +689,7 @@
 
     <!-- Quote -->
     <blockquote class="hero-quote">
-      "Você não precisa sofrer<br>para ser uma boa mãe."
+      "O verdadeiro recomeço acontece no pós-parto. E ele merece atenção, cuidado e acompanhamento especializado."
     </blockquote>
 
     <!-- CTAs -->
@@ -721,12 +750,16 @@
 
     </div>
 
-    <!-- Indicadores -->
-    <div class="dots" id="dots" aria-hidden="true">
-      <div class="dot on"></div>
-      <div class="dot"></div>
-      <div class="dot"></div>
-      <div class="dot"></div>
+    <!-- Navegação -->
+    <div class="carrossel-nav" aria-hidden="true">
+      <button class="carr-btn" id="carr-prev" aria-label="Foto anterior">&#8249;</button>
+      <div class="dots" id="dots">
+        <div class="dot on"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+      </div>
+      <button class="carr-btn" id="carr-next" aria-label="Próxima foto">&#8250;</button>
     </div>
 
     <!-- Legenda -->
@@ -828,7 +861,7 @@
     </p>
 
     <p class="cta-final-sub reveal reveal-d2">
-      Agora é só dar o próximo passo —<br>sem compromisso, sem pressa.
+      Agora é só dar o próximo passo para o seu processo de recuperação.
     </p>
 
     <div class="cta-final-btn-wrap reveal reveal-d3">
@@ -876,11 +909,10 @@
 
   document.querySelectorAll('.reveal, .reveal-scale').forEach(el => io.observe(el));
 
-  /* ── Carrossel automático ── */
-  const slides  = document.querySelectorAll('.slide');
-  const dots    = document.querySelectorAll('.dot');
-  let atual     = 0;
-  let intervalo;
+  /* ── Carrossel manual (botões prev/next) ── */
+  const slides = document.querySelectorAll('.slide');
+  const dots   = document.querySelectorAll('.dot');
+  let atual    = 0;
 
   function goTo(idx) {
     slides[atual].classList.remove('ativo');
@@ -890,26 +922,21 @@
     dots[atual].classList.add('on');
   }
 
-  function avancar() { goTo(atual + 1); }
+  document.getElementById('carr-prev').addEventListener('click', () => goTo(atual - 1));
+  document.getElementById('carr-next').addEventListener('click', () => goTo(atual + 1));
 
-  function iniciar() {
-    clearInterval(intervalo);
-    intervalo = setInterval(avancar, 3800);
-  }
-
-  iniciar();
-
-  // Dots clicáveis
   dots.forEach((dot, i) => {
-    dot.addEventListener('click', () => { goTo(i); iniciar(); });
+    dot.addEventListener('click', () => goTo(i));
   });
 
-  // Pausa no hover
+  // Swipe touch
+  let touchStartX = 0;
   const wrap = document.getElementById('carrosselWrap');
-  wrap.addEventListener('mouseenter', () => clearInterval(intervalo));
-  wrap.addEventListener('mouseleave', iniciar);
-  wrap.addEventListener('touchstart', () => clearInterval(intervalo), { passive: true });
-  wrap.addEventListener('touchend',   () => setTimeout(iniciar, 4000), { passive: true });
+  wrap.addEventListener('touchstart', e => { touchStartX = e.touches[0].clientX; }, { passive: true });
+  wrap.addEventListener('touchend', e => {
+    const diff = touchStartX - e.changedTouches[0].clientX;
+    if (Math.abs(diff) > 45) goTo(diff > 0 ? atual + 1 : atual - 1);
+  }, { passive: true });
 </script>
 
 </body>

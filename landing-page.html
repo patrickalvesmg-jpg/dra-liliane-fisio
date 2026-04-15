@@ -235,10 +235,10 @@
       border-radius: var(--radius-card);
       display: block;
     }
-    /* Fotos antes/depois — formato HORIZONTAL (16:10) */
+    /* Fotos antes/depois — formato (1:1) */
     .ba-slot {
       width: 100%;
-      aspect-ratio: 16/10;
+      aspect-ratio: 1/1;
       object-fit: cover;
       border-radius: var(--radius-card);
       display: block;
@@ -412,7 +412,7 @@
     .hero h1 {
       font-size: clamp(3rem, 7vw, 5.5rem);
       font-weight: 900;
-      color: var(--texto-escuro);
+      color: #7B5EA7;
       letter-spacing: -0.03em;
       line-height: 1.05;
       margin-bottom: 14px;
@@ -843,20 +843,10 @@
       transform: scale(1.3);
     }
 
-    /* Desktop: desativa carousel, mostra tudo empilhado */
-    @media (min-width: 768px) {
-      .ba-track { flex-direction: column; transform: none !important; }
-      .ba-slide { min-width: unset; width: 100%; margin-bottom: 18px; }
-      .ba-slide:last-child { margin-bottom: 0; }
-      .ba-controls { display: none !important; }
-    }
-
-    /* Mobile: ativa carousel */
-    @media (max-width: 767px) {
-      .ba-track { flex-direction: row; }
-      .ba-slide { min-width: 100%; margin-bottom: 0; }
-      .ba-controls { display: flex; }
-    }
+    /* Carousel ativo em todos os tamanhos de tela */
+    .ba-track { flex-direction: row; }
+    .ba-slide { min-width: 100%; margin-bottom: 0; }
+    .ba-controls { display: flex; }
 
     .recurso-quote {
       font-family: 'Cormorant Garamond', serif;
@@ -1515,8 +1505,8 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
   <div class="fade-in" style="transition-delay:0.35s; margin-top: 16px;">
     <blockquote class="hero-quote">
-      Você merece se recuperar bem.<br>
-      E isso começa antes mesmo do parto.
+      O verdadeiro recomeço acontece no pós-parto.<br>
+      E ele merece atenção, cuidado e acompanhamento especializado.
     </blockquote>
   </div>
 
@@ -1542,10 +1532,9 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       <h2 class="section-title">Olá! Sou a Liliane.</h2>
       <div class="title-underline"></div>
       <p class="sobre-text">
-        Escolhi me dedicar ao cuidado de gestantes e puérperas porque vi de perto o quanto as mulheres
-        sofrem desnecessariamente nessa fase — com dor, inchaço, insegurança — achando que "é assim mesmo."
+        Escolhi me dedicar ao cuidado de gestantes e puérperas porque são fases intensas e transformadoras
+        onde a mulher merece acolhimento, atenção e suporte qualificado.
       </p>
-      <p class="sobre-negrito">Não é assim mesmo.</p>
       <p class="sobre-text">
         Sou fisioterapeuta formada pela Universidade Federal da Paraíba, com pós-graduação em Fisioterapia
         Dermatofuncional. Uno o conhecimento da dermato ao cuidado obstétrico para oferecer avaliação
@@ -1602,8 +1591,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         </svg>
       </div>
       <h3 class="pq-title">Prescrição de exercícios terapêuticos</h3>
-      <p class="pq-text">Exercícios certos, no momento certo, na progressão certa — para reabilitar
-        sua musculatura abdominal e postural com segurança. Isso não é instrução genérica: é fisioterapia.</p>
+      <p class="pq-text">Exercícios certos, no momento certo, na progressão certa, prescritos especialmente para o seu processo de reabilitação com segurança e respaldo científico.</p>
     </div>
 
     <!-- Card 3 — Identificação -->
@@ -1618,8 +1606,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         </svg>
       </div>
       <h3 class="pq-title">Identificação de intercorrências</h3>
-      <p class="pq-text">Um olhar treinado percebe sinais que passariam despercebidos — diástase,
-        alterações na cicatriz, compensações posturais — e age antes que virem problema.</p>
+      <p class="pq-text">Um olhar profissional percebe sinais antes que eles evoluam — diástase, alterações na cicatriz, compensações posturais — permitindo uma intervenção precoce e uma recuperação mais segura e eficiente.</p>
     </div>
 
     <!-- Card 4 — Responsabilidade -->
@@ -1631,17 +1618,21 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
           <polyline points="11 16.5 14.5 20 21.5 12.5" stroke-width="1.9"/>
         </svg>
       </div>
-      <h3 class="pq-title">Responsabilidade profissional e legal</h3>
-      <p class="pq-text">Só uma fisioterapeuta registrada pode assumir legalmente a condução do seu
-        processo de recuperação.</p>
+      <h3 class="pq-title">Suporte além do atendimento na maternidade</h3>
+      <p class="pq-text">O cuidado se estende para além das sessões, envolvendo:</p>
+      <ul class="recurso-list" role="list" style="margin-top:8px">
+        <li>Orientações no domicílio</li>
+        <li>Ajustes na rotina</li>
+        <li>Uso adequado de recursos como calcinha pós-parto, meias de compressão e órtese</li>
+      </ul>
+      <p class="pq-text" style="margin-top:10px">Favorecendo uma recuperação mais confortável e segura, com suporte via WhatsApp.</p>
     </div>
   </div>
 
   <div class="quote-barra fade-in">
     <div class="quote-barra-line" aria-hidden="true"></div>
     <blockquote>
-      "Sua recuperação acontece uma vez só. Não desperdice esse momento com quem não tem o preparo
-      para cuidar de você como você merece."
+      "Sua recuperação acontece uma vez só. Você merece estar em boas mãos — com alguém que tenha o preparo técnico e o cuidado profissional que essa fase exige."
     </blockquote>
   </div>
 </section>
@@ -1651,11 +1642,11 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 ==================================================== -->
 <section id="o-que-faco" aria-label="Recursos terapêuticos">
   <div class="oq-header fade-in">
-    <span class="section-tag">O que fazemos e o que transforma</span>
+    <span class="section-tag">O que fazemos e o que promove evolução</span>
     <h2 class="section-title">Um acompanhamento completo.<br>Do primeiro contato à sua recuperação.</h2>
     <div class="title-underline center"></div>
     <p class="section-subtexto">
-      Cada recurso é escolhido após avaliação — não de forma padronizada. O que muda de paciente
+      Cada abordagem e recursos são escolhidos após avaliação — não de forma padronizada. O que muda de paciente
       para paciente não é só o tape aplicado, é toda a conduta.
     </p>
   </div>
@@ -1665,11 +1656,11 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <div class="recurso-inner fade-in">
       <h3 class="recurso-h3">Reabilitação Fisioterapêutica — o coração do acompanhamento</h3>
       <p class="recurso-text">Seu corpo passou por 9 meses de adaptações e por um evento físico intenso.
-        Ele precisa de reabilitação — não de repouso passivo.</p>
+        Ele precisa de um olhar clínico para conduzir o processo de reabilitação.</p>
       <ul class="recurso-list" role="list">
         <li>Exercícios iniciados ainda na maternidade</li>
         <li>Reabilitação abdominal progressiva</li>
-        <li>Correção postural</li>
+        <li>Ajustes posturais, ergonômicos e de transferências para o seu dia a dia</li>
         <li>Programa domiciliar estruturado com suporte via WhatsApp</li>
         <li>Olhar clínico para intercorrências</li>
       </ul>
@@ -1680,10 +1671,8 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   <div class="recurso">
     <div class="recurso-inner fade-in">
       <p class="recurso-lead">"Imagine terminar o dia sem dor nas costas pela primeira vez em meses."</p>
-      <h3 class="recurso-h3">Taping de Sustentação</h3>
-      <p class="recurso-text">Suporte real ao peso abdominal, aliviando dores pélvicas e lombares
-        da gestação. A ciência mostra que o taping, quando combinado com avaliação e prescrição
-        fisioterapêutica, é significativamente mais eficaz do que qualquer aplicação isolada.</p>
+      <h3 class="recurso-h3">Taping de Sustentação (pré-parto)</h3>
+      <p class="recurso-text">Suporte real ao peso abdominal, aliviando os desconfortos pélvicos e lombares comuns da gestação. Quando combinado com a avaliação e prescrição fisioterapêutica, promove mais qualidade de vida à gestante.</p>
       <div class="foto-grid-2x2">
         <img src="Foto%204.jpg" alt="Taping de sustentação — aplicação" loading="lazy" class="foto-slot" />
         <img src="Foto%205.jpg" alt="Taping de sustentação — aplicação" loading="lazy" class="foto-slot" />
@@ -1699,9 +1688,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <div class="recurso-inner fade-in">
       <p class="recurso-lead">"A primeira vez que você se levantar após o parto não precisa ser assustadora."</p>
       <h3 class="recurso-h3">Taping Compressivo (pós-parto)</h3>
-      <p class="recurso-text">Controla o processo inflamatório, reduz o edema e devolve estabilidade
-        ao abdômen. As evidências científicas são claras: o uso de cinta não é recomendado. O taping
-        compressivo é a alternativa clínica correta — e os resultados são visíveis em dias.</p>
+      <p class="recurso-text">Reduz o inchaço (edema), promove estabilidade abdominal, diminui as tensões sobre a cicatriz da cesárea, consequentemente ajuda no processo de cicatrização, proporciona mais conforto e segurança na hora de sentar para amamentar, levantar, caminhar, segurar o seu bebê e realizar os seus cuidados pessoais. O uso de cinta não é recomendado no pós-parto. O taping compressivo é a alternativa clínica mais adequada — e os resultados são visíveis em dias.</p>
 
       <div class="ba-carousel-wrap" data-carousel>
         <div class="ba-track-outer">
@@ -1760,13 +1747,9 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   <!-- Recurso 4 — Laser -->
   <div class="recurso">
     <div class="recurso-inner fade-in">
-      <p class="recurso-lead">"Sua cicatriz merece cicatrizar bem."</p>
+      <p class="recurso-lead">"Sua cicatriz merece cuidado para evoluir com qualidade."</p>
       <h3 class="recurso-h3">Laserterapia</h3>
-      <p class="recurso-text">A literatura científica confirma: o laser de baixa potência estimula a
-        proliferação de fibroblastos e a síntese de colágeno — dois processos fundamentais para a
-        cicatrização — além de ter ação anti-inflamatória e analgésica comprovada. Cicatriz de cesárea
-        mais fina e sem aderências. Períneo recuperado com mais conforto. Fissuras mamilares tratadas
-        para não interromper a amamentação.</p>
+      <p class="recurso-text">O laser de baixa potência tem ação anti-inflamatória, cicatrizante e analgésica. Atua na condução da ferida operatória da cesárea, lesões perineais, além das fissuras mamilares, facilitando o processo de amamentação.</p>
 
       <div class="ba-carousel-wrap" data-carousel>
         <div class="ba-track-outer">
@@ -1812,7 +1795,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   <!-- Recurso 5 — Drenagem -->
   <div class="recurso">
     <div class="recurso-inner fade-in">
-      <h3 class="recurso-h3">Drenagem Linfática</h3>
+      <h3 class="recurso-h3">Drenagem Linfática (pré e pós-parto)</h3>
       <p class="recurso-text">Reduz o edema, melhora a circulação e alivia a sensação de peso e
         cansaço nas pernas. Um momento de cuidado exclusivo — necessário e merecido.</p>
 
@@ -1837,7 +1820,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
       <blockquote class="recurso-quote">
         "Os resultados são visíveis já na primeira sessão.<br>
-        O inchaço diminui. A dor alivia. Você se sente você."
+        O inchaço diminui. A dor alivia. Você se sente bem."
       </blockquote>
     </div>
   </div>
@@ -1870,10 +1853,16 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         </svg>
       </div>
       <div class="tl-content">
-        <h3 class="tl-title">Encontro online inicial (pré-parto)</h3>
-        <p class="tl-text">Avaliação completa, orientações sobre o pós-parto, indicação da calcinha
-          ideal com cupom de desconto, meias de compressão e o que levar para a maternidade.
-          Você sai daqui preparada.</p>
+        <h3 class="tl-title">Consulta inicial pré-parto</h3>
+        <p class="tl-text">Avaliação completa: orientações e como se preparar para a fase de pós-parto.</p>
+        <ul class="recurso-list" role="list" style="margin-top:8px; font-size:0.88rem">
+          <li>Indicação da calcinha ideal para ajudar no processo de recuperação com cupom de desconto</li>
+          <li>Meias de compressão</li>
+          <li>Uso de órtese</li>
+          <li>Itens para facilitar o dia a dia em casa após o parto</li>
+          <li>O que levar para a maternidade</li>
+        </ul>
+        <p class="tl-text" style="margin-top:10px">Você sai daqui preparada e informada.</p>
       </div>
     </div>
 
@@ -1892,10 +1881,8 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         </svg>
       </div>
       <div class="tl-content">
-        <h3 class="tl-title">Atendimento na maternidade (primeiras 48h)</h3>
-        <p class="tl-text">A Dra. Liliane vai até você. Avaliação clínica, taping, laserterapia,
-          exercícios terapêuticos iniciais e orientações — tudo conforme o que seu corpo precisar
-          naquele momento.</p>
+        <h3 class="tl-title">Atendimento na maternidade (primeiras 24h)</h3>
+        <p class="tl-text">A Dra. Liliane vai até você já nas primeiras 24 horas após o parto. Avaliação e raciocínio clínico baseado no que seu corpo precisa naquele momento, podendo ser utilizado: taping, laserterapia, exercícios terapêuticos iniciais e progressivos para domicílio e orientações.</p>
       </div>
     </div>
 
@@ -1945,7 +1932,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <div class="aviso-box">
       ⚠️ <strong>Vagas por mês são limitadas.</strong> Cada acompanhamento recebe atenção exclusiva.
       Se você está lendo isso agora, considere garantir sua vaga antes do nascimento —
-      sem custo e sem compromisso.
+      sem custos para pré-agendamento.
     </div>
   </div>
 </section>
@@ -2001,14 +1988,12 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   <div class="planos-intro fade-in">
     <p>Sei que existe no mercado quem cobra menos. E você tem todo o direito de comparar. Mas reflita:
     a sua recuperação pós-parto acontece uma única vez por bebê. O que você decide nesse período
-    impacta seu corpo pelos próximos meses — às vezes anos. Não é sobre preço. É sobre não desperdiçar
-    o único pós-parto que você tem.</p>
+    impacta seu corpo pelos próximos meses — às vezes anos. Não é sobre o preço, é sobre não deixar passar o melhor cuidado no seu pós-parto.</p>
   </div>
 
   <div class="planos-quote-box fade-in">
     <blockquote>
-      "As mulheres que se cuidam não estão comprando um procedimento. Estão investindo em si mesmas —
-      e isso diz muito sobre quem elas são."
+      "As mulheres que se cuidam não estão comprando procedimentos — estão investindo em si mesmas e na recuperação que merecem."
     </blockquote>
   </div>
 
@@ -2019,7 +2004,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   </div>
 
   <p class="planos-instrucao fade-in">
-    Selecione os planos que te interessam — a mensagem já vai montada com tudo para o WhatsApp da Dra. Liliane.
+    Selecione os planos que te interessam — o seu plano já vai montado com tudo para o WhatsApp da Dra. Liliane.
   </p>
 
   <!-- PRÉ-PARTO -->
@@ -2032,8 +2017,8 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         <p class="plan-name">Bem Gestar</p>
         <p class="plan-price">R$ 150,00</p>
         <ul class="plan-items" role="list">
-          <li>Drenagem linfática com exercícios miolinfocinéticos</li>
-          <li>Redução de inchaços e alívio do cansaço nas pernas</li>
+          <li>Drenagem linfática: momento de total relaxamento, reduzindo os inchaços e aliviando a sensação de cansaço nas pernas</li>
+          <li>Exercícios miolinfocinéticos: exercícios que irão ajudar a reduzir os inchaços</li>
           <li>Orientações personalizadas</li>
         </ul>
       </label>
@@ -2046,9 +2031,10 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         <p class="plan-name">Bem Gestar Premium</p>
         <p class="plan-price">R$ 500,00</p>
         <ul class="plan-items" role="list">
-          <li>Tudo do Bem Gestar + pacote com 4 sessões (1/semana)</li>
-          <li>Economia de R$ 100,00 em relação às sessões individuais</li>
-          <li>Orientações em cada sessão | Pacote renovável</li>
+          <li>Pacote com 4 sessões de drenagem linfática (uma por semana)</li>
+          <li>Economia de R$ 100 no combo Bem Gestar Premium</li>
+          <li>Orientações em cada sessão</li>
+          <li>Pacote renovável</li>
         </ul>
         <p class="plan-nota">Ideal para acompanhamento durante toda a gestação.</p>
       </label>
@@ -2095,12 +2081,12 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         <p class="plan-name">Pós-Parto Essencials</p>
         <p class="plan-price">R$ 400,00</p>
         <ul class="plan-items" role="list">
-          <li>Encontro online inicial completo</li>
-          <li>Atendimento na maternidade nas primeiras 48h (avaliação + taping + laser + exercícios + orientações)</li>
+          <li>Consulta pré-parto online</li>
+          <li>Atendimento na maternidade nas primeiras 24h (avaliação + taping + laser + exercícios + orientações)</li>
           <li>Programa de exercícios domiciliares em PDF</li>
           <li>Suporte via WhatsApp | Retirada ou orientação p/ retirada do taping</li>
         </ul>
-        <p class="plan-nota">A base completa do acompanhamento. Para quem quer começar bem desde o primeiro dia.</p>
+        <p class="plan-nota">A base completa do acompanhamento para quem quer começar bem desde o primeiro dia de pós-parto.</p>
       </label>
     </div>
 
@@ -2113,9 +2099,9 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         <p class="plan-price">R$ 600,00</p>
         <ul class="plan-items" role="list">
           <li>Tudo do Essencials +</li>
-          <li>Retorno domiciliar com 7 dias: reavaliação clínica + novo taping + laser + progressão dos exercícios</li>
+          <li>Retorno domiciliar com 7 dias: retirada do taping + reavaliação clínica + novo taping + laser + progressão dos exercícios</li>
         </ul>
-        <p class="plan-nota">Para quem quer acompanhamento na semana mais crítica da recuperação.</p>
+        <p class="plan-nota">Para quem quer continuar a evolução do acompanhamento.</p>
       </label>
     </div>
 
@@ -2128,9 +2114,9 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         <p class="plan-price">R$ 800,00</p>
         <ul class="plan-items" role="list">
           <li>Tudo do Advanced +</li>
-          <li>Retorno domiciliar com 15 dias: reavaliação clínica + novo taping + laser + progressão dos exercícios</li>
+          <li>Retorno domiciliar com 15 dias: retirada do taping + avaliação clínica + novo taping + laser + progressão dos exercícios</li>
         </ul>
-        <p class="plan-nota">O acompanhamento mais completo nos 15 dias mais importantes do seu pós-parto.</p>
+        <p class="plan-nota">O acompanhamento mais completo nos 21 dias mais importantes do seu pós-parto.</p>
       </label>
     </div>
   </div>
@@ -2159,9 +2145,8 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       <h2 class="enc-title">Você chegou até aqui.</h2>
       <div class="title-underline"></div>
       <p class="enc-text">Isso já diz muito sobre quem você é — o tipo de mulher que se cuida, que
-        não deixa a sua recuperação para depois, que entende que cuidar de si também é cuidar do seu bebê.</p>
-      <p class="enc-text">Agora é só dar o próximo passo. Entre em contato e vamos conversar sobre
-        qual plano faz mais sentido para você. Sem compromisso. Sem pressa.</p>
+        não deixa a sua recuperação para depois, que entende que cuidar de si também é cuidar do seu bebê e da sua família.</p>
+      <p class="enc-text">Agora é só dar o próximo passo para o seu processo de recuperação. Entre em contato e vamos conversar sobre qual plano faz mais sentido para você.</p>
       <p class="enc-italic">Eu estou aqui para cuidar de você nessa fase tão especial.</p>
       <div class="enc-buttons">
         <a href="https://wa.me/5583999254499?text=Ol%C3%A1+Dra.+Liliane!+Gostaria+de+saber+mais+sobre+seu+acompanhamento."
@@ -2229,10 +2214,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
       function goTo(idx) {
         current = ((idx % slides.length) + slides.length) % slides.length;
-        // Only transform on mobile
-        if (window.innerWidth < 768) {
-          track.style.transform = `translateX(-${current * 100}%)`;
-        }
+        track.style.transform = `translateX(-${current * 100}%)`;
         dots.forEach((d, i) => d.classList.toggle('active', i === current));
       }
 
@@ -2249,13 +2231,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       });
 
       // Reset on resize
-      window.addEventListener('resize', () => {
-        if (window.innerWidth >= 768) {
-          track.style.transform = '';
-        } else {
-          goTo(current);
-        }
-      });
+      window.addEventListener('resize', () => { goTo(current); });
     });
   }
   initCarousels();
