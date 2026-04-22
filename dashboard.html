@@ -366,10 +366,17 @@ function calcular(ano) {
   const totalVendido   = fatRealizado + fatAgendado;
   const custoUberMat   = realizadas.reduce((s,c) => s + c.custo, 0);
 
-  // tráfego acumulado apenas dos meses já realizados
+  // tráfego acumulado apenas dos meses já realizados (jan→mesLimite)
   const trafegoRealizado = MESES.slice(0, mesLimite + 1).reduce((s, mes) => s + (trafego[mes] || 0), 0);
   const custoTotal       = custoUberMat + trafegoRealizado;
-  const lucroLiquido     = fatRealizado - custoTotal;
+
+  // lucro por mês = fat realizado no mês − uber/mat do mês − tráfego do mês
+  const lucroLiquido = MESES.slice(0, mesLimite + 1).reduce((s, mes, idx) => {
+    const fatMes    = realizadas.filter(c => mesIndex(c.mesRealizado) === idx).reduce((a,c) => a + c.valorTotal, 0);
+    const uberMes   = realizadas.filter(c => mesIndex(c.mesRealizado) === idx).reduce((a,c) => a + c.custo, 0);
+    const trafMes   = trafego[mes] || 0;
+    return s + fatMes - uberMes - trafMes;
+  }, 0);
 
   const mesesDecorridos = mesLimite + 1;
   const projFaturamento = mesesDecorridos > 0 ? (fatRealizado / mesesDecorridos) * 12 : 0;
