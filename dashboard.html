@@ -8,20 +8,12 @@
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
   <style>
     :root {
-      --bg: #2A2028;
-      --bg2: #231F21;
-      --bg3: #1E1B1D;
-      --roxo: #B090A5;
-      --roxo-claro: #C9AEC0;
-      --creme: #FBF6EE;
-      --creme-dim: rgba(251,246,238,0.65);
-      --texto: rgba(251,246,238,0.38);
-      --texto2: rgba(251,246,238,0.65);
-      --verde: #7BAF8E;
-      --card: rgba(251,246,238,0.04);
-      --card2: rgba(176,144,165,0.08);
-      --borda: rgba(176,144,165,0.18);
-      --borda2: rgba(176,144,165,0.32);
+      --bg: #2A2028; --bg2: #231F21; --bg3: #1E1B1D;
+      --roxo: #B090A5; --roxo-claro: #C9AEC0;
+      --creme: #FBF6EE; --texto: rgba(251,246,238,0.38); --texto2: rgba(251,246,238,0.65);
+      --verde: #7BAF8E; --vermelho: #C47878; --amarelo: #C9A96E;
+      --card: rgba(251,246,238,0.04); --card2: rgba(176,144,165,0.08);
+      --borda: rgba(176,144,165,0.18); --borda2: rgba(176,144,165,0.32);
     }
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     html, body { background: var(--bg); font-family: 'Outfit', sans-serif; color: var(--creme); min-height: 100vh; overflow-x: hidden; }
@@ -36,7 +28,6 @@
 
     /* HEADER */
     .hdr { background: rgba(42,32,40,0.94); border-bottom: 1px solid var(--borda); padding: 14px 40px; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 100; backdrop-filter: blur(16px); }
-    .hdr-left {}
     .hdr-nome { font-family: 'Cormorant Garamond', serif; font-size: 20px; font-weight: 600; color: var(--creme); letter-spacing: 0.5px; }
     .hdr-sub { font-size: 10px; font-weight: 500; letter-spacing: 2px; text-transform: uppercase; color: var(--texto); margin-top: 1px; }
     .hdr-right { display: flex; align-items: center; gap: 10px; }
@@ -72,23 +63,26 @@
     .card-val { font-size: 26px; font-weight: 800; line-height: 1; color: var(--creme); }
     .card-val.roxo { color: var(--roxo-claro); }
     .card-val.verde { color: var(--verde); }
+    .card-val.vermelho { color: var(--vermelho); }
+    .card-val.amarelo { color: var(--amarelo); }
     .card-sub { font-size: 11px; font-weight: 500; color: var(--texto); margin-top: 6px; line-height: 1.5; }
 
-    /* CARDS PROJEÇÃO (destaque) */
+    /* CARD CANCELAMENTO (destaque vermelho) */
+    .card-cancel { background: rgba(196,120,120,0.06); border: 1px solid rgba(196,120,120,0.22); border-radius: 16px; padding: 22px 24px; }
+
+    /* CARDS PROJEÇÃO */
     .proj-card { background: rgba(176,144,165,0.07); border: 1px solid rgba(176,144,165,0.25); border-radius: 16px; padding: 24px 26px; }
     .proj-lbl { font-size: 9px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: rgba(201,174,192,0.55); margin-bottom: 6px; }
     .proj-titulo { font-family: 'Cormorant Garamond', serif; font-size: 13px; font-weight: 400; font-style: italic; color: var(--texto2); margin-bottom: 12px; }
     .proj-val { font-size: 34px; font-weight: 900; color: var(--roxo-claro); line-height: 1; }
     .proj-hint { font-size: 10px; font-weight: 600; color: var(--texto); margin-top: 8px; line-height: 1.6; }
 
-    /* GRÁFICO */
+    /* GRÁFICOS */
     .grafico-wrap { background: var(--card); border: 1px solid var(--borda); border-radius: 16px; padding: 24px 28px; }
     .grafico-titulo { font-family: 'Cormorant Garamond', serif; font-size: 17px; font-weight: 600; color: var(--creme); margin-bottom: 4px; }
-    .grafico-sub { font-size: 11px; color: var(--texto); margin-bottom: 20px; }
+    .grafico-sub { font-size: 11px; color: var(--texto); margin-bottom: 16px; }
     .grafico-canvas-wrap { position: relative; height: 260px; }
-
-    /* LEGENDA GRÁFICO */
-    .grafico-legenda { display: flex; gap: 20px; margin-bottom: 16px; }
+    .grafico-legenda { display: flex; gap: 20px; margin-bottom: 16px; flex-wrap: wrap; }
     .leg-item { display: flex; align-items: center; gap: 7px; font-size: 11px; font-weight: 600; color: var(--texto2); }
     .leg-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
 
@@ -105,6 +99,7 @@
     .pacote-ticket { font-size: 11px; font-weight: 600; color: var(--texto); }
 
     /* PIPELINE */
+    .pipeline-wrap { background: var(--card); border: 1px solid var(--borda); border-radius: 16px; overflow: hidden; }
     .pipeline-table { width: 100%; border-collapse: collapse; }
     .pipeline-table th { font-size: 9px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--texto); padding: 10px 16px; text-align: left; border-bottom: 1px solid var(--borda); }
     .pipeline-table td { font-size: 13px; font-weight: 500; color: var(--texto2); padding: 14px 16px; border-bottom: 1px solid rgba(176,144,165,0.07); }
@@ -113,7 +108,6 @@
     .pipeline-table td.valor { font-weight: 800; color: var(--roxo-claro); }
     .pipeline-table td.mes { color: var(--roxo); }
     .pipeline-vazio { text-align: center; padding: 32px; font-size: 13px; color: var(--texto); font-style: italic; }
-    .pipeline-wrap { background: var(--card); border: 1px solid var(--borda); border-radius: 16px; overflow: hidden; }
 
     /* RESPONSIVE */
     @media (max-width: 900px) {
@@ -131,19 +125,14 @@
 </head>
 <body>
 
-<!-- LOADER -->
 <div id="loader">
   <div class="ld-titulo">Dra. Liliane Araújo</div>
   <div class="ld-sub">Carregando dados...</div>
   <div class="ld-bar"><div class="ld-fill" id="ld-fill"></div></div>
 </div>
 
-<!-- ERRO -->
-<div id="erro">
-  <p id="erro-msg">Não foi possível carregar os dados. Verifique sua conexão e tente novamente.</p>
-</div>
+<div id="erro"><p id="erro-msg">Não foi possível carregar os dados. Verifique sua conexão e tente novamente.</p></div>
 
-<!-- HEADER -->
 <header class="hdr">
   <div class="hdr-left">
     <div class="hdr-nome">Dra. Liliane Araújo</div>
@@ -152,47 +141,55 @@
   <div class="hdr-right">
     <select class="hdr-ano" id="sel-ano"></select>
     <button class="hdr-btn-atualizar" id="btn-atualizar">
-      <span class="ico">↻</span>
-      <span>Atualizar</span>
+      <span class="ico">↻</span><span>Atualizar</span>
     </button>
   </div>
 </header>
 
-<!-- DASHBOARD -->
 <div id="dash">
   <div class="cnt">
 
     <div class="sec">Resultados do Ano</div>
     <div class="g4" id="kpis"></div>
 
+    <div class="sec">Cancelamentos</div>
+    <div class="g3" id="cancelamentos"></div>
+
     <div class="sec">Projeções</div>
     <div class="g3" id="projecoes"></div>
 
-    <div class="sec">Faturamento por Mês</div>
+    <div class="sec">Evolução por Mês de Atendimento</div>
     <div class="grafico-wrap">
-      <div class="grafico-titulo">Evolução Mensal</div>
-      <div class="grafico-sub">Total vendido × faturamento já realizado por mês</div>
+      <div class="grafico-titulo">Realizado · Agendado · Cancelado</div>
+      <div class="grafico-sub">Valor por mês de atendimento, separado por status</div>
       <div class="grafico-legenda">
-        <div class="leg-item"><div class="leg-dot" style="background:#B090A5"></div>Total Vendido</div>
-        <div class="leg-item"><div class="leg-dot" style="background:#7BAF8E"></div>Faturamento Realizado</div>
+        <div class="leg-item"><div class="leg-dot" style="background:#7BAF8E"></div>Realizado</div>
+        <div class="leg-item"><div class="leg-dot" style="background:#C9AEC0"></div>Agendado</div>
+        <div class="leg-item"><div class="leg-dot" style="background:#C47878"></div>Cancelado</div>
       </div>
-      <div class="grafico-canvas-wrap"><canvas id="chart-mensal"></canvas></div>
+      <div class="grafico-canvas-wrap"><canvas id="chart-atend"></canvas></div>
+    </div>
+
+    <div class="sec">Evolução de Vendas por Mês de Fechamento</div>
+    <div class="grafico-wrap">
+      <div class="grafico-titulo">Ritmo de Fechamentos</div>
+      <div class="grafico-sub">Quantas vendas foram fechadas a cada mês (data da venda)</div>
+      <div class="grafico-legenda">
+        <div class="leg-item"><div class="leg-dot" style="background:#B090A5"></div>Vendas Fechadas</div>
+        <div class="leg-item"><div class="leg-dot" style="background:#C9A96E"></div>Receita Fechada</div>
+      </div>
+      <div class="grafico-canvas-wrap"><canvas id="chart-fechamentos"></canvas></div>
     </div>
 
     <div class="sec">Pacotes Mais Vendidos</div>
     <div id="pacotes-lista" class="pacote-lista"></div>
 
-    <div class="sec">Pipeline de Clientes</div>
+    <div class="sec">Pipeline — Clientes Agendadas</div>
     <div class="pipeline-wrap">
-      <table class="pipeline-table" id="pipeline-table">
-        <thead>
-          <tr>
-            <th>Cliente</th>
-            <th>Mês Atend.</th>
-            <th>Pacote(s)</th>
-            <th>Valor Total</th>
-          </tr>
-        </thead>
+      <table class="pipeline-table">
+        <thead><tr>
+          <th>Cliente</th><th>Mês Atend.</th><th>Pacote(s)</th><th>Valor Total</th>
+        </tr></thead>
         <tbody id="pipeline-body"></tbody>
       </table>
     </div>
@@ -201,48 +198,39 @@
 </div>
 
 <script>
-// ─── CONFIG ────────────────────────────────────────────────────────────────
+// ─── CONFIG ───────────────────────────────────────────────────────────────────
 const SHEET_ID   = '1DPxDKTXGy4hBnsggdWfPfIkAiznT-GEEn01oFKB3GR4';
 const GID_VENDAS = '436702235';
 const GID_INVEST = '1973352773';
-
 const MESES = ['Janeiro','Fevereiro','Março','Abril','Maio','Junho',
                'Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
 
-// ─── ESTADO ─────────────────────────────────────────────────────────────────
-let dadosVendas = [];
-let dadosInvest = [];
+// ─── ESTADO ──────────────────────────────────────────────────────────────────
+let dadosVendas = [], dadosInvest = [];
 let anoSelecionado = new Date().getFullYear();
-let chartMensal = null;
+let chartAtend = null, chartFechamentos = null;
 
-// ─── LOADER ─────────────────────────────────────────────────────────────────
-function setLoader(pct) {
-  document.getElementById('ld-fill').style.width = pct + '%';
-}
-function esconderLoader() {
-  document.getElementById('loader').classList.add('hidden');
-}
+// ─── LOADER ──────────────────────────────────────────────────────────────────
+function setLoader(p) { document.getElementById('ld-fill').style.width = p + '%'; }
+function esconderLoader() { document.getElementById('loader').classList.add('hidden'); }
 function mostrarErro(msg) {
   esconderLoader();
-  const el = document.getElementById('erro');
-  el.classList.add('on');
-  if (msg) document.getElementById('erro-msg').textContent = msg;
+  document.getElementById('erro').classList.add('on');
+  document.getElementById('erro-msg').textContent = msg;
 }
 
-// ─── FETCH SHEETS (gviz/tq — sem API Key) ───────────────────────────────────
+// ─── FETCH GVIZ ──────────────────────────────────────────────────────────────
 async function fetchGviz(gid) {
   const url = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json&gid=${gid}`;
   const res = await fetch(url);
   if (!res.ok) throw new Error(`HTTP ${res.status}`);
   const text = await res.text();
-  // resposta vem como: google.visualization.Query.setResponse({...})
   const json = JSON.parse(text.match(/google\.visualization\.Query\.setResponse\(([\s\S]*)\)/)[1]);
   const cols = json.table.cols.length;
   return (json.table.rows || []).map(row =>
     Array.from({ length: cols }, (_, i) => {
       const c = row.c && row.c[i];
       if (!c || c.v === null || c.v === undefined) return '';
-      // datas vêm como Date(ano,mes,dia) — converter para DD/MM/YYYY
       if (typeof c.v === 'string' && c.v.startsWith('Date(')) {
         const [y, m, d] = c.v.slice(5, -1).split(',').map(Number);
         return `${String(d).padStart(2,'0')}/${String(m+1).padStart(2,'0')}/${y}`;
@@ -261,8 +249,6 @@ async function carregarDados() {
     setLoader(60);
     const invest = await fetchGviz(GID_INVEST);
     setLoader(90);
-    // gviz já exclui o cabeçalho — não usar slice(1)
-    // filtrar linhas vazias (nome vazio = linha em branco da planilha)
     dadosVendas = vendas.filter(r => r[0] && r[0].trim() !== '');
     dadosInvest = invest.filter(r => r[0] && r[0].trim() !== '');
     popularAnosSeletor();
@@ -271,7 +257,7 @@ async function carregarDados() {
     setTimeout(esconderLoader, 400);
     document.getElementById('dash').classList.add('on');
     document.getElementById('erro').classList.remove('on');
-  } catch (e) {
+  } catch(e) {
     mostrarErro('Não foi possível carregar os dados. Verifique se a planilha está compartilhada como pública.');
     console.error(e);
   } finally {
@@ -285,17 +271,14 @@ function popularAnosSeletor() {
   dadosInvest.forEach(r => { if (r[1]) anos.add(parseInt(r[1])); });
   dadosVendas.forEach(r => {
     if (r[1]) {
-      const partes = r[1].split('/');
-      if (partes.length === 3) {
-        const y = parseInt(partes[2]);
-        if (y > 2020) anos.add(y);
-      }
+      const p = r[1].split('/');
+      if (p.length === 3) { const y = parseInt(p[2]); if (y > 2020) anos.add(y); }
     }
   });
   if (anos.size === 0) anos.add(new Date().getFullYear());
   const sel = document.getElementById('sel-ano');
   sel.innerHTML = '';
-  [...anos].sort((a,b) => b - a).forEach(a => {
+  [...anos].sort((a,b) => b-a).forEach(a => {
     const opt = document.createElement('option');
     opt.value = a; opt.textContent = a;
     if (a === anoSelecionado) opt.selected = true;
@@ -308,99 +291,115 @@ function parseBRL(str) {
   if (!str) return 0;
   return parseFloat(str.replace('R$','').replace(/\./g,'').replace(',','.').trim()) || 0;
 }
-
-function mesIndex(nome) {
-  return MESES.indexOf(nome);
-}
-
+function mesIndex(nome) { return MESES.indexOf(nome); }
 function anoAtual() { return new Date().getFullYear(); }
-function mesAtual() { return new Date().getMonth(); } // 0-based
+function mesAtual() { return new Date().getMonth(); }
 
-// Retorna clientes do ano selecionado com dados parseados
+// ─── CLIENTES DO ANO ─────────────────────────────────────────────────────────
+// Colunas: A=0 nome, B=1 dataParto, C=2 mesPrevisto, D=3 mesRealizado,
+//          E=4 origem, F=5 pac1, G=6 pac2, H=7 extra, I=8 valPacotes,
+//          J=9 valExtra, K=10 custo, L=11 valTotal, M=12 status,
+//          N=13 dataContato, O=14 dataVenda, P=15 mesVenda
 function clientesDoAno(ano) {
   return dadosVendas
     .filter(r => {
-      // descartar linhas sem nome ou sem mês realizado
       if (!r[0] || !r[3]) return false;
-      const dataStr = r[1]; // "DD/MM/YYYY"
+      const dataStr = r[1];
       if (!dataStr) return ano === anoAtual();
-      const partes = dataStr.split('/');
-      if (partes.length < 3) return ano === anoAtual();
-      const anoData = parseInt(partes[2]);
-      return anoData === ano;
+      const p = dataStr.split('/');
+      if (p.length < 3) return ano === anoAtual();
+      return parseInt(p[2]) === ano;
     })
     .map(r => ({
-      nome:          r[0] || '',
-      dataParto:     r[1] || '',
-      mesPrevisto:   r[2] || '',
-      mesRealizado:  r[3] || '',
-      origem:        r[4] || '',
-      pacote1:       r[5] || '',
-      pacote2:       r[6] || '',
-      extra:         r[7] || '',
-      valorPacotes:  parseBRL(r[8]),
-      valorExtra:    parseBRL(r[9]),
-      custo:         parseBRL(r[10]),
+      nome:         r[0] || '',
+      dataParto:    r[1] || '',
+      mesPrevisto:  r[2] || '',
+      mesRealizado: r[3] || '',
+      pacote1:      r[5] || '',
+      pacote2:      r[6] || '',
+      valorPacotes: parseBRL(r[8]),
+      valorExtra:   parseBRL(r[9]),
+      custo:        parseBRL(r[10]),
+      status:       r[12] || '',   // Realizado | Agendado | Cancelado
+      dataVenda:    r[14] || '',
+      mesVenda:     r[15] || '',
       get valorTotal() { return this.valorPacotes + this.valorExtra; }
     }));
 }
 
-// ─── CÁLCULOS ────────────────────────────────────────────────────────────────
+// ─── TRÁFEGO POR MÊS ─────────────────────────────────────────────────────────
 function trafegoPorMes(ano) {
   const mapa = {};
   dadosInvest.forEach(r => {
     const mes = r[0] || '';
-    const anoRow = parseInt(r[1]);
-    // aceitar tanto número puro quanto string com ano
-    if (!mes || anoRow !== ano) return;
-    const val = parseFloat(String(r[2]).replace('R$','').replace(/\./g,'').replace(',','.').trim()) || 0;
-    mapa[mes] = val;
+    if (!mes || parseInt(r[1]) !== ano) return;
+    mapa[mes] = parseFloat(String(r[2]).replace('R$','').replace(/\./g,'').replace(',','.').trim()) || 0;
   });
   return mapa;
 }
 
+// ─── CÁLCULOS ────────────────────────────────────────────────────────────────
 function calcular(ano) {
-  const clientes = clientesDoAno(ano);
+  const todos     = clientesDoAno(ano);
   const mesLimite = (ano === anoAtual()) ? mesAtual() : 11;
   const trafego   = trafegoPorMes(ano);
 
-  const realizadas = clientes.filter(c => mesIndex(c.mesRealizado) <= mesLimite && mesIndex(c.mesRealizado) >= 0);
-  const futuras    = clientes.filter(c => mesIndex(c.mesRealizado) >  mesLimite);
+  // separar por status — cancelados excluídos dos KPIs financeiros
+  const realizadas  = todos.filter(c => c.status === 'Realizado');
+  const agendadas   = todos.filter(c => c.status === 'Agendado');
+  const canceladas  = todos.filter(c => c.status === 'Cancelado');
+  const ativas      = [...realizadas, ...agendadas]; // excluindo cancelados
 
-  const fatRealizado   = realizadas.reduce((s,c) => s + c.valorTotal, 0);
-  const fatAgendado    = futuras.reduce((s,c)    => s + c.valorTotal, 0);
-  const totalVendido   = fatRealizado + fatAgendado;
-  const custoUberMat   = realizadas.reduce((s,c) => s + c.custo, 0);
+  const fatRealizado  = realizadas.reduce((s,c) => s + c.valorTotal, 0);
+  const fatAgendado   = agendadas.reduce((s,c)  => s + c.valorTotal, 0);
+  const totalVendido  = fatRealizado + fatAgendado;
+  const totalCancelado = canceladas.reduce((s,c) => s + c.valorTotal, 0);
 
-  // tráfego acumulado apenas dos meses já realizados (jan→mesLimite)
+  const custoUberMat     = realizadas.reduce((s,c) => s + c.custo, 0);
   const trafegoRealizado = MESES.slice(0, mesLimite + 1).reduce((s, mes) => s + (trafego[mes] || 0), 0);
-  const custoTotal       = custoUberMat + trafegoRealizado;
 
-  // lucro por mês = fat realizado no mês − uber/mat do mês − tráfego do mês
   const lucroLiquido = MESES.slice(0, mesLimite + 1).reduce((s, mes, idx) => {
-    const fatMes    = realizadas.filter(c => mesIndex(c.mesRealizado) === idx).reduce((a,c) => a + c.valorTotal, 0);
-    const uberMes   = realizadas.filter(c => mesIndex(c.mesRealizado) === idx).reduce((a,c) => a + c.custo, 0);
-    const trafMes   = trafego[mes] || 0;
-    return s + fatMes - uberMes - trafMes;
+    const real    = realizadas.filter(c => mesIndex(c.mesRealizado) === idx);
+    const fatMes  = real.reduce((a,c) => a + c.valorTotal, 0);
+    const uberMes = real.reduce((a,c) => a + c.custo, 0);
+    return s + fatMes - uberMes - (trafego[mes] || 0);
   }, 0);
 
-  const mesesDecorridos = mesLimite + 1;
-  const projFaturamento = mesesDecorridos > 0 ? (fatRealizado / mesesDecorridos) * 12 : 0;
-  const projFechamentos = mesesDecorridos > 0 ? (realizadas.length / mesesDecorridos) * 12 : 0;
-  const comValor        = clientes.filter(c => c.valorTotal > 0);
-  const ticketMedio     = comValor.length > 0 ? totalVendido / comValor.length : 0;
+  // cancelamento
+  const totalFechadas       = realizadas.length + canceladas.length; // já atendidas ou deveriam ter sido
+  const taxaCancelamento    = totalFechadas > 0 ? canceladas.length / totalFechadas : 0;
 
-  // Mensal
-  const mensal = MESES.map((mes, idx) => {
-    const doMes = clientes.filter(c => mesIndex(c.mesRealizado) === idx);
-    const totalMes     = doMes.reduce((s,c) => s + c.valorTotal, 0);
-    const realizadoMes = (idx <= mesLimite) ? doMes.reduce((s,c) => s + c.valorTotal, 0) : 0;
-    return { mes, totalMes, realizadoMes };
+  // projeções baseadas em realizadas (meses já ocorridos)
+  const realizadasAteMes    = realizadas.filter(c => mesIndex(c.mesRealizado) <= mesLimite && mesIndex(c.mesRealizado) >= 0);
+  const mesesDecorridos     = mesLimite + 1;
+  const projFaturamento     = mesesDecorridos > 0 ? (fatRealizado / mesesDecorridos) * 12 : 0;
+  const projFechamentos     = mesesDecorridos > 0 ? (realizadasAteMes.length / mesesDecorridos) * 12 : 0;
+  // projeção ajustada: desconta taxa de cancelamento histórica
+  const projFechamentosAdj  = projFechamentos * (1 - taxaCancelamento);
+  const comValor            = ativas.filter(c => c.valorTotal > 0);
+  const ticketMedio         = comValor.length > 0 ? totalVendido / comValor.length : 0;
+
+  // mensal por mês de ATENDIMENTO — 3 status
+  const mensal = MESES.map((mes, idx) => ({
+    mes,
+    realizado:  realizadas.filter(c => mesIndex(c.mesRealizado) === idx).reduce((s,c) => s + c.valorTotal, 0),
+    agendado:   agendadas.filter(c  => mesIndex(c.mesRealizado) === idx).reduce((s,c) => s + c.valorTotal, 0),
+    cancelado:  canceladas.filter(c => mesIndex(c.mesRealizado) === idx).reduce((s,c) => s + c.valorTotal, 0),
+  }));
+
+  // fechamentos por mês da VENDA (col P / mesVenda)
+  const fechamentosPorMes = MESES.map(mes => {
+    const doMes = todos.filter(c => c.mesVenda === mes && c.status !== 'Cancelado');
+    return {
+      mes,
+      qtd:    doMes.length,
+      receita: doMes.reduce((s,c) => s + c.valorTotal, 0),
+    };
   });
 
-  // Pacotes
+  // pacotes — só de ativas
   const pacoteMap = {};
-  clientes.forEach(c => {
+  ativas.forEach(c => {
     [c.pacote1, c.pacote2].forEach(p => {
       if (!p) return;
       if (!pacoteMap[p]) pacoteMap[p] = { nome: p, freq: 0, receita: 0 };
@@ -410,121 +409,149 @@ function calcular(ano) {
   });
   const pacotes = Object.values(pacoteMap).sort((a,b) => b.receita - a.receita);
 
-  // Pipeline futuro
-  const pipeline = futuras
+  // pipeline — só agendadas, ordenadas por data do parto
+  const pipeline = agendadas
     .filter(c => c.valorTotal > 0)
     .sort((a,b) => {
       if (!a.dataParto) return 1;
       if (!b.dataParto) return -1;
-      const da = new Date(a.dataParto.split('/').reverse().join('-'));
-      const db = new Date(b.dataParto.split('/').reverse().join('-'));
-      return da - db;
+      return new Date(a.dataParto.split('/').reverse().join('-')) - new Date(b.dataParto.split('/').reverse().join('-'));
     });
 
-  return { fatRealizado, fatAgendado, totalVendido, lucroLiquido, custoUberMat, trafegoRealizado, custoTotal, projFaturamento, projFechamentos, ticketMedio, mensal, pacotes, pipeline, mesesDecorridos, realizadas };
+  return {
+    fatRealizado, fatAgendado, totalVendido, totalCancelado,
+    lucroLiquido, custoUberMat, trafegoRealizado,
+    canceladas, taxaCancelamento,
+    projFaturamento, projFechamentos, projFechamentosAdj, ticketMedio,
+    mensal, fechamentosPorMes, pacotes, pipeline,
+    mesesDecorridos, realizadasAteMes
+  };
 }
 
 // ─── FORMATAÇÃO ──────────────────────────────────────────────────────────────
 function fmtBRL(n) {
   return 'R$ ' + n.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 }
+function fmtPct(n) { return (n * 100).toFixed(1) + '%'; }
 
 // ─── RENDER KPIs ─────────────────────────────────────────────────────────────
 function renderKPIs(d) {
-  const kpis = [
-    { lbl: 'Faturamento Realizado', val: fmtBRL(d.fatRealizado), sub: 'Já recebido no ano', cls: 'verde' },
-    { lbl: 'Receita Futura Agendada', val: fmtBRL(d.fatAgendado), sub: 'Clientes vendidas, atend. futuro', cls: 'roxo' },
-    { lbl: 'Total Vendido no Ano', val: fmtBRL(d.totalVendido), sub: 'Realizado + agendado', cls: '' },
-    { lbl: 'Lucro Líquido Realizado', val: fmtBRL(d.lucroLiquido), sub: `Uber/mat: ${fmtBRL(d.custoUberMat)} · Tráfego: ${fmtBRL(d.trafegoRealizado)}`, cls: d.lucroLiquido >= 0 ? 'verde' : '' },
-  ];
-  document.getElementById('kpis').innerHTML = kpis.map(k => `
+  document.getElementById('kpis').innerHTML = `
     <div class="card">
-      <div class="card-lbl">${k.lbl}</div>
-      <div class="card-val ${k.cls}">${k.val}</div>
-      <div class="card-sub">${k.sub}</div>
+      <div class="card-lbl">Faturamento Realizado</div>
+      <div class="card-val verde">${fmtBRL(d.fatRealizado)}</div>
+      <div class="card-sub">Já recebido no ano</div>
     </div>
-  `).join('');
+    <div class="card">
+      <div class="card-lbl">Receita Futura Agendada</div>
+      <div class="card-val roxo">${fmtBRL(d.fatAgendado)}</div>
+      <div class="card-sub">Clientes vendidas, atend. futuro</div>
+    </div>
+    <div class="card">
+      <div class="card-lbl">Total Vendido no Ano</div>
+      <div class="card-val">${fmtBRL(d.totalVendido)}</div>
+      <div class="card-sub">Realizado + agendado (sem cancelados)</div>
+    </div>
+    <div class="card">
+      <div class="card-lbl">Lucro Líquido Realizado</div>
+      <div class="card-val ${d.lucroLiquido >= 0 ? 'verde' : 'vermelho'}">${fmtBRL(d.lucroLiquido)}</div>
+      <div class="card-sub">Uber/mat: ${fmtBRL(d.custoUberMat)} · Tráfego: ${fmtBRL(d.trafegoRealizado)}</div>
+    </div>
+  `;
+}
+
+// ─── RENDER CANCELAMENTOS ────────────────────────────────────────────────────
+function renderCancelamentos(d) {
+  document.getElementById('cancelamentos').innerHTML = `
+    <div class="card-cancel card">
+      <div class="card-lbl">Taxa de Cancelamento</div>
+      <div class="card-val vermelho">${fmtPct(d.taxaCancelamento)}</div>
+      <div class="card-sub">${d.canceladas.length} ${d.canceladas.length === 1 ? 'cliente cancelada' : 'clientes canceladas'}</div>
+    </div>
+    <div class="card-cancel card">
+      <div class="card-lbl">Receita Perdida (Cancelamentos)</div>
+      <div class="card-val vermelho">${fmtBRL(d.totalCancelado)}</div>
+      <div class="card-sub">${d.canceladas.map(c => c.nome).join(', ') || '—'}</div>
+    </div>
+    <div class="card">
+      <div class="card-lbl">Ticket Médio por Cliente</div>
+      <div class="card-val roxo">${fmtBRL(d.ticketMedio)}</div>
+      <div class="card-sub">Calculado sobre clientes ativas</div>
+    </div>
+  `;
 }
 
 // ─── RENDER PROJEÇÕES ────────────────────────────────────────────────────────
 function renderProjecoes(d) {
-  const cards = [
-    {
-      lbl: 'Projeção de Faturamento Anual',
-      titulo: 'Se o ritmo atual se mantiver',
-      val: fmtBRL(d.projFaturamento),
-      hint: `Baseado em ${d.mesesDecorridos} ${d.mesesDecorridos === 1 ? 'mês' : 'meses'} realizados`
-    },
-    {
-      lbl: 'Projeção de Fechamentos',
-      titulo: 'Vendas esperadas até dezembro',
-      val: Math.round(d.projFechamentos) + ' clientes',
-      hint: `Ritmo: ${d.mesesDecorridos > 0 ? (d.realizadas.length / d.mesesDecorridos).toFixed(1) : '0'} fechamentos/mês`
-    },
-    {
-      lbl: 'Ticket Médio por Cliente',
-      titulo: 'Valor médio de cada venda fechada',
-      val: fmtBRL(d.ticketMedio),
-      hint: 'Calculado sobre todas as vendas do ano'
-    },
-  ];
-  document.getElementById('projecoes').innerHTML = cards.map(c => `
+  document.getElementById('projecoes').innerHTML = `
     <div class="proj-card">
-      <div class="proj-lbl">${c.lbl}</div>
-      <div class="proj-titulo">${c.titulo}</div>
-      <div class="proj-val">${c.val}</div>
-      <div class="proj-hint">${c.hint}</div>
+      <div class="proj-lbl">Projeção de Faturamento Anual</div>
+      <div class="proj-titulo">Se o ritmo atual se mantiver</div>
+      <div class="proj-val">${fmtBRL(d.projFaturamento)}</div>
+      <div class="proj-hint">Baseado em ${d.mesesDecorridos} ${d.mesesDecorridos === 1 ? 'mês' : 'meses'} realizados</div>
     </div>
-  `).join('');
+    <div class="proj-card">
+      <div class="proj-lbl">Projeção de Fechamentos</div>
+      <div class="proj-titulo">Vendas esperadas até dezembro</div>
+      <div class="proj-val">${Math.round(d.projFechamentos)} clientes</div>
+      <div class="proj-hint">Ritmo: ${(d.realizadasAteMes.length / d.mesesDecorridos).toFixed(1)} fechamentos/mês</div>
+    </div>
+    <div class="proj-card">
+      <div class="proj-lbl">Projeção Ajustada (c/ cancelamento)</div>
+      <div class="proj-titulo">Descontando taxa histórica de ${fmtPct(d.taxaCancelamento)}</div>
+      <div class="proj-val">${Math.round(d.projFechamentosAdj)} clientes</div>
+      <div class="proj-hint">Estimativa conservadora considerando cancelamentos</div>
+    </div>
+  `;
 }
 
-// ─── RENDER GRÁFICO ──────────────────────────────────────────────────────────
-function renderGrafico(d) {
+// ─── RENDER GRÁFICO ATENDIMENTO ──────────────────────────────────────────────
+function renderGraficoAtend(d) {
+  if (chartAtend) { chartAtend.destroy(); chartAtend = null; }
+  const ctx = document.getElementById('chart-atend').getContext('2d');
   const labels = MESES.map(m => m.substring(0,3));
-  const totalVendidoData = d.mensal.map(m => m.totalMes);
-  const fatRealizadoData = d.mensal.map(m => m.realizadoMes);
-
-  if (chartMensal) { chartMensal.destroy(); chartMensal = null; }
-
-  const ctx = document.getElementById('chart-mensal').getContext('2d');
-  chartMensal = new Chart(ctx, {
+  chartAtend = new Chart(ctx, {
     type: 'bar',
     data: {
       labels,
       datasets: [
-        {
-          label: 'Total Vendido',
-          data: totalVendidoData,
-          backgroundColor: 'rgba(176,144,165,0.55)',
-          borderRadius: 6,
-          borderSkipped: false,
-        },
-        {
-          label: 'Faturamento Realizado',
-          data: fatRealizadoData,
-          backgroundColor: 'rgba(123,175,142,0.75)',
-          borderRadius: 6,
-          borderSkipped: false,
-        }
+        { label: 'Realizado',  data: d.mensal.map(m => m.realizado),  backgroundColor: 'rgba(123,175,142,0.80)', borderRadius: 5, borderSkipped: false },
+        { label: 'Agendado',   data: d.mensal.map(m => m.agendado),   backgroundColor: 'rgba(201,174,192,0.60)', borderRadius: 5, borderSkipped: false },
+        { label: 'Cancelado',  data: d.mensal.map(m => m.cancelado),  backgroundColor: 'rgba(196,120,120,0.70)', borderRadius: 5, borderSkipped: false },
       ]
     },
     options: {
-      responsive: true,
-      maintainAspectRatio: false,
+      responsive: true, maintainAspectRatio: false,
       plugins: { legend: { display: false } },
       scales: {
-        x: {
-          grid: { color: 'rgba(176,144,165,0.07)' },
-          ticks: { color: 'rgba(251,246,238,0.38)', font: { family: 'Outfit', size: 11 } }
-        },
-        y: {
-          grid: { color: 'rgba(176,144,165,0.07)' },
-          ticks: {
-            color: 'rgba(251,246,238,0.38)',
-            font: { family: 'Outfit', size: 11 },
-            callback: v => v >= 1000 ? 'R$' + (v/1000).toFixed(0) + 'k' : 'R$' + v
-          }
-        }
+        x: { grid: { color: 'rgba(176,144,165,0.07)' }, ticks: { color: 'rgba(251,246,238,0.38)', font: { family: 'Outfit', size: 11 } } },
+        y: { grid: { color: 'rgba(176,144,165,0.07)' }, ticks: { color: 'rgba(251,246,238,0.38)', font: { family: 'Outfit', size: 11 }, callback: v => v >= 1000 ? 'R$' + (v/1000).toFixed(0) + 'k' : 'R$' + v } }
+      }
+    }
+  });
+}
+
+// ─── RENDER GRÁFICO FECHAMENTOS ──────────────────────────────────────────────
+function renderGraficoFechamentos(d) {
+  if (chartFechamentos) { chartFechamentos.destroy(); chartFechamentos = null; }
+  const ctx = document.getElementById('chart-fechamentos').getContext('2d');
+  const labels = MESES.map(m => m.substring(0,3));
+  chartFechamentos = new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels,
+      datasets: [
+        { label: 'Vendas Fechadas', data: d.fechamentosPorMes.map(m => m.qtd), backgroundColor: 'rgba(176,144,165,0.60)', borderRadius: 5, borderSkipped: false, yAxisID: 'y' },
+        { label: 'Receita Fechada', data: d.fechamentosPorMes.map(m => m.receita), backgroundColor: 'rgba(201,169,110,0.65)', borderRadius: 5, borderSkipped: false, yAxisID: 'y2' },
+      ]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { display: false } },
+      scales: {
+        x: { grid: { color: 'rgba(176,144,165,0.07)' }, ticks: { color: 'rgba(251,246,238,0.38)', font: { family: 'Outfit', size: 11 } } },
+        y:  { position: 'left',  grid: { color: 'rgba(176,144,165,0.07)' }, ticks: { color: 'rgba(176,144,165,0.55)', font: { family: 'Outfit', size: 10 }, stepSize: 1 }, title: { display: true, text: 'Qtd vendas', color: 'rgba(176,144,165,0.40)', font: { size: 10 } } },
+        y2: { position: 'right', grid: { drawOnChartArea: false }, ticks: { color: 'rgba(201,169,110,0.55)', font: { family: 'Outfit', size: 10 }, callback: v => v >= 1000 ? 'R$' + (v/1000).toFixed(0) + 'k' : 'R$' + v }, title: { display: true, text: 'Receita', color: 'rgba(201,169,110,0.40)', font: { size: 10 } } },
       }
     }
   });
@@ -536,16 +563,11 @@ function renderPacotes(d) {
     document.getElementById('pacotes-lista').innerHTML = '<p style="color:var(--texto);font-size:13px;padding:20px 0">Nenhum pacote encontrado.</p>';
     return;
   }
-  const maxReceita = d.pacotes[0].receita;
+  const max = d.pacotes[0].receita;
   document.getElementById('pacotes-lista').innerHTML = d.pacotes.map(p => `
     <div class="pacote-item">
-      <div class="pacote-top">
-        <span class="pacote-nome">${p.nome}</span>
-        <span class="pacote-receita">${fmtBRL(p.receita)}</span>
-      </div>
-      <div class="pacote-bar-bg">
-        <div class="pacote-bar-fill" style="width:${maxReceita > 0 ? (p.receita/maxReceita*100).toFixed(1) : 0}%"></div>
-      </div>
+      <div class="pacote-top"><span class="pacote-nome">${p.nome}</span><span class="pacote-receita">${fmtBRL(p.receita)}</span></div>
+      <div class="pacote-bar-bg"><div class="pacote-bar-fill" style="width:${max > 0 ? (p.receita/max*100).toFixed(1) : 0}%"></div></div>
       <div class="pacote-bot">
         <span class="pacote-freq">${p.freq} ${p.freq === 1 ? 'cliente' : 'clientes'}</span>
         <span class="pacote-ticket">Ticket médio: ${fmtBRL(p.receita / p.freq)}</span>
@@ -554,37 +576,38 @@ function renderPacotes(d) {
   `).join('');
 }
 
-// ─── RENDER PIPELINE ────────────────────────────────────────────────────────
+// ─── RENDER PIPELINE ─────────────────────────────────────────────────────────
 function renderPipeline(d) {
   const tbody = document.getElementById('pipeline-body');
   if (d.pipeline.length === 0) {
-    tbody.innerHTML = `<tr><td colspan="4" class="pipeline-vazio">Nenhuma cliente com atendimento futuro agendado.</td></tr>`;
+    tbody.innerHTML = `<tr><td colspan="4" class="pipeline-vazio">Nenhuma cliente agendada no momento.</td></tr>`;
     return;
   }
   tbody.innerHTML = d.pipeline.map(c => {
-    const pacotes = [c.pacote1, c.pacote2].filter(Boolean).join(' + ') || '—';
+    const pacs = [c.pacote1, c.pacote2].filter(Boolean).join(' + ') || '—';
     return `<tr>
       <td class="nome">${c.nome}</td>
       <td class="mes">${c.mesRealizado}</td>
-      <td>${pacotes}</td>
+      <td>${pacs}</td>
       <td class="valor">${fmtBRL(c.valorTotal)}</td>
     </tr>`;
   }).join('');
 }
 
-// ─── RENDERIZAR TUDO ─────────────────────────────────────────────────────────
+// ─── RENDERIZAR ──────────────────────────────────────────────────────────────
 function renderizar() {
   const d = calcular(anoSelecionado);
   renderKPIs(d);
+  renderCancelamentos(d);
   renderProjecoes(d);
-  renderGrafico(d);
+  renderGraficoAtend(d);
+  renderGraficoFechamentos(d);
   renderPacotes(d);
   renderPipeline(d);
 }
 
 // ─── EVENTOS ─────────────────────────────────────────────────────────────────
 document.getElementById('btn-atualizar').addEventListener('click', carregarDados);
-
 document.getElementById('sel-ano').addEventListener('change', e => {
   anoSelecionado = parseInt(e.target.value);
   renderizar();
@@ -593,11 +616,7 @@ document.getElementById('sel-ano').addEventListener('change', e => {
 // ─── INIT ────────────────────────────────────────────────────────────────────
 (function init() {
   let p = 0;
-  const interval = setInterval(() => {
-    p = Math.min(p + 5, 15);
-    setLoader(p);
-    if (p >= 15) clearInterval(interval);
-  }, 80);
+  const interval = setInterval(() => { p = Math.min(p + 5, 15); setLoader(p); if (p >= 15) clearInterval(interval); }, 80);
   carregarDados();
 })();
 </script>
