@@ -156,7 +156,7 @@
     <div class="g3" id="cancelamentos"></div>
 
     <div class="sec">Projeções</div>
-    <div class="g3" id="projecoes"></div>
+    <div class="g4" id="projecoes"></div>
 
     <div class="sec">Evolução por Mês de Atendimento</div>
     <div class="grafico-wrap">
@@ -389,6 +389,18 @@ function calcular(ano) {
   // Estimativa do que ainda pode entrar (só o futuro)
   const projRestanteAno = fatAgendadoAjustado + estimativaMesesVazios;
 
+  // Projeção baseada no ritmo de vendas:
+  // média de vendas fechadas por mês × ticket médio × meses restantes × (1 - cancelamento)
+  // usa mesVenda para contar vendas fechadas por mês (col P)
+  const mesesComVenda = MESES.slice(0, mesesDecorridos).filter(mes =>
+    todos.some(c => c.mesVenda === mes && c.status !== 'Cancelado')
+  );
+  const mesesComVendaCount = mesesComVenda.length || 1;
+  const totalVendasFechadas = todos.filter(c => c.status !== 'Cancelado').length;
+  const mediaVendasPorMes   = totalVendasFechadas / mesesComVendaCount;
+  const projNovasFuturas     = mediaVendasPorMes * mesesRestantes * ticketMedio * (1 - taxaCancelamento);
+  const projPorRitmoVendas   = fatRealizado + fatAgendadoAjustado + projNovasFuturas;
+
   // Projeção de fechamentos (ritmo histórico × 12)
   const projFechamentos    = mesesDecorridos > 0 ? (realizadasAteMes.length / mesesDecorridos) * 12 : 0;
   const projFechamentosAdj = projFechamentos * (1 - taxaCancelamento);
@@ -440,6 +452,7 @@ function calcular(ano) {
     lucroLiquido, custoUberMat, trafegoRealizado,
     canceladas, taxaCancelamento,
     projFaturamento, projFaturamentoAnual, projRestanteAno,
+    projPorRitmoVendas, mediaVendasPorMes, projNovasFuturas,
     fatAgendadoAjustado, estimativaMesesVazios,
     mesesVaziosFuturos, mesesRestantes,
     projFechamentos, projFechamentosAdj, ticketMedio,
@@ -522,6 +535,16 @@ function renderProjecoes(d) {
         Agendado confirmado: ${fmtBRL(d.fatAgendadoAjustado)}<br>
         + Meses sem cliente ainda: ${fmtBRL(d.estimativaMesesVazios)}<br>
         Ticket médio atual: ${fmtBRL(d.ticketMedio)}
+      </div>
+    </div>
+    <div class="proj-card">
+      <div class="proj-lbl">Projeção pelo Ritmo de Vendas</div>
+      <div class="proj-titulo">Se o ritmo de novas vendas continuar</div>
+      <div class="proj-val">${fmtBRL(d.projPorRitmoVendas)}</div>
+      <div class="proj-hint">
+        Realizado: ${fmtBRL(d.fatRealizado)}<br>
+        + Agendado ajustado: ${fmtBRL(d.fatAgendadoAjustado)}<br>
+        + ${d.mesesRestantes} meses × ${d.mediaVendasPorMes.toFixed(1)} vendas/mês × ticket: ${fmtBRL(d.projNovasFuturas)}
       </div>
     </div>
     <div class="proj-card">
