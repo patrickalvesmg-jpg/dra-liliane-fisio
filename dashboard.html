@@ -343,9 +343,20 @@ function clientesDoAno(ano) {
 }
 
 // ─── CÁLCULOS ────────────────────────────────────────────────────────────────
+function trafegoPorMes(ano) {
+  const mapa = {};
+  dadosInvest.forEach(r => {
+    if (!r[1] || parseInt(r[1]) !== ano) return;
+    const mes = r[0] || '';
+    mapa[mes] = parseFloat(String(r[2]).replace(',','.')) || 0;
+  });
+  return mapa;
+}
+
 function calcular(ano) {
   const clientes = clientesDoAno(ano);
   const mesLimite = (ano === anoAtual()) ? mesAtual() : 11;
+  const trafego   = trafegoPorMes(ano);
 
   const realizadas = clientes.filter(c => mesIndex(c.mesRealizado) <= mesLimite && mesIndex(c.mesRealizado) >= 0);
   const futuras    = clientes.filter(c => mesIndex(c.mesRealizado) >  mesLimite);
@@ -353,8 +364,12 @@ function calcular(ano) {
   const fatRealizado   = realizadas.reduce((s,c) => s + c.valorTotal, 0);
   const fatAgendado    = futuras.reduce((s,c)    => s + c.valorTotal, 0);
   const totalVendido   = fatRealizado + fatAgendado;
-  const custoTotal     = realizadas.reduce((s,c) => s + c.custo, 0);
-  const lucroLiquido   = fatRealizado - custoTotal;
+  const custoUberMat   = realizadas.reduce((s,c) => s + c.custo, 0);
+
+  // tráfego acumulado apenas dos meses já realizados
+  const trafegoRealizado = MESES.slice(0, mesLimite + 1).reduce((s, mes) => s + (trafego[mes] || 0), 0);
+  const custoTotal       = custoUberMat + trafegoRealizado;
+  const lucroLiquido     = fatRealizado - custoTotal;
 
   const mesesDecorridos = mesLimite + 1;
   const projFaturamento = mesesDecorridos > 0 ? (fatRealizado / mesesDecorridos) * 12 : 0;
@@ -393,7 +408,7 @@ function calcular(ano) {
       return da - db;
     });
 
-  return { fatRealizado, fatAgendado, totalVendido, lucroLiquido, projFaturamento, projFechamentos, ticketMedio, mensal, pacotes, pipeline, mesesDecorridos, realizadas };
+  return { fatRealizado, fatAgendado, totalVendido, lucroLiquido, custoUberMat, trafegoRealizado, custoTotal, projFaturamento, projFechamentos, ticketMedio, mensal, pacotes, pipeline, mesesDecorridos, realizadas };
 }
 
 // ─── FORMATAÇÃO ──────────────────────────────────────────────────────────────
@@ -407,7 +422,7 @@ function renderKPIs(d) {
     { lbl: 'Faturamento Realizado', val: fmtBRL(d.fatRealizado), sub: 'Já recebido no ano', cls: 'verde' },
     { lbl: 'Receita Futura Agendada', val: fmtBRL(d.fatAgendado), sub: 'Clientes vendidas, atend. futuro', cls: 'roxo' },
     { lbl: 'Total Vendido no Ano', val: fmtBRL(d.totalVendido), sub: 'Realizado + agendado', cls: '' },
-    { lbl: 'Lucro Líquido Realizado', val: fmtBRL(d.lucroLiquido), sub: 'Faturado − custos (Uber/mat)', cls: d.lucroLiquido >= 0 ? 'verde' : '' },
+    { lbl: 'Lucro Líquido Realizado', val: fmtBRL(d.lucroLiquido), sub: `Uber/mat: ${fmtBRL(d.custoUberMat)} · Tráfego: ${fmtBRL(d.trafegoRealizado)}`, cls: d.lucroLiquido >= 0 ? 'verde' : '' },
   ];
   document.getElementById('kpis').innerHTML = kpis.map(k => `
     <div class="card">
