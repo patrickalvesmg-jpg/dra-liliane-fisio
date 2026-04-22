@@ -261,9 +261,10 @@ async function carregarDados() {
     setLoader(60);
     const invest = await fetchGviz(GID_INVEST);
     setLoader(90);
-    // pular linha de cabeçalho (índice 0)
-    dadosVendas = vendas.slice(1);
-    dadosInvest = invest.slice(1);
+    // gviz já exclui o cabeçalho — não usar slice(1)
+    // filtrar linhas vazias (nome vazio = linha em branco da planilha)
+    dadosVendas = vendas.filter(r => r[0] && r[0].trim() !== '');
+    dadosInvest = invest.filter(r => r[0] && r[0].trim() !== '');
     popularAnosSeletor();
     renderizar();
     setLoader(100);
@@ -319,8 +320,10 @@ function mesAtual() { return new Date().getMonth(); } // 0-based
 function clientesDoAno(ano) {
   return dadosVendas
     .filter(r => {
+      // descartar linhas sem nome ou sem mês realizado
+      if (!r[0] || !r[3]) return false;
       const dataStr = r[1]; // "DD/MM/YYYY"
-      if (!dataStr) return ano === anoAtual(); // sem data de parto = inclui no ano atual
+      if (!dataStr) return ano === anoAtual();
       const partes = dataStr.split('/');
       if (partes.length < 3) return ano === anoAtual();
       const anoData = parseInt(partes[2]);
@@ -346,9 +349,12 @@ function clientesDoAno(ano) {
 function trafegoPorMes(ano) {
   const mapa = {};
   dadosInvest.forEach(r => {
-    if (!r[1] || parseInt(r[1]) !== ano) return;
     const mes = r[0] || '';
-    mapa[mes] = parseFloat(String(r[2]).replace(',','.')) || 0;
+    const anoRow = parseInt(r[1]);
+    // aceitar tanto número puro quanto string com ano
+    if (!mes || anoRow !== ano) return;
+    const val = parseFloat(String(r[2]).replace('R$','').replace(/\./g,'').replace(',','.').trim()) || 0;
+    mapa[mes] = val;
   });
   return mapa;
 }
