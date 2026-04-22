@@ -350,10 +350,10 @@ function calcular(ano) {
   const canceladas  = todos.filter(c => c.status === 'Cancelado');
   const ativas      = [...realizadas, ...agendadas]; // excluindo cancelados
 
-  const fatRealizado  = realizadas.reduce((s,c) => s + c.valorTotal, 0);
-  const fatAgendado   = agendadas.reduce((s,c)  => s + c.valorTotal, 0);
-  const totalVendido  = fatRealizado + fatAgendado;
+  const fatRealizado   = realizadas.reduce((s,c) => s + c.valorTotal, 0);
+  const fatAgendado    = agendadas.reduce((s,c)  => s + c.valorTotal, 0);
   const totalCancelado = canceladas.reduce((s,c) => s + c.valorTotal, 0);
+  const totalVendido   = fatRealizado + fatAgendado + totalCancelado;
 
   const custoUberMat     = realizadas.reduce((s,c) => s + c.custo, 0);
   const trafegoRealizado = MESES.slice(0, mesLimite + 1).reduce((s, mes) => s + (trafego[mes] || 0), 0);
@@ -450,7 +450,7 @@ function renderKPIs(d) {
     <div class="card">
       <div class="card-lbl">Total Vendido no Ano</div>
       <div class="card-val">${fmtBRL(d.totalVendido)}</div>
-      <div class="card-sub">Realizado + agendado (sem cancelados)</div>
+      <div class="card-sub">Realizado + agendado + cancelado</div>
     </div>
     <div class="card">
       <div class="card-lbl">Lucro Líquido Realizado</div>
