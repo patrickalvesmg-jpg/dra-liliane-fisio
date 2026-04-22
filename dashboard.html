@@ -202,8 +202,9 @@
 
 <script>
 // ─── CONFIG ────────────────────────────────────────────────────────────────
-const SHEET_ID = '1Cg7ZT4Ws4vp_EWMRRz0RyAYEU74b3Rg6f3KcUgeecyY';
-const API_KEY  = 'COLE_SUA_API_KEY_AQUI';
+const SHEET_ID   = '1DPxDKTXGy4hBnsggdWfPfIkAiznT-GEEn01oFKB3GR4';
+const GID_VENDAS = '436702235';
+const GID_INVEST = '1973352773';
 
 const MESES = ['Janeiro','Fevereiro','Março','Abril','Maio','Junho',
                'Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
@@ -228,13 +229,27 @@ function mostrarErro(msg) {
   if (msg) document.getElementById('erro-msg').textContent = msg;
 }
 
-// ─── FETCH SHEETS ────────────────────────────────────────────────────────────
-async function fetchRange(range) {
-  const url = `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/${encodeURIComponent(range)}?key=${API_KEY}`;
+// ─── FETCH SHEETS (gviz/tq — sem API Key) ───────────────────────────────────
+async function fetchGviz(gid) {
+  const url = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json&gid=${gid}`;
   const res = await fetch(url);
   if (!res.ok) throw new Error(`HTTP ${res.status}`);
-  const json = await res.json();
-  return json.values || [];
+  const text = await res.text();
+  // resposta vem como: google.visualization.Query.setResponse({...})
+  const json = JSON.parse(text.match(/google\.visualization\.Query\.setResponse\(([\s\S]*)\)/)[1]);
+  const cols = json.table.cols.length;
+  return (json.table.rows || []).map(row =>
+    Array.from({ length: cols }, (_, i) => {
+      const c = row.c && row.c[i];
+      if (!c || c.v === null || c.v === undefined) return '';
+      // datas vêm como Date(ano,mes,dia) — converter para DD/MM/YYYY
+      if (typeof c.v === 'string' && c.v.startsWith('Date(')) {
+        const [y, m, d] = c.v.slice(5, -1).split(',').map(Number);
+        return `${String(d).padStart(2,'0')}/${String(m+1).padStart(2,'0')}/${y}`;
+      }
+      return c.f !== null && c.f !== undefined ? c.f : String(c.v);
+    })
+  );
 }
 
 async function carregarDados() {
@@ -242,12 +257,13 @@ async function carregarDados() {
   btn.classList.add('girando');
   try {
     setLoader(20);
-    const vendas = await fetchRange('Vendas!A2:K200');
+    const vendas = await fetchGviz(GID_VENDAS);
     setLoader(60);
-    const invest = await fetchRange('Investimentos!A2:C13');
+    const invest = await fetchGviz(GID_INVEST);
     setLoader(90);
-    dadosVendas = vendas;
-    dadosInvest = invest;
+    // pular linha de cabeçalho (índice 0)
+    dadosVendas = vendas.slice(1);
+    dadosInvest = invest.slice(1);
     popularAnosSeletor();
     renderizar();
     setLoader(100);
@@ -255,7 +271,7 @@ async function carregarDados() {
     document.getElementById('dash').classList.add('on');
     document.getElementById('erro').classList.remove('on');
   } catch (e) {
-    mostrarErro('Não foi possível carregar os dados da planilha. Verifique a API Key e tente novamente.');
+    mostrarErro('Não foi possível carregar os dados. Verifique se a planilha está compartilhada como pública.');
     console.error(e);
   } finally {
     btn.classList.remove('girando');
