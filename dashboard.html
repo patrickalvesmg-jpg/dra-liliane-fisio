@@ -575,32 +575,6 @@ function renderPipeline(d) {
 // ─── RENDERIZAR TUDO ─────────────────────────────────────────────────────────
 function renderizar() {
   const d = calcular(anoSelecionado);
-
-  // ── DIAGNÓSTICO — remover após validar ──
-  const clientes = clientesDoAno(anoSelecionado);
-  const mesLimite = anoSelecionado === anoAtual() ? mesAtual() : 11;
-  const trafego = trafegoPorMes(anoSelecionado);
-  console.group('=== DIAGNÓSTICO DASHBOARD ===');
-  console.log('Clientes carregadas:', clientes.length);
-  clientes.forEach(c => console.log(`  ${c.nome} | mesReal=${c.mesRealizado} | val=${c.valorTotal} | custo=${c.custo} | dataParto=${c.dataParto}`));
-  console.log('Tráfego por mês:', trafego);
-  console.log('mesLimite:', mesLimite, '(', MESES[mesLimite], ')');
-  MESES.slice(0, mesLimite + 1).forEach((mes, idx) => {
-    const real = clientes.filter(c => mesIndex(c.mesRealizado) === idx);
-    const fat  = real.reduce((s,c) => s + c.valorTotal, 0);
-    const ub   = real.reduce((s,c) => s + c.custo, 0);
-    const tr   = trafego[mes] || 0;
-    console.log(`  ${mes}: fat=${fat} uber=${ub} traf=${tr} lucro=${fat - ub - tr}`);
-  });
-  console.log('FAT REALIZADO:', d.fatRealizado);
-  console.log('FAT AGENDADO:', d.fatAgendado);
-  console.log('TOTAL VENDIDO:', d.totalVendido);
-  console.log('CUSTO UBER/MAT:', d.custoUberMat);
-  console.log('TRAFEGO REALIZADO:', d.trafegoRealizado);
-  console.log('LUCRO LIQUIDO:', d.lucroLiquido);
-  console.groupEnd();
-  // ── FIM DIAGNÓSTICO ──
-
   renderKPIs(d);
   renderProjecoes(d);
   renderGrafico(d);
