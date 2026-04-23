@@ -336,10 +336,8 @@
     }
     .nav-wpp:hover { background: #1da851 !important; }
 
-    /* ESCONDE nav no mobile completamente */
-    @media (max-width: 767px) {
-      .nav { display: none; }
-    }
+    /* ESCONDE nav em todos os tamanhos — portfólio é jornada linear */
+    .nav { display: none; }
 
     /* ============================================================
        SEÇÃO 1 — HERO (sem foto, sem botões, com logo SVG)
@@ -1446,6 +1444,50 @@
       .sobre-inner { grid-template-columns: 1fr 1.4fr; }
       .enc-inner { grid-template-columns: 1fr 1.4fr; }
     }
+
+    /* ============================================================
+       BARRA DE PROGRESSO DE LEITURA
+    ============================================================ */
+    .progress-bar-wrap {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      z-index: 200;
+      background: rgba(244,238,242,0.92);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      border-bottom: 1px solid rgba(176,144,165,0.18);
+      padding: 8px 20px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .progress-bar-track {
+      flex: 1;
+      height: 4px;
+      background: rgba(176,144,165,0.22);
+      border-radius: 2px;
+      overflow: hidden;
+    }
+    .progress-bar-fill {
+      height: 100%;
+      width: 0%;
+      background: var(--roxo-principal);
+      border-radius: 2px;
+      transition: width 0.15s ease;
+    }
+    .progress-label {
+      font-family: 'Outfit', sans-serif;
+      font-size: 0.68rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--roxo-principal);
+      white-space: nowrap;
+      min-width: 110px;
+      text-align: right;
+    }
   </style>
   <!-- Google Tag Manager -->
   <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
@@ -1462,7 +1504,17 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <!-- End Google Tag Manager (noscript) -->
 
 <!-- ====================================================
-     NAVEGAÇÃO — apenas desktop
+     BARRA DE PROGRESSO DE LEITURA
+==================================================== -->
+<div class="progress-bar-wrap" role="progressbar" aria-label="Progresso de leitura">
+  <div class="progress-bar-track">
+    <div class="progress-bar-fill" id="progress-fill"></div>
+  </div>
+  <span class="progress-label" id="progress-label">Apresentação</span>
+</div>
+
+<!-- ====================================================
+     NAVEGAÇÃO — apenas desktop (oculta — jornada linear)
 ==================================================== -->
 <nav class="nav" role="navigation" aria-label="Menu principal">
   <div class="nav-inner">
@@ -1500,13 +1552,14 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   <div class="fade-in" style="transition-delay:0.2s">
     <h1>Dra. Liliane Araújo</h1>
     <p class="hero-subtitle">Fisioterapeuta</p>
-    <p class="hero-location">Com atuação voltada para gestação e pós-parto em João Pessoa</p>
+    <p class="hero-location">Gestação e pós-parto em João Pessoa</p>
   </div>
 
   <div class="fade-in" style="transition-delay:0.35s; margin-top: 16px;">
     <blockquote class="hero-quote">
-      O verdadeiro recomeço acontece no pós-parto.<br>
-      E ele merece atenção, cuidado e acompanhamento especializado.
+      Sei que você está grávida, que o parto se aproxima<br>
+      e que talvez você ainda não saiba o que esperar do seu corpo depois.<br>
+      Eu vim aqui pra te ajudar com isso.
     </blockquote>
   </div>
 
@@ -1529,20 +1582,19 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     </div>
     <div class="fade-in" style="transition-delay:0.12s">
       <span class="section-tag">Quem sou eu</span>
-      <h2 class="section-title">Olá! Sou a Liliane.</h2>
+      <h2 class="section-title">Olá! Eu sou a Liliane.</h2>
       <div class="title-underline"></div>
       <p class="sobre-text">
-        Escolhi me dedicar ao cuidado de gestantes e puérperas porque são fases intensas e transformadoras
-        onde a mulher merece acolhimento, atenção e suporte qualificado.
-      </p>
-      <p class="sobre-text">
         Sou fisioterapeuta formada pela Universidade Federal da Paraíba, com pós-graduação em Fisioterapia
-        Dermatofuncional. Uno o conhecimento da dermato ao cuidado obstétrico para oferecer avaliação
-        clínica, técnica apurada e um olhar atento a cada detalhe da sua recuperação.
+        Dermatofuncional — e escolhi dedicar minha carreira ao cuidado de gestantes e puérperas porque
+        acredito que essas fases merecem atenção especializada, acolhimento e muita dedicação.
       </p>
       <p class="sobre-text">
-        Sou referência no acompanhamento de gestantes e puérperas em João Pessoa —
-        e <strong>cuidar bem de você é o que me move.</strong>
+        Uno os conhecimentos da dermato ao cuidado obstétrico para oferecer não só a técnica certa,
+        mas o olhar atento que cada mulher precisa nesse momento tão intenso da vida.
+      </p>
+      <p class="sobre-text">
+        <strong>Cuidar bem de você é o que me move.</strong> E nesse portfólio vou te mostrar exatamente como faço isso.
       </p>
     </div>
   </div>
@@ -1557,8 +1609,8 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <h2 class="section-title">Tape qualquer um aplica.<br>Recuperação de verdade é outra coisa.</h2>
     <div class="title-underline center"></div>
     <p class="section-subtexto">
-      Vivemos num momento em que qualquer pessoa pode comprar um rolo de kinesio tape e se apresentar
-      como referência em pós-parto. Mas existe algo que nenhum outro profissional pode oferecer:
+      Eu sei que existe muita gente oferecendo "pós-parto" por aí. E entendo que às vezes fica difícil entender a diferença.
+      Mas deixa eu te explicar o que só uma fisioterapeuta pode fazer por você:
     </p>
   </div>
 
@@ -1632,7 +1684,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   <div class="quote-barra fade-in">
     <div class="quote-barra-line" aria-hidden="true"></div>
     <blockquote>
-      "Sua recuperação acontece uma vez só. Você merece estar em boas mãos — com alguém que tenha o preparo técnico e o cuidado profissional que essa fase exige."
+      "Sua recuperação acontece uma vez só por bebê. Eu quero estar ao seu lado nesse momento — com o preparo técnico e o cuidado que você merece."
     </blockquote>
   </div>
 </section>
@@ -1642,12 +1694,12 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 ==================================================== -->
 <section id="o-que-faco" aria-label="Recursos terapêuticos">
   <div class="oq-header fade-in">
-    <span class="section-tag">O que fazemos e o que promove evolução</span>
-    <h2 class="section-title">Um acompanhamento completo.<br>Do primeiro contato à sua recuperação.</h2>
+    <span class="section-tag">O que eu faço por você</span>
+    <h2 class="section-title">Cada recurso tem um motivo.<br>Nada aqui é aplicado por padrão.</h2>
     <div class="title-underline center"></div>
     <p class="section-subtexto">
-      Cada abordagem e recursos são escolhidos após avaliação — não de forma padronizada. O que muda de paciente
-      para paciente não é só o tape aplicado, é toda a conduta.
+      Antes de qualquer técnica, eu avalio. O que eu aplico em você é escolhido para o seu corpo,
+      para o seu parto, para o seu momento. Deixa eu te mostrar o que tenho disponível para a sua recuperação:
     </p>
   </div>
 
@@ -1832,7 +1884,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <section class="como-funciona" aria-label="Como funciona o acompanhamento">
   <div class="section-header-centered fade-in">
     <span class="section-tag">Como funciona o acompanhamento</span>
-    <h2 class="section-title">Você sabe exatamente o que vai acontecer<br>em cada etapa. Sem surpresas.</h2>
+    <h2 class="section-title">Quero que você saiba exatamente<br>o que vai acontecer em cada etapa.</h2>
     <div class="title-underline center"></div>
   </div>
 
@@ -1853,8 +1905,8 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         </svg>
       </div>
       <div class="tl-content">
-        <h3 class="tl-title">Consulta inicial pré-parto</h3>
-        <p class="tl-text">Avaliação completa: orientações e como se preparar para a fase de pós-parto.</p>
+        <h3 class="tl-title">Consulta inicial pré-parto (online)</h3>
+        <p class="tl-text">A gente se encontra online antes do parto — você de onde estiver. Eu te avalio, te oriento e a gente sai dali com um plano. Você vai saber exatamente o que esperar — e vai se sentir muito mais preparada.</p>
         <ul class="recurso-list" role="list" style="margin-top:8px; font-size:0.88rem">
           <li>Indicação da calcinha ideal para ajudar no processo de recuperação com cupom de desconto</li>
           <li>Meias de compressão</li>
@@ -1882,7 +1934,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       </div>
       <div class="tl-content">
         <h3 class="tl-title">Atendimento na maternidade (primeiras 24h)</h3>
-        <p class="tl-text">A Dra. Liliane vai até você já nas primeiras 24 horas após o parto. Avaliação e raciocínio clínico baseado no que seu corpo precisa naquele momento, podendo ser utilizado: taping, laserterapia, exercícios terapêuticos iniciais e progressivos para domicílio e orientações.</p>
+        <p class="tl-text">Eu vou até você na maternidade, nas primeiras 24 horas após o parto. Você acabou de passar por um evento físico enorme — e esse é o momento mais importante para começar bem a recuperação. Avalio, aplico o que seu corpo precisa e fico ao seu lado.</p>
       </div>
     </div>
 
@@ -1903,8 +1955,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       </div>
       <div class="tl-content">
         <h3 class="tl-title">Retorno domiciliar (7 e/ou 15 dias)</h3>
-        <p class="tl-text">A fisioterapeuta vai até sua casa. Reavaliação, troca do taping, laser
-          nas necessidades, progressão dos exercícios. Sua recuperação é acompanhada, não abandonada.</p>
+        <p class="tl-text">Eu vou até a sua casa. Você não precisa se preocupar em sair com um recém-nascido — eu chego até você. Reavaliação, troca do taping, laser, progressão dos exercícios. Sua recuperação é acompanhada do início ao fim.</p>
       </div>
     </div>
 
@@ -1922,8 +1973,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       </div>
       <div class="tl-content">
         <h3 class="tl-title">Suporte contínuo</h3>
-        <p class="tl-text">PDFs com exercícios e orientações, suporte via WhatsApp durante todo o
-          período. Você nunca fica com dúvidas sem resposta.</p>
+        <p class="tl-text">Você me chama no WhatsApp quando tiver dúvida — e eu respondo. Mando exercícios em PDF, orientações para o dia a dia, dicas sobre a recuperação. Você nunca vai ficar sozinha nessa fase.</p>
       </div>
     </div>
   </div>
@@ -1943,9 +1993,9 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <section class="feedbacks" aria-label="Depoimentos de pacientes">
   <div class="section-header-centered fade-in">
     <span class="section-tag">O que elas dizem</span>
-    <h2 class="section-title">Não acredite só em mim. Acredite nelas.</h2>
+    <h2 class="section-title">Não precisa acreditar só em mim.<br>Ouça quem já passou por isso.</h2>
     <div class="title-underline center"></div>
-    <p class="section-subtexto">Mulheres reais. Resultados reais. Em João Pessoa.</p>
+    <p class="section-subtexto">Mulheres reais. Resultados reais. Aqui em João Pessoa.</p>
   </div>
 
   <div class="fb-grid">
@@ -1981,26 +2031,22 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <section class="planos" id="planos" aria-label="Planos de acompanhamento">
   <div class="section-header-centered fade-in">
     <span class="section-tag">Planos e próximos passos</span>
-    <h2 class="section-title">Escolha o acompanhamento certo para você.</h2>
+    <h2 class="section-title">Escolha o acompanhamento que faz sentido pra você.</h2>
     <div class="title-underline center"></div>
   </div>
 
   <div class="planos-intro fade-in">
-    <p>Sei que existe no mercado quem cobra menos. E você tem todo o direito de comparar. Mas reflita:
-    a sua recuperação pós-parto acontece uma única vez por bebê. O que você decide nesse período
-    impacta seu corpo pelos próximos meses — às vezes anos. Não é sobre o preço, é sobre não deixar passar o melhor cuidado no seu pós-parto.</p>
+    <p>Eu sei que tem quem cobre menos por aí. E você tem todo o direito de comparar. Mas quero te dizer uma coisa com sinceridade: a sua recuperação pós-parto acontece uma única vez por bebê. O que você decide nesse período impacta seu corpo nos próximos meses — às vezes anos. Não é sobre preço. É sobre não deixar passar o melhor cuidado no momento que mais importa.</p>
   </div>
 
   <div class="planos-quote-box fade-in">
     <blockquote>
-      "As mulheres que se cuidam não estão comprando procedimentos — estão investindo em si mesmas e na recuperação que merecem."
+      "Você não está comprando um procedimento — está investindo em si mesma e na recuperação que você merece."
     </blockquote>
   </div>
 
   <div class="planos-upsell fade-in">
-    <p>Uma coisa que os resultados mostram com clareza: quanto mais contínuo o acompanhamento, mais
-    rápida e completa é a recuperação. Cada retorno traz reavaliação, progressão dos exercícios e
-    ajuste fino na conduta.</p>
+    <p>O que os resultados mostram com clareza: quanto mais contínuo o acompanhamento, mais rápida e completa é a recuperação. Cada retorno que faço traz reavaliação, progressão dos exercícios e ajuste fino na conduta — pensado para o seu momento, não para um padrão.</p>
   </div>
 
   <p class="planos-instrucao fade-in">
@@ -2142,21 +2188,19 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       </div>
     </div>
     <div class="fade-in" style="transition-delay:0.12s">
-      <h2 class="enc-title">Você chegou até aqui.</h2>
+      <h2 class="enc-title">Ficou com alguma dúvida?</h2>
       <div class="title-underline"></div>
-      <p class="enc-text">Isso já diz muito sobre quem você é — o tipo de mulher que se cuida, que
-        não deixa a sua recuperação para depois, que entende que cuidar de si também é cuidar do seu bebê e da sua família.</p>
-      <p class="enc-text">Agora é só dar o próximo passo para o seu processo de recuperação. Entre em contato e vamos conversar sobre qual plano faz mais sentido para você.</p>
-      <p class="enc-italic">Eu estou aqui para cuidar de você nessa fase tão especial.</p>
+      <p class="enc-text">Será um prazer te atender nesse momento tão especial da sua vida. Meu objetivo é fazer desse momento o mais confortável possível, para que você guarde boas lembranças dessa fase.</p>
+      <p class="enc-text">Me chama no WhatsApp — vamos conversar sobre qual plano faz mais sentido para você e garantir o seu acompanhamento.</p>
+      <p class="enc-italic">Entre em contato comigo para agendarmos seu acompanhamento.</p>
       <div class="enc-buttons">
-        <a href="https://wa.me/5583999254499?text=Ol%C3%A1+Dra.+Liliane!+Gostaria+de+saber+mais+sobre+seu+acompanhamento."
+        <a href="https://wa.me/5583999254499?text=Ol%C3%A1+Dra.+Liliane!+Vi+seu+portf%C3%B3lio+e+gostaria+de+saber+mais+sobre+o+acompanhamento."
            class="btn-whatsapp" target="_blank" rel="noopener noreferrer">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
             <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/>
           </svg>
-          Falar no WhatsApp agora
+          Falar com a Dra. Liliane
         </a>
-        <a href="#planos" class="btn-secondary">Ver os planos</a>
       </div>
     </div>
   </div>
@@ -2260,6 +2304,42 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   }
 
   checkboxes.forEach(cb => cb.addEventListener('change', updatePainel));
+
+  /* ============================================================
+     BARRA DE PROGRESSO DE LEITURA
+  ============================================================ */
+  const progressFill  = document.getElementById('progress-fill');
+  const progressLabel = document.getElementById('progress-label');
+
+  const sections = [
+    { el: document.querySelector('.hero'),         label: 'Apresentação' },
+    { el: document.querySelector('.sobre'),        label: 'Sobre a Dra. Liliane' },
+    { el: document.querySelector('.por-que'),      label: 'Por que a Fisioterapia?' },
+    { el: document.querySelector('#o-que-faco'),   label: 'O que faço' },
+    { el: document.querySelector('.como-funciona'),label: 'Como funciona' },
+    { el: document.querySelector('.feedbacks'),    label: 'Depoimentos' },
+    { el: document.querySelector('.planos'),       label: 'Planos de acompanhamento' },
+    { el: document.querySelector('.encerramento'), label: 'Fale comigo' },
+  ].filter(s => s.el);
+
+  function updateProgress() {
+    const scrollTop    = window.scrollY;
+    const docHeight    = document.documentElement.scrollHeight - window.innerHeight;
+    const pct          = docHeight > 0 ? Math.min(100, (scrollTop / docHeight) * 100) : 0;
+    progressFill.style.width = pct + '%';
+
+    let current = sections[0];
+    for (const s of sections) {
+      const top = s.el.getBoundingClientRect().top + scrollTop;
+      if (scrollTop >= top - window.innerHeight * 0.4) current = s;
+    }
+    if (progressLabel.textContent !== current.label) {
+      progressLabel.textContent = current.label;
+    }
+  }
+
+  window.addEventListener('scroll', updateProgress, { passive: true });
+  updateProgress();
 
   btnEnviar.addEventListener('click', () => {
     const sel = getSelected();
