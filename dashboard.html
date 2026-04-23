@@ -169,6 +169,7 @@
     <div class="g3" id="cancelamentos"></div>
 
     <div class="sec">Projeções</div>
+    <div id="lucro-projetado-wrap" style="margin-bottom:14px"></div>
     <div class="g4" id="projecoes"></div>
 
     <div class="sec">Evolução por Mês de Atendimento</div>
@@ -428,6 +429,15 @@ function calcular(ano) {
   const projFechamentos    = mesesDecorridos > 0 ? (realizadasAteMes.length / mesesDecorridos) * 12 : 0;
   const projFechamentosAdj = projFechamentos * (1 - taxaCancelamento);
 
+  // Lucro projetado do ano
+  const TRAFEGO_MENSAL_FIXO   = 900;
+  const trafegoFuturo         = mesesRestantes * TRAFEGO_MENSAL_FIXO;
+  const trafegoAnoTotal       = trafegoRealizado + trafegoFuturo;
+  // clientes futuras = agendadas ajustadas + novas pelo ritmo
+  const clientesFuturas       = agendadas.length * (1 - taxaCancelamento) + (ticketMedio > 0 ? projNovasFuturas / ticketMedio : 0);
+  const custoUberMatFuturo    = clientesFuturas * custoMedioUberMat;
+  const lucroProjetadoAnual   = projPorRitmoVendas - custoUberMat - custoUberMatFuturo - trafegoAnoTotal;
+
   // manter compatibilidade
   const projFaturamento = projFaturamentoAnual;
 
@@ -501,6 +511,7 @@ function calcular(ano) {
     canceladas, taxaCancelamento,
     projFaturamento, projFaturamentoAnual, projRestanteAno,
     projPorRitmoVendas, mediaVendasPorMes, projNovasFuturas,
+    lucroProjetadoAnual, trafegoAnoTotal, trafegoFuturo, TRAFEGO_MENSAL_FIXO, custoUberMatFuturo,
     fatAgendadoAjustado, estimativaMesesVazios,
     mesesVaziosFuturos, mesesRestantes,
     projFechamentos, projFechamentosAdj, ticketMedio,
@@ -580,6 +591,29 @@ function renderCancelamentos(d) {
       <div class="card-lbl">Ticket Médio por Cliente</div>
       <div class="card-val roxo">${fmtBRL(d.ticketMedio)}</div>
       <div class="card-sub">Calculado sobre clientes ativas</div>
+    </div>
+  `;
+}
+
+// ─── RENDER LUCRO PROJETADO ──────────────────────────────────────────────────
+function renderLucroProjetado(d) {
+  const cor = d.lucroProjetadoAnual >= 0 ? 'var(--verde)' : 'var(--vermelho)';
+  document.getElementById('lucro-projetado-wrap').innerHTML = `
+    <div style="background:#F0F7F3;border:1.5px solid rgba(78,139,101,0.30);border-radius:16px;padding:24px 28px;box-shadow:var(--sombra);display:grid;grid-template-columns:1fr auto;align-items:center;gap:24px">
+      <div>
+        <div style="font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--verde);margin-bottom:6px">Lucro Líquido Projetado do Ano</div>
+        <div style="font-family:'Cormorant Garamond',serif;font-size:13px;font-style:italic;color:var(--texto);margin-bottom:10px">Faturamento pelo ritmo de vendas − todos os custos projetados</div>
+        <div style="font-size:11px;font-weight:600;color:var(--texto);line-height:1.8">
+          Faturamento projetado: ${fmtBRL(d.projPorRitmoVendas)}<br>
+          − Material/Uber (realizado + futuro): ${fmtBRL(d.custoUberMat + d.custoUberMatFuturo)}
+          <span style="opacity:.6">(${fmtBRL(d.custoMedioUberMat)}/cliente)</span><br>
+          − Tráfego passado ${fmtBRL(d.trafegoRealizado)} + ${d.mesesRestantes} meses × R$${d.TRAFEGO_MENSAL_FIXO}: ${fmtBRL(d.trafegoAnoTotal)}
+        </div>
+      </div>
+      <div style="text-align:right;flex-shrink:0">
+        <div style="font-size:48px;font-weight:900;color:${cor};line-height:1">${fmtBRL(d.lucroProjetadoAnual)}</div>
+        <div style="font-size:11px;font-weight:600;color:var(--texto);margin-top:6px">margem: ${fmtPct(d.projPorRitmoVendas > 0 ? d.lucroProjetadoAnual / d.projPorRitmoVendas : 0)}</div>
+      </div>
     </div>
   `;
 }
@@ -793,6 +827,7 @@ function renderizar() {
   renderCustosMedios(d);
   renderCancelamentos(d);
   renderProjecoes(d);
+  renderLucroProjetado(d);
   renderGraficoAtend(d);
   renderGraficoFechamentos(d);
   renderJornada(d);
