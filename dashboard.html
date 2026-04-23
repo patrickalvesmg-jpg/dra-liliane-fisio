@@ -181,6 +181,9 @@
       <div class="grafico-canvas-wrap"><canvas id="chart-fechamentos"></canvas></div>
     </div>
 
+    <div class="sec">Jornada da Cliente — Fechamento vs. Parto</div>
+    <div id="jornada-wrap"></div>
+
     <div class="sec">Pacotes Mais Vendidos</div>
     <div id="pacotes-lista" class="pacote-lista"></div>
 
@@ -447,6 +450,30 @@ function calcular(ano) {
       return new Date(a.dataParto.split('/').reverse().join('-')) - new Date(b.dataParto.split('/').reverse().join('-'));
     });
 
+  // jornada: antecedência de fechamento ao parto
+  // para cada cliente com mesVenda e mesPrevisto preenchidos, calcula a diferença em meses
+  const jornada = todos
+    .filter(c => c.mesVenda && c.mesPrevisto && c.status !== 'Cancelado')
+    .map(c => {
+      const iVenda  = mesIndex(c.mesVenda);
+      const iParto  = mesIndex(c.mesPrevisto);
+      if (iVenda < 0 || iParto < 0) return null;
+      // diferença: quantos meses antes do parto ela fechou (positivo = antes, negativo = depois)
+      return { nome: c.nome, mesVenda: c.mesVenda, mesParto: c.mesPrevisto, antecedencia: iParto - iVenda };
+    })
+    .filter(Boolean);
+
+  const mediaAntecedencia = jornada.length > 0
+    ? jornada.reduce((s, j) => s + j.antecedencia, 0) / jornada.length
+    : null;
+
+  // distribuição: quantas fecharam por "X meses antes do parto"
+  const distAntecedencia = {};
+  jornada.forEach(j => {
+    const k = j.antecedencia;
+    distAntecedencia[k] = (distAntecedencia[k] || 0) + 1;
+  });
+
   return {
     fatRealizado, fatAgendado, totalVendido, totalCancelado,
     lucroLiquido, custoUberMat, trafegoRealizado,
@@ -457,6 +484,7 @@ function calcular(ano) {
     mesesVaziosFuturos, mesesRestantes,
     projFechamentos, projFechamentosAdj, ticketMedio,
     mensal, fechamentosPorMes, pacotes, pipeline,
+    jornada, mediaAntecedencia, distAntecedencia,
     mesesDecorridos, realizadasAteMes
   };
 }
@@ -611,6 +639,74 @@ function renderGraficoFechamentos(d) {
   });
 }
 
+// ─── RENDER JORNADA ──────────────────────────────────────────────────────────
+function renderJornada(d) {
+  const wrap = document.getElementById('jornada-wrap');
+  if (!d.jornada.length) {
+    wrap.innerHTML = '<p style="color:var(--texto);font-size:13px;padding:20px 0">Dados insuficientes — preencha Mês da Venda e Mês Previsto de Atend. na planilha.</p>';
+    return;
+  }
+
+  // distribuição ordenada por antecedência
+  const dist = Object.entries(d.distAntecedencia)
+    .map(([k, v]) => ({ meses: parseInt(k), qtd: v }))
+    .sort((a, b) => b.meses - a.meses);
+  const maxQtd = Math.max(...dist.map(x => x.qtd));
+
+  const label = m => {
+    if (m === 0) return 'No mesmo mês do parto';
+    if (m === 1) return '1 mês antes do parto';
+    if (m > 1)  return `${m} meses antes do parto`;
+    if (m === -1) return '1 mês após o parto';
+    return `${Math.abs(m)} meses após o parto`;
+  };
+
+  wrap.innerHTML = `
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
+      <div class="card" style="display:flex;flex-direction:column;gap:6px">
+        <div class="card-lbl">Antecedência Média de Fechamento</div>
+        <div class="card-val roxo">${d.mediaAntecedencia !== null ? d.mediaAntecedencia.toFixed(1) + ' meses' : '—'}</div>
+        <div class="card-sub">antes do parto previsto · baseado em ${d.jornada.length} ${d.jornada.length === 1 ? 'cliente' : 'clientes'}</div>
+      </div>
+      <div class="card">
+        <div class="card-lbl" style="margin-bottom:14px">Distribuição — Quando fechou antes do parto</div>
+        ${dist.map(x => `
+          <div style="margin-bottom:10px">
+            <div style="display:flex;justify-content:space-between;margin-bottom:4px">
+              <span style="font-size:12px;font-weight:600;color:var(--texto2)">${label(x.meses)}</span>
+              <span style="font-size:12px;font-weight:800;color:var(--roxo-claro)">${x.qtd} cliente${x.qtd > 1 ? 's' : ''}</span>
+            </div>
+            <div style="height:4px;background:rgba(176,144,165,0.12);border-radius:2px;overflow:hidden">
+              <div style="height:100%;width:${(x.qtd/maxQtd*100).toFixed(0)}%;background:linear-gradient(90deg,var(--roxo),var(--roxo-claro));border-radius:2px"></div>
+            </div>
+          </div>
+        `).join('')}
+      </div>
+    </div>
+    <div class="card" style="margin-top:14px;overflow:hidden">
+      <div class="card-lbl" style="margin-bottom:14px">Detalhe por Cliente — Mês da Venda → Mês do Parto</div>
+      <table style="width:100%;border-collapse:collapse">
+        <thead><tr>
+          <th style="font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--texto);padding:0 12px 10px;text-align:left">Cliente</th>
+          <th style="font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--texto);padding:0 12px 10px;text-align:left">Fechou em</th>
+          <th style="font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--texto);padding:0 12px 10px;text-align:left">Parto previsto</th>
+          <th style="font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--texto);padding:0 12px 10px;text-align:left">Antecedência</th>
+        </tr></thead>
+        <tbody>
+          ${d.jornada.map(j => `
+            <tr>
+              <td style="font-size:13px;font-weight:700;color:var(--creme);padding:10px 12px;border-bottom:1px solid rgba(176,144,165,0.07)">${j.nome}</td>
+              <td style="font-size:13px;color:var(--texto2);padding:10px 12px;border-bottom:1px solid rgba(176,144,165,0.07)">${j.mesVenda}</td>
+              <td style="font-size:13px;color:var(--texto2);padding:10px 12px;border-bottom:1px solid rgba(176,144,165,0.07)">${j.mesParto}</td>
+              <td style="font-size:13px;font-weight:700;padding:10px 12px;border-bottom:1px solid rgba(176,144,165,0.07);color:${j.antecedencia >= 3 ? 'var(--verde)' : j.antecedencia >= 1 ? 'var(--amarelo)' : 'var(--vermelho)'}">${label(j.antecedencia)}</td>
+            </tr>
+          `).join('')}
+        </tbody>
+      </table>
+    </div>
+  `;
+}
+
 // ─── RENDER PACOTES ──────────────────────────────────────────────────────────
 function renderPacotes(d) {
   if (d.pacotes.length === 0) {
@@ -656,6 +752,7 @@ function renderizar() {
   renderProjecoes(d);
   renderGraficoAtend(d);
   renderGraficoFechamentos(d);
+  renderJornada(d);
   renderPacotes(d);
   renderPipeline(d);
 }
