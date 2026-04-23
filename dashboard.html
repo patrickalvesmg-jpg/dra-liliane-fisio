@@ -119,17 +119,72 @@
     .pipeline-table td.mes { color: var(--roxo); }
     .pipeline-vazio { text-align: center; padding: 32px; font-size: 13px; color: var(--texto); font-style: italic; }
 
-    /* RESPONSIVE */
+    /* LUCRO PROJETADO */
+    .lucro-proj-card { background:#F0F7F3; border:1.5px solid rgba(78,139,101,0.30); border-radius:16px; padding:24px 28px; box-shadow:var(--sombra); display:grid; grid-template-columns:1fr auto; align-items:center; gap:24px; }
+    .lucro-proj-lbl { font-size:9px; font-weight:700; letter-spacing:2px; text-transform:uppercase; color:var(--verde); margin-bottom:6px; }
+    .lucro-proj-sub { font-family:'Cormorant Garamond',serif; font-size:13px; font-style:italic; color:var(--texto); margin-bottom:10px; }
+    .lucro-proj-detalhe { font-size:11px; font-weight:600; color:var(--texto); line-height:1.8; }
+    .lucro-proj-valor { text-align:right; flex-shrink:0; }
+
+    /* TABLET */
     @media (max-width: 900px) {
       .cnt { padding: 24px 16px 60px; }
       .hdr { padding: 12px 16px; }
       .g4 { grid-template-columns: repeat(2, 1fr); }
-      .g3 { grid-template-columns: repeat(1, 1fr); }
+      .g3 { grid-template-columns: repeat(2, 1fr); }
       .g2 { grid-template-columns: 1fr; }
+      .grafico-canvas-wrap { height: 220px; }
+      .proj-val { font-size: 28px; }
+      .card-val { font-size: 22px; }
     }
-    @media (max-width: 480px) {
-      .g4 { grid-template-columns: 1fr; }
-      .hdr-nome { font-size: 16px; }
+
+    /* MOBILE */
+    @media (max-width: 600px) {
+      .cnt { padding: 16px 12px 60px; }
+      .hdr { padding: 10px 14px; flex-wrap: wrap; gap: 8px; }
+      .hdr-nome { font-size: 17px; }
+      .hdr-sub { font-size: 9px; }
+      .hdr-right { gap: 8px; }
+      .hdr-ano { font-size: 12px; padding: 6px 10px; }
+      .hdr-btn-atualizar { padding: 6px 12px; font-size: 10px; }
+      .hdr-btn-atualizar span:last-child { display: none; }
+
+      .sec { font-size: 8px; margin: 28px 0 12px; }
+
+      .g4, .g3, .g2 { grid-template-columns: 1fr; gap: 10px; }
+
+      .card { padding: 16px 18px; border-radius: 12px; }
+      .card-lbl { font-size: 8px; margin-bottom: 6px; }
+      .card-val { font-size: 22px; }
+      .card-sub { font-size: 10px; }
+
+      .card-cancel { padding: 16px 18px; border-radius: 12px; }
+
+      .proj-card { padding: 18px 20px; border-radius: 12px; }
+      .proj-val { font-size: 28px; }
+      .proj-hint { font-size: 10px; }
+
+      .grafico-wrap { padding: 16px 14px; border-radius: 12px; }
+      .grafico-titulo { font-size: 15px; }
+      .grafico-canvas-wrap { height: 200px; }
+      .grafico-legenda { gap: 12px; }
+      .leg-item { font-size: 10px; }
+
+      .pacote-item { padding: 14px 16px; border-radius: 10px; }
+      .pacote-nome { font-size: 13px; }
+      .pacote-receita { font-size: 14px; }
+
+      .pipeline-wrap { border-radius: 12px; }
+      .pipeline-table th { font-size: 8px; padding: 10px 12px; letter-spacing: 1px; }
+      .pipeline-table td { font-size: 12px; padding: 12px 12px; }
+      /* esconde coluna Pacote(s) no mobile — fica apertado */
+      .pipeline-table th:nth-child(3),
+      .pipeline-table td:nth-child(3) { display: none; }
+
+      /* lucro projetado — empilha verticalmente */
+      .lucro-proj-card { grid-template-columns: 1fr; padding: 18px 16px; gap: 14px; }
+      .lucro-proj-valor { text-align: left; }
+      .lucro-proj-detalhe { font-size: 10px; }
     }
   </style>
 </head>
@@ -599,19 +654,19 @@ function renderCancelamentos(d) {
 function renderLucroProjetado(d) {
   const cor = d.lucroProjetadoAnual >= 0 ? 'var(--verde)' : 'var(--vermelho)';
   document.getElementById('lucro-projetado-wrap').innerHTML = `
-    <div style="background:#F0F7F3;border:1.5px solid rgba(78,139,101,0.30);border-radius:16px;padding:24px 28px;box-shadow:var(--sombra);display:grid;grid-template-columns:1fr auto;align-items:center;gap:24px">
-      <div>
-        <div style="font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--verde);margin-bottom:6px">Lucro Líquido Projetado do Ano</div>
-        <div style="font-family:'Cormorant Garamond',serif;font-size:13px;font-style:italic;color:var(--texto);margin-bottom:10px">Faturamento pelo ritmo de vendas − todos os custos projetados</div>
-        <div style="font-size:11px;font-weight:600;color:var(--texto);line-height:1.8">
+    <div class="lucro-proj-card">
+      <div class="lucro-proj-info">
+        <div class="lucro-proj-lbl">Lucro Líquido Projetado do Ano</div>
+        <div class="lucro-proj-sub">Faturamento pelo ritmo de vendas − todos os custos projetados</div>
+        <div class="lucro-proj-detalhe">
           Faturamento projetado: ${fmtBRL(d.projPorRitmoVendas)}<br>
           − Material/Uber (realizado + futuro): ${fmtBRL(d.custoUberMat + d.custoUberMatFuturo)}
           <span style="opacity:.6">(${fmtBRL(d.custoMedioUberMat)}/cliente)</span><br>
-          − Tráfego passado ${fmtBRL(d.trafegoRealizado)} + ${d.mesesRestantes} meses × R$${d.TRAFEGO_MENSAL_FIXO}: ${fmtBRL(d.trafegoAnoTotal)}
+          − Tráfego passado ${fmtBRL(d.trafegoRealizado)} + ${d.mesesRestantes}× R$${d.TRAFEGO_MENSAL_FIXO}: ${fmtBRL(d.trafegoAnoTotal)}
         </div>
       </div>
-      <div style="text-align:right;flex-shrink:0">
-        <div style="font-size:48px;font-weight:900;color:${cor};line-height:1">${fmtBRL(d.lucroProjetadoAnual)}</div>
+      <div class="lucro-proj-valor">
+        <div style="font-size:clamp(28px,5vw,48px);font-weight:900;color:${cor};line-height:1">${fmtBRL(d.lucroProjetadoAnual)}</div>
         <div style="font-size:11px;font-weight:600;color:var(--texto);margin-top:6px">margem: ${fmtPct(d.projPorRitmoVendas > 0 ? d.lucroProjetadoAnual / d.projPorRitmoVendas : 0)}</div>
       </div>
     </div>
@@ -738,7 +793,7 @@ function renderJornada(d) {
   };
 
   wrap.innerHTML = `
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
+    <div class="g2">
       <div class="card" style="display:flex;flex-direction:column;gap:6px">
         <div class="card-lbl">Antecedência Média de Fechamento</div>
         <div class="card-val roxo">${d.mediaAntecedencia !== null ? d.mediaAntecedencia.toFixed(1) + ' meses' : '—'}</div>
