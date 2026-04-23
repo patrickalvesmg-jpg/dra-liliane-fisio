@@ -162,6 +162,9 @@
     <div class="sec">Resultados do Ano</div>
     <div class="g4" id="kpis"></div>
 
+    <div class="sec">Custos por Atendimento</div>
+    <div class="g3" id="custos-medios"></div>
+
     <div class="sec">Cancelamentos</div>
     <div class="g3" id="cancelamentos"></div>
 
@@ -371,6 +374,13 @@ function calcular(ano) {
   const custoUberMat     = realizadas.reduce((s,c) => s + c.custo, 0);
   const trafegoRealizado = MESES.slice(0, mesLimite + 1).reduce((s, mes) => s + (trafego[mes] || 0), 0);
 
+  // custo médio por atendimento realizado
+  // uber/mat é direto por cliente; tráfego é diluído sobre todas as vendas ativas (gerou todas as vendas)
+  const custoMedioUberMat  = realizadas.length > 0 ? custoUberMat / realizadas.length : 0;
+  const totalAtivas        = ativas.length || 1;
+  const custoMedioTrafego  = trafegoRealizado / totalAtivas;
+  const custoMedioTotal    = custoMedioUberMat + custoMedioTrafego;
+
   const lucroLiquido = MESES.slice(0, mesLimite + 1).reduce((s, mes, idx) => {
     const real    = realizadas.filter(c => mesIndex(c.mesRealizado) === idx);
     const fatMes  = real.reduce((a,c) => a + c.valorTotal, 0);
@@ -487,6 +497,7 @@ function calcular(ano) {
   return {
     fatRealizado, fatAgendado, totalVendido, totalCancelado,
     lucroLiquido, custoUberMat, trafegoRealizado,
+    custoMedioUberMat, custoMedioTrafego, custoMedioTotal,
     canceladas, taxaCancelamento,
     projFaturamento, projFaturamentoAnual, projRestanteAno,
     projPorRitmoVendas, mediaVendasPorMes, projNovasFuturas,
@@ -527,6 +538,27 @@ function renderKPIs(d) {
       <div class="card-lbl">Lucro Líquido Realizado</div>
       <div class="card-val ${d.lucroLiquido >= 0 ? 'verde' : 'vermelho'}">${fmtBRL(d.lucroLiquido)}</div>
       <div class="card-sub">Uber/mat: ${fmtBRL(d.custoUberMat)} · Tráfego: ${fmtBRL(d.trafegoRealizado)}</div>
+    </div>
+  `;
+}
+
+// ─── RENDER CUSTOS MÉDIOS ────────────────────────────────────────────────────
+function renderCustosMedios(d) {
+  document.getElementById('custos-medios').innerHTML = `
+    <div class="card">
+      <div class="card-lbl">Custo Médio de Material / Uber</div>
+      <div class="card-val amarelo">${fmtBRL(d.custoMedioUberMat)}</div>
+      <div class="card-sub">Por atendimento realizado · Total: ${fmtBRL(d.custoUberMat)} em ${d.realizadasAteMes.length} atend.</div>
+    </div>
+    <div class="card">
+      <div class="card-lbl">Custo Médio de Tráfego Diluído</div>
+      <div class="card-val amarelo">${fmtBRL(d.custoMedioTrafego)}</div>
+      <div class="card-sub">Total tráfego ${fmtBRL(d.trafegoRealizado)} ÷ ${d.realizadasAteMes.length + (d.fatAgendado > 0 ? d.pipeline.length : 0)} clientes ativas</div>
+    </div>
+    <div class="card" style="border-color: var(--borda2);">
+      <div class="card-lbl">Custo Total Médio por Cliente</div>
+      <div class="card-val vermelho">${fmtBRL(d.custoMedioTotal)}</div>
+      <div class="card-sub">Material/Uber + tráfego diluído · Margem: ${fmtPct(d.fatRealizado > 0 ? (d.fatRealizado - d.custoUberMat - d.trafegoRealizado) / d.fatRealizado : 0)}</div>
     </div>
   `;
 }
@@ -758,6 +790,7 @@ function renderPipeline(d) {
 function renderizar() {
   const d = calcular(anoSelecionado);
   renderKPIs(d);
+  renderCustosMedios(d);
   renderCancelamentos(d);
   renderProjecoes(d);
   renderGraficoAtend(d);
