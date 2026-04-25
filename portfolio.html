@@ -1115,16 +1115,21 @@
       line-height: 1.75;
     }
 
+    /* Grid de planos — pré-parto: 2 cols; pós-parto: 3 cols */
     .planos-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(255px, 1fr));
-      gap: 22px;
-      max-width: 1100px;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 24px;
+      max-width: 860px;
       margin: 0 auto;
       padding: 0 32px;
     }
+    .planos-grid.tres-cols {
+      grid-template-columns: repeat(3, 1fr);
+      max-width: 1100px;
+    }
 
-    /* Plan card */
+    /* Plan card — novo visual */
     .plan-wrapper { position: relative; }
     .plan-wrapper input[type="checkbox"] {
       position: absolute;
@@ -1133,47 +1138,63 @@
     }
 
     .plan-card {
-      display: block;
+      display: flex;
+      flex-direction: column;
       background: var(--branco);
-      border: 2px solid transparent;
-      border-radius: var(--radius-card);
-      padding: 26px 22px;
+      border: 2px solid var(--creme-escuro);
+      border-radius: 18px;
+      padding: 0;
       cursor: pointer;
       transition: border-color 0.25s, background 0.25s, transform 0.22s, box-shadow 0.25s;
-      box-shadow: var(--shadow-card);
+      box-shadow: 0 4px 24px rgba(0,0,0,0.06);
       position: relative;
       height: 100%;
       user-select: none;
+      overflow: hidden;
     }
     .plan-card:hover {
-      transform: scale(1.025);
-      box-shadow: 0 12px 38px rgba(176,144,165,0.15);
+      transform: translateY(-4px);
+      box-shadow: 0 16px 48px rgba(176,144,165,0.18);
       border-color: var(--roxo-claro);
     }
     .plan-wrapper input:checked + .plan-card {
       border-color: var(--roxo-principal);
-      border-width: 3px;
-      background: #f8f1ff;
-      box-shadow: 0 12px 40px rgba(176,144,165,0.2);
+      border-width: 2px;
+      background: #fdf9ff;
+      box-shadow: 0 16px 48px rgba(176,144,165,0.22);
     }
+
+    /* Cabeçalho colorido do card */
+    .plan-header {
+      background: var(--roxo-bg);
+      padding: 24px 24px 20px;
+      border-bottom: 1px solid rgba(176,144,165,0.18);
+      position: relative;
+    }
+    .plan-header.destaque {
+      background: linear-gradient(135deg, #7B5EA7 0%, #B090A5 100%);
+    }
+    .plan-header.destaque .plan-name,
+    .plan-header.destaque .plan-tagline { color: white; }
 
     .plan-check-icon {
       position: absolute;
-      top: 14px; right: 14px;
-      width: 26px; height: 26px;
+      top: 16px; right: 16px;
+      width: 28px; height: 28px;
       border-radius: 50%;
       background: var(--roxo-principal);
       color: white;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 0.85rem;
+      font-size: 0.9rem;
       font-weight: 700;
       font-family: 'Outfit', sans-serif;
       opacity: 0;
       transform: scale(0) rotate(-90deg);
       transition: opacity 0.25s, transform 0.3s cubic-bezier(0.34,1.56,0.64,1);
     }
+    .plan-header.destaque .plan-check-icon { background: white; color: #7B5EA7; }
     .plan-wrapper input:checked + .plan-card .plan-check-icon {
       opacity: 1;
       transform: scale(1) rotate(0deg);
@@ -1182,59 +1203,269 @@
     .plan-badge {
       display: inline-block;
       font-family: 'Outfit', sans-serif;
-      font-size: 0.68rem;
+      font-size: 0.66rem;
       font-weight: 700;
       padding: 4px 12px;
       border-radius: 20px;
       margin-bottom: 10px;
-      letter-spacing: 0.04em;
+      letter-spacing: 0.05em;
     }
     .plan-badge.popular { background: var(--roxo-principal); color: white; }
+    .plan-badge.popular-inv { background: white; color: #7B5EA7; }
     .plan-badge.completo { background: #FFF0B3; color: #7A5A00; border: 1px solid #D4A800; }
 
     .plan-name {
       font-family: 'Outfit', sans-serif;
-      font-weight: 700;
-      font-size: 1.02rem;
+      font-weight: 800;
+      font-size: 1.08rem;
       color: var(--texto-escuro);
-      margin-bottom: 6px;
+      margin-bottom: 4px;
+      padding-right: 36px;
     }
 
-    .plan-price {
+    .plan-tagline {
+      font-size: 0.8rem;
+      color: var(--texto-cinza);
+      line-height: 1.5;
+      margin-bottom: 0;
+    }
+
+    /* Bloco de preço — ancoragem visual */
+    .plan-pricing {
+      padding: 20px 24px 18px;
+      border-bottom: 1px solid var(--creme-escuro);
+      background: var(--branco);
+      position: relative;
+    }
+
+    .plan-pricing-row {
+      display: flex;
+      align-items: flex-end;
+      gap: 14px;
+      flex-wrap: wrap;
+    }
+
+    .plan-price-de-wrap {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .plan-price-de-label {
+      font-family: 'Outfit', sans-serif;
+      font-size: 0.62rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: #c0a0b0;
+      margin-bottom: 1px;
+    }
+
+    .plan-price-de {
+      font-family: 'Outfit', sans-serif;
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: #c0a0b0;
+      text-decoration: line-through;
+      text-decoration-thickness: 2px;
+      line-height: 1;
+    }
+
+    .plan-price-por-wrap {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .plan-price-por-label {
+      font-family: 'Outfit', sans-serif;
+      font-size: 0.62rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--roxo-principal);
+      margin-bottom: 1px;
+    }
+
+    .plan-price-por {
       font-family: 'Outfit', sans-serif;
       font-weight: 900;
-      font-size: 1.5rem;
+      font-size: 2.2rem;
       color: var(--roxo-principal);
-      margin-bottom: 18px;
-      letter-spacing: -0.02em;
+      letter-spacing: -0.04em;
+      line-height: 1;
+    }
+    .plan-header.destaque ~ .plan-pricing .plan-price-por { color: #7B5EA7; }
+    .plan-header.destaque ~ .plan-pricing .plan-price-por-label { color: #7B5EA7; }
+
+    .plan-economy-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      background: #E8F5E9;
+      color: #2E7D32;
+      font-family: 'Outfit', sans-serif;
+      font-size: 0.7rem;
+      font-weight: 800;
+      padding: 4px 10px;
+      border-radius: 20px;
+      margin-left: auto;
+      align-self: center;
+      white-space: nowrap;
     }
 
-    .plan-items { list-style: none; margin-bottom: 14px; }
+    .plan-price-parcela {
+      font-family: 'Outfit', sans-serif;
+      font-size: 0.8rem;
+      color: var(--texto-cinza);
+      margin-top: 10px;
+      padding-top: 10px;
+      border-top: 1px dashed rgba(176,144,165,0.25);
+    }
+    .plan-price-parcela strong {
+      color: var(--texto-escuro);
+      font-weight: 800;
+    }
+
+    /* Corpo do card */
+    .plan-body {
+      padding: 20px 24px;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+    }
+
+    .plan-section-label {
+      font-family: 'Outfit', sans-serif;
+      font-size: 0.63rem;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--roxo-principal);
+      margin-bottom: 10px;
+    }
+
+    .plan-items { list-style: none; margin-bottom: 18px; }
     .plan-items li {
-      font-size: 0.85rem;
-      padding: 4px 0 4px 20px;
+      font-size: 0.84rem;
+      padding: 6px 0 6px 24px;
       position: relative;
       color: var(--texto-escuro);
-      line-height: 1.55;
+      line-height: 1.5;
+      border-bottom: 1px solid rgba(0,0,0,0.04);
     }
+    .plan-items li:last-child { border-bottom: none; }
     .plan-items li::before {
-      content: '·';
+      content: '✓';
       position: absolute;
       left: 0;
       color: var(--roxo-principal);
       font-weight: 900;
-      font-size: 1.2rem;
-      line-height: 1.2;
+      font-size: 0.8rem;
+      line-height: 1.8;
+    }
+
+    /* Item de destaque dentro da lista */
+    .plan-items li.item-destaque {
+      background: linear-gradient(90deg, rgba(176,144,165,0.1) 0%, transparent 100%);
+      border-radius: 6px;
+      padding-left: 24px;
+      padding-right: 8px;
+      font-weight: 600;
+      color: #7B5EA7;
+      border-bottom: none;
+      margin: 4px 0;
+    }
+    .plan-items li.item-destaque::before {
+      content: '✦';
+      color: #7B5EA7;
+      font-size: 0.7rem;
+      line-height: 2;
+    }
+
+    /* Box "Quer mais sessões?" — pré-parto */
+    .plan-extras {
+      background: linear-gradient(135deg, var(--roxo-bg) 0%, #f0e8f8 100%);
+      border: 1px solid rgba(176,144,165,0.28);
+      border-radius: 12px;
+      padding: 14px 16px;
+      margin-top: auto;
+      position: relative;
+      overflow: hidden;
+    }
+    .plan-extras::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0;
+      width: 3px; height: 100%;
+      background: var(--roxo-principal);
+      border-radius: 3px 0 0 3px;
+    }
+
+    .plan-extras-header {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 8px;
+    }
+
+    .plan-extras-label {
+      font-family: 'Outfit', sans-serif;
+      font-size: 0.68rem;
+      font-weight: 800;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--roxo-principal);
+    }
+
+    .plan-extras-pill {
+      background: var(--roxo-principal);
+      color: white;
+      font-family: 'Outfit', sans-serif;
+      font-size: 0.62rem;
+      font-weight: 700;
+      padding: 2px 8px;
+      border-radius: 20px;
+      letter-spacing: 0.04em;
+    }
+
+    .plan-extras-content {
+      display: flex;
+      align-items: baseline;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .plan-extras-preco-de {
+      font-family: 'Outfit', sans-serif;
+      font-size: 0.85rem;
+      color: #c0a0b0;
+      text-decoration: line-through;
+      text-decoration-thickness: 1.5px;
+    }
+
+    .plan-extras-preco-por {
+      font-family: 'Outfit', sans-serif;
+      font-size: 1.15rem;
+      font-weight: 900;
+      color: #7B5EA7;
+      letter-spacing: -0.02em;
+    }
+
+    .plan-extras-desc {
+      font-size: 0.78rem;
+      color: var(--texto-cinza);
+      line-height: 1.45;
+      margin-top: 4px;
     }
 
     .plan-nota {
       font-style: italic;
-      font-size: 0.8rem;
+      font-size: 0.79rem;
       color: var(--texto-cinza);
-      line-height: 1.58;
+      line-height: 1.55;
       border-top: 1px solid var(--creme-escuro);
-      padding-top: 12px;
-      margin-top: 10px;
+      padding-top: 14px;
+      margin-top: 14px;
     }
 
     /* ============================================================
@@ -1396,6 +1627,7 @@
     @media (max-width: 1023px) {
       .fb-grid { grid-template-columns: 1fr; max-width: 560px; }
       .planos-grid { grid-template-columns: repeat(2, 1fr); }
+      .planos-grid.tres-cols { grid-template-columns: repeat(2, 1fr); max-width: 860px; }
     }
 
     /* ============================================================
@@ -1424,6 +1656,7 @@
 
       .fb-grid { grid-template-columns: 1fr; }
       .planos-grid { grid-template-columns: 1fr; }
+      .planos-grid.tres-cols { grid-template-columns: 1fr; }
       .planos { padding-bottom: 200px; }
 
       .painel { flex-direction: column; align-items: flex-start; gap: 12px; }
@@ -2055,116 +2288,247 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
   <!-- PRÉ-PARTO -->
   <div class="grupo-label fade-in">PRÉ-PARTO</div>
+  <div class="grupo-desc fade-in">
+    Cuidado especializado durante a gestação: alívio das dores, redução do inchaço e preparo do corpo para o parto.
+  </div>
   <div class="planos-grid">
+
+    <!-- Alívio Gestar -->
     <div class="plan-wrapper fade-in">
-      <input type="checkbox" id="bem-gestar" name="plano" value="Bem Gestar — R$ 150,00" aria-label="Selecionar Bem Gestar" />
-      <label class="plan-card" for="bem-gestar">
-        <div class="plan-check-icon" aria-hidden="true">✓</div>
-        <p class="plan-name">Bem Gestar</p>
-        <p class="plan-price">R$ 150,00</p>
-        <ul class="plan-items" role="list">
-          <li>Drenagem linfática: momento de total relaxamento, reduzindo os inchaços e aliviando a sensação de cansaço nas pernas</li>
-          <li>Exercícios miolinfocinéticos: exercícios que irão ajudar a reduzir os inchaços</li>
-          <li>Orientações personalizadas</li>
-        </ul>
-      </label>
-    </div>
-
-    <div class="plan-wrapper fade-in" style="transition-delay:0.08s">
-      <input type="checkbox" id="bem-gestar-premium" name="plano" value="Bem Gestar Premium — R$ 500,00" aria-label="Selecionar Bem Gestar Premium" />
-      <label class="plan-card" for="bem-gestar-premium">
-        <div class="plan-check-icon" aria-hidden="true">✓</div>
-        <p class="plan-name">Bem Gestar Premium</p>
-        <p class="plan-price">R$ 500,00</p>
-        <ul class="plan-items" role="list">
-          <li>Pacote com 4 sessões de drenagem linfática (uma por semana)</li>
-          <li>Economia de R$ 100 no combo Bem Gestar Premium</li>
-          <li>Orientações em cada sessão</li>
-          <li>Pacote renovável</li>
-        </ul>
-        <p class="plan-nota">Ideal para acompanhamento durante toda a gestação.</p>
-      </label>
-    </div>
-
-    <div class="plan-wrapper fade-in" style="transition-delay:0.16s">
       <input type="checkbox" id="alivio-gestar" name="plano" value="Alívio Gestar — R$ 150,00" aria-label="Selecionar Alívio Gestar" />
       <label class="plan-card" for="alivio-gestar">
-        <div class="plan-check-icon" aria-hidden="true">✓</div>
-        <p class="plan-name">Alívio Gestar</p>
-        <p class="plan-price">R$ 150,00</p>
-        <ul class="plan-items" role="list">
-          <li>Taping de sustentação com avaliação clínica</li>
-          <li>Exercícios e orientações para suas queixas específicas</li>
-        </ul>
+        <div class="plan-header">
+          <div class="plan-check-icon" aria-hidden="true">✓</div>
+          <p class="plan-name">Alívio Gestar</p>
+          <p class="plan-tagline">Uma sessão completa de suporte à gestação</p>
+        </div>
+        <div class="plan-pricing">
+          <div class="plan-pricing-row">
+            <div class="plan-price-de-wrap">
+              <span class="plan-price-de-label">Serviços avulsos</span>
+              <span class="plan-price-de">R$ 220,00</span>
+            </div>
+            <div class="plan-price-por-wrap">
+              <span class="plan-price-por-label">Por apenas</span>
+              <span class="plan-price-por">R$ 150,00</span>
+            </div>
+            <span class="plan-economy-pill">↓ R$ 70 off</span>
+          </div>
+          <p class="plan-price-parcela">à vista · sessão avulsa renovável</p>
+        </div>
+        <div class="plan-body">
+          <p class="plan-section-label">O que está incluso</p>
+          <ul class="plan-items" role="list">
+            <li>Avaliação clínica individualizada — identificação das suas queixas específicas</li>
+            <li class="item-destaque">Drenagem linfática — relaxamento profundo, redução do inchaço e alívio do cansaço nas pernas</li>
+            <li>Exercícios miolinfocinéticos — auxiliam na prevenção da trombose, redução do inchaço, mobilidade, função gastrointestinal e funcionalidade geral</li>
+            <li>Prescrição de exercícios terapêuticos personalizados para a gestação</li>
+            <li>Orientações posturais e de ergonomia para o dia a dia</li>
+          </ul>
+          <div class="plan-extras">
+            <div class="plan-extras-header">
+              <span class="plan-extras-label">Pacote 4 sessões</span>
+              <span class="plan-extras-pill">Economize R$ 100</span>
+            </div>
+            <div class="plan-extras-content">
+              <span class="plan-extras-preco-de">R$ 600,00</span>
+              <span class="plan-extras-preco-por">R$ 500,00</span>
+            </div>
+            <p class="plan-extras-desc">4 sessões do Alívio Gestar por R$ 500 — uma por semana, pacote renovável.</p>
+          </div>
+        </div>
       </label>
     </div>
 
-    <div class="plan-wrapper fade-in" style="transition-delay:0.24s">
+    <!-- Sereno Gestar -->
+    <div class="plan-wrapper fade-in" style="transition-delay:0.1s">
       <input type="checkbox" id="sereno-gestar" name="plano" value="Sereno Gestar — R$ 250,00" aria-label="Selecionar Sereno Gestar" />
       <label class="plan-card" for="sereno-gestar">
-        <div class="plan-check-icon" aria-hidden="true">✓</div>
-        <p class="plan-name">Sereno Gestar</p>
-        <p class="plan-price">R$ 250,00</p>
-        <ul class="plan-items" role="list">
-          <li>Tudo do Alívio Gestar + Drenagem linfática na mesma sessão</li>
-        </ul>
-        <p class="plan-nota">O combo perfeito: suporte abdominal e relaxamento em um único encontro.</p>
+        <div class="plan-header destaque">
+          <div class="plan-check-icon" aria-hidden="true">✓</div>
+          <span class="plan-badge popular-inv">Mais completo</span>
+          <p class="plan-name">Sereno Gestar</p>
+          <p class="plan-tagline">Suporte abdominal + drenagem linfática em uma sessão</p>
+        </div>
+        <div class="plan-pricing">
+          <div class="plan-pricing-row">
+            <div class="plan-price-de-wrap">
+              <span class="plan-price-de-label">Serviços avulsos</span>
+              <span class="plan-price-de">R$ 370,00</span>
+            </div>
+            <div class="plan-price-por-wrap">
+              <span class="plan-price-por-label">Por apenas</span>
+              <span class="plan-price-por">R$ 250,00</span>
+            </div>
+            <span class="plan-economy-pill">↓ R$ 120 off</span>
+          </div>
+          <p class="plan-price-parcela">à vista · sessão avulsa renovável</p>
+        </div>
+        <div class="plan-body">
+          <p class="plan-section-label">O que está incluso</p>
+          <ul class="plan-items" role="list">
+            <li>Avaliação clínica individualizada — identificação das suas queixas específicas</li>
+            <li class="item-destaque">Drenagem linfática — relaxamento profundo, redução do inchaço e alívio do cansaço nas pernas</li>
+            <li>Exercícios miolinfocinéticos — auxiliam na prevenção da trombose, redução do inchaço, mobilidade, função gastrointestinal e funcionalidade geral</li>
+            <li>Prescrição de exercícios terapêuticos personalizados para a gestação</li>
+            <li>Orientações posturais e de ergonomia para o dia a dia</li>
+          </ul>
+          <div class="plan-extras">
+            <div class="plan-extras-header">
+              <span class="plan-extras-label">Pacote 2 sessões</span>
+              <span class="plan-extras-pill">Economize R$ 100</span>
+            </div>
+            <div class="plan-extras-content">
+              <span class="plan-extras-preco-de">R$ 500,00</span>
+              <span class="plan-extras-preco-por">R$ 400,00</span>
+            </div>
+            <p class="plan-extras-desc">2 sessões do Sereno Gestar por R$ 400 — perfeito para repetir o cuidado em duas semanas.</p>
+          </div>
+        </div>
       </label>
     </div>
+
   </div>
 
   <!-- PÓS-PARTO -->
   <div class="grupo-label pos fade-in">PÓS-PARTO</div>
   <div class="grupo-desc fade-in">
-    Todos os planos incluem avaliação clínica, exercícios terapêuticos e orientações. A diferença
-    entre os planos é o tempo de acompanhamento — e quanto mais contínuo, melhor a evolução.
+    Acompanhamento especializado nas semanas mais importantes do pós-parto. Quanto mais contínuo o cuidado, mais rápida e completa a recuperação.
   </div>
-  <div class="planos-grid">
+  <div class="planos-grid tres-cols">
+
+    <!-- Essencials -->
     <div class="plan-wrapper fade-in">
-      <input type="checkbox" id="pos-parto-essencials" name="plano" value="Pós-Parto Essencials — R$ 400,00" aria-label="Selecionar Pós-Parto Essencials" />
+      <input type="checkbox" id="pos-parto-essencials" name="plano" value="Pós-Parto Essencials — R$ 400,00 à vista" aria-label="Selecionar Pós-Parto Essencials" />
       <label class="plan-card" for="pos-parto-essencials">
-        <div class="plan-check-icon" aria-hidden="true">✓</div>
-        <p class="plan-name">Pós-Parto Essencials</p>
-        <p class="plan-price">R$ 400,00</p>
-        <ul class="plan-items" role="list">
-          <li>Consulta pré-parto online</li>
-          <li>Atendimento na maternidade nas primeiras 24h (avaliação + taping + laser + exercícios + orientações)</li>
-          <li>Programa de exercícios domiciliares em PDF</li>
-          <li>Suporte via WhatsApp | Retirada ou orientação p/ retirada do taping</li>
-        </ul>
-        <p class="plan-nota">A base completa do acompanhamento para quem quer começar bem desde o primeiro dia de pós-parto.</p>
+        <div class="plan-header">
+          <div class="plan-check-icon" aria-hidden="true">✓</div>
+          <p class="plan-name">Pós-Parto Essencials</p>
+          <p class="plan-tagline">A base completa desde o primeiro dia</p>
+        </div>
+        <div class="plan-pricing">
+          <div class="plan-pricing-row">
+            <div class="plan-price-de-wrap">
+              <span class="plan-price-de-label">Serviços avulsos</span>
+              <span class="plan-price-de">R$ 620,00</span>
+            </div>
+            <div class="plan-price-por-wrap">
+              <span class="plan-price-por-label">Por apenas</span>
+              <span class="plan-price-por">R$ 400,00</span>
+            </div>
+            <span class="plan-economy-pill">↓ R$ 220 off</span>
+          </div>
+          <p class="plan-price-parcela">à vista · ou <strong>6× de R$ 75,00</strong> sem juros</p>
+        </div>
+        <div class="plan-body">
+          <p class="plan-section-label">O que está incluso</p>
+          <ul class="plan-items" role="list">
+            <li>Consulta pré-parto online — preparação e alinhamento antes do nascimento</li>
+            <li>Atendimento na maternidade nas primeiras 24h após o parto</li>
+            <li>Avaliação clínica completa do pós-parto imediato</li>
+            <li>Taping compressivo — redução do inchaço (edema), estabilidade abdominal, maior conforto e segurança na hora de sentar, levantar, caminhar, segurar o seu bebê e cuidar de si</li>
+            <li>Laserterapia — cicatrização da cesárea, períneo e fissuras mamilares</li>
+            <li>Exercícios terapêuticos iniciados ainda na maternidade, incluindo miolinfocinéticos — auxiliam na prevenção da trombose, redução do inchaço, mobilidade, função gastrointestinal e funcionalidade geral</li>
+            <li>Programa de exercícios domiciliares em PDF</li>
+            <li>Orientações posturais para amamentação e transferências</li>
+            <li>Suporte via WhatsApp durante todo o acompanhamento</li>
+            <li>Orientação para retirada do taping com segurança</li>
+          </ul>
+          <p class="plan-nota">Para quem quer começar a recuperação com o melhor cuidado desde o primeiro dia.</p>
+        </div>
       </label>
     </div>
 
+    <!-- Advanced -->
     <div class="plan-wrapper fade-in" style="transition-delay:0.1s">
-      <input type="checkbox" id="pos-parto-advanced" name="plano" value="Pós-Parto Advanced — R$ 600,00" aria-label="Selecionar Pós-Parto Advanced" />
+      <input type="checkbox" id="pos-parto-advanced" name="plano" value="Pós-Parto Advanced — R$ 600,00 à vista" aria-label="Selecionar Pós-Parto Advanced" />
       <label class="plan-card" for="pos-parto-advanced">
-        <div class="plan-check-icon" aria-hidden="true">✓</div>
-        <span class="plan-badge popular">Mais escolhido</span>
-        <p class="plan-name">Pós-Parto Advanced</p>
-        <p class="plan-price">R$ 600,00</p>
-        <ul class="plan-items" role="list">
-          <li>Tudo do Essencials +</li>
-          <li>Retorno domiciliar com 7 dias: retirada do taping + reavaliação clínica + novo taping + laser + progressão dos exercícios</li>
-        </ul>
-        <p class="plan-nota">Para quem quer continuar a evolução do acompanhamento.</p>
+        <div class="plan-header destaque">
+          <div class="plan-check-icon" aria-hidden="true">✓</div>
+          <span class="plan-badge popular-inv">Mais escolhido</span>
+          <p class="plan-name">Pós-Parto Advanced</p>
+          <p class="plan-tagline">Acompanhamento contínuo nos primeiros 7 dias</p>
+        </div>
+        <div class="plan-pricing">
+          <div class="plan-pricing-row">
+            <div class="plan-price-de-wrap">
+              <span class="plan-price-de-label">Serviços avulsos</span>
+              <span class="plan-price-de">R$ 980,00</span>
+            </div>
+            <div class="plan-price-por-wrap">
+              <span class="plan-price-por-label">Por apenas</span>
+              <span class="plan-price-por">R$ 600,00</span>
+            </div>
+            <span class="plan-economy-pill">↓ R$ 380 off</span>
+          </div>
+          <p class="plan-price-parcela">à vista · ou <strong>6× de R$ 110,00</strong> sem juros</p>
+        </div>
+        <div class="plan-body">
+          <p class="plan-section-label">O que está incluso</p>
+          <ul class="plan-items" role="list">
+            <li>Consulta pré-parto online — preparação e alinhamento antes do nascimento</li>
+            <li>Atendimento na maternidade nas primeiras 24h após o parto</li>
+            <li>Avaliação clínica completa do pós-parto imediato</li>
+            <li>Taping compressivo — redução do inchaço (edema), estabilidade abdominal, maior conforto e segurança na hora de sentar, levantar, caminhar, segurar o seu bebê e cuidar de si</li>
+            <li>Laserterapia — cicatrização da cesárea, períneo e fissuras mamilares</li>
+            <li>Exercícios terapêuticos iniciados ainda na maternidade, incluindo miolinfocinéticos — auxiliam na prevenção da trombose, redução do inchaço, mobilidade, função gastrointestinal e funcionalidade geral</li>
+            <li>Programa de exercícios domiciliares em PDF</li>
+            <li>Orientações posturais para amamentação e transferências</li>
+            <li>Suporte via WhatsApp durante todo o acompanhamento</li>
+            <li><strong>Retorno domiciliar no 7º dia</strong> — retirada do taping, reavaliação clínica, novo taping, laserterapia e progressão dos exercícios</li>
+            <li class="item-destaque">+ Drenagem linfática domiciliar no retorno do 7º dia <span style="font-weight:400;font-style:italic;">(realizada apenas quando as condições clínicas forem adequadas)</span></li>
+          </ul>
+          <p class="plan-nota">Para quem quer manter a evolução da recuperação com acompanhamento profissional na primeira semana em casa.</p>
+        </div>
       </label>
     </div>
 
+    <!-- Exclusive -->
     <div class="plan-wrapper fade-in" style="transition-delay:0.2s">
-      <input type="checkbox" id="pos-parto-exclusive" name="plano" value="Pós-Parto Exclusive — R$ 800,00" aria-label="Selecionar Pós-Parto Exclusive" />
+      <input type="checkbox" id="pos-parto-exclusive" name="plano" value="Pós-Parto Exclusive — R$ 800,00 à vista" aria-label="Selecionar Pós-Parto Exclusive" />
       <label class="plan-card" for="pos-parto-exclusive">
-        <div class="plan-check-icon" aria-hidden="true">✓</div>
-        <span class="plan-badge completo">⭐ Mais completo</span>
-        <p class="plan-name">Pós-Parto Exclusive</p>
-        <p class="plan-price">R$ 800,00</p>
-        <ul class="plan-items" role="list">
-          <li>Tudo do Advanced +</li>
-          <li>Retorno domiciliar com 15 dias: retirada do taping + avaliação clínica + novo taping + laser + progressão dos exercícios</li>
-        </ul>
-        <p class="plan-nota">O acompanhamento mais completo nos 21 dias mais importantes do seu pós-parto.</p>
+        <div class="plan-header">
+          <div class="plan-check-icon" aria-hidden="true">✓</div>
+          <span class="plan-badge completo">⭐ Mais completo</span>
+          <p class="plan-name">Pós-Parto Exclusive</p>
+          <p class="plan-tagline">21 dias de acompanhamento especializado</p>
+        </div>
+        <div class="plan-pricing">
+          <div class="plan-pricing-row">
+            <div class="plan-price-de-wrap">
+              <span class="plan-price-de-label">Serviços avulsos</span>
+              <span class="plan-price-de">R$ 1.340,00</span>
+            </div>
+            <div class="plan-price-por-wrap">
+              <span class="plan-price-por-label">Por apenas</span>
+              <span class="plan-price-por">R$ 800,00</span>
+            </div>
+            <span class="plan-economy-pill">↓ R$ 540 off</span>
+          </div>
+          <p class="plan-price-parcela">à vista · ou <strong>6× de R$ 146,67</strong> sem juros</p>
+        </div>
+        <div class="plan-body">
+          <p class="plan-section-label">O que está incluso</p>
+          <ul class="plan-items" role="list">
+            <li>Consulta pré-parto online — preparação e alinhamento antes do nascimento</li>
+            <li>Atendimento na maternidade nas primeiras 24h após o parto</li>
+            <li>Avaliação clínica completa do pós-parto imediato</li>
+            <li>Taping compressivo — redução do inchaço (edema), estabilidade abdominal, maior conforto e segurança na hora de sentar, levantar, caminhar, segurar o seu bebê e cuidar de si</li>
+            <li>Laserterapia — cicatrização da cesárea, períneo e fissuras mamilares</li>
+            <li>Exercícios terapêuticos iniciados ainda na maternidade, incluindo miolinfocinéticos — auxiliam na prevenção da trombose, redução do inchaço, mobilidade, função gastrointestinal e funcionalidade geral</li>
+            <li>Programa de exercícios domiciliares em PDF</li>
+            <li>Orientações posturais para amamentação e transferências</li>
+            <li>Suporte via WhatsApp durante todo o acompanhamento</li>
+            <li><strong>Retorno domiciliar no 7º dia</strong> — retirada do taping, reavaliação clínica, novo taping, laserterapia e progressão dos exercícios</li>
+            <li class="item-destaque">+ Drenagem linfática domiciliar no retorno do 7º dia <span style="font-weight:400;font-style:italic;">(realizada apenas quando as condições clínicas forem adequadas)</span></li>
+            <li><strong>Retorno domiciliar no 15º dia</strong> — reavaliação clínica, novo taping, laserterapia e progressão dos exercícios</li>
+            <li class="item-destaque">+ Drenagem linfática domiciliar no retorno do 15º dia <span style="font-weight:400;font-style:italic;">(realizada apenas quando as condições clínicas forem adequadas)</span></li>
+          </ul>
+          <p class="plan-nota">O acompanhamento mais completo nos 21 dias mais importantes do pós-parto — para uma recuperação segura, progressiva e bem acompanhada.</p>
+        </div>
       </label>
     </div>
+
   </div>
 </section>
 
