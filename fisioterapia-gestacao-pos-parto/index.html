@@ -2782,7 +2782,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     window.addEventListener('popstate', function () {
       if (planosVisto) {
         history.pushState({ bonusGuard: true }, '');
-        window.location.href = '/saida.html';
+        setTimeout(function () { window.location.href = '/saida.html'; }, 50);
       }
     });
 
