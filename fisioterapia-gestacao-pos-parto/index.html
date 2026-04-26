@@ -2723,7 +2723,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
      POPUP DE BÔNUS
   ============================================================ */
   (function () {
-    var shown = false;
+    var shown = sessionStorage.getItem('bonusShown') === '1';
     var planosVisto = sessionStorage.getItem('planosVisto') === '1';
     var timer = null;
 
@@ -2741,6 +2741,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     function showPopup() {
       if (shown || !planosVisto) return;
       shown = true;
+      sessionStorage.setItem('bonusShown', '1');
       clearTimeout(timer);
 
       var overlay = document.createElement('div');
@@ -2783,7 +2784,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         if (entries[0].isIntersecting && !planosVisto) {
           planosVisto = true;
           sessionStorage.setItem('planosVisto', '1');
-          timer = setTimeout(showPopup, 20000);
+          timer = setTimeout(showPopup, 5000);
           /* mobile: fecha o navegador do WhatsApp ou troca de app */
           document.addEventListener('visibilitychange', function () {
             if (document.visibilityState === 'hidden') showPopup();

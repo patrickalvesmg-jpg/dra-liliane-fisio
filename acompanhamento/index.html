@@ -1399,7 +1399,7 @@
      POPUP DE BÔNUS
   ============================================================ */
   (function () {
-    var shown = false;
+    var shown = sessionStorage.getItem('bonusShown') === '1';
     var planosVisto = sessionStorage.getItem('planosVisto') === '1';
     var timer = null;
 
@@ -1417,6 +1417,7 @@
     function showPopup() {
       if (shown || !planosVisto) return;
       shown = true;
+      sessionStorage.setItem('bonusShown', '1');
       clearTimeout(timer);
 
       var overlay = document.createElement('div');
@@ -1460,8 +1461,8 @@
         if (entries[0].isIntersecting && !planosVisto) {
           planosVisto = true;
           sessionStorage.setItem('planosVisto', '1');
-          /* fallback: 20s sem interação */
-          timer = setTimeout(showPopup, 20000);
+          /* aparece 5s depois de chegar nos planos — só na primeira vez */
+          timer = setTimeout(showPopup, 5000);
           /* mobile: fecha o navegador do WhatsApp ou troca de app */
           document.addEventListener('visibilitychange', function () {
             if (document.visibilityState === 'hidden') showPopup();
