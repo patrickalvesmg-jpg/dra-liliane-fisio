@@ -1453,6 +1453,15 @@
       document.getElementById('bonus-fechar').addEventListener('click', fechar);
     }
 
+    /* mobile: pushState sempre ativo — botão Voltar cai na saida.html */
+    history.pushState({ bonusGuard: true }, '');
+    window.addEventListener('popstate', function () {
+      if (planosVisto) {
+        history.pushState({ bonusGuard: true }, '');
+        window.location.href = '/saida.html';
+      }
+    });
+
     /* Detecta quando a seção de planos aparece na tela */
     var secPlanos = document.getElementById('planos');
     if (secPlanos && window.IntersectionObserver) {
@@ -1464,15 +1473,6 @@
           /* mobile: detecta quando aba some ou troca de app */
           document.addEventListener('visibilitychange', function () {
             if (document.visibilityState === 'hidden') showPopup();
-          });
-          /* mobile: botão Voltar sempre redireciona para página de saída */
-          function guardarHistorico() {
-            history.pushState({ bonusGuard: true }, '');
-          }
-          guardarHistorico();
-          window.addEventListener('popstate', function () {
-            guardarHistorico();
-            window.location.href = '/saida.html';
           });
         }
       }, { threshold: 0, rootMargin: '0px' });
