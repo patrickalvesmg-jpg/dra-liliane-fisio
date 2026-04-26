@@ -1461,9 +1461,16 @@
           planosVisto = true;
           /* fallback: 20 segundos na seção sem sair */
           timer = setTimeout(showPopup, 20000);
-          /* mobile: detecta quando aba some */
+          /* mobile: detecta quando aba some ou troca de app */
           document.addEventListener('visibilitychange', function () {
             if (document.visibilityState === 'hidden') showPopup();
+          });
+          /* mobile: captura botão Voltar */
+          history.pushState({ bonusGuard: true }, '');
+          window.addEventListener('popstate', function onPop() {
+            window.removeEventListener('popstate', onPop);
+            showPopup();
+            if (!shown) history.pushState({ bonusGuard: true }, '');
           });
         }
       }, { threshold: 0, rootMargin: '0px' });
