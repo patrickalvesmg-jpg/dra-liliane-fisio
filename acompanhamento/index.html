@@ -1465,14 +1465,14 @@
           document.addEventListener('visibilitychange', function () {
             if (document.visibilityState === 'hidden') showPopup();
           });
-          /* mobile: botão Voltar redireciona para página de saída com popup */
-          history.pushState({ bonusGuard: true }, '');
-          window.addEventListener('popstate', function onPop() {
-            window.removeEventListener('popstate', onPop);
-            if (!shown) {
-              shown = true;
-              window.location.href = '/saida.html';
-            }
+          /* mobile: botão Voltar sempre redireciona para página de saída */
+          function guardarHistorico() {
+            history.pushState({ bonusGuard: true }, '');
+          }
+          guardarHistorico();
+          window.addEventListener('popstate', function () {
+            guardarHistorico();
+            window.location.href = '/saida.html';
           });
         }
       }, { threshold: 0, rootMargin: '0px' });
