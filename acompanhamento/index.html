@@ -1399,13 +1399,6 @@
      POPUP DE BÔNUS
   ============================================================ */
   (function () {
-    /* Se voltou da saida.html ou de outro app após ver os planos, redireciona */
-    if (sessionStorage.getItem('mostrarBonus') === '1') {
-      sessionStorage.removeItem('mostrarBonus');
-      window.location.href = '/saida.html';
-      return;
-    }
-
     var shown = false;
     var planosVisto = sessionStorage.getItem('planosVisto') === '1';
     var timer = null;
@@ -1469,11 +1462,9 @@
           sessionStorage.setItem('planosVisto', '1');
           /* fallback: 20s sem interação */
           timer = setTimeout(showPopup, 20000);
-          /* mobile: troca de app, minimiza ou aperta Voltar (iPhone) */
+          /* mobile: fecha o navegador do WhatsApp ou troca de app */
           document.addEventListener('visibilitychange', function () {
-            if (document.visibilityState === 'hidden') {
-              sessionStorage.setItem('mostrarBonus', '1');
-            }
+            if (document.visibilityState === 'hidden') showPopup();
           });
         }
       }, { threshold: 0, rootMargin: '0px' });

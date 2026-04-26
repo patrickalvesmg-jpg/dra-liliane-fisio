@@ -2723,13 +2723,6 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
      POPUP DE BÔNUS
   ============================================================ */
   (function () {
-    /* Se voltou após ver os planos, redireciona para saida.html */
-    if (sessionStorage.getItem('mostrarBonus') === '1') {
-      sessionStorage.removeItem('mostrarBonus');
-      window.location.href = '/saida.html';
-      return;
-    }
-
     var shown = false;
     var planosVisto = sessionStorage.getItem('planosVisto') === '1';
     var timer = null;
@@ -2791,11 +2784,9 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
           planosVisto = true;
           sessionStorage.setItem('planosVisto', '1');
           timer = setTimeout(showPopup, 20000);
-          /* mobile: troca de app, minimiza ou aperta Voltar (iPhone) */
+          /* mobile: fecha o navegador do WhatsApp ou troca de app */
           document.addEventListener('visibilitychange', function () {
-            if (document.visibilityState === 'hidden') {
-              sessionStorage.setItem('mostrarBonus', '1');
-            }
+            if (document.visibilityState === 'hidden') showPopup();
           });
         }
       }, { threshold: 0, rootMargin: '0px' });
