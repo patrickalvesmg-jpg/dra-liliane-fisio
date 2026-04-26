@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Espera — você tem um presente esperando por você</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: #B090A5;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+    }
+    .box {
+      background: #FBF6EE;
+      border-radius: 20px;
+      max-width: 480px;
+      width: 100%;
+      box-shadow: 0 24px 64px rgba(0,0,0,0.3);
+      overflow: hidden;
+    }
+    .topo {
+      background: #B090A5;
+      padding: 20px 24px 18px;
+      text-align: center;
+    }
+    .badge {
+      display: inline-block;
+      background: rgba(255,255,255,0.22);
+      color: #fff;
+      font-family: 'Outfit', sans-serif;
+      font-size: .65rem;
+      font-weight: 700;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      padding: 4px 14px;
+      border-radius: 20px;
+      margin-bottom: 10px;
+    }
+    .topo h1 {
+      font-family: 'Outfit', sans-serif;
+      color: #fff;
+      font-size: clamp(1.1rem, 4vw, 1.35rem);
+      font-weight: 800;
+      line-height: 1.25;
+    }
+    .topo h1 u { text-underline-offset: 3px; }
+    .corpo {
+      padding: 22px 24px 8px;
+    }
+    .intro {
+      font-size: .88rem;
+      color: #7A6872;
+      text-align: center;
+      margin-bottom: 18px;
+      line-height: 1.6;
+    }
+    .intro strong { color: #2A2028; }
+    .intro em { color: #B090A5; font-style: normal; font-weight: 700; }
+    .bonus {
+      display: flex;
+      gap: 14px;
+      align-items: flex-start;
+      background: #F4EEF2;
+      border-radius: 14px;
+      padding: 15px;
+      margin-bottom: 10px;
+    }
+    .bonus-icon {
+      min-width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      background: #B090A5;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.25rem;
+      flex-shrink: 0;
+    }
+    .bonus-titulo {
+      font-family: 'Outfit', sans-serif;
+      font-weight: 700;
+      font-size: .93rem;
+      color: #2A2028;
+      margin: 0 0 4px;
+    }
+    .bonus-desc {
+      font-size: .82rem;
+      color: #7A6872;
+      line-height: 1.55;
+      margin: 0;
+    }
+    .cta {
+      display: block;
+      text-align: center;
+      background: #25D366;
+      color: #fff;
+      font-family: 'Outfit', sans-serif;
+      font-weight: 800;
+      font-size: 1.05rem;
+      padding: 18px 20px;
+      border-radius: 12px;
+      text-decoration: none;
+      margin: 20px 0 8px;
+    }
+    .instrucao {
+      font-size: .78rem;
+      color: #B0A0AA;
+      text-align: center;
+      line-height: 1.5;
+      margin-bottom: 4px;
+    }
+    .voltar {
+      display: block;
+      width: 100%;
+      background: none;
+      border: none;
+      color: #C8C0C5;
+      font-family: 'DM Sans', sans-serif;
+      font-size: .72rem;
+      cursor: pointer;
+      padding: 6px 0 18px;
+      text-align: center;
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <div class="box">
+    <div class="topo">
+      <div class="badge">Oferta por tempo limitado</div>
+      <h1>Feche nos próximos <u>3 dias</u><br>e ganhe 2 bônus exclusivos</h1>
+    </div>
+    <div class="corpo">
+      <p class="intro">
+        Para ganhar os bônus você precisa fazer <strong>duas coisas</strong>:
+        fechar o acompanhamento até <em id="data-limite"></em>
+        <u>e</u> clicar no botão abaixo enviando a mensagem no WhatsApp —
+        isso confirma seu interesse e garante os presentes.
+      </p>
+
+      <div class="bonus">
+        <div class="bonus-icon">🎗️</div>
+        <div>
+          <p class="bonus-titulo">Órtese Espuma Pós-Parto</p>
+          <p class="bonus-desc">Órtese em espuma usada após a cesárea para estabilizar a região da cicatriz. Combinada ao tape e à calcinha adequada, promove uma compressão uniforme que evita o acúmulo de inchaço em pontos específicos — prevenindo a famosa "bolsinha" que se forma acima da cicatriz.</p>
+        </div>
+      </div>
+
+      <div class="bonus">
+        <div class="bonus-icon">🤱</div>
+        <div>
+          <p class="bonus-titulo">Rosquinha de Amamentação</p>
+          <p class="bonus-desc">Protetor de mamilo em formato de rosca que evita o contato com o sutiã quando ele está sensível ou machucado — tornando a amamentação mais confortável sem precisar parar.</p>
+        </div>
+      </div>
+
+      <a id="btn-wpp" href="#" target="_blank" rel="noopener" class="cta">
+        Quero meu bônus! — Mandar mensagem agora
+      </a>
+      <p class="instrucao">Você vai ser direcionada para o WhatsApp.<br>A mensagem já vem preenchida — é só enviar.</p>
+      <button class="voltar" onclick="history.back()">Não quero os bônus</button>
+    </div>
+  </div>
+
+  <script>
+    var d = new Date();
+    d.setDate(d.getDate() + 3);
+    document.getElementById('data-limite').textContent = d.toLocaleDateString('pt-BR', { day: '2-digit', month: 'long' });
+
+    var msg = 'Quero meu bônus! \n\nVi os bônus exclusivos no site e quero garantir os dois antes do prazo:\n- Órtese Espuma Pós-Parto\n- Rosquinha de Amamentação\n\nPode me passar mais informações sobre o acompanhamento?';
+    document.getElementById('btn-wpp').href = 'https://wa.me/5583999254499?text=' + encodeURIComponent(msg);
+  </script>
+</body>
+</html>

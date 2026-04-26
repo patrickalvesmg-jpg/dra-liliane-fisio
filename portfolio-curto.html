@@ -1465,12 +1465,14 @@
           document.addEventListener('visibilitychange', function () {
             if (document.visibilityState === 'hidden') showPopup();
           });
-          /* mobile: captura botão Voltar */
+          /* mobile: botão Voltar redireciona para página de saída com popup */
           history.pushState({ bonusGuard: true }, '');
           window.addEventListener('popstate', function onPop() {
             window.removeEventListener('popstate', onPop);
-            showPopup();
-            if (!shown) history.pushState({ bonusGuard: true }, '');
+            if (!shown) {
+              shown = true;
+              window.location.href = 'saida.html';
+            }
           });
         }
       }, { threshold: 0, rootMargin: '0px' });
