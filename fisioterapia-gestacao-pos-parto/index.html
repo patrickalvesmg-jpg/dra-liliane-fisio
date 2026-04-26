@@ -2724,7 +2724,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   ============================================================ */
   (function () {
     var shown = false;
-    var planosVisto = false;
+    var planosVisto = sessionStorage.getItem('planosVisto') === '1';
     var timer = null;
 
     function dataLimite() {
@@ -2791,6 +2791,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       var obs = new IntersectionObserver(function (entries) {
         if (entries[0].isIntersecting && !planosVisto) {
           planosVisto = true;
+          sessionStorage.setItem('planosVisto', '1');
           timer = setTimeout(showPopup, 20000);
           document.addEventListener('visibilitychange', function () {
             if (document.visibilityState === 'hidden') showPopup();
