@@ -2777,15 +2777,6 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       document.getElementById('bonus-fechar').addEventListener('click', fechar);
     }
 
-    /* mobile: pushState sempre ativo — botão Voltar cai na saida.html */
-    history.pushState({ bonusGuard: true }, '');
-    window.addEventListener('popstate', function () {
-      if (planosVisto) {
-        history.pushState({ bonusGuard: true }, '');
-        setTimeout(function () { window.location.href = '/saida.html'; }, 50);
-      }
-    });
-
     var secPlanos = document.getElementById('planos');
     if (secPlanos && window.IntersectionObserver) {
       var obs = new IntersectionObserver(function (entries) {
