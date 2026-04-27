@@ -2,7 +2,7 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
-  <!-- v20260427-imediato -->
+  <!-- v20260427-fix -->
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
   <meta http-equiv="Pragma" content="no-cache" />
   <meta http-equiv="Expires" content="0" />
@@ -1425,7 +1425,7 @@ Pode me passar mais informações sobre o acompanhamento?';
   }
 
   function showPopup() {
-    if (shown || !planosVisto) return;
+    if (shown) return;
     shown = true;
     clearTimeout(timer);
 
@@ -1463,19 +1463,13 @@ Pode me passar mais informações sobre o acompanhamento?';
     document.getElementById('bonus-fechar').addEventListener('click', fechar);
   }
 
-  var secPlanos = document.getElementById('planos');
-  if (secPlanos && window.IntersectionObserver) {
-    var obs = new IntersectionObserver(function (entries) {
-      if (entries[0].isIntersecting && !planosVisto) {
-        planosVisto = true;
-        showPopup();
-        document.addEventListener('visibilitychange', function () {
-          if (document.visibilityState === 'hidden') showPopup();
-        });
-      }
-    }, { threshold: 0, rootMargin: '0px' });
-    obs.observe(secPlanos);
-  }
+  /* Aparece 2s após carregar a página */
+  setTimeout(showPopup, 2000);
+
+  /* Também aparece em exit-intent */
+  document.addEventListener('visibilitychange', function () {
+    if (document.visibilityState === 'hidden') showPopup();
+  });
 
   document.documentElement.addEventListener('mouseleave', function () {
     showPopup();
