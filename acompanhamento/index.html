@@ -2,7 +2,7 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
-  <!-- v20260427-fix2 -->
+  <!-- v20260427-planos -->
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
   <meta http-equiv="Pragma" content="no-cache" />
   <meta http-equiv="Expires" content="0" />
@@ -1457,13 +1457,17 @@
     document.getElementById('bonus-fechar').addEventListener('click', fechar);
   }
 
-  /* Aparece 2s após carregar a página */
-  setTimeout(showPopup, 2000);
-
-  /* Também aparece em exit-intent */
-  document.addEventListener('visibilitychange', function () {
-    if (document.visibilityState === 'hidden') showPopup();
-  });
+  /* Aparece quando a seção de planos entra na tela */
+  var secPlanos = document.getElementById('planos');
+  if (secPlanos && window.IntersectionObserver) {
+    var obs = new IntersectionObserver(function (entries) {
+      if (entries[0].isIntersecting) {
+        showPopup();
+        obs.disconnect();
+      }
+    }, { threshold: 0.15 });
+    obs.observe(secPlanos);
+  }
 
   document.documentElement.addEventListener('mouseleave', function () {
     showPopup();
