@@ -1461,22 +1461,22 @@
       document.getElementById('bonus-fechar').addEventListener('click', fechar);
     }
 
-    /* Detecta quando a seção de planos aparece na tela */
+    /* Detecta quando a seção de planos aparece na tela via scroll */
     var secPlanos = document.getElementById('planos');
-    if (secPlanos && window.IntersectionObserver) {
-      var obs = new IntersectionObserver(function (entries) {
-        if (entries[0].isIntersecting && !planosVisto) {
-          planosVisto = true;
-          /* v20260426 — aparece imediatamente ao chegar nos planos */
-          showPopup();
-          /* mobile: fecha o navegador do WhatsApp ou troca de app */
-          document.addEventListener('visibilitychange', function () {
-            if (document.visibilityState === 'hidden') showPopup();
-          });
-        }
-      }, { threshold: 0, rootMargin: '0px' });
-      obs.observe(secPlanos);
+    function checkPlanos() {
+      if (planosVisto || !secPlanos) return;
+      var rect = secPlanos.getBoundingClientRect();
+      if (rect.top < window.innerHeight) {
+        planosVisto = true;
+        window.removeEventListener('scroll', checkPlanos);
+        showPopup();
+        document.addEventListener('visibilitychange', function () {
+          if (document.visibilityState === 'hidden') showPopup();
+        });
+      }
     }
+    window.addEventListener('scroll', checkPlanos, { passive: true });
+    checkPlanos(); /* checa já no carregamento caso já esteja visível */
 
     /* Desktop: exit-intent — mouse sai da janela após ver os planos */
     document.documentElement.addEventListener('mouseleave', function () {
