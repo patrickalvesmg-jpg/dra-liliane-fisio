@@ -2580,6 +2580,147 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 </footer>
 
 <script>
+  /* ============================================================
+     FADE-IN — INTERSECTION OBSERVER
+  ============================================================ */
+  const fadeEls = document.querySelectorAll('.fade-in, .fade-left');
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach((entry, i) => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        io.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.1, rootMargin: '0px 0px -28px 0px' });
+  fadeEls.forEach(el => io.observe(el));
+
+  /* ============================================================
+     ICON DRAW ANIMATION
+  ============================================================ */
+  const iconEls = document.querySelectorAll('.icon-svg');
+  const iconIo = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('drawn');
+        iconIo.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.3 });
+  iconEls.forEach(el => iconIo.observe(el));
+
+  /* ============================================================
+     ANTES/DEPOIS — CAROUSEL (mobile only)
+  ============================================================ */
+  function initCarousels() {
+    document.querySelectorAll('[data-carousel]').forEach(wrap => {
+      const track  = wrap.querySelector('.ba-track');
+      const slides = wrap.querySelectorAll('.ba-slide');
+      const dots   = wrap.querySelectorAll('.ba-dot');
+      const prev   = wrap.querySelector('.ba-prev');
+      const next   = wrap.querySelector('.ba-next');
+      if (!track || slides.length <= 1) return;
+
+      let current = 0;
+
+      function goTo(idx) {
+        current = ((idx % slides.length) + slides.length) % slides.length;
+        track.style.transform = `translateX(-${current * 100}%)`;
+        dots.forEach((d, i) => d.classList.toggle('active', i === current));
+      }
+
+      if (prev) prev.addEventListener('click', () => goTo(current - 1));
+      if (next) next.addEventListener('click', () => goTo(current + 1));
+      dots.forEach((d, i) => d.addEventListener('click', () => goTo(i)));
+
+      // Touch swipe
+      let startX = 0;
+      track.addEventListener('touchstart', e => { startX = e.touches[0].clientX; }, { passive: true });
+      track.addEventListener('touchend', e => {
+        const diff = startX - e.changedTouches[0].clientX;
+        if (Math.abs(diff) > 45) goTo(diff > 0 ? current + 1 : current - 1);
+      });
+
+      // Reset on resize
+      window.addEventListener('resize', () => { goTo(current); });
+    });
+  }
+  initCarousels();
+
+  /* ============================================================
+     SELETOR DE PLANOS + WHATSAPP
+  ============================================================ */
+  const checkboxes  = document.querySelectorAll('input[name="plano"]');
+  const painel      = document.getElementById('painel');
+  const painelNomes = document.getElementById('painel-nomes');
+  const btnEnviar   = document.getElementById('btn-enviar');
+
+  function getSelected() {
+    return Array.from(checkboxes).filter(cb => cb.checked).map(cb => cb.value);
+  }
+
+  function updatePainel() {
+    const sel = getSelected();
+    if (sel.length > 0) {
+      painel.classList.add('visible');
+      painelNomes.textContent = sel.join(' · ');
+    } else {
+      painel.classList.remove('visible');
+      painelNomes.textContent = 'Nenhum selecionado';
+    }
+  }
+
+  checkboxes.forEach(cb => cb.addEventListener('change', updatePainel));
+
+  /* ============================================================
+     BARRA DE PROGRESSO DE LEITURA
+  ============================================================ */
+  const progressFill  = document.getElementById('progress-fill');
+  const progressLabel = document.getElementById('progress-label');
+
+  const sections = [
+    { el: document.querySelector('.hero'),         label: 'Apresentação' },
+    { el: document.querySelector('.sobre'),        label: 'Sobre a Dra. Liliane' },
+    { el: document.querySelector('.por-que'),      label: 'Por que a Fisioterapia?' },
+    { el: document.querySelector('#o-que-faco'),   label: 'O que faço' },
+    { el: document.querySelector('.como-funciona'),label: 'Como funciona' },
+    { el: document.querySelector('.feedbacks'),    label: 'Depoimentos' },
+    { el: document.querySelector('.planos'),       label: 'Planos de acompanhamento' },
+    { el: document.querySelector('.encerramento'), label: 'Fale comigo' },
+  ].filter(s => s.el);
+
+  function updateProgress() {
+    const scrollTop    = window.scrollY;
+    const docHeight    = document.documentElement.scrollHeight - window.innerHeight;
+    const pct          = docHeight > 0 ? Math.min(100, (scrollTop / docHeight) * 100) : 0;
+    progressFill.style.width = pct + '%';
+
+    let current = sections[0];
+    for (const s of sections) {
+      const top = s.el.getBoundingClientRect().top + scrollTop;
+      if (scrollTop >= top - window.innerHeight * 0.4) current = s;
+    }
+    if (progressLabel.textContent !== current.label) {
+      progressLabel.textContent = current.label;
+    }
+  }
+
+  window.addEventListener('scroll', updateProgress, { passive: true });
+  updateProgress();
+
+  btnEnviar.addEventListener('click', () => {
+    const sel = getSelected();
+    let msg;
+    if (sel.length > 0) {
+      const lista = sel.map(p => `• ${p}`).join('\n');
+      msg = `Olá Dra. Liliane! Tenho interesse nos seguintes planos:\n\n${lista}\n\nPoderia me passar mais informações?`;
+    } else {
+      msg = 'Olá Dra. Liliane! Gostaria de saber mais sobre seus acompanhamentos. Poderia me ajudar?';
+    }
+    window.open('https://wa.me/5583999254499?text=' + encodeURIComponent(msg), '_blank');
+  });
+</script>
+
+<script>
 /* POPUP BONUS v20260427-prog */
 (function () {
   var shown = false;
