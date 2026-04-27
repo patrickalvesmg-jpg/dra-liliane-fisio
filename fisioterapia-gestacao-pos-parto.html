@@ -2580,226 +2580,96 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 </footer>
 
 <script>
-  /* ============================================================
-     FADE-IN — INTERSECTION OBSERVER
-  ============================================================ */
-  const fadeEls = document.querySelectorAll('.fade-in, .fade-left');
-  const io = new IntersectionObserver((entries) => {
-    entries.forEach((entry, i) => {
-      if (entry.isIntersecting) {
-        entry.target.classList.add('visible');
-        io.unobserve(entry.target);
-      }
-    });
-  }, { threshold: 0.1, rootMargin: '0px 0px -28px 0px' });
-  fadeEls.forEach(el => io.observe(el));
+/* POPUP BONUS v20260427-prog */
+(function () {
+  var shown = false;
 
-  /* ============================================================
-     ICON DRAW ANIMATION
-  ============================================================ */
-  const iconEls = document.querySelectorAll('.icon-svg');
-  const iconIo = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        entry.target.classList.add('drawn');
-        iconIo.unobserve(entry.target);
-      }
-    });
-  }, { threshold: 0.3 });
-  iconEls.forEach(el => iconIo.observe(el));
-
-  /* ============================================================
-     ANTES/DEPOIS — CAROUSEL (mobile only)
-  ============================================================ */
-  function initCarousels() {
-    document.querySelectorAll('[data-carousel]').forEach(wrap => {
-      const track  = wrap.querySelector('.ba-track');
-      const slides = wrap.querySelectorAll('.ba-slide');
-      const dots   = wrap.querySelectorAll('.ba-dot');
-      const prev   = wrap.querySelector('.ba-prev');
-      const next   = wrap.querySelector('.ba-next');
-      if (!track || slides.length <= 1) return;
-
-      let current = 0;
-
-      function goTo(idx) {
-        current = ((idx % slides.length) + slides.length) % slides.length;
-        track.style.transform = `translateX(-${current * 100}%)`;
-        dots.forEach((d, i) => d.classList.toggle('active', i === current));
-      }
-
-      if (prev) prev.addEventListener('click', () => goTo(current - 1));
-      if (next) next.addEventListener('click', () => goTo(current + 1));
-      dots.forEach((d, i) => d.addEventListener('click', () => goTo(i)));
-
-      // Touch swipe
-      let startX = 0;
-      track.addEventListener('touchstart', e => { startX = e.touches[0].clientX; }, { passive: true });
-      track.addEventListener('touchend', e => {
-        const diff = startX - e.changedTouches[0].clientX;
-        if (Math.abs(diff) > 45) goTo(diff > 0 ? current + 1 : current - 1);
-      });
-
-      // Reset on resize
-      window.addEventListener('resize', () => { goTo(current); });
-    });
-  }
-  initCarousels();
-
-  /* ============================================================
-     SELETOR DE PLANOS + WHATSAPP
-  ============================================================ */
-  const checkboxes  = document.querySelectorAll('input[name="plano"]');
-  const painel      = document.getElementById('painel');
-  const painelNomes = document.getElementById('painel-nomes');
-  const btnEnviar   = document.getElementById('btn-enviar');
-
-  function getSelected() {
-    return Array.from(checkboxes).filter(cb => cb.checked).map(cb => cb.value);
+  function dataLimite() {
+    var d = new Date();
+    d.setDate(d.getDate() + 3);
+    return d.toLocaleDateString('pt-BR', { day: '2-digit', month: 'long' });
   }
 
-  function updatePainel() {
-    const sel = getSelected();
-    if (sel.length > 0) {
-      painel.classList.add('visible');
-      painelNomes.textContent = sel.join(' · ');
-    } else {
-      painel.classList.remove('visible');
-      painelNomes.textContent = 'Nenhum selecionado';
-    }
+  function wppUrl() {
+    var msg = 'Quero meu bônus! \n\nVi os bônus exclusivos no site e quero deixar meu acompanhamento pré-agendado para garantir os dois bônus:\n- Órtese Espuma Pós-Parto\n- Rosquinha de Amamentação\n\nPode me passar mais informações?';
+    return 'https://wa.me/5583999254499?text=' + encodeURIComponent(msg);
   }
 
-  checkboxes.forEach(cb => cb.addEventListener('change', updatePainel));
-
-  /* ============================================================
-     BARRA DE PROGRESSO DE LEITURA
-  ============================================================ */
-  const progressFill  = document.getElementById('progress-fill');
-  const progressLabel = document.getElementById('progress-label');
-
-  const sections = [
-    { el: document.querySelector('.hero'),         label: 'Apresentação' },
-    { el: document.querySelector('.sobre'),        label: 'Sobre a Dra. Liliane' },
-    { el: document.querySelector('.por-que'),      label: 'Por que a Fisioterapia?' },
-    { el: document.querySelector('#o-que-faco'),   label: 'O que faço' },
-    { el: document.querySelector('.como-funciona'),label: 'Como funciona' },
-    { el: document.querySelector('.feedbacks'),    label: 'Depoimentos' },
-    { el: document.querySelector('.planos'),       label: 'Planos de acompanhamento' },
-    { el: document.querySelector('.encerramento'), label: 'Fale comigo' },
-  ].filter(s => s.el);
-
-  function updateProgress() {
-    const scrollTop    = window.scrollY;
-    const docHeight    = document.documentElement.scrollHeight - window.innerHeight;
-    const pct          = docHeight > 0 ? Math.min(100, (scrollTop / docHeight) * 100) : 0;
-    progressFill.style.width = pct + '%';
-
-    let current = sections[0];
-    for (const s of sections) {
-      const top = s.el.getBoundingClientRect().top + scrollTop;
-      if (scrollTop >= top - window.innerHeight * 0.4) current = s;
-    }
-    if (progressLabel.textContent !== current.label) {
-      progressLabel.textContent = current.label;
-    }
+  function mostrarBotaoFixo() {
+    if (document.getElementById('bonus-btn-fixo')) return;
+    var a = document.createElement('a');
+    a.id = 'bonus-btn-fixo';
+    a.href = wppUrl();
+    a.target = '_blank';
+    a.rel = 'noopener';
+    a.style.cssText = 'position:fixed;bottom:0;left:0;right:0;z-index:9998;background:#25D366;color:#fff;font-family:Outfit,sans-serif;font-weight:800;font-size:.95rem;text-align:center;text-decoration:none;padding:16px 18px;box-shadow:0 -6px 24px rgba(0,0,0,0.22);display:flex;align-items:center;justify-content:center;gap:8px;letter-spacing:-.01em;';
+    a.innerHTML = '<span style="font-size:1.05rem;">🎁</span> Quero meu bônus — mandar mensagem';
+    document.body.appendChild(a);
   }
 
-  window.addEventListener('scroll', updateProgress, { passive: true });
-  updateProgress();
+  function showPopup() {
+    if (shown) return;
+    shown = true;
 
-  btnEnviar.addEventListener('click', () => {
-    const sel = getSelected();
-    let msg;
-    if (sel.length > 0) {
-      const lista = sel.map(p => `• ${p}`).join('\n');
-      msg = `Olá Dra. Liliane! Tenho interesse nos seguintes planos:\n\n${lista}\n\nPoderia me passar mais informações?`;
-    } else {
-      msg = 'Olá Dra. Liliane! Gostaria de saber mais sobre seus acompanhamentos. Poderia me ajudar?';
-    }
-    window.open('https://wa.me/5583999254499?text=' + encodeURIComponent(msg), '_blank');
-  });
+    var overlay = document.createElement('div');
+    overlay.id = 'bonus-overlay';
+    overlay.style.cssText = 'position:fixed;top:0;left:0;right:0;bottom:0;z-index:9999;background:rgba(42,32,40,0.78);display:flex;align-items:center;justify-content:center;padding:12px;box-sizing:border-box;font-family:DM Sans,sans-serif;';
 
-  /* ============================================================
-     POPUP DE BÔNUS
-  ============================================================ */
-  (function () {
-    var shown = false;
-    var planosVisto = false;
-    var timer = null;
+    var box = document.createElement('div');
+    box.style.cssText = 'background:#FBF6EE;border-radius:18px;max-width:440px;width:100%;box-shadow:0 24px 64px rgba(0,0,0,0.3);display:flex;flex-direction:column;max-height:calc(100dvh - 24px);overflow:hidden;';
 
-    function dataLimite() {
-      var d = new Date();
-      d.setDate(d.getDate() + 3);
-      return d.toLocaleDateString('pt-BR', { day: '2-digit', month: 'long' });
-    }
-
-    function wppUrl() {
-      var msg = 'Quero meu bônus! \n\nVi os bônus exclusivos no site e quero garantir os dois antes do prazo:\n- Órtese Espuma Pós-Parto\n- Rosquinha de Amamentação\n\nPode me passar mais informações sobre o acompanhamento?';
-      return 'https://wa.me/5583999254499?text=' + encodeURIComponent(msg);
-    }
-
-    function showPopup() {
-      if (shown || !planosVisto) return;
-      shown = true;
-      clearTimeout(timer);
-
-      var overlay = document.createElement('div');
-      overlay.style.cssText = 'position:fixed;top:0;left:0;right:0;bottom:0;z-index:9999;background:rgba(42,32,40,0.75);display:flex;align-items:center;justify-content:center;padding:16px;';
-
-      var box = document.createElement('div');
-      box.style.cssText = 'background:#FBF6EE;border-radius:20px;max-width:480px;width:100%;box-shadow:0 24px 64px rgba(0,0,0,0.3);overflow:hidden;max-height:90vh;overflow-y:auto;';
-
-      box.innerHTML =
-        '<div style="background:#B090A5;padding:16px 24px;text-align:center;">' +
-          '<div style="display:inline-block;background:rgba(255,255,255,0.2);color:#fff;font-family:Outfit,sans-serif;font-size:.65rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;padding:4px 14px;border-radius:20px;margin-bottom:8px;">Oferta por tempo limitado</div>' +
-          '<h2 style="font-family:Outfit,sans-serif;color:#fff;font-size:1.25rem;font-weight:800;line-height:1.25;margin:0;">Feche nos próximos <u>3 dias</u><br>e ganhe 2 bônus exclusivos</h2>' +
+    box.innerHTML =
+      '<div style="background:#B090A5;padding:14px 20px 13px;text-align:center;flex-shrink:0;">' +
+        '<div style="display:inline-block;background:rgba(255,255,255,0.2);color:#fff;font-family:Outfit,sans-serif;font-size:.6rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;padding:3px 12px;border-radius:20px;margin-bottom:6px;">Oferta por tempo limitado</div>' +
+        '<h2 style="font-family:Outfit,sans-serif;color:#fff;font-size:clamp(1rem,4vw,1.2rem);font-weight:800;line-height:1.25;margin:0;">Antes de ver os planos<br>ganhe 2 bônus exclusivos</h2>' +
+      '</div>' +
+      '<div style="padding:14px 18px 12px;overflow-y:auto;flex:1;">' +
+        '<p style="font-family:DM Sans,sans-serif;color:#7A6872;font-size:.82rem;text-align:center;margin-bottom:12px;line-height:1.55;">Para ganhar os bônus você só precisa <strong style="color:#2A2028;">deixar seu acompanhamento pós-parto pré-agendado</strong> com a Dra. Liliane até <strong style="color:#B090A5;">' + dataLimite() + '</strong> — válido para qualquer pacote pós-parto.</p>' +
+        '<div style="display:flex;gap:10px;align-items:flex-start;background:#F4EEF2;border-radius:12px;padding:10px 12px;margin-bottom:8px;">' +
+          '<div style="min-width:36px;height:36px;border-radius:50%;background:#B090A5;display:flex;align-items:center;justify-content:center;font-size:1.05rem;flex-shrink:0;">&#x1F397;</div>' +
+          '<div><p style="font-family:Outfit,sans-serif;font-weight:700;font-size:.83rem;color:#2A2028;margin:0 0 2px;">Órtese Espuma Pós-Parto</p><p style="font-family:DM Sans,sans-serif;font-size:.74rem;color:#7A6872;line-height:1.45;margin:0;">Estabiliza a cicatriz da cesárea, evita inchaço e previne a famosa "bolsinha" acima da cicatriz.</p></div>' +
         '</div>' +
-        '<div style="padding:22px 24px 8px;">' +
-          '<p style="font-family:DM Sans,sans-serif;color:#7A6872;font-size:.88rem;text-align:center;margin-bottom:18px;line-height:1.6;">Para ganhar os bônus você precisa fazer <strong style="color:#2A2028;">duas coisas</strong>: fechar o acompanhamento até <strong style="color:#B090A5;">' + dataLimite() + '</strong> <u>e</u> clicar no botão abaixo enviando a mensagem no WhatsApp — isso confirma seu interesse e garante os presentes.</p>' +
-          '<div style="display:flex;gap:14px;align-items:flex-start;background:#F4EEF2;border-radius:14px;padding:15px;margin-bottom:10px;">' +
-            '<div style="min-width:42px;height:42px;border-radius:50%;background:#B090A5;display:flex;align-items:center;justify-content:center;font-size:1.25rem;flex-shrink:0;">&#x1F397;</div>' +
-            '<div><p style="font-family:Outfit,sans-serif;font-weight:700;font-size:.93rem;color:#2A2028;margin:0 0 4px;">Órtese Espuma Pós-Parto</p><p style="font-family:DM Sans,sans-serif;font-size:.82rem;color:#7A6872;line-height:1.55;margin:0;">Órtese em espuma usada após a cesárea para estabilizar a região da cicatriz, promovendo junto ao tape e à calcinha adequada uma compressão uniforme — evitando o acúmulo de inchaço em pontos específicos e prevenindo a famosa "bolsinha" que se forma acima da cicatriz.</p></div>' +
-          '</div>' +
-          '<div style="display:flex;gap:14px;align-items:flex-start;background:#F4EEF2;border-radius:14px;padding:15px;margin-bottom:20px;">' +
-            '<div style="min-width:42px;height:42px;border-radius:50%;background:#B090A5;display:flex;align-items:center;justify-content:center;font-size:1.25rem;flex-shrink:0;">&#x1F931;</div>' +
-            '<div><p style="font-family:Outfit,sans-serif;font-weight:700;font-size:.93rem;color:#2A2028;margin:0 0 4px;">Rosquinha de Amamentação</p><p style="font-family:DM Sans,sans-serif;font-size:.82rem;color:#7A6872;line-height:1.55;margin:0;">Protetor de mamilo em formato de rosca que evita o contato com o sutiã quando ele está sensível ou machucado — tornando a amamentação mais confortável sem precisar parar.</p></div>' +
-          '</div>' +
-          '<a href="' + wppUrl() + '" target="_blank" rel="noopener" style="display:block;text-align:center;background:#25D366;color:#fff;font-family:Outfit,sans-serif;font-weight:800;font-size:1.05rem;padding:18px 20px;border-radius:12px;text-decoration:none;margin-bottom:8px;">Quero meu bônus! — Mandar mensagem agora</a>' +
-          '<p style="font-family:DM Sans,sans-serif;font-size:.78rem;color:#B0A0AA;text-align:center;margin:0 0 4px;line-height:1.5;">Você vai ser direcionada para o WhatsApp.<br>A mensagem já vem preenchida — é só enviar.</p>' +
-          '<button id="bonus-fechar" style="display:block;width:100%;background:none;border:none;color:#C8C0C5;font-family:DM Sans,sans-serif;font-size:.72rem;cursor:pointer;padding:6px 0 16px;text-align:center;text-decoration:underline;">Não quero os bônus</button>' +
-        '</div>';
+        '<div style="display:flex;gap:10px;align-items:flex-start;background:#F4EEF2;border-radius:12px;padding:10px 12px;margin-bottom:14px;">' +
+          '<div style="min-width:36px;height:36px;border-radius:50%;background:#B090A5;display:flex;align-items:center;justify-content:center;font-size:1.05rem;flex-shrink:0;">&#x1F931;</div>' +
+          '<div><p style="font-family:Outfit,sans-serif;font-weight:700;font-size:.83rem;color:#2A2028;margin:0 0 2px;">Rosquinha de Amamentação</p><p style="font-family:DM Sans,sans-serif;font-size:.74rem;color:#7A6872;line-height:1.45;margin:0;">Protetor de mamilo — amamentação mais confortável sem precisar parar.</p></div>' +
+        '</div>' +
+        '<button id="bonus-ver-planos" style="display:block;width:100%;text-align:center;background:#B090A5;color:#fff;font-family:Outfit,sans-serif;font-weight:800;font-size:.95rem;padding:14px 16px;border-radius:12px;border:none;cursor:pointer;margin-bottom:6px;">Ver os planos e valores →</button>' +
+        '<div style="background:#F4EEF2;border-radius:10px;padding:10px 12px;margin-top:10px;"><p style="font-family:Outfit,sans-serif;font-size:.66rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:#B090A5;margin:0 0 6px;text-align:center;">Como ativar seu bônus</p><p style="font-family:DM Sans,sans-serif;font-size:.74rem;color:#5A4852;margin:0 0 4px;line-height:1.5;"><b style="color:#B090A5;">1.</b> Clique no botão acima e veja os planos com calma.</p><p style="font-family:DM Sans,sans-serif;font-size:.74rem;color:#5A4852;margin:0;line-height:1.5;"><b style="color:#B090A5;">2.</b> Depois de ver os planos, vai aparecer um <b style="color:#1da851;">botão verde do WhatsApp</b> escrito <b style="color:#1da851;">"Quero meu bônus — mandar mensagem"</b> na parte de baixo da tela. É só clicar nele para enviar a mensagem para a Dra. Liliane e garantir seus bônus.</p></div>' +
+        '<button id="bonus-fechar" style="display:block;width:100%;background:none;border:none;color:#C8C0C5;font-family:DM Sans,sans-serif;font-size:.7rem;cursor:pointer;padding:8px 0 4px;text-align:center;text-decoration:underline;">Não quero os bônus</button>' +
+      '</div>';
 
-      overlay.appendChild(box);
-      document.body.appendChild(overlay);
+    overlay.appendChild(box);
+    document.body.appendChild(overlay);
 
-      function fechar() { overlay.parentNode && overlay.parentNode.removeChild(overlay); }
-      overlay.addEventListener('click', function (e) { if (e.target === overlay) fechar(); });
-      document.getElementById('bonus-fechar').addEventListener('click', fechar);
-    }
+    function fecharOverlay() { if (overlay.parentNode) overlay.parentNode.removeChild(overlay); }
 
-    var secPlanos = document.getElementById('planos');
-    if (secPlanos && window.IntersectionObserver) {
-      var obs = new IntersectionObserver(function (entries) {
-        if (entries[0].isIntersecting && !planosVisto) {
-          planosVisto = true;
-          timer = setTimeout(showPopup, 20000);
-          document.addEventListener('visibilitychange', function () {
-            if (document.visibilityState === 'hidden') showPopup();
-          });
-          history.pushState({ bonusGuard: true }, '');
-          window.addEventListener('popstate', function onPop() {
-            window.removeEventListener('popstate', onPop);
-            if (!shown) { shown = true; window.location.href = 'saida.html'; }
-          });
-        }
-      }, { threshold: 0, rootMargin: '0px' });
-      obs.observe(secPlanos);
-    }
+    overlay.addEventListener('click', function (e) { if (e.target === overlay) fecharOverlay(); });
+    document.getElementById('bonus-fechar').addEventListener('click', fecharOverlay);
 
-    document.documentElement.addEventListener('mouseleave', function () {
-      showPopup();
+    document.getElementById('bonus-ver-planos').addEventListener('click', function () {
+      fecharOverlay();
+      mostrarBotaoFixo();
+      var sec = document.getElementById('planos');
+      if (sec) sec.scrollIntoView({ behavior: 'smooth' });
     });
-  })();
+  }
+
+  /* Aparece quando a seção de planos entra na tela */
+  var secPlanos = document.getElementById('planos');
+  if (secPlanos && window.IntersectionObserver) {
+    var obs = new IntersectionObserver(function (entries) {
+      if (entries[0].isIntersecting) {
+        showPopup();
+        obs.disconnect();
+      }
+    }, { threshold: 0, rootMargin: "0px 0px -10% 0px" });
+    obs.observe(secPlanos);
+  }
+
+  document.documentElement.addEventListener('mouseleave', function () {
+    showPopup();
+  });
+})();
 </script>
 </body>
 </html>
