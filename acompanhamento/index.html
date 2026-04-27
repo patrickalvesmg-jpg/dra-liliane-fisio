@@ -1416,30 +1416,37 @@
 
     var popup = document.createElement('div');
     popup.id = 'bp';
-    popup.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100dvh;z-index:2147483647;background:#B090A5;display:flex;align-items:center;justify-content:center;padding:12px;box-sizing:border-box;';
+    popup.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100dvh;z-index:2147483647;background:#B090A5;display:flex;align-items:center;justify-content:center;padding:16px;box-sizing:border-box;font-family:”DM Sans”,sans-serif;';
     popup.innerHTML = ''
-      + '<div style=”background:#FBF6EE;border-radius:20px;width:100%;max-width:420px;max-height:calc(100dvh - 24px);display:flex;flex-direction:column;overflow:hidden;box-shadow:0 24px 60px rgba(0,0,0,0.3);”>'
-        /* Topo */
-        + '<div style=”background:#B090A5;padding:18px 20px 16px;text-align:center;flex-shrink:0;”>'
-          + '<div style=”display:inline-block;background:rgba(255,255,255,0.22);color:#fff;font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;padding:4px 14px;border-radius:20px;margin-bottom:10px;”>Oferta por tempo limitado</div>'
-          + '<div style=”color:#fff;font-size:22px;font-weight:800;line-height:1.25;font-family:Outfit,sans-serif;”>Feche nos próximos <u>3 dias</u><br>e ganhe 2 bônus exclusivos</div>'
+      + '<div style=”background:#FBF6EE;border-radius:18px;width:100%;max-width:440px;max-height:calc(100dvh - 24px);display:flex;flex-direction:column;overflow:hidden;box-shadow:0 20px 56px rgba(0,0,0,0.28);”>'
+        /* Topo — idêntico ao saida.html */
+        + '<div style=”background:#B090A5;padding:12px 20px 11px;text-align:center;flex-shrink:0;”>'
+          + '<div style=”display:inline-block;background:rgba(255,255,255,0.22);color:#fff;font-family:Outfit,sans-serif;font-size:.6rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;padding:3px 12px;border-radius:20px;margin-bottom:6px;”>Oferta por tempo limitado</div>'
+          + '<h2 style=”font-family:Outfit,sans-serif;color:#fff;font-size:clamp(.95rem,3.5vw,1.2rem);font-weight:800;line-height:1.2;margin:0;”>Feche nos próximos <u>3 dias</u><br>e ganhe 2 bônus exclusivos</h2>'
         + '</div>'
         /* Corpo */
-        + '<div style=”padding:18px 18px 16px;display:flex;flex-direction:column;gap:10px;overflow-y:auto;flex:1;”>'
+        + '<div style=”padding:14px 18px 10px;overflow-y:auto;flex:1;display:flex;flex-direction:column;gap:8px;”>'
           /* Instrução */
-          + '<p style=”margin:0;color:#7A6872;font-size:13px;text-align:center;line-height:1.6;”>Veja os planos, escolha o seu e clique em <b style=”color:#B090A5;”>Quero receber o bônus</b> — que aparece na parte de baixo da tela — até <b style=”color:#2A2028;”>' + dataLimite + '</b>.</p>'
+          + '<p style=”font-size:.8rem;color:#7A6872;text-align:center;margin:0 0 4px;line-height:1.5;”>Veja os planos, escolha o seu e clique em <strong style=”color:#B090A5;”>Quero receber o bônus</strong> — que vai aparecer na parte de baixo da tela — até <em style=”font-style:normal;font-weight:700;color:#B090A5;”>' + dataLimite + '</em>.</p>'
           /* Bônus 1 */
-          + '<div style=”display:flex;gap:12px;align-items:flex-start;background:#F4EEF2;border-radius:14px;padding:14px;”>'
-            + '<div style=”min-width:40px;height:40px;border-radius:50%;background:#B090A5;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;”>🎗️</div>'
-            + '<div><b style=”color:#2A2028;font-size:14px;display:block;margin-bottom:3px;font-family:Outfit,sans-serif;”>Órtese Espuma Pós-Parto</b><span style=”color:#7A6872;font-size:12px;line-height:1.5;”>Compressão da cicatriz da cesárea — evita inchaço e previne a “bolsinha” acima da cicatriz.</span></div>'
+          + '<div style=”display:flex;gap:10px;align-items:flex-start;background:#F4EEF2;border-radius:12px;padding:10px 12px;”>'
+            + '<div style=”min-width:36px;height:36px;border-radius:50%;background:#B090A5;display:flex;align-items:center;justify-content:center;font-size:1.05rem;flex-shrink:0;”>🎗️</div>'
+            + '<div>'
+              + '<p style=”font-family:Outfit,sans-serif;font-weight:700;font-size:.85rem;color:#2A2028;margin:0 0 2px;”>Órtese Espuma Pós-Parto</p>'
+              + '<p style=”font-size:.75rem;color:#7A6872;line-height:1.45;margin:0;”>Órtese em espuma usada após a cesárea para estabilizar a cicatriz — evita inchaço e previne a “bolsinha”.</p>'
+            + '</div>'
           + '</div>'
           /* Bônus 2 */
-          + '<div style=”display:flex;gap:12px;align-items:flex-start;background:#F4EEF2;border-radius:14px;padding:14px;”>'
-            + '<div style=”min-width:40px;height:40px;border-radius:50%;background:#B090A5;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;”>🤱</div>'
-            + '<div><b style=”color:#2A2028;font-size:14px;display:block;margin-bottom:3px;font-family:Outfit,sans-serif;”>Rosquinha de Amamentação</b><span style=”color:#7A6872;font-size:12px;line-height:1.5;”>Protetor de mamilo — amamentação mais confortável sem precisar parar.</span></div>'
+          + '<div style=”display:flex;gap:10px;align-items:flex-start;background:#F4EEF2;border-radius:12px;padding:10px 12px;”>'
+            + '<div style=”min-width:36px;height:36px;border-radius:50%;background:#B090A5;display:flex;align-items:center;justify-content:center;font-size:1.05rem;flex-shrink:0;”>🤱</div>'
+            + '<div>'
+              + '<p style=”font-family:Outfit,sans-serif;font-weight:700;font-size:.85rem;color:#2A2028;margin:0 0 2px;”>Rosquinha de Amamentação</p>'
+              + '<p style=”font-size:.75rem;color:#7A6872;line-height:1.45;margin:0;”>Protetor de mamilo que evita o contato com o sutiã quando está sensível — amamentação mais confortável.</p>'
+            + '</div>'
           + '</div>'
           /* Botão */
-          + '<button id=bp-btn style=”display:block;width:100%;background:#B090A5;border:none;color:#fff;font-size:16px;font-weight:800;padding:17px;border-radius:14px;cursor:pointer;font-family:Outfit,sans-serif;letter-spacing:0.01em;”>Ver os planos e valores →</button>'
+          + '<button id=bp-btn style=”display:block;width:100%;background:#B090A5;border:none;color:#fff;font-family:Outfit,sans-serif;font-size:.95rem;font-weight:800;padding:14px 16px;border-radius:12px;cursor:pointer;margin-top:4px;”>Ver os planos e valores →</button>'
+          + '<p style=”font-size:.72rem;color:#B0A0AA;text-align:center;margin:0;”>Escolha o plano e ative a oferta na parte de baixo da tela.</p>'
         + '</div>'
       + '</div>';
 
