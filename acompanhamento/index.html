@@ -2,6 +2,10 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
+  <!-- v20260426-1 -->
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+  <meta http-equiv="Pragma" content="no-cache" />
+  <meta http-equiv="Expires" content="0" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Dra. Liliane Araújo — Fisioterapeuta | Gestação e Pós-Parto | João Pessoa, PB</title>
   <meta name="description" content="Fisioterapia especializada em gestação e pós-parto em João Pessoa. Taping, laserterapia, drenagem linfática e reabilitação." />
@@ -1463,8 +1467,8 @@
       var obs = new IntersectionObserver(function (entries) {
         if (entries[0].isIntersecting && !planosVisto) {
           planosVisto = true;
-          /* aparece 5s depois de chegar nos planos — só na primeira vez */
-          timer = setTimeout(showPopup, 5000);
+          /* v20260426 — aparece imediatamente ao chegar nos planos */
+          showPopup();
           /* mobile: fecha o navegador do WhatsApp ou troca de app */
           document.addEventListener('visibilitychange', function () {
             if (document.visibilityState === 'hidden') showPopup();
