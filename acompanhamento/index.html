@@ -1399,90 +1399,62 @@
   window.addEventListener('scroll', updateProgress, { passive: true });
   updateProgress();
 
-  /* ============================================================
-     POPUP DE BÔNUS
-  ============================================================ */
-  (function () {
-    var shown = false;
-    var planosVisto = false;
-    var timer = null;
+  /* POPUP BONUS v3 */
+  var _bonusShown = false;
 
-    function dataLimite() {
-      var d = new Date();
-      d.setDate(d.getDate() + 3);
-      return d.toLocaleDateString('pt-BR', { day: '2-digit', month: 'long' });
+  function _mostrarPopup() {
+    if (_bonusShown) return;
+    _bonusShown = true;
+
+    var d = new Date(); d.setDate(d.getDate() + 3);
+    var dataLimite = d.toLocaleDateString('pt-BR', { day: '2-digit', month: 'long' });
+    var msg = 'Quero meu bônus! \n\nVi os bônus exclusivos no site e quero garantir os dois antes do prazo:\n- Órtese Espuma Pós-Parto\n- Rosquinha de Amamentação\n\nPode me passar mais informações sobre o acompanhamento?';
+    var wpp = 'https://wa.me/5583999254499?text=' + encodeURIComponent(msg);
+
+    var el = document.createElement('div');
+    el.id = 'bonus-popup';
+    el.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;z-index:99999;background:#B090A5;overflow-y:auto;font-family:sans-serif;';
+    el.innerHTML = '<div style="max-width:480px;margin:0 auto;min-height:100%;display:flex;flex-direction:column;">'
+      + '<div style="background:#B090A5;padding:20px;text-align:center;">'
+        + '<div style="display:inline-block;background:rgba(255,255,255,0.2);color:#fff;font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;padding:4px 14px;border-radius:20px;margin-bottom:10px;">Oferta por tempo limitado</div>'
+        + '<div style="color:#fff;font-size:22px;font-weight:800;line-height:1.25;">Feche nos próximos <u>3 dias</u><br>e ganhe 2 bônus exclusivos</div>'
+      + '</div>'
+      + '<div style="background:#FBF6EE;flex:1;padding:20px;display:flex;flex-direction:column;justify-content:space-between;">'
+        + '<div>'
+          + '<p style="color:#7A6872;font-size:14px;text-align:center;margin:0 0 16px;line-height:1.6;">Para ganhar os bônus: feche um <b style="color:#2A2028;">pacote de pós-parto</b> até <b style="color:#B090A5;">' + dataLimite + '</b> e envie a mensagem abaixo no WhatsApp.</p>'
+          + '<div style="display:flex;gap:12px;background:#F4EEF2;border-radius:12px;padding:14px;margin-bottom:10px;">'
+            + '<div style="min-width:40px;height:40px;border-radius:50%;background:#B090A5;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;">🎗️</div>'
+            + '<div><b style="color:#2A2028;font-size:14px;display:block;margin-bottom:4px;">Órtese Espuma Pós-Parto</b><span style="color:#7A6872;font-size:13px;line-height:1.5;">Órtese em espuma usada após a cesárea para estabilizar a cicatriz, promovendo compressão uniforme — evitando inc\u00haço e prevenindo a “bolsinha” acima da cicatriz.</span></div>'
+          + '</div>'
+          + '<div style="display:flex;gap:12px;background:#F4EEF2;border-radius:12px;padding:14px;margin-bottom:20px;">'
+            + '<div style="min-width:40px;height:40px;border-radius:50%;background:#B090A5;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;">🤱</div>'
+            + '<div><b style="color:#2A2028;font-size:14px;display:block;margin-bottom:4px;">Rosquinha de Amamentação</b><span style="color:#7A6872;font-size:13px;line-height:1.5;">Protetor de mamilo que evita o contato com o sutiã quando está sensível — amamentação mais confortável sem precisar parar.</span></div>'
+          + '</div>'
+        + '</div>'
+        + '<div>'
+          + '<a href="' + wpp + '" target="_blank" style="display:block;text-align:center;background:#25D366;color:#fff;font-size:16px;font-weight:800;padding:18px;border-radius:12px;text-decoration:none;margin-bottom:8px;">Quero meu bônus! — Mandar mensagem agora</a>'
+          + '<p style="color:#B0A0AA;font-size:12px;text-align:center;margin:0 0 6px;">A mensagem já vem preenchida — é só enviar.</p>'
+          + '<button onclick="document.getElementById(\'bonus-popup\').remove()" style="display:block;width:100%;background:none;border:none;color:#C8C0C5;font-size:12px;cursor:pointer;padding:8px 0 16px;text-decoration:underline;">Não quero os bônus</button>'
+        + '</div>'
+      + '</div>'
+    + '</div>';
+
+    document.body.appendChild(el);
+  }
+
+  /* Verifica a cada 300ms se os planos já estão visíveis */
+  var _checkInterval = setInterval(function () {
+    var sec = document.getElementById('planos');
+    if (!sec) return;
+    var rect = sec.getBoundingClientRect();
+    if (rect.top < window.innerHeight && rect.bottom > 0) {
+      clearInterval(_checkInterval);
+      _mostrarPopup();
     }
+  }, 300);
 
-    function wppUrl() {
-      var msg = 'Quero meu bônus! \n\nVi os bônus exclusivos no site e quero garantir os dois antes do prazo:\n- Órtese Espuma Pós-Parto\n- Rosquinha de Amamentação\n\nPode me passar mais informações sobre o acompanhamento?';
-      return 'https://wa.me/5583999254499?text=' + encodeURIComponent(msg);
-    }
-
-    function showPopup() {
-      if (shown || !planosVisto) return;
-      shown = true;
-      clearTimeout(timer);
-
-      var overlay = document.createElement('div');
-      overlay.style.cssText = 'position:fixed;top:0;left:0;right:0;bottom:0;z-index:9999;background:#B090A5;display:flex;align-items:center;justify-content:center;padding:0;';
-
-      var box = document.createElement('div');
-      box.style.cssText = 'background:#FBF6EE;width:100%;height:100dvh;max-width:480px;overflow-y:auto;display:flex;flex-direction:column;';
-
-      box.innerHTML =
-        '<div style="background:#B090A5;padding:14px 20px;text-align:center;flex-shrink:0;">' +
-          '<div style="display:inline-block;background:rgba(255,255,255,0.2);color:#fff;font-family:Outfit,sans-serif;font-size:.6rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;padding:3px 12px;border-radius:20px;margin-bottom:6px;">Oferta por tempo limitado</div>' +
-          '<h2 style="font-family:Outfit,sans-serif;color:#fff;font-size:clamp(1rem,4vw,1.25rem);font-weight:800;line-height:1.2;margin:0;">Feche nos próximos <u>3 dias</u><br>e ganhe 2 bônus exclusivos</h2>' +
-        '</div>' +
-        '<div style="padding:16px 20px 12px;flex:1;overflow-y:auto;display:flex;flex-direction:column;justify-content:space-between;">' +
-          '<div>' +
-            '<p style="font-family:DM Sans,sans-serif;color:#7A6872;font-size:.8rem;text-align:center;margin-bottom:12px;line-height:1.5;">Para ganhar os bônus: feche um <strong style="color:#2A2028;">pacote de pós-parto</strong> até <strong style="color:#B090A5;">' + dataLimite() + '</strong> <u>e</u> envie a mensagem abaixo no WhatsApp.</p>' +
-            '<div style="display:flex;gap:10px;align-items:flex-start;background:#F4EEF2;border-radius:12px;padding:12px;margin-bottom:8px;">' +
-              '<div style="min-width:38px;height:38px;border-radius:50%;background:#B090A5;display:flex;align-items:center;justify-content:center;font-size:1.1rem;flex-shrink:0;">&#x1F397;</div>' +
-              '<div><p style="font-family:Outfit,sans-serif;font-weight:700;font-size:.85rem;color:#2A2028;margin:0 0 2px;">Órtese Espuma Pós-Parto</p><p style="font-family:DM Sans,sans-serif;font-size:.75rem;color:#7A6872;line-height:1.45;margin:0;">Órtese em espuma usada após a cesárea para estabilizar a cicatriz, promovendo compressão uniforme — evitando inchaço e prevenindo a "bolsinha" acima da cicatriz.</p></div>' +
-            '</div>' +
-            '<div style="display:flex;gap:10px;align-items:flex-start;background:#F4EEF2;border-radius:12px;padding:12px;margin-bottom:14px;">' +
-              '<div style="min-width:38px;height:38px;border-radius:50%;background:#B090A5;display:flex;align-items:center;justify-content:center;font-size:1.1rem;flex-shrink:0;">&#x1F931;</div>' +
-              '<div><p style="font-family:Outfit,sans-serif;font-weight:700;font-size:.85rem;color:#2A2028;margin:0 0 2px;">Rosquinha de Amamentação</p><p style="font-family:DM Sans,sans-serif;font-size:.75rem;color:#7A6872;line-height:1.45;margin:0;">Protetor de mamilo que evita o contato com o sutiã quando está sensível — amamentação mais confortável sem precisar parar.</p></div>' +
-            '</div>' +
-          '</div>' +
-          '<div>' +
-            '<a href="' + wppUrl() + '" target="_blank" rel="noopener" style="display:block;text-align:center;background:#25D366;color:#fff;font-family:Outfit,sans-serif;font-weight:800;font-size:1rem;padding:16px 20px;border-radius:12px;text-decoration:none;margin-bottom:6px;">Quero meu bônus! — Mandar mensagem agora</a>' +
-            '<p style="font-family:DM Sans,sans-serif;font-size:.72rem;color:#B0A0AA;text-align:center;margin:0 0 4px;line-height:1.4;">A mensagem já vem preenchida — é só enviar.</p>' +
-            '<button id="bonus-fechar" style="display:block;width:100%;background:none;border:none;color:#C8C0C5;font-family:DM Sans,sans-serif;font-size:.7rem;cursor:pointer;padding:6px 0 10px;text-align:center;text-decoration:underline;">Não quero os bônus</button>' +
-          '</div>' +
-        '</div>';
-
-      overlay.appendChild(box);
-      document.body.appendChild(overlay);
-
-      function fechar() { overlay.parentNode && overlay.parentNode.removeChild(overlay); }
-      overlay.addEventListener('click', function (e) { if (e.target === overlay) fechar(); });
-      document.getElementById('bonus-fechar').addEventListener('click', fechar);
-    }
-
-    /* Detecta quando a seção de planos aparece na tela via scroll */
-    var secPlanos = document.getElementById('planos');
-    function checkPlanos() {
-      if (planosVisto || !secPlanos) return;
-      var rect = secPlanos.getBoundingClientRect();
-      if (rect.top < window.innerHeight) {
-        planosVisto = true;
-        window.removeEventListener('scroll', checkPlanos);
-        showPopup();
-        document.addEventListener('visibilitychange', function () {
-          if (document.visibilityState === 'hidden') showPopup();
-        });
-      }
-    }
-    window.addEventListener('scroll', checkPlanos, { passive: true });
-    checkPlanos(); /* checa já no carregamento caso já esteja visível */
-
-    /* Desktop: exit-intent — mouse sai da janela após ver os planos */
-    document.documentElement.addEventListener('mouseleave', function () {
-      showPopup();
-    });
-  })();
+  /* Desktop: exit-intent */
+  document.documentElement.addEventListener('mouseleave', _mostrarPopup);
 </script>
 </body>
 </html>
