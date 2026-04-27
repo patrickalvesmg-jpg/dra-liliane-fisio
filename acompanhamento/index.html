@@ -2,7 +2,7 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
-  <!-- v20260427-1 -->
+  <!-- v20260427-2 -->
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
   <meta http-equiv="Pragma" content="no-cache" />
   <meta http-equiv="Expires" content="0" />
@@ -1401,7 +1401,7 @@
 </script>
 
 <script>
-/* POPUP BONUS v20260426 */
+/* POPUP BONUS v20260427 */
 (function() {
   var shown = false;
 
@@ -1414,54 +1414,102 @@
     var msg = 'Quero meu bônus! \n\nVi os bônus exclusivos no site e quero garantir os dois antes do prazo:\n- Órtese Espuma Pós-Parto\n- Rosquinha de Amamentação\n\nPode me passar mais informações sobre o acompanhamento?';
     var wpp = 'https://wa.me/5583999254499?text=' + encodeURIComponent(msg);
 
-    var popup = document.createElement('div');
-    popup.id = 'bp';
-    popup.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100dvh;z-index:2147483647;background:#B090A5;display:flex;align-items:center;justify-content:center;padding:16px;box-sizing:border-box;font-family:”DM Sans”,sans-serif;';
-    popup.innerHTML = ''
-      + '<div style=”background:#FBF6EE;border-radius:18px;width:100%;max-width:440px;max-height:calc(100dvh - 24px);display:flex;flex-direction:column;overflow:hidden;box-shadow:0 20px 56px rgba(0,0,0,0.28);”>'
-        /* Topo — idêntico ao saida.html */
-        + '<div style=”background:#B090A5;padding:12px 20px 11px;text-align:center;flex-shrink:0;”>'
-          + '<div style=”display:inline-block;background:rgba(255,255,255,0.22);color:#fff;font-family:Outfit,sans-serif;font-size:.6rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;padding:3px 12px;border-radius:20px;margin-bottom:6px;”>Oferta por tempo limitado</div>'
-          + '<h2 style=”font-family:Outfit,sans-serif;color:#fff;font-size:clamp(.95rem,3.5vw,1.2rem);font-weight:800;line-height:1.2;margin:0;”>Feche nos próximos <u>3 dias</u><br>e ganhe 2 bônus exclusivos</h2>'
+    /* Estilos de animação */
+    var style = document.createElement('style');
+    style.textContent = '@keyframes bp-in{from{opacity:0;transform:translateY(32px) scale(.96)}to{opacity:1;transform:translateY(0) scale(1)}}@keyframes bp-fade{from{opacity:0}to{opacity:1}}';
+    document.head.appendChild(style);
+
+    var overlay = document.createElement('div');
+    overlay.id = 'bp';
+    overlay.style.cssText = 'position:fixed;inset:0;z-index:2147483647;background:rgba(42,32,40,.62);backdrop-filter:blur(4px);display:flex;align-items:center;justify-content:center;padding:16px;box-sizing:border-box;font-family:DM Sans,sans-serif;animation:bp-fade .3s ease both;';
+
+    overlay.innerHTML =
+      '<div style=”background:#FBF6EE;border-radius:22px;width:100%;max-width:420px;max-height:calc(100dvh - 32px);display:flex;flex-direction:column;overflow:hidden;box-shadow:0 28px 64px rgba(0,0,0,.32);animation:bp-in .38s cubic-bezier(.22,1,.36,1) both;”>'
+
+        /* —— Topo —— */
+        + '<div style=”background:linear-gradient(135deg,#7B5EA7 0%,#B090A5 100%);padding:20px 20px 18px;text-align:center;flex-shrink:0;position:relative;”>'
+          /* Botão fechar */
+          + '<button id=”bp-close” style=”position:absolute;top:10px;right:12px;background:rgba(255,255,255,.2);border:none;color:#fff;width:28px;height:28px;border-radius:50%;cursor:pointer;font-size:15px;line-height:1;display:flex;align-items:center;justify-content:center;”>✕</button>'
+          /* Badge */
+          + '<div style=”display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.3);color:#fff;font-family:Outfit,sans-serif;font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;padding:4px 14px;border-radius:20px;margin-bottom:12px;”>🎁 Oferta por tempo limitado</div>'
+          /* Título */
+          + '<h2 style=”font-family:Outfit,sans-serif;color:#fff;font-size:clamp(1rem,4.5vw,1.3rem);font-weight:900;line-height:1.2;margin:0 0 6px;letter-spacing:-.02em;”>Feche nos próximos <u>3 dias</u><br>e ganhe 2 bônus exclusivos</h2>'
+          + '<p style=”color:rgba(255,255,255,.75);font-size:11px;margin:0;”>Válido até <b style=”color:#fff;”>' + dataLimite + '</b> · só para novas pacientes</p>'
         + '</div>'
-        /* Corpo */
-        + '<div style=”padding:14px 18px 10px;overflow-y:auto;flex:1;display:flex;flex-direction:column;gap:8px;”>'
-          /* Instrução */
-          + '<p style=”font-size:.8rem;color:#7A6872;text-align:center;margin:0 0 4px;line-height:1.5;”>Veja os planos, escolha o seu e clique em <strong style=”color:#B090A5;”>Quero receber o bônus</strong> — que vai aparecer na parte de baixo da tela — até <em style=”font-style:normal;font-weight:700;color:#B090A5;”>' + dataLimite + '</em>.</p>'
+
+        /* —— Corpo —— */
+        + '<div style=”padding:18px 18px 6px;overflow-y:auto;flex:1;display:flex;flex-direction:column;gap:10px;”>'
+
+          /* Passo 1 */
+          + '<div style=”display:flex;gap:11px;align-items:flex-start;background:#F4EEF2;border-radius:13px;padding:12px 14px;”>'
+            + '<div style=”min-width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,#7B5EA7,#B090A5);color:#fff;font-family:Outfit,sans-serif;font-weight:800;font-size:12px;display:flex;align-items:center;justify-content:center;flex-shrink:0;box-shadow:0 2px 8px rgba(123,94,167,.35);”>1</div>'
+            + '<p style=”color:#5A4852;font-size:13px;line-height:1.5;margin:0;”>Role a tela e <b style=”color:#2A2028;”>escolha o plano</b> que faz sentido pra você.</p>'
+          + '</div>'
+
+          /* Passo 2 */
+          + '<div style=”display:flex;gap:11px;align-items:flex-start;background:#F4EEF2;border-radius:13px;padding:12px 14px;”>'
+            + '<div style=”min-width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,#7B5EA7,#B090A5);color:#fff;font-family:Outfit,sans-serif;font-weight:800;font-size:12px;display:flex;align-items:center;justify-content:center;flex-shrink:0;box-shadow:0 2px 8px rgba(123,94,167,.35);”>2</div>'
+            + '<p style=”color:#5A4852;font-size:13px;line-height:1.5;margin:0;”>Clique em <b style=”color:#2A2028;”>”Quero receber o bônus”</b> que vai aparecer na parte de baixo da tela.</p>'
+          + '</div>'
+
+          /* Divisor */
+          + '<p style=”font-family:Outfit,sans-serif;font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#B090A5;margin:2px 0 0;text-align:center;”>O que você ganha</p>'
+
           /* Bônus 1 */
-          + '<div style=”display:flex;gap:10px;align-items:flex-start;background:#F4EEF2;border-radius:12px;padding:10px 12px;”>'
-            + '<div style=”min-width:36px;height:36px;border-radius:50%;background:#B090A5;display:flex;align-items:center;justify-content:center;font-size:1.05rem;flex-shrink:0;”>🎗️</div>'
+          + '<div style=”display:flex;gap:12px;align-items:center;background:#fff;border:1px solid rgba(176,144,165,.2);border-radius:13px;padding:12px 14px;box-shadow:0 2px 10px rgba(0,0,0,.05);”>'
+            + '<div style=”font-size:26px;line-height:1;flex-shrink:0;”>🎗️</div>'
             + '<div>'
-              + '<p style=”font-family:Outfit,sans-serif;font-weight:700;font-size:.85rem;color:#2A2028;margin:0 0 2px;”>Órtese Espuma Pós-Parto</p>'
-              + '<p style=”font-size:.75rem;color:#7A6872;line-height:1.45;margin:0;”>Órtese em espuma usada após a cesárea para estabilizar a cicatriz — evita inchaço e previne a “bolsinha”.</p>'
+              + '<p style=”font-family:Outfit,sans-serif;font-weight:800;font-size:13px;color:#2A2028;margin:0 0 3px;”>Órtese Espuma Pós-Parto</p>'
+              + '<p style=”font-size:12px;color:#7A6872;line-height:1.5;margin:0;”>Compressão da cicatriz da cesárea — evita inchaço e previne a “bolsinha”.</p>'
             + '</div>'
           + '</div>'
+
           /* Bônus 2 */
-          + '<div style=”display:flex;gap:10px;align-items:flex-start;background:#F4EEF2;border-radius:12px;padding:10px 12px;”>'
-            + '<div style=”min-width:36px;height:36px;border-radius:50%;background:#B090A5;display:flex;align-items:center;justify-content:center;font-size:1.05rem;flex-shrink:0;”>🤱</div>'
+          + '<div style=”display:flex;gap:12px;align-items:center;background:#fff;border:1px solid rgba(176,144,165,.2);border-radius:13px;padding:12px 14px;box-shadow:0 2px 10px rgba(0,0,0,.05);”>'
+            + '<div style=”font-size:26px;line-height:1;flex-shrink:0;”>🤱</div>'
             + '<div>'
-              + '<p style=”font-family:Outfit,sans-serif;font-weight:700;font-size:.85rem;color:#2A2028;margin:0 0 2px;”>Rosquinha de Amamentação</p>'
-              + '<p style=”font-size:.75rem;color:#7A6872;line-height:1.45;margin:0;”>Protetor de mamilo que evita o contato com o sutiã quando está sensível — amamentação mais confortável.</p>'
+              + '<p style=”font-family:Outfit,sans-serif;font-weight:800;font-size:13px;color:#2A2028;margin:0 0 3px;”>Rosquinha de Amamentação</p>'
+              + '<p style=”font-size:12px;color:#7A6872;line-height:1.5;margin:0;”>Protetor de mamilo — amamentação mais confortável desde o primeiro dia.</p>'
             + '</div>'
           + '</div>'
-          /* Botão */
-          + '<button id=bp-btn style=”display:block;width:100%;background:#B090A5;border:none;color:#fff;font-family:Outfit,sans-serif;font-size:.95rem;font-weight:800;padding:14px 16px;border-radius:12px;cursor:pointer;margin-top:4px;”>Ver os planos e valores →</button>'
-          + '<p style=”font-size:.72rem;color:#B0A0AA;text-align:center;margin:0;”>Escolha o plano e ative a oferta na parte de baixo da tela.</p>'
+
         + '</div>'
+
+        /* —— Rodapé com botão —— */
+        + '<div style=”padding:14px 18px 18px;flex-shrink:0;”>'
+          + '<button id=”bp-btn” style=”display:block;width:100%;background:linear-gradient(135deg,#7B5EA7 0%,#B090A5 100%);border:none;color:#fff;font-family:Outfit,sans-serif;font-size:15px;font-weight:800;padding:16px;border-radius:13px;cursor:pointer;letter-spacing:-.01em;box-shadow:0 6px 22px rgba(123,94,167,.38);transition:filter .2s;”>Ver os planos e garantir meu bônus →</button>'
+          + '<p style=”font-size:11px;color:#B0A0AA;text-align:center;margin:10px 0 0;”>Sem compromisso · você escolhe e depois decide</p>'
+        + '</div>'
+
       + '</div>';
 
-    document.body.appendChild(popup);
+    document.body.appendChild(overlay);
+
+    document.getElementById('bp-close').onclick = function() { overlay.remove(); };
+    overlay.addEventListener('click', function(e) { if (e.target === overlay) overlay.remove(); });
+
+    document.getElementById('bp-btn').onmouseenter = function() { this.style.filter = 'brightness(1.08)'; };
+    document.getElementById('bp-btn').onmouseleave = function() { this.style.filter = ''; };
+
     document.getElementById('bp-btn').onclick = function() {
-      popup.remove();
+      overlay.remove();
       document.getElementById('planos').scrollIntoView({ behavior: 'smooth' });
 
-      /* Botão fixo "Quero receber o bônus" */
+      /* Botão fixo “Quero receber o bônus” */
       var btnBonus = document.createElement('a');
       btnBonus.href = wpp;
       btnBonus.target = '_blank';
       btnBonus.rel = 'noopener';
-      btnBonus.style.cssText = 'position:fixed;bottom:0;left:0;right:0;z-index:999;background:#B090A5;color:#fff;font-family:Outfit,sans-serif;font-weight:800;font-size:clamp(14px,4vw,16px);text-align:center;text-decoration:none;padding:18px 24px;box-shadow:0 -4px 20px rgba(0,0,0,0.18);';
-      btnBonus.textContent = 'Quero receber o bônus — mandar mensagem';
+      btnBonus.style.cssText = [
+        'position:fixed;bottom:0;left:0;right:0;z-index:999;',
+        'background:linear-gradient(135deg,#7B5EA7 0%,#B090A5 100%);',
+        'color:#fff;font-family:Outfit,sans-serif;font-weight:800;',
+        'font-size:clamp(14px,4vw,16px);text-align:center;text-decoration:none;',
+        'padding:18px 24px;letter-spacing:-.01em;',
+        'box-shadow:0 -4px 24px rgba(123,94,167,.38);',
+        'display:flex;align-items:center;justify-content:center;gap:8px;'
+      ].join('');
+      btnBonus.innerHTML = '<span style=”font-size:18px;”>🎁</span> Quero receber o bônus — mandar mensagem';
       document.body.appendChild(btnBonus);
     };
   }
