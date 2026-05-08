@@ -1362,32 +1362,24 @@
       max-width: 1100px;
     }
 
-    /* Plan card — link direto para WhatsApp */
+    /* Plan card — visual neutro, não clicável (só o CTA é o botão) */
     .plan-wrapper { position: relative; }
 
     .plan-card {
       display: flex;
       flex-direction: column;
       background: var(--branco);
-      border: 2px solid var(--creme-escuro);
+      border: 1px solid rgba(176,144,165,0.18);
       border-radius: 18px;
       padding: 0;
-      cursor: pointer;
-      transition: border-color 0.25s, transform 0.22s, box-shadow 0.25s;
-      box-shadow: 0 4px 24px rgba(0,0,0,0.06);
+      box-shadow: var(--shadow-warm);
       position: relative;
       height: 100%;
       overflow: hidden;
-      text-decoration: none;
-      color: inherit;
+      transition: box-shadow 0.32s ease;
     }
     .plan-card:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 16px 48px rgba(176,144,165,0.22);
-      border-color: var(--roxo-principal);
-    }
-    .plan-card:hover .plan-cta {
-      background: #6a4d96;
+      box-shadow: 0 12px 36px rgba(123,94,146,0.14);
     }
 
     /* Cabeçalho colorido do card */
@@ -1409,22 +1401,34 @@
       align-items: center;
       justify-content: center;
       gap: 8px;
-      margin-top: 16px;
-      padding: 13px 18px;
+      margin-top: 18px;
+      padding: 14px 20px;
       background: #7B5EA7;
       color: white;
       font-family: 'Outfit', sans-serif;
       font-weight: 800;
-      font-size: 0.92rem;
+      font-size: 0.95rem;
       border-radius: 10px;
       letter-spacing: -0.005em;
-      transition: background 0.2s;
+      cursor: pointer;
+      text-decoration: none;
+      box-shadow: 0 6px 16px rgba(123,94,146,0.28);
+      transition: background 0.22s ease, transform 0.22s ease, box-shadow 0.22s ease;
+    }
+    .plan-cta:hover {
+      background: #6a4d96;
+      transform: translateY(-2px);
+      box-shadow: 0 10px 24px rgba(123,94,146,0.36);
+    }
+    .plan-cta:active {
+      transform: translateY(0);
+      box-shadow: 0 4px 12px rgba(123,94,146,0.22);
     }
     .plan-cta span[aria-hidden] {
       transition: transform 0.25s cubic-bezier(0.34,1.56,0.64,1);
       display: inline-block;
     }
-    .plan-card:hover .plan-cta span[aria-hidden] { transform: translateX(4px); }
+    .plan-cta:hover span[aria-hidden] { transform: translateX(4px); }
 
     .plan-badge {
       display: inline-block;
@@ -2584,8 +2588,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
     <!-- Plano 1: Bem Gestar -->
     <div class="plan-wrapper fade-in">
-      <a class="plan-card" href="https://wa.me/5583999254499?text=Ol%C3%A1+Dra.+Liliane%21+Tenho+interesse+no+plano+Bem+Gestar+%28R%24+150%29.+Gostaria+de+mais+informa%C3%A7%C3%B5es+sobre+o+acompanhamento."
-         target="_blank" rel="noopener" aria-label="Falar sobre o plano Bem Gestar no WhatsApp">
+      <div class="plan-card">
         <div class="plan-header">
           <p class="plan-name">Bem Gestar</p>
           <p class="plan-tagline">Sessão de relaxamento e alívio do inchaço</p>
@@ -2611,15 +2614,15 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
             <li>Exercícios miolinfocinéticos — auxiliam na redução dos inchaços</li>
             <li>Orientações personalizadas para a gestação</li>
           </ul>
-          <span class="plan-cta">Quero este plano <span aria-hidden="true">→</span></span>
+          <a class="plan-cta" href="https://wa.me/5583999254499?text=Ol%C3%A1+Dra.+Liliane%21+Tenho+interesse+no+plano+Bem+Gestar+%28R%24+150%29.+Gostaria+de+mais+informa%C3%A7%C3%B5es+sobre+o+acompanhamento."
+             target="_blank" rel="noopener" aria-label="Falar sobre o plano Bem Gestar no WhatsApp">Quero este plano <span aria-hidden="true">→</span></a>
         </div>
-      </a>
+      </div>
     </div>
 
     <!-- Plano 2: Bem Gestar Premium -->
     <div class="plan-wrapper fade-in" style="transition-delay:0.08s">
-      <a class="plan-card" href="https://wa.me/5583999254499?text=Ol%C3%A1+Dra.+Liliane%21+Tenho+interesse+no+plano+Bem+Gestar+Premium+%28pacote+4+sess%C3%B5es+%E2%80%94+R%24+500%29.+Gostaria+de+mais+informa%C3%A7%C3%B5es."
-         target="_blank" rel="noopener" aria-label="Falar sobre o plano Bem Gestar Premium no WhatsApp">
+      <div class="plan-card">
         <div class="plan-header destaque">
           <span class="plan-badge popular-inv">Economize R$ 100</span>
           <p class="plan-name">Bem Gestar Premium</p>
@@ -2647,15 +2650,15 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
             <li>Orientações personalizadas para a gestação</li>
           </ul>
           <p class="plan-nota">O pacote corresponde a 1 sessão por semana e pode ser renovado. 4 sessões que custariam R$ 600 saem por R$ 500.</p>
-          <span class="plan-cta">Quero este plano <span aria-hidden="true">→</span></span>
+          <a class="plan-cta" href="https://wa.me/5583999254499?text=Ol%C3%A1+Dra.+Liliane%21+Tenho+interesse+no+plano+Bem+Gestar+Premium+%28pacote+4+sess%C3%B5es+%E2%80%94+R%24+500%29.+Gostaria+de+mais+informa%C3%A7%C3%B5es."
+             target="_blank" rel="noopener" aria-label="Falar sobre o plano Bem Gestar Premium no WhatsApp">Quero este plano <span aria-hidden="true">→</span></a>
         </div>
-      </a>
+      </div>
     </div>
 
     <!-- Plano 3: Alívio Gestar -->
     <div class="plan-wrapper fade-in" style="transition-delay:0.16s">
-      <a class="plan-card" href="https://wa.me/5583999254499?text=Ol%C3%A1+Dra.+Liliane%21+Tenho+interesse+no+plano+Al%C3%ADvio+Gestar+%28R%24+150%29.+Gostaria+de+mais+informa%C3%A7%C3%B5es."
-         target="_blank" rel="noopener" aria-label="Falar sobre o plano Alívio Gestar no WhatsApp">
+      <div class="plan-card">
         <div class="plan-header">
           <p class="plan-name">Alívio Gestar</p>
           <p class="plan-tagline">Suporte abdominal e alívio das dores</p>
@@ -2681,15 +2684,15 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
             <li class="item-destaque"><strong>Taping de sustentação</strong> — promove a sustentação do abdômen e alívio dos desconfortos pélvicos e/ou lombares</li>
             <li>Exercícios e orientações para aliviar dores e desconfortos de acordo com a causa das suas queixas</li>
           </ul>
-          <span class="plan-cta">Quero este plano <span aria-hidden="true">→</span></span>
+          <a class="plan-cta" href="https://wa.me/5583999254499?text=Ol%C3%A1+Dra.+Liliane%21+Tenho+interesse+no+plano+Al%C3%ADvio+Gestar+%28R%24+150%29.+Gostaria+de+mais+informa%C3%A7%C3%B5es."
+             target="_blank" rel="noopener" aria-label="Falar sobre o plano Alívio Gestar no WhatsApp">Quero este plano <span aria-hidden="true">→</span></a>
         </div>
-      </a>
+      </div>
     </div>
 
     <!-- Plano 4: Sereno Gestar -->
     <div class="plan-wrapper fade-in" style="transition-delay:0.24s">
-      <a class="plan-card" href="https://wa.me/5583999254499?text=Ol%C3%A1+Dra.+Liliane%21+Tenho+interesse+no+plano+Sereno+Gestar+%28R%24+250%29.+Gostaria+de+mais+informa%C3%A7%C3%B5es."
-         target="_blank" rel="noopener" aria-label="Falar sobre o plano Sereno Gestar no WhatsApp">
+      <div class="plan-card">
         <div class="plan-header destaque">
           <span class="plan-badge popular-inv">Combo completo</span>
           <p class="plan-name">Sereno Gestar</p>
@@ -2716,9 +2719,10 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
             <li>Um combo que promove suporte abdominal e relaxamento profundo na mesma sessão</li>
             <li>Orientações personalizadas para a gestação</li>
           </ul>
-          <span class="plan-cta">Quero este plano <span aria-hidden="true">→</span></span>
+          <a class="plan-cta" href="https://wa.me/5583999254499?text=Ol%C3%A1+Dra.+Liliane%21+Tenho+interesse+no+plano+Sereno+Gestar+%28R%24+250%29.+Gostaria+de+mais+informa%C3%A7%C3%B5es."
+             target="_blank" rel="noopener" aria-label="Falar sobre o plano Sereno Gestar no WhatsApp">Quero este plano <span aria-hidden="true">→</span></a>
         </div>
-      </a>
+      </div>
     </div>
 
   </div>
@@ -2733,8 +2737,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
     <!-- Essencials -->
     <div class="plan-wrapper fade-in">
-      <a class="plan-card" href="https://wa.me/5583999254499?text=Ol%C3%A1+Dra.+Liliane%21+Tenho+interesse+no+plano+P%C3%B3s-Parto+Essencials+%28R%24+400%29.+Gostaria+de+mais+informa%C3%A7%C3%B5es."
-         target="_blank" rel="noopener" aria-label="Falar sobre o plano Pós-Parto Essencials no WhatsApp">
+      <div class="plan-card">
         <div class="plan-header">
           <p class="plan-name">Pós-Parto Essencials</p>
           <p class="plan-tagline">A base completa desde o primeiro dia</p>
@@ -2768,15 +2771,15 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
             <li>Orientação para retirada do taping com segurança</li>
           </ul>
           <p class="plan-nota">Para quem quer começar a recuperação com o melhor cuidado desde o primeiro dia.</p>
-          <span class="plan-cta">Quero este plano <span aria-hidden="true">→</span></span>
+          <a class="plan-cta" href="https://wa.me/5583999254499?text=Ol%C3%A1+Dra.+Liliane%21+Tenho+interesse+no+plano+P%C3%B3s-Parto+Essencials+%28R%24+400%29.+Gostaria+de+mais+informa%C3%A7%C3%B5es."
+             target="_blank" rel="noopener" aria-label="Falar sobre o plano Pós-Parto Essencials no WhatsApp">Quero este plano <span aria-hidden="true">→</span></a>
         </div>
-      </a>
+      </div>
     </div>
 
     <!-- Advanced -->
     <div class="plan-wrapper fade-in" style="transition-delay:0.1s">
-      <a class="plan-card" href="https://wa.me/5583999254499?text=Ol%C3%A1+Dra.+Liliane%21+Tenho+interesse+no+plano+P%C3%B3s-Parto+Advanced+%28R%24+600%29.+Gostaria+de+mais+informa%C3%A7%C3%B5es."
-         target="_blank" rel="noopener" aria-label="Falar sobre o plano Pós-Parto Advanced no WhatsApp">
+      <div class="plan-card">
         <div class="plan-header destaque">
           <span class="plan-badge popular-inv">Mais escolhido</span>
           <p class="plan-name">Pós-Parto Advanced</p>
@@ -2812,15 +2815,15 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
             <li class="item-destaque">+ <strong>Drenagem linfática</strong> domiciliar no retorno do 7º dia <span style="font-weight:400;font-style:italic;">(realizada apenas quando as condições clínicas forem adequadas)</span></li>
           </ul>
           <p class="plan-nota">Para quem quer manter a evolução da recuperação com acompanhamento profissional na primeira semana em casa.</p>
-          <span class="plan-cta">Quero este plano <span aria-hidden="true">→</span></span>
+          <a class="plan-cta" href="https://wa.me/5583999254499?text=Ol%C3%A1+Dra.+Liliane%21+Tenho+interesse+no+plano+P%C3%B3s-Parto+Advanced+%28R%24+600%29.+Gostaria+de+mais+informa%C3%A7%C3%B5es."
+             target="_blank" rel="noopener" aria-label="Falar sobre o plano Pós-Parto Advanced no WhatsApp">Quero este plano <span aria-hidden="true">→</span></a>
         </div>
-      </a>
+      </div>
     </div>
 
     <!-- Exclusive -->
     <div class="plan-wrapper fade-in" style="transition-delay:0.2s">
-      <a class="plan-card" href="https://wa.me/5583999254499?text=Ol%C3%A1+Dra.+Liliane%21+Tenho+interesse+no+plano+P%C3%B3s-Parto+Exclusive+%28R%24+800%29.+Gostaria+de+mais+informa%C3%A7%C3%B5es."
-         target="_blank" rel="noopener" aria-label="Falar sobre o plano Pós-Parto Exclusive no WhatsApp">
+      <div class="plan-card">
         <div class="plan-header destaque">
           <span class="plan-badge recomendado">✦ Recomendado pela Dra.</span>
           <p class="plan-name">Pós-Parto Exclusive</p>
@@ -2858,9 +2861,10 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
             <li class="item-destaque">+ <strong>Drenagem linfática</strong> domiciliar no retorno do 15º dia <span style="font-weight:400;font-style:italic;">(realizada apenas quando as condições clínicas forem adequadas)</span></li>
           </ul>
           <p class="plan-nota">O acompanhamento mais completo nos 21 dias mais importantes do pós-parto — para uma recuperação segura, progressiva e bem acompanhada.</p>
-          <span class="plan-cta">Quero este plano <span aria-hidden="true">→</span></span>
+          <a class="plan-cta" href="https://wa.me/5583999254499?text=Ol%C3%A1+Dra.+Liliane%21+Tenho+interesse+no+plano+P%C3%B3s-Parto+Exclusive+%28R%24+800%29.+Gostaria+de+mais+informa%C3%A7%C3%B5es."
+             target="_blank" rel="noopener" aria-label="Falar sobre o plano Pós-Parto Exclusive no WhatsApp">Quero este plano <span aria-hidden="true">→</span></a>
         </div>
-      </a>
+      </div>
     </div>
 
   </div>
