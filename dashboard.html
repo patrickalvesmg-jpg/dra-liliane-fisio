@@ -138,6 +138,28 @@
       .card-val { font-size: 22px; }
     }
 
+    /* CALENDÁRIO DE ATENDIMENTOS */
+    .cal-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
+    .cal-mes-card { background: var(--card); border: 1px solid var(--borda); border-radius: 16px; padding: 20px 22px; box-shadow: var(--sombra); }
+    .cal-mes-card.destaque { border-color: var(--borda2); background: var(--roxo-bg); }
+    .cal-mes-nome { font-size: 9px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--texto); margin-bottom: 10px; }
+    .cal-mes-total { font-size: 28px; font-weight: 900; color: var(--escuro); line-height: 1; }
+    .cal-mes-total.roxo { color: var(--roxo); }
+    .cal-mes-label { font-size: 11px; font-weight: 500; color: var(--texto); margin-top: 4px; margin-bottom: 12px; }
+    .cal-pacotes { display: flex; flex-direction: column; gap: 5px; }
+    .cal-pacote-linha { display: flex; justify-content: space-between; align-items: center; font-size: 11px; }
+    .cal-pacote-nome { color: var(--texto2); font-weight: 500; }
+    .cal-pacote-atend { color: var(--roxo); font-weight: 700; }
+    .cal-vazio { font-size: 12px; color: var(--texto); font-style: italic; }
+    .cal-resumo { background: var(--card); border: 1px solid var(--borda); border-radius: 16px; padding: 24px 28px; box-shadow: var(--sombra); margin-bottom: 14px; display: flex; gap: 40px; align-items: center; flex-wrap: wrap; }
+    .cal-resumo-item { display: flex; flex-direction: column; gap: 4px; }
+    .cal-resumo-lbl { font-size: 9px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--texto); }
+    .cal-resumo-val { font-size: 28px; font-weight: 900; color: var(--escuro); line-height: 1; }
+    .cal-resumo-val.roxo { color: var(--roxo); }
+    .cal-resumo-sub { font-size: 11px; color: var(--texto); }
+
+    @media (max-width: 900px) { .cal-grid { grid-template-columns: repeat(2, 1fr); } }
+
     /* MOBILE */
     @media (max-width: 600px) {
       .cnt { padding: 16px 12px 60px; }
@@ -265,6 +287,10 @@
         <tbody id="pipeline-body"></tbody>
       </table>
     </div>
+
+    <div class="sec">Calendário de Atendimentos por Mês</div>
+    <div id="cal-resumo-wrap"></div>
+    <div class="cal-grid" id="cal-grid"></div>
 
   </div>
 </div>
@@ -485,7 +511,7 @@ function calcular(ano) {
   const projFechamentosAdj = projFechamentos * (1 - taxaCancelamento);
 
   // Lucro projetado do ano
-  const TRAFEGO_MENSAL_FIXO   = 900;
+  const TRAFEGO_MENSAL_FIXO   = 1500;
   const trafegoFuturo         = mesesRestantes * TRAFEGO_MENSAL_FIXO;
   const trafegoAnoTotal       = trafegoRealizado + trafegoFuturo;
   // clientes futuras = agendadas ajustadas + novas pelo ritmo
@@ -505,12 +531,15 @@ function calcular(ano) {
   }));
 
   // fechamentos por mês da VENDA (col P / mesVenda)
+  // qtd: conta todas as vendas do mês, incluindo canceladas (representa o volume de vendas)
+  // receita: só vendas ativas (exclui canceladas), representa o valor realmente fechado
   const fechamentosPorMes = MESES.map(mes => {
-    const doMes = todos.filter(c => c.mesVenda === mes && c.status !== 'Cancelado');
+    const todasDoMes = todos.filter(c => c.mesVenda === mes);
+    const ativasDoMes = todasDoMes.filter(c => c.status !== 'Cancelado');
     return {
       mes,
-      qtd:    doMes.length,
-      receita: doMes.reduce((s,c) => s + c.valorTotal, 0),
+      qtd:     todasDoMes.length,
+      receita: ativasDoMes.reduce((s,c) => s + c.valorTotal, 0),
     };
   });
 
@@ -857,6 +886,50 @@ function renderPacotes(d) {
   `).join('');
 }
 
+// ─── ATENDIMENTOS POR PACOTE ─────────────────────────────────────────────────
+const ATEND_POR_PACOTE = {
+  'Bem Gestar':            1,
+  'Bem Gestar Premium':    4,
+  'Alívio Gestar':         1,
+  'Sereno Gestar':         1,
+  'Pós-Parto Essenciais':  2,
+  'Pós-Parto Advanced':    3,
+  'Pós-Parto Exclusivo':   4,
+};
+
+function atendimentosDoPacote(nome) {
+  if (!nome) return 0;
+  const key = Object.keys(ATEND_POR_PACOTE).find(k => nome.trim() === k);
+  return key ? ATEND_POR_PACOTE[key] : 1; // padrão 1 se pacote desconhecido
+}
+
+function calcularCalendario(ano) {
+  const todos = clientesDoAno(ano);
+  const ativas = todos.filter(c => c.status !== 'Cancelado');
+
+  return MESES.map((mes, idx) => {
+    const clientesDoMes = ativas.filter(c => mesIndex(c.mesRealizado) === idx);
+    const detalhes = [];
+
+    clientesDoMes.forEach(c => {
+      [c.pacote1, c.pacote2].forEach(p => {
+        if (!p) return;
+        const atend = atendimentosDoPacote(p);
+        const existente = detalhes.find(d => d.pacote === p);
+        if (existente) {
+          existente.clientes++;
+          existente.atendimentos += atend;
+        } else {
+          detalhes.push({ pacote: p, clientes: 1, atendimentos: atend });
+        }
+      });
+    });
+
+    const totalAtendimentos = detalhes.reduce((s, d) => s + d.atendimentos, 0);
+    return { mes, idx, totalAtendimentos, detalhes, clientesCount: clientesDoMes.length };
+  });
+}
+
 // ─── RENDER PIPELINE ─────────────────────────────────────────────────────────
 function renderPipeline(d) {
   const tbody = document.getElementById('pipeline-body');
@@ -875,6 +948,60 @@ function renderPipeline(d) {
   }).join('');
 }
 
+// ─── RENDER CALENDÁRIO ───────────────────────────────────────────────────────
+function renderCalendario() {
+  const cal = calcularCalendario(anoSelecionado);
+  const mesHoje = (anoSelecionado === anoAtual()) ? new Date().getMonth() : -1;
+
+  const totalAno = cal.reduce((s, m) => s + m.totalAtendimentos, 0);
+  const mediaMensal = cal.filter(m => m.totalAtendimentos > 0).length > 0
+    ? (totalAno / cal.filter(m => m.totalAtendimentos > 0).length).toFixed(1)
+    : '—';
+  const mesMaximo = cal.reduce((max, m) => m.totalAtendimentos > max.totalAtendimentos ? m : max, cal[0]);
+
+  document.getElementById('cal-resumo-wrap').innerHTML = `
+    <div class="cal-resumo">
+      <div class="cal-resumo-item">
+        <div class="cal-resumo-lbl">Total de Atendimentos no Ano</div>
+        <div class="cal-resumo-val roxo">${totalAno}</div>
+        <div class="cal-resumo-sub">atendimentos previstos/realizados</div>
+      </div>
+      <div class="cal-resumo-item">
+        <div class="cal-resumo-lbl">Média por Mês</div>
+        <div class="cal-resumo-val">${mediaMensal}</div>
+        <div class="cal-resumo-sub">nos meses com clientes</div>
+      </div>
+      <div class="cal-resumo-item">
+        <div class="cal-resumo-lbl">Mês Mais Cheio</div>
+        <div class="cal-resumo-val">${mesMaximo.totalAtendimentos > 0 ? mesMaximo.totalAtendimentos : '—'}</div>
+        <div class="cal-resumo-sub">${mesMaximo.totalAtendimentos > 0 ? mesMaximo.mes : 'sem dados'}</div>
+      </div>
+    </div>
+  `;
+
+  document.getElementById('cal-grid').innerHTML = cal.map(m => {
+    const ehMesAtual = m.idx === mesHoje;
+    return `
+      <div class="cal-mes-card${ehMesAtual ? ' destaque' : ''}">
+        <div class="cal-mes-nome">${m.mes}${ehMesAtual ? ' · atual' : ''}</div>
+        <div class="cal-mes-total${m.totalAtendimentos > 0 ? ' roxo' : ''}">${m.totalAtendimentos || '—'}</div>
+        <div class="cal-mes-label">${m.totalAtendimentos === 1 ? 'atendimento' : m.totalAtendimentos > 1 ? 'atendimentos' : 'sem clientes'} · ${m.clientesCount} ${m.clientesCount === 1 ? 'cliente' : 'clientes'}</div>
+        <div class="cal-pacotes">
+          ${m.detalhes.length > 0
+            ? m.detalhes.map(d => `
+                <div class="cal-pacote-linha">
+                  <span class="cal-pacote-nome">${d.pacote}</span>
+                  <span class="cal-pacote-atend">${d.atendimentos} atend.</span>
+                </div>
+              `).join('')
+            : '<span class="cal-vazio">nenhum agendamento</span>'
+          }
+        </div>
+      </div>
+    `;
+  }).join('');
+}
+
 // ─── RENDERIZAR ──────────────────────────────────────────────────────────────
 function renderizar() {
   const d = calcular(anoSelecionado);
@@ -888,6 +1015,7 @@ function renderizar() {
   renderJornada(d);
   renderPacotes(d);
   renderPipeline(d);
+  renderCalendario();
 }
 
 // ─── EVENTOS ─────────────────────────────────────────────────────────────────
