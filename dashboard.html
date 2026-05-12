@@ -138,6 +138,23 @@
       .card-val { font-size: 22px; }
     }
 
+    /* CONVERSÃO */
+    .conv-table-wrap { background: var(--card); border: 1px solid var(--borda); border-radius: 16px; overflow: hidden; box-shadow: var(--sombra); }
+    .conv-table { width: 100%; border-collapse: collapse; }
+    .conv-table th { font-size: 9px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--texto); padding: 12px 16px; text-align: left; border-bottom: 1px solid var(--borda); background: var(--bg2); }
+    .conv-table th.num { text-align: right; }
+    .conv-table td { font-size: 13px; font-weight: 500; color: var(--texto2); padding: 13px 16px; border-bottom: 1px solid rgba(176,144,165,0.10); }
+    .conv-table tr:last-child td { border-bottom: none; }
+    .conv-table td.mes-nome { font-weight: 700; color: var(--escuro); }
+    .conv-table td.num { text-align: right; font-weight: 700; }
+    .conv-table td.taxa-boa  { text-align: right; font-weight: 800; color: var(--verde); }
+    .conv-table td.taxa-med  { text-align: right; font-weight: 800; color: var(--amarelo); }
+    .conv-table td.taxa-ruim { text-align: right; font-weight: 800; color: var(--vermelho); }
+    .conv-table td.taxa-vazio { text-align: right; color: var(--texto); font-style: italic; }
+    .conv-table td.custo { text-align: right; font-weight: 700; color: var(--roxo); }
+    .conv-resumo { display: flex; gap: 14px; margin-bottom: 14px; flex-wrap: wrap; }
+    .conv-resumo .card { flex: 1; min-width: 160px; }
+
     /* CALENDÁRIO DE ATENDIMENTOS */
     .cal-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
     .cal-mes-card { background: var(--card); border: 1px solid var(--borda); border-radius: 16px; padding: 20px 22px; box-shadow: var(--sombra); }
@@ -288,6 +305,22 @@
       </table>
     </div>
 
+    <div class="sec">Taxa de Conversão — Leads vs. Vendas</div>
+    <div class="conv-resumo" id="conv-resumo"></div>
+    <div class="conv-table-wrap">
+      <table class="conv-table">
+        <thead><tr>
+          <th>Mês</th>
+          <th class="num">Leads</th>
+          <th class="num">Vendas Fechadas</th>
+          <th class="num">Taxa de Conversão</th>
+          <th class="num">Custo por Lead</th>
+          <th class="num">Custo por Cliente</th>
+        </tr></thead>
+        <tbody id="conv-body"></tbody>
+      </table>
+    </div>
+
     <div class="sec">Calendário de Atendimentos por Mês</div>
     <div id="cal-resumo-wrap"></div>
     <div class="cal-grid" id="cal-grid"></div>
@@ -300,11 +333,12 @@
 const SHEET_ID   = '1DPxDKTXGy4hBnsggdWfPfIkAiznT-GEEn01oFKB3GR4';
 const GID_VENDAS = '436702235';
 const GID_INVEST = '1973352773';
+const GID_LEADS  = '1947126829';
 const MESES = ['Janeiro','Fevereiro','Março','Abril','Maio','Junho',
                'Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
 
 // ─── ESTADO ──────────────────────────────────────────────────────────────────
-let dadosVendas = [], dadosInvest = [];
+let dadosVendas = [], dadosInvest = [], dadosLeads = [];
 let anoSelecionado = new Date().getFullYear();
 let chartAtend = null, chartFechamentos = null;
 
@@ -344,11 +378,14 @@ async function carregarDados() {
   try {
     setLoader(20);
     const vendas = await fetchGviz(GID_VENDAS);
-    setLoader(60);
+    setLoader(50);
     const invest = await fetchGviz(GID_INVEST);
+    setLoader(75);
+    const leads = await fetchGviz(GID_LEADS);
     setLoader(90);
     dadosVendas = vendas.filter(r => r[0] && r[0].trim() !== '');
     dadosInvest = invest.filter(r => r[0] && r[0].trim() !== '');
+    dadosLeads  = leads.filter(r => r[0] && r[0].trim() !== '');
     popularAnosSeletor();
     renderizar();
     setLoader(100);
@@ -886,6 +923,95 @@ function renderPacotes(d) {
   `).join('');
 }
 
+// ─── LEADS POR MÊS ───────────────────────────────────────────────────────────
+// Colunas aba Leads: A=0 Mês, B=1 Ano, C=2 Leads Recebidos
+function leadsPorMes(ano) {
+  const mapa = {};
+  dadosLeads.forEach(r => {
+    const mes = (r[0] || '').trim();
+    const a   = parseInt(r[1]);
+    const qtd = parseInt(r[2]) || 0;
+    if (mes && a === ano && qtd > 0) mapa[mes] = qtd;
+  });
+  return mapa;
+}
+
+// ─── RENDER CONVERSÃO ────────────────────────────────────────────────────────
+function renderConversao() {
+  const todos    = clientesDoAno(anoSelecionado);
+  const trafego  = trafegoPorMes(anoSelecionado);
+  const leads    = leadsPorMes(anoSelecionado);
+
+  // vendas fechadas por mês da venda (excluindo canceladas)
+  const vendasPorMes = {};
+  MESES.forEach(mes => {
+    vendasPorMes[mes] = todos.filter(c => c.mesVenda === mes && c.status !== 'Cancelado').length;
+  });
+
+  // meses que têm pelo menos leads ou vendas registradas
+  const mesesAtivos = MESES.filter(mes => leads[mes] || vendasPorMes[mes]);
+
+  // totais para o resumo
+  const totalLeads  = Object.values(leads).reduce((s, v) => s + v, 0);
+  const totalVendas = Object.values(vendasPorMes).reduce((s, v) => s + v, 0);
+  const taxaGeral   = totalLeads > 0 ? totalVendas / totalLeads : null;
+  const trafegoTotal = MESES.reduce((s, mes) => s + (trafego[mes] || 0), 0);
+  const custoPorLead    = totalLeads > 0 ? trafegoTotal / totalLeads : null;
+  const custoPorCliente = totalVendas > 0 ? trafegoTotal / totalVendas : null;
+
+  // resumo
+  document.getElementById('conv-resumo').innerHTML = `
+    <div class="card">
+      <div class="card-lbl">Total de Leads no Ano</div>
+      <div class="card-val roxo">${totalLeads || '—'}</div>
+      <div class="card-sub">leads recebidos</div>
+    </div>
+    <div class="card">
+      <div class="card-lbl">Taxa de Conversão Geral</div>
+      <div class="card-val ${taxaGeral === null ? '' : taxaGeral >= 0.3 ? 'verde' : taxaGeral >= 0.15 ? 'amarelo' : 'vermelho'}">${taxaGeral !== null ? fmtPct(taxaGeral) : '—'}</div>
+      <div class="card-sub">${totalVendas} vendas ÷ ${totalLeads} leads</div>
+    </div>
+    <div class="card">
+      <div class="card-lbl">Custo por Lead</div>
+      <div class="card-val amarelo">${custoPorLead !== null ? fmtBRL(custoPorLead) : '—'}</div>
+      <div class="card-sub">tráfego ÷ leads recebidos</div>
+    </div>
+    <div class="card">
+      <div class="card-lbl">Custo por Cliente Fechada</div>
+      <div class="card-val amarelo">${custoPorCliente !== null ? fmtBRL(custoPorCliente) : '—'}</div>
+      <div class="card-sub">tráfego ÷ vendas fechadas</div>
+    </div>
+  `;
+
+  // tabela por mês
+  const tbody = document.getElementById('conv-body');
+  if (mesesAtivos.length === 0) {
+    tbody.innerHTML = `<tr><td colspan="6" style="text-align:center;padding:28px;font-size:13px;color:var(--texto);font-style:italic">Preencha a coluna "Leads Recebidos" na aba Leads da planilha.</td></tr>`;
+    return;
+  }
+
+  tbody.innerHTML = mesesAtivos.map(mes => {
+    const qtdLeads  = leads[mes] || 0;
+    const qtdVendas = vendasPorMes[mes] || 0;
+    const taxa      = qtdLeads > 0 ? qtdVendas / qtdLeads : null;
+    const trafegoMes = trafego[mes] || 0;
+    const cpl  = qtdLeads  > 0 ? trafegoMes / qtdLeads  : null;
+    const cpv  = qtdVendas > 0 ? trafegoMes / qtdVendas : null;
+
+    const taxaClass = taxa === null ? 'taxa-vazio' : taxa >= 0.3 ? 'taxa-boa' : taxa >= 0.15 ? 'taxa-med' : 'taxa-ruim';
+    const taxaStr   = taxa !== null ? fmtPct(taxa) : qtdLeads === 0 ? 'sem leads' : '—';
+
+    return `<tr>
+      <td class="mes-nome">${mes}</td>
+      <td class="num">${qtdLeads || '—'}</td>
+      <td class="num">${qtdVendas || '—'}</td>
+      <td class="${taxaClass}">${taxaStr}</td>
+      <td class="custo">${cpl !== null ? fmtBRL(cpl) : '—'}</td>
+      <td class="custo">${cpv !== null ? fmtBRL(cpv) : '—'}</td>
+    </tr>`;
+  }).join('');
+}
+
 // ─── ATENDIMENTOS POR PACOTE ─────────────────────────────────────────────────
 const ATEND_POR_PACOTE = {
   'Bem Gestar':            1,
@@ -1015,6 +1141,7 @@ function renderizar() {
   renderJornada(d);
   renderPacotes(d);
   renderPipeline(d);
+  renderConversao();
   renderCalendario();
 }
 
