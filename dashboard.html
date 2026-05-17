@@ -649,8 +649,6 @@ async function fetchGviz(gid) {
         const [y, m, d] = c.v.slice(5, -1).split(',').map(Number);
         return `${String(d).padStart(2,'0')}/${String(m+1).padStart(2,'0')}/${y}`;
       }
-      // Colunas numéricas (I=8, J=9, K=10, L=11): retorna número bruto para salvar sem formatação moeda
-      if (typeof c.v === 'number' && i >= 8 && i <= 11) return c.v;
       return c.f !== null && c.f !== undefined ? c.f : String(c.v);
     })
   );
@@ -710,8 +708,9 @@ function popularAnosSeletor() {
 
 // ─── PARSE ───────────────────────────────────────────────────────────────────
 function parseBRL(str) {
-  if (!str) return 0;
-  return parseFloat(str.replace('R$','').replace(/\./g,'').replace(',','.').trim()) || 0;
+  if (!str && str !== 0) return 0;
+  if (typeof str === 'number') return str;
+  return parseFloat(String(str).replace('R$','').replace(/\./g,'').replace(',','.').trim()) || 0;
 }
 function mesIndex(nome) { return MESES.indexOf(nome); }
 function anoAtual() { return new Date().getFullYear(); }
@@ -1967,10 +1966,10 @@ function abrirModalEdicao(nome, dataParto) {
     document.getElementById('mf-nome').value       = linha[0]  || '';
     document.getElementById('mf-dataParto').value  = linha[1]  || '';
     document.getElementById('mf-extra').value      = linha[7]  || '';
-    document.getElementById('mf-valPacotes').value = linha[8]  || '';
-    document.getElementById('mf-valExtra').value   = linha[9]  || '';
-    document.getElementById('mf-custo').value      = linha[10] || '';
-    document.getElementById('mf-valTotal').value   = linha[11] || '';
+    document.getElementById('mf-valPacotes').value = parseBRL(linha[8])  || '';
+    document.getElementById('mf-valExtra').value   = parseBRL(linha[9])  || '';
+    document.getElementById('mf-custo').value      = parseBRL(linha[10]) || '';
+    document.getElementById('mf-valTotal').value   = parseBRL(linha[11]) || '';
     document.getElementById('mf-dataVenda').value  = linha[14] || '';
     _preencherSelect('mf-mesPrevisto',  linha[2]  || '');
     _preencherSelect('mf-mesRealizado', linha[3]  || '');
@@ -2017,10 +2016,10 @@ async function salvarVenda() {
     pacote1:      document.getElementById('mf-pacote1').value,
     pacote2:      document.getElementById('mf-pacote2').value,
     extra:        document.getElementById('mf-extra').value.trim(),
-    valPacotes:   document.getElementById('mf-valPacotes').value.trim(),
-    valExtra:     document.getElementById('mf-valExtra').value.trim(),
-    custo:        document.getElementById('mf-custo').value.trim(),
-    valTotal:     document.getElementById('mf-valTotal').value.trim(),
+    valPacotes:   parseBRL(document.getElementById('mf-valPacotes').value) || '',
+    valExtra:     parseBRL(document.getElementById('mf-valExtra').value) || '',
+    custo:        parseBRL(document.getElementById('mf-custo').value) || '',
+    valTotal:     parseBRL(document.getElementById('mf-valTotal').value) || '',
     status:       document.getElementById('mf-status').value,
     dataVenda:    document.getElementById('mf-dataVenda').value.trim(),
     mesVenda:     document.getElementById('mf-mesVenda').value,
