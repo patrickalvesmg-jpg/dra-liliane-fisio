@@ -103,8 +103,8 @@ function acaoAtualizarStatus(p) {
 
   const dados = aba.getDataRange().getValues();
   for (let i = 1; i < dados.length; i++) {
-    if (String(dados[i][0]).trim() === nome.trim() &&
-        String(dados[i][1]).trim() === dataParto.trim()) {
+    if (normalizar(dados[i][0]) === normalizar(nome) &&
+        normalizar(dados[i][1]) === normalizar(dataParto)) {
       aba.getRange(i + 1, 13).setValue(novoStatus); // coluna M = index 12 → coluna 13
       return resposta({ ok: true });
     }
@@ -158,8 +158,8 @@ function acaoEditarVenda(p) {
 
   const dados = aba.getDataRange().getValues();
   for (let i = 1; i < dados.length; i++) {
-    if (String(dados[i][0]).trim() === nomeOriginal.trim() &&
-        String(dados[i][1]).trim() === dataPartoOriginal.trim()) {
+    if (normalizar(dados[i][0]) === normalizar(nomeOriginal) &&
+        normalizar(dados[i][1]) === normalizar(dataPartoOriginal)) {
       // Atualiza todas as colunas exceto N (dataContato = coluna 14, índice 13)
       const dataContato = dados[i][13]; // preserva col N (dataContato) sem alterar
       const novaLinha = [
@@ -194,6 +194,17 @@ function sanitizar(v) {
   // Previne injeção de fórmula: prefixo com apóstrofo se começa com = + - @
   if (s && /^[=+\-@]/.test(s)) return "'" + s;
   return s;
+}
+
+function normalizar(v) {
+  if (v instanceof Date) {
+    const d = String(v.getDate()).padStart(2,'0');
+    const m = String(v.getMonth()+1).padStart(2,'0');
+    const y = v.getFullYear();
+    return `${d}/${m}/${y}`;
+  }
+  const s = String(v === null || v === undefined ? '' : v).trim();
+  return s.startsWith("'") ? s.slice(1) : s;
 }
 
 function criarAbaControle(ss) {
