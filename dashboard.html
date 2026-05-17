@@ -649,7 +649,8 @@ async function fetchGviz(gid) {
         const [y, m, d] = c.v.slice(5, -1).split(',').map(Number);
         return `${String(d).padStart(2,'0')}/${String(m+1).padStart(2,'0')}/${y}`;
       }
-      if (typeof c.v === 'number') return c.v;
+      // Colunas numéricas (I=8, J=9, K=10, L=11): retorna número bruto para salvar sem formatação moeda
+      if (typeof c.v === 'number' && i >= 8 && i <= 11) return c.v;
       return c.f !== null && c.f !== undefined ? c.f : String(c.v);
     })
   );
