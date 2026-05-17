@@ -157,13 +157,9 @@ function acaoEditarVenda(p) {
   if (!aba) return resposta({ ok: false, erro: 'Aba Vendas não encontrada' });
 
   const dados = aba.getDataRange().getValues();
-  const debug = [];
   for (let i = 1; i < dados.length; i++) {
-    const nPlan = normalizar(dados[i][0]);
-    const dPlan = normalizar(dados[i][1]);
-    const nEnv  = normalizar(nomeOriginal);
-    const dEnv  = normalizar(dataPartoOriginal);
-    if (nPlan === nEnv && dPlan === dEnv) {
+    if (normalizar(dados[i][0]) === normalizar(nomeOriginal) &&
+        normalizar(dados[i][1]) === normalizar(dataPartoOriginal)) {
       const dataContato = dados[i][13];
       const novaLinha = [
         sanitizar(d.nome),
@@ -186,9 +182,8 @@ function acaoEditarVenda(p) {
       aba.getRange(i + 1, 1, 1, 16).setValues([novaLinha]);
       return resposta({ ok: true });
     }
-    if (i <= 10) debug.push({ linha: i+1, nome: nPlan, data: dPlan, tipoData: typeof dados[i][1], raw: String(dados[i][1]).slice(0,40) });
   }
-  return resposta({ ok: false, erro: 'Cliente não encontrada', recebido: { nome: normalizar(nomeOriginal), data: normalizar(dataPartoOriginal) }, planilha: debug });
+  return resposta({ ok: false, erro: 'Cliente não encontrada: ' + normalizar(nomeOriginal) + ' / ' + normalizar(dataPartoOriginal) });
 }
 
 // ── UTILITÁRIOS ──────────────────────────────────────────────────────────────
