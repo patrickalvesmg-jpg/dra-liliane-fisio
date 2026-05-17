@@ -140,6 +140,7 @@
 
     /* CALENDÁRIO DE ATENDIMENTOS */
     .cal-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
+    #ger-cal-atend, #ger-cal-vendas { margin-bottom: 20px; }
     .cal-mes-card {
       background: var(--card); border: 1px solid var(--borda); border-radius: 16px;
       padding: 20px 22px; box-shadow: var(--sombra);
@@ -287,12 +288,6 @@
     .cancel-check-label { font-size: 11px; font-weight: 700; color: var(--vermelho); }
     .ger-cliente-card.cancelada { opacity: 0.55; background: #FDF4F4; border-color: rgba(176,85,85,0.18); }
 
-    /* ABA GERENCIAL — FILTRO DE MÊS */
-    .ger-mes-filtro { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 20px; }
-    .ger-mes-pill { background: var(--card); border: 1px solid var(--borda); border-radius: 20px; padding: 6px 14px; font-family: 'Outfit', sans-serif; font-size: 11px; font-weight: 700; letter-spacing: 0.5px; color: var(--texto); cursor: pointer; transition: all .2s; }
-    .ger-mes-pill:hover { border-color: var(--roxo-claro); color: var(--roxo); }
-    .ger-mes-pill.ativo { background: var(--roxo); border-color: var(--roxo); color: #fff; }
-
     /* ABA GERENCIAL — TABELA DE VENDAS */
     .ger-vendas-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; flex-wrap: wrap; gap: 10px; }
     .ger-nova-venda-btn { display: flex; align-items: center; gap: 8px; background: var(--roxo); border: none; border-radius: 10px; padding: 10px 20px; font-family: 'Outfit', sans-serif; font-size: 12px; font-weight: 700; letter-spacing: 0.5px; color: #fff; cursor: pointer; transition: all .2s; }
@@ -369,8 +364,6 @@
 
   <div id="aba-relatorios">
     <div class="cnt">
-
-    <div id="alertas-wrap" class="alertas-wrap"></div>
 
     <div class="sec">Resultados do Ano</div>
     <div class="g4" id="kpis"></div>
@@ -457,10 +450,11 @@
       <div id="ger-alertas-wrap" class="alertas-wrap"></div>
 
       <div class="sec">Atendimentos por Cliente</div>
-      <div id="ger-mes-filtro" class="ger-mes-filtro"></div>
+      <div class="cal-grid" id="ger-cal-atend"></div>
       <div id="ger-atendimentos-wrap"></div>
 
       <div class="sec">Vendas — Cadastro e Edição</div>
+      <div class="cal-grid" id="ger-cal-vendas"></div>
       <div class="ger-vendas-header">
         <div></div>
         <button class="ger-nova-venda-btn" onclick="abrirModalNovaVenda()">+ Nova Venda</button>
@@ -584,7 +578,8 @@ let pacoteMode = 'qtd';
 let mesSelecionadoCal = -1;
 let marcacoes = [];
 let abaAtiva = 'relatorios';
-let mesGerencial = -1; // -1 = mês atual do calendário
+let mesGerencial = -1;
+let mesGerVendas = -1;
 
 // ─── LOADER ──────────────────────────────────────────────────────────────────
 function setLoader(p) { document.getElementById('ld-fill').style.width = p + '%'; }
@@ -1530,7 +1525,8 @@ function renderAlertasEm(wrapId) {
     })
     // parto entre 1º de maio e hoje+60 dias, excluindo já convidadas
     .filter(c => c && c.parto >= inicio && c.parto <= limite && !getMarcacao(c.nome, 'convite_preparto'))
-    .sort((a, b) => a.diasRestantes - b.diasRestantes);
+    .sort((a, b) => a.diasRestantes - b.diasRestantes)
+    .slice(0, 3);
 
   if (!candidatas.length) { wrap.innerHTML = ''; return; }
 
@@ -1600,8 +1596,9 @@ function trocarAba(aba) {
 // ─── RENDER GERENCIAL ────────────────────────────────────────────────────────
 function renderGerencial() {
   renderAlertasGerencial();
-  renderGerMesFiltro();
+  renderGerCalAtend();
   renderGerAtendimentos();
+  renderGerCalVendas();
   renderGerVendas();
 }
 
@@ -1609,41 +1606,86 @@ function renderAlertasGerencial() {
   renderAlertasEm('ger-alertas-wrap');
 }
 
-function renderGerMesFiltro() {
-  const filtroEl = document.getElementById('ger-mes-filtro');
-  const todos = clientesDoAno(anoSelecionado);
+function renderGerCalAtend() {
+  const cal = calcularCalendario(anoSelecionado);
+  const mesHoje = (anoSelecionado === anoAtual()) ? new Date().getMonth() : -1;
 
-  // Coleta meses únicos das clientes (por mesRealizado)
-  const MESES = ['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'];
-  const mesSet = new Set();
-  todos.forEach(c => { if (c.mesRealizado) mesSet.add(c.mesRealizado.trim()); });
-  const mesesDisponiveis = MESES.filter(m => mesSet.has(m));
-
-  if (!mesesDisponiveis.length) { filtroEl.innerHTML = ''; return; }
-
-  // Se mesGericial ainda é -1, seleciona o mês atual (ou o último disponível)
   if (mesGerencial === -1) {
-    const mesAtual = MESES[new Date().getMonth()];
-    mesGerencial = mesesDisponiveis.includes(mesAtual) ? mesAtual : mesesDisponiveis[mesesDisponiveis.length - 1];
+    if (mesHoje >= 0 && cal[mesHoje].clientesCount > 0) {
+      mesGerencial = mesHoje;
+    } else {
+      const primeiro = cal.find(m => m.clientesCount > 0);
+      mesGerencial = primeiro ? primeiro.idx : 0;
+    }
   }
 
-  filtroEl.innerHTML = mesesDisponiveis.map(m =>
-    `<button class="ger-mes-pill${m === mesGerencial ? ' ativo' : ''}" onclick="selecionarMesGer('${m}')">${m}</button>`
-  ).join('');
+  document.getElementById('ger-cal-atend').innerHTML = cal.map(m => {
+    const ehAtual = m.idx === mesHoje;
+    const selecionado = m.idx === mesGerencial;
+    return `
+      <div class="cal-mes-card${selecionado ? ' selecionado' : ''}${ehAtual && !selecionado ? ' destaque-atual' : ''}"
+           onclick="selecionarMesGerAtend(${m.idx})">
+        <div class="cal-mes-nome">${m.mes}${ehAtual ? ' · atual' : ''}</div>
+        <div class="cal-mes-total${m.clientesCount > 0 ? ' roxo' : ''}">${m.clientesCount || '—'}</div>
+        <div class="cal-mes-label">${m.clientesCount === 1 ? 'cliente' : m.clientesCount > 1 ? 'clientes' : 'sem clientes'}</div>
+      </div>
+    `;
+  }).join('');
 }
 
-function selecionarMesGer(mes) {
-  mesGerencial = mes;
-  renderGerMesFiltro();
+function selecionarMesGerAtend(idx) {
+  mesGerencial = idx;
+  renderGerCalAtend();
   renderGerAtendimentos();
+}
+
+function renderGerCalVendas() {
+  const todos = clientesDoAno(anoSelecionado);
+  const mesHoje = (anoSelecionado === anoAtual()) ? new Date().getMonth() : -1;
+
+  // Agrupa por mesVenda (coluna P)
+  const contagemPorMes = Array(12).fill(0);
+  todos.forEach(c => {
+    const idx = mesIndex(c.mesVenda);
+    if (idx >= 0) contagemPorMes[idx]++;
+  });
+
+  if (mesGerVendas === -1) {
+    if (mesHoje >= 0 && contagemPorMes[mesHoje] > 0) {
+      mesGerVendas = mesHoje;
+    } else {
+      const ultimo = [...contagemPorMes].map((v,i) => ({v,i})).filter(x => x.v > 0).pop();
+      mesGerVendas = ultimo ? ultimo.i : (mesHoje >= 0 ? mesHoje : 0);
+    }
+  }
+
+  document.getElementById('ger-cal-vendas').innerHTML = MESES.map((mes, idx) => {
+    const ehAtual = idx === mesHoje;
+    const selecionado = idx === mesGerVendas;
+    const qtd = contagemPorMes[idx];
+    return `
+      <div class="cal-mes-card${selecionado ? ' selecionado' : ''}${ehAtual && !selecionado ? ' destaque-atual' : ''}"
+           onclick="selecionarMesGerVendas(${idx})">
+        <div class="cal-mes-nome">${mes}${ehAtual ? ' · atual' : ''}</div>
+        <div class="cal-mes-total${qtd > 0 ? ' roxo' : ''}">${qtd || '—'}</div>
+        <div class="cal-mes-label">${qtd === 1 ? 'venda' : qtd > 1 ? 'vendas' : 'sem vendas'}</div>
+      </div>
+    `;
+  }).join('');
+}
+
+function selecionarMesGerVendas(idx) {
+  mesGerVendas = idx;
+  renderGerCalVendas();
+  renderGerVendas();
 }
 
 function renderGerAtendimentos() {
   const wrap = document.getElementById('ger-atendimentos-wrap');
   const todos = clientesDoAno(anoSelecionado);
 
-  const filtrados = mesGerencial !== -1
-    ? todos.filter(c => c.mesRealizado && c.mesRealizado.trim() === mesGerencial)
+  const filtrados = mesGerencial >= 0
+    ? todos.filter(c => mesIndex(c.mesRealizado) === mesGerencial)
     : todos;
 
   if (!filtrados.length) {
@@ -1713,12 +1755,16 @@ function renderGerVendas() {
   const todos = clientesDoAno(anoSelecionado);
   const tbody = document.getElementById('ger-vendas-body');
 
-  if (!todos.length) {
-    tbody.innerHTML = `<tr><td colspan="5" style="text-align:center;padding:28px;font-size:13px;color:var(--texto);font-style:italic">Nenhuma cliente no ano selecionado.</td></tr>`;
+  const filtrados = mesGerVendas >= 0
+    ? todos.filter(c => mesIndex(c.mesVenda) === mesGerVendas)
+    : todos;
+
+  if (!filtrados.length) {
+    tbody.innerHTML = `<tr><td colspan="5" style="text-align:center;padding:28px;font-size:13px;color:var(--texto);font-style:italic">Nenhuma venda neste mês.</td></tr>`;
     return;
   }
 
-  tbody.innerHTML = todos.map(c => {
+  tbody.innerHTML = filtrados.map(c => {
     const pacotes = [c.pacote1, c.pacote2].filter(Boolean).join(' + ') || '—';
     const nomeEsc = c.nome.replace(/'/g, "\\'");
     const dataEsc = c.dataParto.replace(/'/g, "\\'");
@@ -1785,7 +1831,6 @@ async function atualizarStatusNaPlanilha(nome, dataParto, novoStatus) {
 
 // ─── RENDERIZAR ──────────────────────────────────────────────────────────────
 function renderizar() {
-  renderAlertas();
   const d = calcular(anoSelecionado);
   renderKPIs(d);
   renderCustosMedios(d);
@@ -1809,6 +1854,7 @@ document.getElementById('btn-atualizar').addEventListener('click', carregarDados
 document.getElementById('sel-ano').addEventListener('change', e => {
   anoSelecionado = parseInt(e.target.value);
   mesGerencial = -1;
+  mesGerVendas = -1;
   renderizar();
 });
 
