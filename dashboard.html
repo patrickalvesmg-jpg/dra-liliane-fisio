@@ -501,15 +501,29 @@
         </div>
         <div class="modal-campo">
           <label class="modal-label">Mês Previsto</label>
-          <input class="modal-input" id="mf-mesPrevisto" type="text" placeholder="Ex: Junho">
+          <select class="modal-select" id="mf-mesPrevisto">
+            <option value="">— selecione —</option>
+            <option>Janeiro</option><option>Fevereiro</option><option>Março</option>
+            <option>Abril</option><option>Maio</option><option>Junho</option>
+            <option>Julho</option><option>Agosto</option><option>Setembro</option>
+            <option>Outubro</option><option>Novembro</option><option>Dezembro</option>
+          </select>
         </div>
         <div class="modal-campo">
           <label class="modal-label">Mês Realizado</label>
-          <input class="modal-input" id="mf-mesRealizado" type="text" placeholder="Ex: Junho">
+          <select class="modal-select" id="mf-mesRealizado">
+            <option value="">— selecione —</option>
+            <option>Janeiro</option><option>Fevereiro</option><option>Março</option>
+            <option>Abril</option><option>Maio</option><option>Junho</option>
+            <option>Julho</option><option>Agosto</option><option>Setembro</option>
+            <option>Outubro</option><option>Novembro</option><option>Dezembro</option>
+          </select>
         </div>
         <div class="modal-campo">
           <label class="modal-label">Origem</label>
-          <input class="modal-input" id="mf-origem" type="text" placeholder="Ex: Instagram">
+          <select class="modal-select" id="mf-origem">
+            <option value="">— selecione —</option>
+          </select>
         </div>
         <div class="modal-campo">
           <label class="modal-label">Status</label>
@@ -521,11 +535,29 @@
         </div>
         <div class="modal-campo">
           <label class="modal-label">Pacote 1</label>
-          <input class="modal-input" id="mf-pacote1" type="text" placeholder="Nome do pacote">
+          <select class="modal-select" id="mf-pacote1">
+            <option value="">— selecione —</option>
+            <option>Bem Gestar</option>
+            <option>Bem Gestar Premium</option>
+            <option>Alívio Gestar</option>
+            <option>Sereno Gestar</option>
+            <option>Pós-Parto Essenciais</option>
+            <option>Pós-Parto Advanced</option>
+            <option>Pós-Parto Exclusivo</option>
+          </select>
         </div>
         <div class="modal-campo">
           <label class="modal-label">Pacote 2</label>
-          <input class="modal-input" id="mf-pacote2" type="text" placeholder="Opcional">
+          <select class="modal-select" id="mf-pacote2">
+            <option value="">— nenhum —</option>
+            <option>Bem Gestar</option>
+            <option>Bem Gestar Premium</option>
+            <option>Alívio Gestar</option>
+            <option>Sereno Gestar</option>
+            <option>Pós-Parto Essenciais</option>
+            <option>Pós-Parto Advanced</option>
+            <option>Pós-Parto Exclusivo</option>
+          </select>
         </div>
         <div class="modal-campo">
           <label class="modal-label">Extra</label>
@@ -553,7 +585,13 @@
         </div>
         <div class="modal-campo">
           <label class="modal-label">Mês da Venda</label>
-          <input class="modal-input" id="mf-mesVenda" type="text" placeholder="Ex: Março">
+          <select class="modal-select" id="mf-mesVenda">
+            <option value="">— selecione —</option>
+            <option>Janeiro</option><option>Fevereiro</option><option>Março</option>
+            <option>Abril</option><option>Maio</option><option>Junho</option>
+            <option>Julho</option><option>Agosto</option><option>Setembro</option>
+            <option>Outubro</option><option>Novembro</option><option>Dezembro</option>
+          </select>
         </div>
       </div>
       <div class="modal-erro" id="modal-erro"></div>
@@ -1898,12 +1936,20 @@ let modalModo = 'novo'; // 'novo' | 'editar'
 let modalNomeOriginal = '';
 let modalDataPartoOriginal = '';
 
+function popularOrigens() {
+  const origens = [...new Set(dadosVendas.map(r => r[4]).filter(Boolean))].sort();
+  const sel = document.getElementById('mf-origem');
+  sel.innerHTML = '<option value="">— selecione —</option>'
+    + origens.map(o => `<option>${o}</option>`).join('');
+}
+
 function abrirModalNovaVenda() {
   modalModo = 'novo';
   modalNomeOriginal = '';
   modalDataPartoOriginal = '';
   document.getElementById('modal-titulo').textContent = 'Nova Venda';
   document.getElementById('modal-btn-salvar').textContent = 'Salvar';
+  popularOrigens();
   limparModal();
   document.getElementById('modal-venda').classList.add('on');
 }
@@ -1919,6 +1965,7 @@ function abrirModalEdicao(nome, dataParto) {
     r[0].trim() === nome.trim() && r[1].trim() === dataParto.trim()
   );
 
+  popularOrigens();
   limparModal();
 
   if (linha) {
@@ -1935,7 +1982,6 @@ function abrirModalEdicao(nome, dataParto) {
     document.getElementById('mf-custo').value        = linha[10] || '';
     document.getElementById('mf-valTotal').value     = linha[11] || '';
     document.getElementById('mf-status').value       = linha[12] || 'Agendado';
-    // linha[13] = dataContato — não editamos
     document.getElementById('mf-dataVenda').value    = linha[14] || '';
     document.getElementById('mf-mesVenda').value     = linha[15] || '';
   }
@@ -1944,8 +1990,10 @@ function abrirModalEdicao(nome, dataParto) {
 }
 
 function limparModal() {
-  ['nome','dataParto','mesPrevisto','mesRealizado','origem','pacote1','pacote2',
-   'extra','valPacotes','valExtra','custo','valTotal','dataVenda','mesVenda'].forEach(id => {
+  ['nome','dataParto','extra','valPacotes','valExtra','custo','valTotal','dataVenda'].forEach(id => {
+    document.getElementById('mf-' + id).value = '';
+  });
+  ['mesPrevisto','mesRealizado','origem','pacote1','pacote2','mesVenda'].forEach(id => {
     document.getElementById('mf-' + id).value = '';
   });
   document.getElementById('mf-status').value = 'Agendado';
@@ -1968,11 +2016,11 @@ async function salvarVenda() {
   const dados = {
     nome,
     dataParto:    document.getElementById('mf-dataParto').value.trim(),
-    mesPrevisto:  document.getElementById('mf-mesPrevisto').value.trim(),
-    mesRealizado: document.getElementById('mf-mesRealizado').value.trim(),
-    origem:       document.getElementById('mf-origem').value.trim(),
-    pacote1:      document.getElementById('mf-pacote1').value.trim(),
-    pacote2:      document.getElementById('mf-pacote2').value.trim(),
+    mesPrevisto:  document.getElementById('mf-mesPrevisto').value,
+    mesRealizado: document.getElementById('mf-mesRealizado').value,
+    origem:       document.getElementById('mf-origem').value,
+    pacote1:      document.getElementById('mf-pacote1').value,
+    pacote2:      document.getElementById('mf-pacote2').value,
     extra:        document.getElementById('mf-extra').value.trim(),
     valPacotes:   document.getElementById('mf-valPacotes').value.trim(),
     valExtra:     document.getElementById('mf-valExtra').value.trim(),
@@ -1980,11 +2028,10 @@ async function salvarVenda() {
     valTotal:     document.getElementById('mf-valTotal').value.trim(),
     status:       document.getElementById('mf-status').value,
     dataVenda:    document.getElementById('mf-dataVenda').value.trim(),
-    mesVenda:     document.getElementById('mf-mesVenda').value.trim(),
+    mesVenda:     document.getElementById('mf-mesVenda').value,
   };
 
   const btn = document.getElementById('modal-btn-salvar');
-  const textoOriginal = btn.textContent;
   btn.textContent = 'Salvando...';
   btn.disabled = true;
 
@@ -1993,23 +2040,17 @@ async function salvarVenda() {
       ? { action: 'inserirVenda', dados }
       : { action: 'editarVenda', nomeOriginal: modalNomeOriginal, dataPartoOriginal: modalDataPartoOriginal, dados };
 
-    const res  = await fetch(APPS_SCRIPT_URL, { method: 'POST', body: JSON.stringify(payload) });
-    const json = await res.json();
-
-    if (!json.ok) {
-      document.getElementById('modal-erro').textContent = json.erro || 'Erro ao salvar.';
-      document.getElementById('modal-erro').classList.add('on');
-      return;
-    }
+    // Apps Script redireciona via 302 — não tenta parsear resposta
+    await fetch(APPS_SCRIPT_URL, { method: 'POST', body: JSON.stringify(payload) });
 
     fecharModal();
+    mostrarToast('Venda salva com sucesso ✓');
     await carregarDados();
 
   } catch(e) {
     document.getElementById('modal-erro').textContent = 'Erro de conexão: ' + e.message;
     document.getElementById('modal-erro').classList.add('on');
-  } finally {
-    btn.textContent = textoOriginal;
+    btn.textContent = modalModo === 'novo' ? 'Salvar' : 'Salvar Alterações';
     btn.disabled = false;
   }
 }
