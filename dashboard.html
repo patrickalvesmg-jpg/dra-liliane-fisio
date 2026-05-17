@@ -1508,12 +1508,9 @@ async function carregarMarcacoes() {
 
 function postAppsScript(payload) {
   if (!APPS_SCRIPT_URL) return Promise.resolve();
-  // Envia como form-urlencoded com campo "data" — é um "simple request" CORS (sem preflight)
-  // O Apps Script parseia e.postData.contents removendo o prefixo "data="
-  const body = 'data=' + encodeURIComponent(JSON.stringify(payload));
   return fetch(APPS_SCRIPT_URL, {
     method: 'POST',
-    body,
+    body: JSON.stringify(payload),
   }).catch(e => console.warn('Apps Script POST erro:', e));
 }
 
@@ -2010,7 +2007,16 @@ async function salvarVenda() {
       ? { action: 'inserirVenda', dados }
       : { action: 'editarVenda', nomeOriginal: modalNomeOriginal, dataPartoOriginal: modalDataPartoOriginal, dados };
 
-    await postAppsScript(payload);
+    const res  = await postAppsScript(payload);
+    const json = res ? await res.json() : null;
+
+    if (json && !json.ok) {
+      document.getElementById('modal-erro').textContent = json.erro || 'Erro ao salvar.';
+      document.getElementById('modal-erro').classList.add('on');
+      btn.textContent = modalModo === 'novo' ? 'Salvar' : 'Salvar Alterações';
+      btn.disabled = false;
+      return;
+    }
 
     fecharModal();
     mostrarToast('Venda salva com sucesso ✓');
