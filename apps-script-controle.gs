@@ -26,9 +26,23 @@ function doGet(e) {
     .setMimeType(ContentService.MimeType.JSON);
 }
 
+function doOptions(e) {
+  return ContentService.createTextOutput('')
+    .setMimeType(ContentService.MimeType.TEXT);
+}
+
 function doPost(e) {
   try {
-    const payload = JSON.parse(e.postData.contents);
+    // Suporte a form-encoded (enviado pelo fetch sem Content-Type) e JSON puro
+    let payload;
+    const raw = e.postData.contents;
+    if (e.postData.type === 'application/x-www-form-urlencoded') {
+      // dados chegam como campo "data" encodado
+      const decoded = decodeURIComponent(raw.replace(/^data=/, ''));
+      payload = JSON.parse(decoded);
+    } else {
+      payload = JSON.parse(raw);
+    }
 
     // Suporte legado: _delete: true → action: 'desmarcar'
     if (payload._delete) payload.action = 'desmarcar';
@@ -36,16 +50,16 @@ function doPost(e) {
     if (!payload.action) payload.action = 'marcar';
 
     switch (payload.action) {
-      case 'marcar':          return acaoMarcar(payload);
-      case 'desmarcar':       return acaoDesmarcar(payload);
-      case 'atualizarStatus': return acaoAtualizarStatus(payload);
-      case 'inserirVenda':    return acaoInserirVenda(payload);
-      case 'editarVenda':     return acaoEditarVenda(payload);
+      case 'marcar':          return respostaCors(acaoMarcar(payload));
+      case 'desmarcar':       return respostaCors(acaoDesmarcar(payload));
+      case 'atualizarStatus': return respostaCors(acaoAtualizarStatus(payload));
+      case 'inserirVenda':    return respostaCors(acaoInserirVenda(payload));
+      case 'editarVenda':     return respostaCors(acaoEditarVenda(payload));
       default:
-        return resposta({ ok: false, erro: 'action desconhecida: ' + payload.action });
+        return respostaCors(resposta({ ok: false, erro: 'action desconhecida: ' + payload.action }));
     }
   } catch(err) {
-    return resposta({ ok: false, erro: err.message });
+    return respostaCors(resposta({ ok: false, erro: err.message }));
   }
 }
 
@@ -209,4 +223,11 @@ function resposta(obj) {
   return ContentService
     .createTextOutput(JSON.stringify(obj))
     .setMimeType(ContentService.MimeType.JSON);
+}
+
+// Apps Script não suporta setHeader() — CORS é resolvido pelo callback JSONP
+// Para POST simples sem preflight: o fetch deve usar mode:'no-cors' OU
+// o payload deve ser enviado como form-data com campo "data"
+function respostaCors(output) {
+  return output;
 }

@@ -1508,11 +1508,12 @@ async function carregarMarcacoes() {
 
 function postAppsScript(payload) {
   if (!APPS_SCRIPT_URL) return Promise.resolve();
-  // mode: no-cors evita preflight CORS — Apps Script aceita assim; resposta é opaca (não lemos)
+  // Envia como form-urlencoded com campo "data" — é um "simple request" CORS (sem preflight)
+  // O Apps Script parseia e.postData.contents removendo o prefixo "data="
+  const body = 'data=' + encodeURIComponent(JSON.stringify(payload));
   return fetch(APPS_SCRIPT_URL, {
     method: 'POST',
-    mode: 'no-cors',
-    body: JSON.stringify(payload),
+    body,
   }).catch(e => console.warn('Apps Script POST erro:', e));
 }
 
@@ -1828,17 +1829,7 @@ async function toggleAtendimentoGer(nome, dataParto, numero, marcado, totalAtend
   } else {
     await removerMarcacao(nome, tipo);
   }
-
-  const estaCancelada = !!getMarcacao(nome, 'cancelada');
-  const todosOsAtend = Array.from({ length: totalAtend }, (_, i) => getMarcacao(nome, `atend_${i + 1}`));
-  const todosMarcados = todosOsAtend.every(Boolean);
-
-  if (todosMarcados && !estaCancelada) {
-    await atualizarStatusNaPlanilha(nome, dataParto, 'Realizado');
-  } else if (!marcado && !estaCancelada) {
-    await atualizarStatusNaPlanilha(nome, dataParto, 'Agendado');
-  }
-  // Não re-renderiza a lista para não destruir os checkboxes durante a interação
+  // Status (Agendado/Realizado) é gerenciado pelo editor de vendas
 }
 
 async function toggleCancelada(nome, dataParto, marcado) {
@@ -1846,12 +1837,9 @@ async function toggleCancelada(nome, dataParto, marcado) {
   const data = new Date().toISOString().slice(0,10);
   if (marcado) {
     await salvarMarcacao(nome, tipo, data, '');
-    await atualizarStatusNaPlanilha(nome, dataParto, 'Cancelado');
   } else {
     await removerMarcacao(nome, tipo);
-    await atualizarStatusNaPlanilha(nome, dataParto, 'Agendado');
   }
-  // Atualiza visualmente só o card desta cliente
   atualizarCardCancelada(nome, marcado);
 }
 
@@ -1868,10 +1856,6 @@ function atualizarCardCancelada(nome, cancelada) {
 
 async function atualizarStatusNaPlanilha(nome, dataParto, novoStatus) {
   await postAppsScript({ action: 'atualizarStatus', nome, dataParto, novoStatus });
-  const label = novoStatus === 'Realizado' ? 'Atendimento concluído — Realizado salvo ✓'
-              : novoStatus === 'Cancelado'  ? 'Cancelamento salvo ✓'
-              : 'Status atualizado ✓';
-  mostrarToast(label);
 }
 
 function mostrarToast(msg, erro) {
