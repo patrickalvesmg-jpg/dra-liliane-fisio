@@ -96,28 +96,10 @@
     .leg-item { display: flex; align-items: center; gap: 7px; font-size: 11px; font-weight: 600; color: var(--texto2); }
     .leg-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
 
-    /* PACOTES */
-    .pacote-lista { display: flex; flex-direction: column; gap: 10px; }
-    .pacote-item { background: var(--card); border: 1px solid var(--borda); border-radius: 12px; padding: 16px 20px; box-shadow: var(--sombra); }
-    .pacote-top { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 8px; }
-    .pacote-nome { font-size: 14px; font-weight: 700; color: var(--escuro); }
-    .pacote-receita { font-size: 15px; font-weight: 800; color: var(--roxo); }
-    .pacote-bar-bg { height: 4px; background: rgba(176,144,165,0.18); border-radius: 2px; overflow: hidden; margin-bottom: 6px; }
-    .pacote-bar-fill { height: 100%; border-radius: 2px; background: linear-gradient(90deg, var(--roxo), var(--roxo-claro)); transition: width .8s ease; }
-    .pacote-bot { display: flex; justify-content: space-between; }
-    .pacote-freq { font-size: 11px; font-weight: 600; color: var(--texto); }
-    .pacote-ticket { font-size: 11px; font-weight: 600; color: var(--texto); }
-
-    /* PIPELINE */
-    .pipeline-wrap { background: var(--card); border: 1px solid var(--borda); border-radius: 16px; overflow: hidden; box-shadow: var(--sombra); }
-    .pipeline-table { width: 100%; border-collapse: collapse; }
-    .pipeline-table th { font-size: 9px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--texto); padding: 12px 16px; text-align: left; border-bottom: 1px solid var(--borda); background: var(--bg2); }
-    .pipeline-table td { font-size: 13px; font-weight: 500; color: var(--texto2); padding: 14px 16px; border-bottom: 1px solid rgba(176,144,165,0.10); }
-    .pipeline-table tr:last-child td { border-bottom: none; }
-    .pipeline-table td.nome { font-weight: 700; color: var(--escuro); }
-    .pipeline-table td.valor { font-weight: 800; color: var(--roxo); }
-    .pipeline-table td.mes { color: var(--roxo); }
-    .pipeline-vazio { text-align: center; padding: 32px; font-size: 13px; color: var(--texto); font-style: italic; }
+    /* PACOTES — GRÁFICO */
+    .pacote-toggle { display: flex; gap: 6px; margin-bottom: 16px; }
+    .pacote-toggle-btn { background: var(--bg2); border: 1px solid var(--borda); border-radius: 8px; padding: 6px 14px; font-family: 'Outfit', sans-serif; font-size: 11px; font-weight: 700; color: var(--texto); cursor: pointer; transition: all .2s; }
+    .pacote-toggle-btn.ativo { background: var(--roxo); border-color: var(--roxo); color: #fff; }
 
     /* LUCRO PROJETADO */
     .lucro-proj-card { background:#F0F7F3; border:1.5px solid rgba(78,139,101,0.30); border-radius:16px; padding:24px 28px; box-shadow:var(--sombra); display:grid; grid-template-columns:1fr auto; align-items:center; gap:24px; }
@@ -152,17 +134,25 @@
     .conv-table td.taxa-ruim { text-align: right; font-weight: 800; color: var(--vermelho); }
     .conv-table td.taxa-vazio { text-align: right; color: var(--texto); font-style: italic; }
     .conv-table td.custo { text-align: right; font-weight: 700; color: var(--roxo); }
+    .conv-table td.ticket { text-align: right; font-weight: 700; color: var(--escuro); }
     .conv-resumo { display: flex; gap: 14px; margin-bottom: 14px; flex-wrap: wrap; }
     .conv-resumo .card { flex: 1; min-width: 160px; }
 
     /* CALENDÁRIO DE ATENDIMENTOS */
     .cal-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
-    .cal-mes-card { background: var(--card); border: 1px solid var(--borda); border-radius: 16px; padding: 20px 22px; box-shadow: var(--sombra); }
-    .cal-mes-card.destaque { border-color: var(--borda2); background: var(--roxo-bg); }
+    .cal-mes-card {
+      background: var(--card); border: 1px solid var(--borda); border-radius: 16px;
+      padding: 20px 22px; box-shadow: var(--sombra);
+      cursor: pointer; transition: border-color .2s, background .2s;
+    }
+    .cal-mes-card:hover { border-color: var(--roxo-claro); }
+    .cal-mes-card.selecionado { border-color: var(--roxo); background: var(--roxo-bg); box-shadow: 0 0 0 3px rgba(176,144,165,0.18); }
+    .cal-mes-card.destaque-atual { border-color: var(--borda2); }
     .cal-mes-nome { font-size: 9px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--texto); margin-bottom: 10px; }
     .cal-mes-total { font-size: 28px; font-weight: 900; color: var(--escuro); line-height: 1; }
     .cal-mes-total.roxo { color: var(--roxo); }
-    .cal-mes-label { font-size: 11px; font-weight: 500; color: var(--texto); margin-top: 4px; margin-bottom: 12px; }
+    .cal-mes-label { font-size: 11px; font-weight: 500; color: var(--texto); margin-top: 4px; margin-bottom: 6px; }
+    .cal-mes-gestantes { font-size: 11px; font-weight: 700; color: var(--roxo); margin-bottom: 10px; }
     .cal-pacotes { display: flex; flex-direction: column; gap: 5px; }
     .cal-pacote-linha { display: flex; justify-content: space-between; align-items: center; font-size: 11px; }
     .cal-pacote-nome { color: var(--texto2); font-weight: 500; }
@@ -174,6 +164,35 @@
     .cal-resumo-val { font-size: 28px; font-weight: 900; color: var(--escuro); line-height: 1; }
     .cal-resumo-val.roxo { color: var(--roxo); }
     .cal-resumo-sub { font-size: 11px; color: var(--texto); }
+
+    /* PAINEL DE DETALHE DO MÊS */
+    .cal-detalhe-wrap {
+      background: var(--card); border: 1.5px solid var(--borda2); border-radius: 16px;
+      box-shadow: var(--sombra); margin-top: 20px; overflow: hidden;
+      animation: fadeIn .25s ease;
+    }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+    .cal-detalhe-header {
+      background: var(--roxo-bg); border-bottom: 1px solid var(--borda2);
+      padding: 16px 24px; display: flex; justify-content: space-between; align-items: center;
+    }
+    .cal-detalhe-titulo { font-family: 'Cormorant Garamond', serif; font-size: 18px; font-weight: 600; color: var(--escuro); }
+    .cal-detalhe-badges { display: flex; gap: 10px; align-items: center; }
+    .cal-badge { font-size: 10px; font-weight: 700; letter-spacing: 1px; padding: 4px 10px; border-radius: 20px; }
+    .cal-badge-gestantes { background: rgba(176,144,165,0.15); color: var(--roxo); }
+    .cal-badge-atend { background: rgba(78,139,101,0.12); color: var(--verde); }
+    .cal-detalhe-table { width: 100%; border-collapse: collapse; }
+    .cal-detalhe-table th { font-size: 9px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--texto); padding: 12px 20px; text-align: left; border-bottom: 1px solid var(--borda); background: var(--bg2); }
+    .cal-detalhe-table td { font-size: 13px; color: var(--texto2); padding: 14px 20px; border-bottom: 1px solid rgba(176,144,165,0.10); vertical-align: middle; }
+    .cal-detalhe-table tr:last-child td { border-bottom: none; }
+    .cal-detalhe-table td.nome { font-weight: 700; color: var(--escuro); }
+    .cal-detalhe-table td.pacotes { font-weight: 600; color: var(--texto2); }
+    .cal-detalhe-table td.atend-num { font-weight: 800; color: var(--roxo); text-align: center; }
+    .cal-detalhe-table td.parto { color: var(--texto); }
+    .cal-status-badge { display: inline-block; font-size: 10px; font-weight: 700; letter-spacing: 0.5px; padding: 3px 10px; border-radius: 20px; }
+    .cal-status-realizado { background: rgba(78,139,101,0.12); color: var(--verde); }
+    .cal-status-agendado { background: rgba(176,144,165,0.15); color: var(--roxo); }
+    .cal-detalhe-vazio { text-align: center; padding: 40px; font-size: 13px; color: var(--texto); font-style: italic; }
 
     @media (max-width: 900px) { .cal-grid { grid-template-columns: repeat(2, 1fr); } }
 
@@ -209,21 +228,13 @@
       .grafico-legenda { gap: 12px; }
       .leg-item { font-size: 10px; }
 
-      .pacote-item { padding: 14px 16px; border-radius: 10px; }
-      .pacote-nome { font-size: 13px; }
-      .pacote-receita { font-size: 14px; }
-
-      .pipeline-wrap { border-radius: 12px; }
-      .pipeline-table th { font-size: 8px; padding: 10px 12px; letter-spacing: 1px; }
-      .pipeline-table td { font-size: 12px; padding: 12px 12px; }
-      /* esconde coluna Pacote(s) no mobile — fica apertado */
-      .pipeline-table th:nth-child(3),
-      .pipeline-table td:nth-child(3) { display: none; }
-
       /* lucro projetado — empilha verticalmente */
       .lucro-proj-card { grid-template-columns: 1fr; padding: 18px 16px; gap: 14px; }
       .lucro-proj-valor { text-align: left; }
       .lucro-proj-detalhe { font-size: 10px; }
+
+      .cal-detalhe-table th:nth-child(4) { display: none; }
+      .cal-detalhe-table td:nth-child(4) { display: none; }
     }
   </style>
 </head>
@@ -292,17 +303,19 @@
     <div class="sec">Jornada da Cliente — Fechamento vs. Parto</div>
     <div id="jornada-wrap"></div>
 
-    <div class="sec">Pacotes Mais Vendidos</div>
-    <div id="pacotes-lista" class="pacote-lista"></div>
-
-    <div class="sec">Pipeline — Clientes Agendadas</div>
-    <div class="pipeline-wrap">
-      <table class="pipeline-table">
-        <thead><tr>
-          <th>Cliente</th><th>Mês Atend.</th><th>Pacote(s)</th><th>Valor Total</th>
-        </tr></thead>
-        <tbody id="pipeline-body"></tbody>
-      </table>
+    <div class="sec">Pacotes Mais Vendidos — por Mês</div>
+    <div class="grafico-wrap">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:12px;margin-bottom:16px">
+        <div>
+          <div class="grafico-titulo">Pacotes por Mês</div>
+          <div class="grafico-sub">Comparativo mensal de cada pacote</div>
+        </div>
+        <div class="pacote-toggle">
+          <button class="pacote-toggle-btn ativo" id="btn-pacote-qtd" onclick="setPacoteMode('qtd')">Qtd. Clientes</button>
+          <button class="pacote-toggle-btn" id="btn-pacote-rec" onclick="setPacoteMode('receita')">Receita</button>
+        </div>
+      </div>
+      <div class="grafico-canvas-wrap" style="height:300px"><canvas id="chart-pacotes"></canvas></div>
     </div>
 
     <div class="sec">Taxa de Conversão — Leads vs. Vendas</div>
@@ -314,6 +327,7 @@
           <th class="num">Leads</th>
           <th class="num">Vendas Fechadas</th>
           <th class="num">Taxa de Conversão</th>
+          <th class="num">Ticket Médio</th>
           <th class="num">Custo por Lead</th>
           <th class="num">Custo por Cliente</th>
         </tr></thead>
@@ -324,6 +338,7 @@
     <div class="sec">Calendário de Atendimentos por Mês</div>
     <div id="cal-resumo-wrap"></div>
     <div class="cal-grid" id="cal-grid"></div>
+    <div id="cal-detalhe-wrap"></div>
 
   </div>
 </div>
@@ -340,7 +355,9 @@ const MESES = ['Janeiro','Fevereiro','Março','Abril','Maio','Junho',
 // ─── ESTADO ──────────────────────────────────────────────────────────────────
 let dadosVendas = [], dadosInvest = [], dadosLeads = [];
 let anoSelecionado = new Date().getFullYear();
-let chartAtend = null, chartFechamentos = null;
+let chartAtend = null, chartFechamentos = null, chartPacotes = null;
+let pacoteMode = 'qtd';
+let mesSelecionadoCal = -1;
 
 // ─── LOADER ──────────────────────────────────────────────────────────────────
 function setLoader(p) { document.getElementById('ld-fill').style.width = p + '%'; }
@@ -455,7 +472,7 @@ function clientesDoAno(ano) {
       valorPacotes: parseBRL(r[8]),
       valorExtra:   parseBRL(r[9]),
       custo:        parseBRL(r[10]),
-      status:       r[12] || '',   // Realizado | Agendado | Cancelado
+      status:       r[12] || '',
       dataVenda:    r[14] || '',
       mesVenda:     r[15] || '',
       get valorTotal() { return this.valorPacotes + this.valorExtra; }
@@ -479,11 +496,10 @@ function calcular(ano) {
   const mesLimite = (ano === anoAtual()) ? mesAtual() : 11;
   const trafego   = trafegoPorMes(ano);
 
-  // separar por status — cancelados excluídos dos KPIs financeiros
   const realizadas  = todos.filter(c => c.status === 'Realizado');
   const agendadas   = todos.filter(c => c.status === 'Agendado');
   const canceladas  = todos.filter(c => c.status === 'Cancelado');
-  const ativas      = [...realizadas, ...agendadas]; // excluindo cancelados
+  const ativas      = [...realizadas, ...agendadas];
 
   const fatRealizado   = realizadas.reduce((s,c) => s + c.valorTotal, 0);
   const fatAgendado    = agendadas.reduce((s,c)  => s + c.valorTotal, 0);
@@ -493,8 +509,6 @@ function calcular(ano) {
   const custoUberMat     = realizadas.reduce((s,c) => s + c.custo, 0);
   const trafegoRealizado = MESES.slice(0, mesLimite + 1).reduce((s, mes) => s + (trafego[mes] || 0), 0);
 
-  // custo médio por atendimento realizado
-  // uber/mat é direto por cliente; tráfego é diluído sobre todas as vendas ativas (gerou todas as vendas)
   const custoMedioUberMat  = realizadas.length > 0 ? custoUberMat / realizadas.length : 0;
   const totalAtivas        = ativas.length || 1;
   const custoMedioTrafego  = trafegoRealizado / totalAtivas;
@@ -507,33 +521,24 @@ function calcular(ano) {
     return s + fatMes - uberMes - (trafego[mes] || 0);
   }, 0);
 
-  // cancelamento
-  const totalFechadas       = realizadas.length + canceladas.length; // já atendidas ou deveriam ter sido
-  const taxaCancelamento    = totalFechadas > 0 ? canceladas.length / totalFechadas : 0;
+  const totalFechadas    = realizadas.length + canceladas.length;
+  const taxaCancelamento = totalFechadas > 0 ? canceladas.length / totalFechadas : 0;
 
   const realizadasAteMes = realizadas.filter(c => mesIndex(c.mesRealizado) <= mesLimite && mesIndex(c.mesRealizado) >= 0);
   const mesesDecorridos  = mesLimite + 1;
-  const mesesRestantes   = 12 - mesesDecorridos; // meses futuros sem dados ainda
+  const mesesRestantes   = 12 - mesesDecorridos;
 
   const comValor    = ativas.filter(c => c.valorTotal > 0);
   const ticketMedio = comValor.length > 0 ? (fatRealizado + fatAgendado) / comValor.length : 0;
 
-  // meses futuros que ainda não têm nenhuma cliente agendada
   const mesesComAgendamento = new Set(agendadas.map(c => mesIndex(c.mesRealizado)).filter(i => i > mesLimite));
   const mesesVaziosFuturos  = MESES.slice(mesLimite + 1).filter((_, i) => !mesesComAgendamento.has(mesLimite + 1 + i)).length;
 
-  // Projeção do Faturamento Total do Ano:
-  // Realizado (certeza) + Agendado ajustado por cancelamento + estimativa dos meses vazios
   const fatAgendadoAjustado  = fatAgendado * (1 - taxaCancelamento);
   const estimativaMesesVazios = mesesVaziosFuturos * ticketMedio * (1 - taxaCancelamento);
   const projFaturamentoAnual  = fatRealizado + fatAgendadoAjustado + estimativaMesesVazios;
-
-  // Estimativa do que ainda pode entrar (só o futuro)
   const projRestanteAno = fatAgendadoAjustado + estimativaMesesVazios;
 
-  // Projeção baseada no ritmo de vendas:
-  // média de vendas fechadas por mês × ticket médio × meses restantes × (1 - cancelamento)
-  // usa mesVenda para contar vendas fechadas por mês (col P)
   const mesesComVenda = MESES.slice(0, mesesDecorridos).filter(mes =>
     todos.some(c => c.mesVenda === mes && c.status !== 'Cancelado')
   );
@@ -543,23 +548,18 @@ function calcular(ano) {
   const projNovasFuturas     = mediaVendasPorMes * mesesRestantes * ticketMedio * (1 - taxaCancelamento);
   const projPorRitmoVendas   = fatRealizado + fatAgendadoAjustado + projNovasFuturas;
 
-  // Projeção de fechamentos (ritmo histórico × 12)
   const projFechamentos    = mesesDecorridos > 0 ? (realizadasAteMes.length / mesesDecorridos) * 12 : 0;
   const projFechamentosAdj = projFechamentos * (1 - taxaCancelamento);
 
-  // Lucro projetado do ano
   const TRAFEGO_MENSAL_FIXO   = 1500;
   const trafegoFuturo         = mesesRestantes * TRAFEGO_MENSAL_FIXO;
   const trafegoAnoTotal       = trafegoRealizado + trafegoFuturo;
-  // clientes futuras = agendadas ajustadas + novas pelo ritmo
   const clientesFuturas       = agendadas.length * (1 - taxaCancelamento) + (ticketMedio > 0 ? projNovasFuturas / ticketMedio : 0);
   const custoUberMatFuturo    = clientesFuturas * custoMedioUberMat;
   const lucroProjetadoAnual   = projPorRitmoVendas - custoUberMat - custoUberMatFuturo - trafegoAnoTotal;
 
-  // manter compatibilidade
   const projFaturamento = projFaturamentoAnual;
 
-  // mensal por mês de ATENDIMENTO — 3 status
   const mensal = MESES.map((mes, idx) => ({
     mes,
     realizado:  realizadas.filter(c => mesIndex(c.mesRealizado) === idx).reduce((s,c) => s + c.valorTotal, 0),
@@ -567,9 +567,6 @@ function calcular(ano) {
     cancelado:  canceladas.filter(c => mesIndex(c.mesRealizado) === idx).reduce((s,c) => s + c.valorTotal, 0),
   }));
 
-  // fechamentos por mês da VENDA (col P / mesVenda)
-  // qtd: conta todas as vendas do mês, incluindo canceladas (representa o volume de vendas)
-  // receita: só vendas ativas (exclui canceladas), representa o valor realmente fechado
   const fechamentosPorMes = MESES.map(mes => {
     const todasDoMes = todos.filter(c => c.mesVenda === mes);
     const ativasDoMes = todasDoMes.filter(c => c.status !== 'Cancelado');
@@ -580,7 +577,6 @@ function calcular(ano) {
     };
   });
 
-  // pacotes — só de ativas
   const pacoteMap = {};
   ativas.forEach(c => {
     [c.pacote1, c.pacote2].forEach(p => {
@@ -592,24 +588,28 @@ function calcular(ano) {
   });
   const pacotes = Object.values(pacoteMap).sort((a,b) => b.receita - a.receita);
 
-  // pipeline — só agendadas, ordenadas por data do parto
-  const pipeline = agendadas
-    .filter(c => c.valorTotal > 0)
-    .sort((a,b) => {
-      if (!a.dataParto) return 1;
-      if (!b.dataParto) return -1;
-      return new Date(a.dataParto.split('/').reverse().join('-')) - new Date(b.dataParto.split('/').reverse().join('-'));
+  // pacotes por mês — para o gráfico
+  const pacotesNomes = [...new Set(ativas.flatMap(c => [c.pacote1, c.pacote2].filter(Boolean)))];
+  const pacotesPorMes = MESES.map((mes, idx) => {
+    const clientesMes = ativas.filter(c => mesIndex(c.mesRealizado) === idx);
+    const porPacote = {};
+    pacotesNomes.forEach(p => { porPacote[p] = { qtd: 0, receita: 0 }; });
+    clientesMes.forEach(c => {
+      [c.pacote1, c.pacote2].forEach(p => {
+        if (!p || !porPacote[p]) return;
+        porPacote[p].qtd++;
+        porPacote[p].receita += c.valorTotal;
+      });
     });
+    return { mes, porPacote };
+  });
 
-  // jornada: antecedência de fechamento ao parto
-  // para cada cliente com mesVenda e mesPrevisto preenchidos, calcula a diferença em meses
   const jornada = todos
     .filter(c => c.mesVenda && c.mesPrevisto && c.status !== 'Cancelado')
     .map(c => {
       const iVenda  = mesIndex(c.mesVenda);
       const iParto  = mesIndex(c.mesPrevisto);
       if (iVenda < 0 || iParto < 0) return null;
-      // diferença: quantos meses antes do parto ela fechou (positivo = antes, negativo = depois)
       return { nome: c.nome, mesVenda: c.mesVenda, mesParto: c.mesPrevisto, antecedencia: iParto - iVenda };
     })
     .filter(Boolean);
@@ -618,7 +618,6 @@ function calcular(ano) {
     ? jornada.reduce((s, j) => s + j.antecedencia, 0) / jornada.length
     : null;
 
-  // distribuição: quantas fecharam por "X meses antes do parto"
   const distAntecedencia = {};
   jornada.forEach(j => {
     const k = j.antecedencia;
@@ -636,9 +635,10 @@ function calcular(ano) {
     fatAgendadoAjustado, estimativaMesesVazios,
     mesesVaziosFuturos, mesesRestantes,
     projFechamentos, projFechamentosAdj, ticketMedio,
-    mensal, fechamentosPorMes, pacotes, pipeline,
+    mensal, fechamentosPorMes, pacotes, pacotesPorMes, pacotesNomes,
     jornada, mediaAntecedencia, distAntecedencia,
-    mesesDecorridos, realizadasAteMes
+    mesesDecorridos, realizadasAteMes,
+    todos, realizadas, agendadas
   };
 }
 
@@ -685,7 +685,7 @@ function renderCustosMedios(d) {
     <div class="card">
       <div class="card-lbl">Custo Médio de Tráfego Diluído</div>
       <div class="card-val amarelo">${fmtBRL(d.custoMedioTrafego)}</div>
-      <div class="card-sub">Total tráfego ${fmtBRL(d.trafegoRealizado)} ÷ ${d.realizadasAteMes.length + (d.fatAgendado > 0 ? d.pipeline.length : 0)} clientes ativas</div>
+      <div class="card-sub">Total tráfego ${fmtBRL(d.trafegoRealizado)} ÷ ${d.realizadasAteMes.length + (d.fatAgendado > 0 ? d.agendadas.length : 0)} clientes ativas</div>
     </div>
     <div class="card" style="border-color: var(--borda2);">
       <div class="card-lbl">Custo Total Médio por Cliente</div>
@@ -836,6 +836,63 @@ function renderGraficoFechamentos(d) {
   });
 }
 
+// ─── RENDER GRÁFICO PACOTES ──────────────────────────────────────────────────
+const CORES_PACOTES = [
+  'rgba(176,144,165,0.75)', 'rgba(123,175,142,0.75)', 'rgba(201,169,110,0.75)',
+  'rgba(110,155,195,0.75)', 'rgba(196,120,120,0.75)', 'rgba(150,130,180,0.75)',
+  'rgba(180,165,120,0.75)', 'rgba(120,180,165,0.75)',
+];
+
+function setPacoteMode(mode) {
+  pacoteMode = mode;
+  document.getElementById('btn-pacote-qtd').classList.toggle('ativo', mode === 'qtd');
+  document.getElementById('btn-pacote-rec').classList.toggle('ativo', mode === 'receita');
+  const d = calcular(anoSelecionado);
+  renderGraficoPacotes(d);
+}
+
+function renderGraficoPacotes(d) {
+  if (chartPacotes) { chartPacotes.destroy(); chartPacotes = null; }
+  if (!d.pacotesNomes.length) return;
+
+  const ctx = document.getElementById('chart-pacotes').getContext('2d');
+  const labels = MESES.map(m => m.substring(0,3));
+
+  const datasets = d.pacotesNomes.map((nome, i) => ({
+    label: nome,
+    data: d.pacotesPorMes.map(m => pacoteMode === 'qtd' ? m.porPacote[nome]?.qtd || 0 : m.porPacote[nome]?.receita || 0),
+    backgroundColor: CORES_PACOTES[i % CORES_PACOTES.length],
+    borderRadius: 4,
+    borderSkipped: false,
+  }));
+
+  const isReceita = pacoteMode === 'receita';
+  chartPacotes = new Chart(ctx, {
+    type: 'bar',
+    data: { labels, datasets },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: {
+        legend: {
+          display: true,
+          position: 'bottom',
+          labels: { color: '#7A6872', font: { family: 'Outfit', size: 11 }, padding: 16, boxWidth: 12, boxHeight: 12 }
+        }
+      },
+      scales: {
+        x: { grid: { color: 'rgba(176,144,165,0.14)' }, ticks: { color: '#7A6872', font: { family: 'Outfit', size: 11 } } },
+        y: {
+          grid: { color: 'rgba(176,144,165,0.14)' },
+          ticks: {
+            color: '#7A6872', font: { family: 'Outfit', size: 11 },
+            callback: v => isReceita ? (v >= 1000 ? 'R$' + (v/1000).toFixed(0) + 'k' : 'R$' + v) : v
+          }
+        }
+      }
+    }
+  });
+}
+
 // ─── RENDER JORNADA ──────────────────────────────────────────────────────────
 function renderJornada(d) {
   const wrap = document.getElementById('jornada-wrap');
@@ -844,7 +901,6 @@ function renderJornada(d) {
     return;
   }
 
-  // distribuição ordenada por antecedência
   const dist = Object.entries(d.distAntecedencia)
     .map(([k, v]) => ({ meses: parseInt(k), qtd: v }))
     .sort((a, b) => b.meses - a.meses);
@@ -880,51 +936,10 @@ function renderJornada(d) {
         `).join('')}
       </div>
     </div>
-    <div class="card" style="margin-top:14px;overflow:hidden">
-      <div class="card-lbl" style="margin-bottom:14px">Detalhe por Cliente — Mês da Venda → Mês do Parto</div>
-      <table style="width:100%;border-collapse:collapse">
-        <thead><tr>
-          <th style="font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--texto);padding:0 12px 10px;text-align:left">Cliente</th>
-          <th style="font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--texto);padding:0 12px 10px;text-align:left">Fechou em</th>
-          <th style="font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--texto);padding:0 12px 10px;text-align:left">Parto previsto</th>
-          <th style="font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--texto);padding:0 12px 10px;text-align:left">Antecedência</th>
-        </tr></thead>
-        <tbody>
-          ${d.jornada.map(j => `
-            <tr>
-              <td style="font-size:13px;font-weight:700;color:var(--escuro);padding:10px 12px;border-bottom:1px solid rgba(176,144,165,0.12)">${j.nome}</td>
-              <td style="font-size:13px;color:var(--texto2);padding:10px 12px;border-bottom:1px solid rgba(176,144,165,0.12)">${j.mesVenda}</td>
-              <td style="font-size:13px;color:var(--texto2);padding:10px 12px;border-bottom:1px solid rgba(176,144,165,0.12)">${j.mesParto}</td>
-              <td style="font-size:13px;font-weight:700;padding:10px 12px;border-bottom:1px solid rgba(176,144,165,0.12);color:${j.antecedencia >= 3 ? 'var(--verde)' : j.antecedencia >= 1 ? 'var(--amarelo)' : 'var(--vermelho)'}">${label(j.antecedencia)}</td>
-            </tr>
-          `).join('')}
-        </tbody>
-      </table>
-    </div>
   `;
 }
 
-// ─── RENDER PACOTES ──────────────────────────────────────────────────────────
-function renderPacotes(d) {
-  if (d.pacotes.length === 0) {
-    document.getElementById('pacotes-lista').innerHTML = '<p style="color:var(--texto);font-size:13px;padding:20px 0">Nenhum pacote encontrado.</p>';
-    return;
-  }
-  const max = d.pacotes[0].receita;
-  document.getElementById('pacotes-lista').innerHTML = d.pacotes.map(p => `
-    <div class="pacote-item">
-      <div class="pacote-top"><span class="pacote-nome">${p.nome}</span><span class="pacote-receita">${fmtBRL(p.receita)}</span></div>
-      <div class="pacote-bar-bg"><div class="pacote-bar-fill" style="width:${max > 0 ? (p.receita/max*100).toFixed(1) : 0}%"></div></div>
-      <div class="pacote-bot">
-        <span class="pacote-freq">${p.freq} ${p.freq === 1 ? 'cliente' : 'clientes'}</span>
-        <span class="pacote-ticket">Ticket médio: ${fmtBRL(p.receita / p.freq)}</span>
-      </div>
-    </div>
-  `).join('');
-}
-
 // ─── LEADS POR MÊS ───────────────────────────────────────────────────────────
-// Colunas aba Leads: A=0 Mês, B=1 Ano, C=2 Leads Recebidos
 function leadsPorMes(ano) {
   const mapa = {};
   dadosLeads.forEach(r => {
@@ -942,16 +957,16 @@ function renderConversao() {
   const trafego  = trafegoPorMes(anoSelecionado);
   const leads    = leadsPorMes(anoSelecionado);
 
-  // vendas fechadas por mês da venda (excluindo canceladas)
   const vendasPorMes = {};
+  const receitaPorMes = {};
   MESES.forEach(mes => {
-    vendasPorMes[mes] = todos.filter(c => c.mesVenda === mes && c.status !== 'Cancelado').length;
+    const ativasDoMes = todos.filter(c => c.mesVenda === mes && c.status !== 'Cancelado');
+    vendasPorMes[mes] = ativasDoMes.length;
+    receitaPorMes[mes] = ativasDoMes.reduce((s, c) => s + c.valorTotal, 0);
   });
 
-  // meses que têm pelo menos leads ou vendas registradas
   const mesesAtivos = MESES.filter(mes => leads[mes] || vendasPorMes[mes]);
 
-  // totais para o resumo
   const totalLeads  = Object.values(leads).reduce((s, v) => s + v, 0);
   const totalVendas = Object.values(vendasPorMes).reduce((s, v) => s + v, 0);
   const taxaGeral   = totalLeads > 0 ? totalVendas / totalLeads : null;
@@ -959,7 +974,9 @@ function renderConversao() {
   const custoPorLead    = totalLeads > 0 ? trafegoTotal / totalLeads : null;
   const custoPorCliente = totalVendas > 0 ? trafegoTotal / totalVendas : null;
 
-  // resumo
+  const totalReceita = Object.values(receitaPorMes).reduce((s, v) => s + v, 0);
+  const ticketMedioGeral = totalVendas > 0 ? totalReceita / totalVendas : null;
+
   document.getElementById('conv-resumo').innerHTML = `
     <div class="card">
       <div class="card-lbl">Total de Leads no Ano</div>
@@ -983,20 +1000,21 @@ function renderConversao() {
     </div>
   `;
 
-  // tabela por mês
   const tbody = document.getElementById('conv-body');
   if (mesesAtivos.length === 0) {
-    tbody.innerHTML = `<tr><td colspan="6" style="text-align:center;padding:28px;font-size:13px;color:var(--texto);font-style:italic">Preencha a coluna "Leads Recebidos" na aba Leads da planilha.</td></tr>`;
+    tbody.innerHTML = `<tr><td colspan="7" style="text-align:center;padding:28px;font-size:13px;color:var(--texto);font-style:italic">Preencha a coluna "Leads Recebidos" na aba Leads da planilha.</td></tr>`;
     return;
   }
 
   tbody.innerHTML = mesesAtivos.map(mes => {
     const qtdLeads  = leads[mes] || 0;
     const qtdVendas = vendasPorMes[mes] || 0;
+    const receita   = receitaPorMes[mes] || 0;
     const taxa      = qtdLeads > 0 ? qtdVendas / qtdLeads : null;
     const trafegoMes = trafego[mes] || 0;
     const cpl  = qtdLeads  > 0 ? trafegoMes / qtdLeads  : null;
     const cpv  = qtdVendas > 0 ? trafegoMes / qtdVendas : null;
+    const ticket = qtdVendas > 0 ? receita / qtdVendas : null;
 
     const taxaClass = taxa === null ? 'taxa-vazio' : taxa >= 0.3 ? 'taxa-boa' : taxa >= 0.15 ? 'taxa-med' : 'taxa-ruim';
     const taxaStr   = taxa !== null ? fmtPct(taxa) : qtdLeads === 0 ? 'sem leads' : '—';
@@ -1006,6 +1024,7 @@ function renderConversao() {
       <td class="num">${qtdLeads || '—'}</td>
       <td class="num">${qtdVendas || '—'}</td>
       <td class="${taxaClass}">${taxaStr}</td>
+      <td class="ticket">${ticket !== null ? fmtBRL(ticket) : '—'}</td>
       <td class="custo">${cpl !== null ? fmtBRL(cpl) : '—'}</td>
       <td class="custo">${cpv !== null ? fmtBRL(cpv) : '—'}</td>
     </tr>`;
@@ -1026,7 +1045,7 @@ const ATEND_POR_PACOTE = {
 function atendimentosDoPacote(nome) {
   if (!nome) return 0;
   const key = Object.keys(ATEND_POR_PACOTE).find(k => nome.trim() === k);
-  return key ? ATEND_POR_PACOTE[key] : 1; // padrão 1 se pacote desconhecido
+  return key ? ATEND_POR_PACOTE[key] : 1;
 }
 
 function calcularCalendario(ano) {
@@ -1052,26 +1071,8 @@ function calcularCalendario(ano) {
     });
 
     const totalAtendimentos = detalhes.reduce((s, d) => s + d.atendimentos, 0);
-    return { mes, idx, totalAtendimentos, detalhes, clientesCount: clientesDoMes.length };
+    return { mes, idx, totalAtendimentos, detalhes, clientesCount: clientesDoMes.length, clientes: clientesDoMes };
   });
-}
-
-// ─── RENDER PIPELINE ─────────────────────────────────────────────────────────
-function renderPipeline(d) {
-  const tbody = document.getElementById('pipeline-body');
-  if (d.pipeline.length === 0) {
-    tbody.innerHTML = `<tr><td colspan="4" class="pipeline-vazio">Nenhuma cliente agendada no momento.</td></tr>`;
-    return;
-  }
-  tbody.innerHTML = d.pipeline.map(c => {
-    const pacs = [c.pacote1, c.pacote2].filter(Boolean).join(' + ') || '—';
-    return `<tr>
-      <td class="nome">${c.nome}</td>
-      <td class="mes">${c.mesRealizado}</td>
-      <td>${pacs}</td>
-      <td class="valor">${fmtBRL(c.valorTotal)}</td>
-    </tr>`;
-  }).join('');
 }
 
 // ─── RENDER CALENDÁRIO ───────────────────────────────────────────────────────
@@ -1079,7 +1080,18 @@ function renderCalendario() {
   const cal = calcularCalendario(anoSelecionado);
   const mesHoje = (anoSelecionado === anoAtual()) ? new Date().getMonth() : -1;
 
+  // seleciona o mês atual por padrão, ou o primeiro com clientes
+  if (mesSelecionadoCal === -1) {
+    if (mesHoje >= 0 && cal[mesHoje].clientesCount > 0) {
+      mesSelecionadoCal = mesHoje;
+    } else {
+      const primeiro = cal.find(m => m.clientesCount > 0);
+      mesSelecionadoCal = primeiro ? primeiro.idx : 0;
+    }
+  }
+
   const totalAno = cal.reduce((s, m) => s + m.totalAtendimentos, 0);
+  const totalGestantes = cal.reduce((s, m) => s + m.clientesCount, 0);
   const mediaMensal = cal.filter(m => m.totalAtendimentos > 0).length > 0
     ? (totalAno / cal.filter(m => m.totalAtendimentos > 0).length).toFixed(1)
     : '—';
@@ -1088,6 +1100,11 @@ function renderCalendario() {
   document.getElementById('cal-resumo-wrap').innerHTML = `
     <div class="cal-resumo">
       <div class="cal-resumo-item">
+        <div class="cal-resumo-lbl">Total de Gestantes no Ano</div>
+        <div class="cal-resumo-val roxo">${totalGestantes}</div>
+        <div class="cal-resumo-sub">clientes ativas</div>
+      </div>
+      <div class="cal-resumo-item">
         <div class="cal-resumo-lbl">Total de Atendimentos no Ano</div>
         <div class="cal-resumo-val roxo">${totalAno}</div>
         <div class="cal-resumo-sub">atendimentos previstos/realizados</div>
@@ -1095,7 +1112,7 @@ function renderCalendario() {
       <div class="cal-resumo-item">
         <div class="cal-resumo-lbl">Média por Mês</div>
         <div class="cal-resumo-val">${mediaMensal}</div>
-        <div class="cal-resumo-sub">nos meses com clientes</div>
+        <div class="cal-resumo-sub">atend. nos meses com clientes</div>
       </div>
       <div class="cal-resumo-item">
         <div class="cal-resumo-lbl">Mês Mais Cheio</div>
@@ -1106,12 +1123,15 @@ function renderCalendario() {
   `;
 
   document.getElementById('cal-grid').innerHTML = cal.map(m => {
-    const ehMesAtual = m.idx === mesHoje;
+    const ehAtual = m.idx === mesHoje;
+    const selecionado = m.idx === mesSelecionadoCal;
     return `
-      <div class="cal-mes-card${ehMesAtual ? ' destaque' : ''}">
-        <div class="cal-mes-nome">${m.mes}${ehMesAtual ? ' · atual' : ''}</div>
+      <div class="cal-mes-card${selecionado ? ' selecionado' : ''}${ehAtual && !selecionado ? ' destaque-atual' : ''}"
+           onclick="selecionarMesCal(${m.idx})">
+        <div class="cal-mes-nome">${m.mes}${ehAtual ? ' · atual' : ''}</div>
         <div class="cal-mes-total${m.totalAtendimentos > 0 ? ' roxo' : ''}">${m.totalAtendimentos || '—'}</div>
-        <div class="cal-mes-label">${m.totalAtendimentos === 1 ? 'atendimento' : m.totalAtendimentos > 1 ? 'atendimentos' : 'sem clientes'} · ${m.clientesCount} ${m.clientesCount === 1 ? 'cliente' : 'clientes'}</div>
+        <div class="cal-mes-label">${m.totalAtendimentos === 1 ? 'atendimento' : m.totalAtendimentos > 1 ? 'atendimentos' : 'sem clientes'}</div>
+        <div class="cal-mes-gestantes">${m.clientesCount > 0 ? m.clientesCount + (m.clientesCount === 1 ? ' gestante' : ' gestantes') : ''}</div>
         <div class="cal-pacotes">
           ${m.detalhes.length > 0
             ? m.detalhes.map(d => `
@@ -1126,6 +1146,68 @@ function renderCalendario() {
       </div>
     `;
   }).join('');
+
+  renderDetalheMes(cal);
+}
+
+function selecionarMesCal(idx) {
+  mesSelecionadoCal = idx;
+  renderCalendario();
+}
+
+function renderDetalheMes(cal) {
+  const wrap = document.getElementById('cal-detalhe-wrap');
+  const m = cal[mesSelecionadoCal];
+  if (!m) { wrap.innerHTML = ''; return; }
+
+  const totalAtend = m.detalhes.reduce((s, d) => s + d.atendimentos, 0);
+
+  if (m.clientes.length === 0) {
+    wrap.innerHTML = `
+      <div class="cal-detalhe-wrap">
+        <div class="cal-detalhe-header">
+          <div class="cal-detalhe-titulo">${m.mes}</div>
+        </div>
+        <div class="cal-detalhe-vazio">Nenhuma cliente agendada para ${m.mes}.</div>
+      </div>
+    `;
+    return;
+  }
+
+  const linhas = m.clientes.map(c => {
+    const pacotes = [c.pacote1, c.pacote2].filter(Boolean);
+    const totalAtendCliente = pacotes.reduce((s, p) => s + atendimentosDoPacote(p), 0);
+    const statusClass = c.status === 'Realizado' ? 'cal-status-realizado' : 'cal-status-agendado';
+    return `<tr>
+      <td class="nome">${c.nome}</td>
+      <td class="pacotes">${pacotes.join(' + ') || '—'}</td>
+      <td class="atend-num">${totalAtendCliente}</td>
+      <td><span class="cal-status-badge ${statusClass}">${c.status}</span></td>
+      <td class="parto">${c.mesPrevisto || '—'}</td>
+    </tr>`;
+  }).join('');
+
+  wrap.innerHTML = `
+    <div class="cal-detalhe-wrap">
+      <div class="cal-detalhe-header">
+        <div class="cal-detalhe-titulo">${m.mes}</div>
+        <div class="cal-detalhe-badges">
+          <span class="cal-badge cal-badge-gestantes">${m.clientesCount} gestante${m.clientesCount !== 1 ? 's' : ''}</span>
+          <span class="cal-badge cal-badge-atend">${totalAtend} atendimento${totalAtend !== 1 ? 's' : ''}</span>
+        </div>
+      </div>
+      <table class="cal-detalhe-table">
+        <thead><tr>
+          <th>Cliente</th>
+          <th>Pacote(s)</th>
+          <th style="text-align:center">Atend.</th>
+          <th>Status</th>
+          <th>Parto Previsto</th>
+        </tr></thead>
+        <tbody>${linhas}</tbody>
+      </table>
+    </div>
+  `;
 }
 
 // ─── RENDERIZAR ──────────────────────────────────────────────────────────────
@@ -1139,9 +1221,9 @@ function renderizar() {
   renderGraficoAtend(d);
   renderGraficoFechamentos(d);
   renderJornada(d);
-  renderPacotes(d);
-  renderPipeline(d);
+  renderGraficoPacotes(d);
   renderConversao();
+  mesSelecionadoCal = -1;
   renderCalendario();
 }
 
