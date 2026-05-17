@@ -142,7 +142,9 @@ function acaoInserirVenda(p) {
     sanitizar(d.dataVenda),    // O
     sanitizar(d.mesVenda),     // P
   ];
-  aba.appendRow(linha);
+  // Encontra a última linha com dados reais na coluna A para não pular linhas vazias
+  const ultLinha = aba.getRange('A:A').getValues().reduce((acc, r, i) => r[0] ? i + 1 : acc, 1);
+  aba.getRange(ultLinha + 1, 1, 1, linha.length).setValues([linha]);
   return resposta({ ok: true });
 }
 

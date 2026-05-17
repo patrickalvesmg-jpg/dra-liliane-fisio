@@ -1506,35 +1506,31 @@ async function carregarMarcacoes() {
   }
 }
 
+function postAppsScript(payload) {
+  if (!APPS_SCRIPT_URL) return Promise.resolve();
+  // mode: no-cors evita preflight CORS — Apps Script aceita assim; resposta é opaca (não lemos)
+  return fetch(APPS_SCRIPT_URL, {
+    method: 'POST',
+    mode: 'no-cors',
+    body: JSON.stringify(payload),
+  }).catch(e => console.warn('Apps Script POST erro:', e));
+}
+
 async function salvarMarcacao(cliente, tipo, data, observacao) {
-  if (!APPS_SCRIPT_URL) return;
-  try {
-    await fetch(APPS_SCRIPT_URL, {
-      method: 'POST',
-      body: JSON.stringify({ cliente, tipo, data, observacao }),
-    });
-    const idx = marcacoes.findIndex(m => m.cliente === cliente && m.tipo === tipo);
-    if (idx >= 0) {
-      marcacoes[idx] = { cliente, tipo, data, observacao };
-    } else {
-      marcacoes.push({ cliente, tipo, data, observacao });
-    }
-  } catch(e) {
-    console.warn('Erro ao salvar marcação:', e);
+  // Atualiza estado local imediatamente (otimista)
+  const idx = marcacoes.findIndex(m => m.cliente === cliente && m.tipo === tipo);
+  if (idx >= 0) {
+    marcacoes[idx] = { cliente, tipo, data, observacao };
+  } else {
+    marcacoes.push({ cliente, tipo, data, observacao });
   }
+  await postAppsScript({ cliente, tipo, data, observacao });
 }
 
 async function removerMarcacao(cliente, tipo) {
-  if (!APPS_SCRIPT_URL) return;
-  try {
-    await fetch(APPS_SCRIPT_URL, {
-      method: 'POST',
-      body: JSON.stringify({ cliente, tipo, _delete: true }),
-    });
-    marcacoes = marcacoes.filter(m => !(m.cliente === cliente && m.tipo === tipo));
-  } catch(e) {
-    console.warn('Erro ao remover marcação:', e);
-  }
+  // Atualiza estado local imediatamente (otimista)
+  marcacoes = marcacoes.filter(m => !(m.cliente === cliente && m.tipo === tipo));
+  await postAppsScript({ cliente, tipo, _delete: true });
 }
 
 function getMarcacao(cliente, tipo) {
@@ -1871,21 +1867,11 @@ function atualizarCardCancelada(nome, cancelada) {
 }
 
 async function atualizarStatusNaPlanilha(nome, dataParto, novoStatus) {
-  if (!APPS_SCRIPT_URL) return;
-  try {
-    // Apps Script não aceita preflight CORS — envia sem Content-Type customizado
-    await fetch(APPS_SCRIPT_URL, {
-      method: 'POST',
-      body: JSON.stringify({ action: 'atualizarStatus', nome, dataParto, novoStatus }),
-    });
-    const label = novoStatus === 'Realizado' ? 'Atendimento concluído — Realizado salvo na planilha ✓'
-                : novoStatus === 'Cancelado'  ? 'Cancelamento salvo na planilha ✓'
-                : 'Status atualizado na planilha ✓';
-    mostrarToast(label);
-  } catch(e) {
-    mostrarToast('Erro de conexão — verifique a internet', true);
-    console.warn('Erro ao atualizar status:', e);
-  }
+  await postAppsScript({ action: 'atualizarStatus', nome, dataParto, novoStatus });
+  const label = novoStatus === 'Realizado' ? 'Atendimento concluído — Realizado salvo ✓'
+              : novoStatus === 'Cancelado'  ? 'Cancelamento salvo ✓'
+              : 'Status atualizado ✓';
+  mostrarToast(label);
 }
 
 function mostrarToast(msg, erro) {
@@ -2040,8 +2026,7 @@ async function salvarVenda() {
       ? { action: 'inserirVenda', dados }
       : { action: 'editarVenda', nomeOriginal: modalNomeOriginal, dataPartoOriginal: modalDataPartoOriginal, dados };
 
-    // Apps Script redireciona via 302 — não tenta parsear resposta
-    await fetch(APPS_SCRIPT_URL, { method: 'POST', body: JSON.stringify(payload) });
+    await postAppsScript(payload);
 
     fecharModal();
     mostrarToast('Venda salva com sucesso ✓');
