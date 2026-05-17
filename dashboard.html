@@ -287,6 +287,12 @@
     .cancel-check-label { font-size: 11px; font-weight: 700; color: var(--vermelho); }
     .ger-cliente-card.cancelada { opacity: 0.55; background: #FDF4F4; border-color: rgba(176,85,85,0.18); }
 
+    /* ABA GERENCIAL — FILTRO DE MÊS */
+    .ger-mes-filtro { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 20px; }
+    .ger-mes-pill { background: var(--card); border: 1px solid var(--borda); border-radius: 20px; padding: 6px 14px; font-family: 'Outfit', sans-serif; font-size: 11px; font-weight: 700; letter-spacing: 0.5px; color: var(--texto); cursor: pointer; transition: all .2s; }
+    .ger-mes-pill:hover { border-color: var(--roxo-claro); color: var(--roxo); }
+    .ger-mes-pill.ativo { background: var(--roxo); border-color: var(--roxo); color: #fff; }
+
     /* ABA GERENCIAL — TABELA DE VENDAS */
     .ger-vendas-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; flex-wrap: wrap; gap: 10px; }
     .ger-nova-venda-btn { display: flex; align-items: center; gap: 8px; background: var(--roxo); border: none; border-radius: 10px; padding: 10px 20px; font-family: 'Outfit', sans-serif; font-size: 12px; font-weight: 700; letter-spacing: 0.5px; color: #fff; cursor: pointer; transition: all .2s; }
@@ -448,7 +454,10 @@
   <div id="aba-gerencial" style="display:none">
     <div class="cnt">
 
+      <div id="ger-alertas-wrap" class="alertas-wrap"></div>
+
       <div class="sec">Atendimentos por Cliente</div>
+      <div id="ger-mes-filtro" class="ger-mes-filtro"></div>
       <div id="ger-atendimentos-wrap"></div>
 
       <div class="sec">Vendas — Cadastro e Edição</div>
@@ -575,6 +584,7 @@ let pacoteMode = 'qtd';
 let mesSelecionadoCal = -1;
 let marcacoes = [];
 let abaAtiva = 'relatorios';
+let mesGerencial = -1; // -1 = mês atual do calendário
 
 // ─── LOADER ──────────────────────────────────────────────────────────────────
 function setLoader(p) { document.getElementById('ld-fill').style.width = p + '%'; }
@@ -1495,7 +1505,11 @@ function getMarcacao(cliente, tipo) {
 
 // ─── ALERTAS PRÉ-PARTO ───────────────────────────────────────────────────────
 function renderAlertas() {
-  const wrap = document.getElementById('alertas-wrap');
+  renderAlertasEm('alertas-wrap');
+}
+
+function renderAlertasEm(wrapId) {
+  const wrap = document.getElementById(wrapId);
   const hoje = new Date();
   hoje.setHours(0,0,0,0);
   const limite = new Date(hoje);
@@ -1556,6 +1570,7 @@ async function toggleConvite(nome, marcado, data) {
     await removerMarcacao(nome, 'convite_preparto');
   }
   renderAlertas();
+  renderAlertasGerencial();
 }
 
 async function toggleAtendimento(nome, numero, marcado) {
@@ -1584,20 +1599,59 @@ function trocarAba(aba) {
 
 // ─── RENDER GERENCIAL ────────────────────────────────────────────────────────
 function renderGerencial() {
+  renderAlertasGerencial();
+  renderGerMesFiltro();
   renderGerAtendimentos();
   renderGerVendas();
+}
+
+function renderAlertasGerencial() {
+  renderAlertasEm('ger-alertas-wrap');
+}
+
+function renderGerMesFiltro() {
+  const filtroEl = document.getElementById('ger-mes-filtro');
+  const todos = clientesDoAno(anoSelecionado);
+
+  // Coleta meses únicos das clientes (por mesRealizado)
+  const MESES = ['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'];
+  const mesSet = new Set();
+  todos.forEach(c => { if (c.mesRealizado) mesSet.add(c.mesRealizado.trim()); });
+  const mesesDisponiveis = MESES.filter(m => mesSet.has(m));
+
+  if (!mesesDisponiveis.length) { filtroEl.innerHTML = ''; return; }
+
+  // Se mesGericial ainda é -1, seleciona o mês atual (ou o último disponível)
+  if (mesGerencial === -1) {
+    const mesAtual = MESES[new Date().getMonth()];
+    mesGerencial = mesesDisponiveis.includes(mesAtual) ? mesAtual : mesesDisponiveis[mesesDisponiveis.length - 1];
+  }
+
+  filtroEl.innerHTML = mesesDisponiveis.map(m =>
+    `<button class="ger-mes-pill${m === mesGerencial ? ' ativo' : ''}" onclick="selecionarMesGer('${m}')">${m}</button>`
+  ).join('');
+}
+
+function selecionarMesGer(mes) {
+  mesGerencial = mes;
+  renderGerMesFiltro();
+  renderGerAtendimentos();
 }
 
 function renderGerAtendimentos() {
   const wrap = document.getElementById('ger-atendimentos-wrap');
   const todos = clientesDoAno(anoSelecionado);
 
-  if (!todos.length) {
-    wrap.innerHTML = '<p style="font-size:13px;color:var(--texto);font-style:italic;padding:20px 0">Nenhuma cliente no ano selecionado.</p>';
+  const filtrados = mesGerencial !== -1
+    ? todos.filter(c => c.mesRealizado && c.mesRealizado.trim() === mesGerencial)
+    : todos;
+
+  if (!filtrados.length) {
+    wrap.innerHTML = '<p style="font-size:13px;color:var(--texto);font-style:italic;padding:20px 0">Nenhuma cliente neste mês.</p>';
     return;
   }
 
-  wrap.innerHTML = todos.map(c => {
+  wrap.innerHTML = filtrados.map(c => {
     const pacotes = [c.pacote1, c.pacote2].filter(Boolean);
     const totalAtendCliente = pacotes.reduce((s, p) => s + atendimentosDoPacote(p), 0);
     const estaCancelada = !!getMarcacao(c.nome, 'cancelada');
@@ -1754,6 +1808,7 @@ function renderizar() {
 document.getElementById('btn-atualizar').addEventListener('click', carregarDados);
 document.getElementById('sel-ano').addEventListener('change', e => {
   anoSelecionado = parseInt(e.target.value);
+  mesGerencial = -1;
   renderizar();
 });
 
