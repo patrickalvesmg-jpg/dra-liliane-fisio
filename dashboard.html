@@ -236,6 +236,35 @@
       .cal-detalhe-table th:nth-child(4) { display: none; }
       .cal-detalhe-table td:nth-child(4) { display: none; }
     }
+
+    /* ALERTAS PRÉ-PARTO */
+    .alertas-wrap { margin-bottom: 0; }
+    .alertas-titulo { font-size: 9px; font-weight: 700; letter-spacing: 3px; text-transform: uppercase; color: var(--amarelo); display: flex; align-items: center; gap: 10px; margin-bottom: 14px; }
+    .alertas-titulo::after { content: ''; flex: 1; height: 1px; background: rgba(160,120,48,0.25); }
+    .alerta-card { background: #FFFBF0; border: 1.5px solid rgba(160,120,48,0.30); border-radius: 14px; padding: 18px 22px; display: flex; align-items: center; justify-content: space-between; gap: 20px; flex-wrap: wrap; box-shadow: 0 2px 12px rgba(160,120,48,0.08); margin-bottom: 10px; }
+    .alerta-card.convidada { background: #F4FBF6; border-color: rgba(78,139,101,0.30); opacity: 0.75; }
+    .alerta-info { display: flex; flex-direction: column; gap: 3px; }
+    .alerta-nome { font-size: 15px; font-weight: 800; color: var(--escuro); }
+    .alerta-detalhe { font-size: 12px; font-weight: 500; color: var(--texto); }
+    .alerta-urgencia { font-size: 10px; font-weight: 700; letter-spacing: 1px; padding: 3px 10px; border-radius: 20px; }
+    .alerta-urgencia.urgente { background: rgba(176,85,85,0.12); color: var(--vermelho); }
+    .alerta-urgencia.atencao { background: rgba(160,120,48,0.12); color: var(--amarelo); }
+    .alerta-urgencia.ok { background: rgba(78,139,101,0.12); color: var(--verde); }
+    .alerta-acao { display: flex; align-items: center; gap: 10px; }
+    .alerta-check-wrap { display: flex; align-items: center; gap: 8px; cursor: pointer; }
+    .alerta-check { width: 18px; height: 18px; border: 2px solid var(--borda2); border-radius: 5px; appearance: none; -webkit-appearance: none; cursor: pointer; transition: all .2s; flex-shrink: 0; }
+    .alerta-check:checked { background: var(--verde); border-color: var(--verde); }
+    .alerta-check:checked::after { content: '✓'; display: block; text-align: center; color: #fff; font-size: 11px; font-weight: 900; line-height: 14px; }
+    .alerta-check-label { font-size: 12px; font-weight: 600; color: var(--texto2); }
+    .alerta-data-convite { font-size: 11px; color: var(--verde); font-weight: 600; margin-top: 2px; }
+
+    /* CHECKBOXES ATENDIMENTO */
+    .atend-checks { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+    .atend-check-item { display: flex; align-items: center; gap: 5px; }
+    .atend-check-box { width: 18px; height: 18px; border: 2px solid var(--borda2); border-radius: 5px; appearance: none; -webkit-appearance: none; cursor: pointer; transition: all .2s; flex-shrink: 0; }
+    .atend-check-box:checked { background: var(--roxo); border-color: var(--roxo); }
+    .atend-check-box:checked::after { content: '✓'; display: block; text-align: center; color: #fff; font-size: 11px; font-weight: 900; line-height: 14px; }
+    .atend-check-label { font-size: 10px; font-weight: 600; color: var(--texto); white-space: nowrap; }
   </style>
 </head>
 <body>
@@ -263,6 +292,8 @@
 
 <div id="dash">
   <div class="cnt">
+
+    <div id="alertas-wrap" class="alertas-wrap"></div>
 
     <div class="sec">Resultados do Ano</div>
     <div class="g4" id="kpis"></div>
@@ -351,6 +382,7 @@ const GID_INVEST = '1973352773';
 const GID_LEADS  = '1947126829';
 const MESES = ['Janeiro','Fevereiro','Março','Abril','Maio','Junho',
                'Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
+const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbz8K9Fz2WNfpqg9tKxeundD-F2HdOV7NxeABGV2767h-nDaDWlKbjLtjkNZivYAu2pcKg/exec';
 
 // ─── ESTADO ──────────────────────────────────────────────────────────────────
 let dadosVendas = [], dadosInvest = [], dadosLeads = [];
@@ -358,6 +390,7 @@ let anoSelecionado = new Date().getFullYear();
 let chartAtend = null, chartFechamentos = null, chartPacotes = null;
 let pacoteMode = 'qtd';
 let mesSelecionadoCal = -1;
+let marcacoes = [];
 
 // ─── LOADER ──────────────────────────────────────────────────────────────────
 function setLoader(p) { document.getElementById('ld-fill').style.width = p + '%'; }
@@ -403,6 +436,7 @@ async function carregarDados() {
     dadosVendas = vendas.filter(r => r[0] && r[0].trim() !== '');
     dadosInvest = invest.filter(r => r[0] && r[0].trim() !== '');
     dadosLeads  = leads.filter(r => r[0] && r[0].trim() !== '');
+    await carregarMarcacoes();
     popularAnosSeletor();
     renderizar();
     setLoader(100);
@@ -1187,10 +1221,28 @@ function renderDetalheMes(cal) {
     const pacotes = [c.pacote1, c.pacote2].filter(Boolean);
     const totalAtendCliente = pacotes.reduce((s, p) => s + atendimentosDoPacote(p), 0);
     const statusClass = c.status === 'Realizado' ? 'cal-status-realizado' : 'cal-status-agendado';
+
+    const checks = Array.from({ length: totalAtendCliente }, (_, i) => {
+      const tipo  = `atend_${i + 1}`;
+      const marc  = getMarcacao(c.nome, tipo);
+      const check = !!marc;
+      const label = i === 0 ? '1º' : i === 1 ? '2º' : '3º';
+      const nomeId = c.nome.replace(/\s/g,'_').replace(/[^a-zA-Z0-9_]/g,'');
+      return `
+        <div class="atend-check-item">
+          <input type="checkbox" class="atend-check-box"
+            id="chk_${nomeId}_${i}"
+            ${check ? 'checked' : ''}
+            onchange="toggleAtendimento('${c.nome.replace(/'/g, "\\'")}', ${i + 1}, this.checked)">
+          <label class="atend-check-label" for="chk_${nomeId}_${i}">${label}</label>
+        </div>
+      `;
+    }).join('');
+
     return `<tr>
       <td class="nome">${c.nome}</td>
       <td class="pacotes">${pacotes.join(' + ') || '—'}</td>
-      <td class="atend-num">${totalAtendCliente}</td>
+      <td><div class="atend-checks">${checks || '—'}</div></td>
       <td><span class="cal-status-badge ${statusClass}">${c.status}</span></td>
       <td class="parto">${c.mesPrevisto || '—'}</td>
     </tr>`;
@@ -1209,7 +1261,7 @@ function renderDetalheMes(cal) {
         <thead><tr>
           <th>Cliente</th>
           <th>Pacote(s)</th>
-          <th style="text-align:center">Atend.</th>
+          <th>Atendimentos</th>
           <th>Status</th>
           <th>Parto Previsto</th>
         </tr></thead>
@@ -1219,8 +1271,132 @@ function renderDetalheMes(cal) {
   `;
 }
 
+// ─── MARCAÇÕES (APPS SCRIPT) ─────────────────────────────────────────────────
+async function carregarMarcacoes() {
+  if (!APPS_SCRIPT_URL) return;
+  try {
+    const res  = await fetch(APPS_SCRIPT_URL);
+    const json = await res.json();
+    if (json.ok) marcacoes = json.marcacoes;
+  } catch(e) {
+    console.warn('Não foi possível carregar marcações:', e);
+  }
+}
+
+async function salvarMarcacao(cliente, tipo, data, observacao) {
+  if (!APPS_SCRIPT_URL) return;
+  try {
+    await fetch(APPS_SCRIPT_URL, {
+      method: 'POST',
+      body: JSON.stringify({ cliente, tipo, data, observacao }),
+    });
+    const idx = marcacoes.findIndex(m => m.cliente === cliente && m.tipo === tipo);
+    if (idx >= 0) {
+      marcacoes[idx] = { cliente, tipo, data, observacao };
+    } else {
+      marcacoes.push({ cliente, tipo, data, observacao });
+    }
+  } catch(e) {
+    console.warn('Erro ao salvar marcação:', e);
+  }
+}
+
+async function removerMarcacao(cliente, tipo) {
+  if (!APPS_SCRIPT_URL) return;
+  try {
+    await fetch(APPS_SCRIPT_URL, {
+      method: 'POST',
+      body: JSON.stringify({ cliente, tipo, _delete: true }),
+    });
+    marcacoes = marcacoes.filter(m => !(m.cliente === cliente && m.tipo === tipo));
+  } catch(e) {
+    console.warn('Erro ao remover marcação:', e);
+  }
+}
+
+function getMarcacao(cliente, tipo) {
+  return marcacoes.find(m => m.cliente === cliente && m.tipo === tipo) || null;
+}
+
+// ─── ALERTAS PRÉ-PARTO ───────────────────────────────────────────────────────
+function renderAlertas() {
+  const wrap = document.getElementById('alertas-wrap');
+  const hoje = new Date();
+  hoje.setHours(0,0,0,0);
+
+  const todos = clientesDoAno(anoSelecionado);
+  const candidatas = todos
+    .filter(c => c.status !== 'Cancelado' && c.dataParto)
+    .map(c => {
+      const p = c.dataParto.split('/');
+      if (p.length < 3) return null;
+      const parto = new Date(parseInt(p[2]), parseInt(p[1])-1, parseInt(p[0]));
+      parto.setHours(0,0,0,0);
+      const diasRestantes = Math.round((parto - hoje) / 86400000);
+      return { ...c, parto, diasRestantes };
+    })
+    .filter(c => c && c.diasRestantes >= 0 && c.diasRestantes <= 60)
+    .sort((a, b) => a.diasRestantes - b.diasRestantes);
+
+  if (!candidatas.length) { wrap.innerHTML = ''; return; }
+
+  const cards = candidatas.map(c => {
+    const marc = getMarcacao(c.nome, 'convite_preparto');
+    const convidada = !!marc;
+    const urgClass = c.diasRestantes <= 14 ? 'urgente' : c.diasRestantes <= 30 ? 'atencao' : 'ok';
+    const urgText  = c.diasRestantes === 0 ? 'Hoje!' : c.diasRestantes === 1 ? 'Amanhã' : `${c.diasRestantes} dias`;
+    const dataStr  = new Date().toISOString().slice(0,10);
+
+    return `
+      <div class="alerta-card${convidada ? ' convidada' : ''}">
+        <div class="alerta-info">
+          <div class="alerta-nome">${c.nome}</div>
+          <div class="alerta-detalhe">Parto previsto: ${c.dataParto} · ${c.mesRealizado} · ${[c.pacote1, c.pacote2].filter(Boolean).join(' + ')}</div>
+          ${convidada ? `<div class="alerta-data-convite">✓ Convidada em ${marc.data}</div>` : ''}
+        </div>
+        <div class="alerta-acao">
+          <span class="alerta-urgencia ${urgClass}">${urgText}</span>
+          <label class="alerta-check-wrap">
+            <input type="checkbox" class="alerta-check"
+              ${convidada ? 'checked' : ''}
+              onchange="toggleConvite('${c.nome.replace(/'/g, "\\'")}', this.checked, '${dataStr}')">
+            <span class="alerta-check-label">${convidada ? 'Convidada' : 'Convidar'}</span>
+          </label>
+        </div>
+      </div>
+    `;
+  }).join('');
+
+  wrap.innerHTML = `
+    <div class="alertas-titulo">Convidar para Pós-Parto — próximos 2 meses</div>
+    ${cards}
+  `;
+}
+
+async function toggleConvite(nome, marcado, data) {
+  if (marcado) {
+    await salvarMarcacao(nome, 'convite_preparto', data, '');
+  } else {
+    await removerMarcacao(nome, 'convite_preparto');
+  }
+  renderAlertas();
+}
+
+async function toggleAtendimento(nome, numero, marcado) {
+  const tipo = `atend_${numero}`;
+  const data = new Date().toISOString().slice(0,10);
+  if (marcado) {
+    await salvarMarcacao(nome, tipo, data, '');
+  } else {
+    await removerMarcacao(nome, tipo);
+  }
+  const cal = calcularCalendario(anoSelecionado);
+  renderDetalheMes(cal);
+}
+
 // ─── RENDERIZAR ──────────────────────────────────────────────────────────────
 function renderizar() {
+  renderAlertas();
   const d = calcular(anoSelecionado);
   renderKPIs(d);
   renderCustosMedios(d);
