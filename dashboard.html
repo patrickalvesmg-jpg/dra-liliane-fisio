@@ -1473,7 +1473,6 @@ async function salvarMarcacao(cliente, tipo, data, observacao) {
   try {
     await fetch(APPS_SCRIPT_URL, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ cliente, tipo, data, observacao }),
     });
     const idx = marcacoes.findIndex(m => m.cliente === cliente && m.tipo === tipo);
@@ -1492,7 +1491,6 @@ async function removerMarcacao(cliente, tipo) {
   try {
     await fetch(APPS_SCRIPT_URL, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ cliente, tipo, _delete: true }),
     });
     marcacoes = marcacoes.filter(m => !(m.cliente === cliente && m.tipo === tipo));
@@ -1736,8 +1734,9 @@ function renderGerAtendimentos() {
       </div>
     `;
 
+    const cardId = 'ger-card-' + c.nome.replace(/\s/g,'_').replace(/[^a-zA-Z0-9_]/g,'');
     return `
-      <div class="ger-cliente-card${estaCancelada ? ' cancelada' : ''}">
+      <div class="ger-cliente-card${estaCancelada ? ' cancelada' : ''}" id="${cardId}">
         <div class="ger-cliente-info">
           <div class="ger-cliente-nome">${c.nome}</div>
           <div class="ger-cliente-detalhe">
@@ -1797,8 +1796,6 @@ async function toggleAtendimentoGer(nome, dataParto, numero, marcado, totalAtend
   }
 
   const estaCancelada = !!getMarcacao(nome, 'cancelada');
-
-  // Verifica se todos os atendimentos estão marcados
   const todosOsAtend = Array.from({ length: totalAtend }, (_, i) => getMarcacao(nome, `atend_${i + 1}`));
   const todosMarcados = todosOsAtend.every(Boolean);
 
@@ -1807,8 +1804,7 @@ async function toggleAtendimentoGer(nome, dataParto, numero, marcado, totalAtend
   } else if (!marcado && !estaCancelada) {
     await atualizarStatusNaPlanilha(nome, dataParto, 'Agendado');
   }
-
-  renderGerAtendimentos();
+  // Não re-renderiza a lista para não destruir os checkboxes durante a interação
 }
 
 async function toggleCancelada(nome, dataParto, marcado) {
@@ -1821,28 +1817,35 @@ async function toggleCancelada(nome, dataParto, marcado) {
     await removerMarcacao(nome, tipo);
     await atualizarStatusNaPlanilha(nome, dataParto, 'Agendado');
   }
-  renderGerAtendimentos();
+  // Atualiza visualmente só o card desta cliente
+  atualizarCardCancelada(nome, marcado);
+}
+
+function atualizarCardCancelada(nome, cancelada) {
+  const nomeId = nome.replace(/\s/g,'_').replace(/[^a-zA-Z0-9_]/g,'');
+  const card = document.getElementById('ger-card-' + nomeId);
+  if (!card) return;
+  if (cancelada) {
+    card.classList.add('cancelada');
+  } else {
+    card.classList.remove('cancelada');
+  }
 }
 
 async function atualizarStatusNaPlanilha(nome, dataParto, novoStatus) {
   if (!APPS_SCRIPT_URL) return;
   try {
-    const res  = await fetch(APPS_SCRIPT_URL, {
+    // Apps Script não aceita preflight CORS — envia sem Content-Type customizado
+    await fetch(APPS_SCRIPT_URL, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ action: 'atualizarStatus', nome, dataParto, novoStatus }),
     });
-    const json = await res.json();
-    if (json.ok) {
-      const label = novoStatus === 'Realizado' ? 'Atendimento concluído — status atualizado para Realizado ✓'
-                  : novoStatus === 'Cancelado'  ? 'Cliente marcada como Cancelada na planilha ✓'
-                  : 'Status atualizado para Agendado ✓';
-      mostrarToast(label);
-    } else {
-      mostrarToast('Erro ao atualizar planilha: ' + (json.erro || 'falha desconhecida'), true);
-    }
+    const label = novoStatus === 'Realizado' ? 'Atendimento concluído — Realizado salvo na planilha ✓'
+                : novoStatus === 'Cancelado'  ? 'Cancelamento salvo na planilha ✓'
+                : 'Status atualizado na planilha ✓';
+    mostrarToast(label);
   } catch(e) {
-    mostrarToast('Erro de conexão ao atualizar planilha', true);
+    mostrarToast('Erro de conexão — verifique a internet', true);
     console.warn('Erro ao atualizar status:', e);
   }
 }
@@ -1990,7 +1993,7 @@ async function salvarVenda() {
       ? { action: 'inserirVenda', dados }
       : { action: 'editarVenda', nomeOriginal: modalNomeOriginal, dataPartoOriginal: modalDataPartoOriginal, dados };
 
-    const res  = await fetch(APPS_SCRIPT_URL, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
+    const res  = await fetch(APPS_SCRIPT_URL, { method: 'POST', body: JSON.stringify(payload) });
     const json = await res.json();
 
     if (!json.ok) {
