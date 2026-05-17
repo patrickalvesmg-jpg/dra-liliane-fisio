@@ -330,6 +330,11 @@
       .modal-grid { grid-template-columns: 1fr; }
       .modal-box { max-height: 95vh; }
     }
+
+    /* TOAST */
+    .toast-notif { position: fixed; bottom: 28px; left: 50%; transform: translateX(-50%) translateY(20px); background: var(--escuro); color: #fff; font-size: 13px; font-weight: 600; padding: 12px 22px; border-radius: 30px; box-shadow: 0 4px 24px rgba(42,32,40,0.22); opacity: 0; transition: opacity .3s, transform .3s; pointer-events: none; z-index: 999; white-space: nowrap; }
+    .toast-notif.on { opacity: 1; transform: translateX(-50%) translateY(0); }
+    .toast-notif.erro { background: var(--vermelho); }
   </style>
 </head>
 <body>
@@ -1468,6 +1473,7 @@ async function salvarMarcacao(cliente, tipo, data, observacao) {
   try {
     await fetch(APPS_SCRIPT_URL, {
       method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ cliente, tipo, data, observacao }),
     });
     const idx = marcacoes.findIndex(m => m.cliente === cliente && m.tipo === tipo);
@@ -1486,6 +1492,7 @@ async function removerMarcacao(cliente, tipo) {
   try {
     await fetch(APPS_SCRIPT_URL, {
       method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ cliente, tipo, _delete: true }),
     });
     marcacoes = marcacoes.filter(m => !(m.cliente === cliente && m.tipo === tipo));
@@ -1643,10 +1650,10 @@ function renderGerCalVendas() {
   const todos = clientesDoAno(anoSelecionado);
   const mesHoje = (anoSelecionado === anoAtual()) ? new Date().getMonth() : -1;
 
-  // Agrupa por mesVenda (coluna P)
+  // Agrupa por mesPrevisto (mês previsto do parto — coluna C)
   const contagemPorMes = Array(12).fill(0);
   todos.forEach(c => {
-    const idx = mesIndex(c.mesVenda);
+    const idx = mesIndex(c.mesPrevisto);
     if (idx >= 0) contagemPorMes[idx]++;
   });
 
@@ -1668,7 +1675,7 @@ function renderGerCalVendas() {
            onclick="selecionarMesGerVendas(${idx})">
         <div class="cal-mes-nome">${mes}${ehAtual ? ' · atual' : ''}</div>
         <div class="cal-mes-total${qtd > 0 ? ' roxo' : ''}">${qtd || '—'}</div>
-        <div class="cal-mes-label">${qtd === 1 ? 'venda' : qtd > 1 ? 'vendas' : 'sem vendas'}</div>
+        <div class="cal-mes-label">${qtd === 1 ? 'cliente' : qtd > 1 ? 'clientes' : 'sem clientes'}</div>
       </div>
     `;
   }).join('');
@@ -1756,7 +1763,7 @@ function renderGerVendas() {
   const tbody = document.getElementById('ger-vendas-body');
 
   const filtrados = mesGerVendas >= 0
-    ? todos.filter(c => mesIndex(c.mesVenda) === mesGerVendas)
+    ? todos.filter(c => mesIndex(c.mesPrevisto) === mesGerVendas)
     : todos;
 
   if (!filtrados.length) {
@@ -1820,13 +1827,38 @@ async function toggleCancelada(nome, dataParto, marcado) {
 async function atualizarStatusNaPlanilha(nome, dataParto, novoStatus) {
   if (!APPS_SCRIPT_URL) return;
   try {
-    await fetch(APPS_SCRIPT_URL, {
+    const res  = await fetch(APPS_SCRIPT_URL, {
       method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ action: 'atualizarStatus', nome, dataParto, novoStatus }),
     });
+    const json = await res.json();
+    if (json.ok) {
+      const label = novoStatus === 'Realizado' ? 'Atendimento concluído — status atualizado para Realizado ✓'
+                  : novoStatus === 'Cancelado'  ? 'Cliente marcada como Cancelada na planilha ✓'
+                  : 'Status atualizado para Agendado ✓';
+      mostrarToast(label);
+    } else {
+      mostrarToast('Erro ao atualizar planilha: ' + (json.erro || 'falha desconhecida'), true);
+    }
   } catch(e) {
+    mostrarToast('Erro de conexão ao atualizar planilha', true);
     console.warn('Erro ao atualizar status:', e);
   }
+}
+
+function mostrarToast(msg, erro) {
+  let t = document.getElementById('toast-notif');
+  if (!t) {
+    t = document.createElement('div');
+    t.id = 'toast-notif';
+    document.body.appendChild(t);
+  }
+  t.textContent = msg;
+  t.className = 'toast-notif' + (erro ? ' erro' : '');
+  t.classList.add('on');
+  clearTimeout(t._timer);
+  t._timer = setTimeout(() => t.classList.remove('on'), 4000);
 }
 
 // ─── RENDERIZAR ──────────────────────────────────────────────────────────────
@@ -1958,7 +1990,7 @@ async function salvarVenda() {
       ? { action: 'inserirVenda', dados }
       : { action: 'editarVenda', nomeOriginal: modalNomeOriginal, dataPartoOriginal: modalDataPartoOriginal, dados };
 
-    const res  = await fetch(APPS_SCRIPT_URL, { method: 'POST', body: JSON.stringify(payload) });
+    const res  = await fetch(APPS_SCRIPT_URL, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
     const json = await res.json();
 
     if (!json.ok) {
