@@ -1323,6 +1323,10 @@ function renderAlertas() {
   const wrap = document.getElementById('alertas-wrap');
   const hoje = new Date();
   hoje.setHours(0,0,0,0);
+  const limite = new Date(hoje);
+  limite.setDate(limite.getDate() + 60);
+  // início fixo: 1º de maio do ano selecionado
+  const inicio = new Date(anoSelecionado, 4, 1); // mês 4 = maio (0-based)
 
   const todos = clientesDoAno(anoSelecionado);
   const candidatas = todos
@@ -1335,32 +1339,29 @@ function renderAlertas() {
       const diasRestantes = Math.round((parto - hoje) / 86400000);
       return { ...c, parto, diasRestantes };
     })
-    .filter(c => c && c.diasRestantes >= 0 && c.diasRestantes <= 60)
+    // parto entre 1º de maio e hoje+60 dias, excluindo já convidadas
+    .filter(c => c && c.parto >= inicio && c.parto <= limite && !getMarcacao(c.nome, 'convite_preparto'))
     .sort((a, b) => a.diasRestantes - b.diasRestantes);
 
   if (!candidatas.length) { wrap.innerHTML = ''; return; }
 
   const cards = candidatas.map(c => {
-    const marc = getMarcacao(c.nome, 'convite_preparto');
-    const convidada = !!marc;
-    const urgClass = c.diasRestantes <= 14 ? 'urgente' : c.diasRestantes <= 30 ? 'atencao' : 'ok';
-    const urgText  = c.diasRestantes === 0 ? 'Hoje!' : c.diasRestantes === 1 ? 'Amanhã' : `${c.diasRestantes} dias`;
+    const urgClass = c.diasRestantes <= 0 ? 'urgente' : c.diasRestantes <= 14 ? 'urgente' : c.diasRestantes <= 30 ? 'atencao' : 'ok';
+    const urgText  = c.diasRestantes <= 0 ? 'Parto próximo!' : c.diasRestantes === 1 ? 'Amanhã' : `${c.diasRestantes} dias`;
     const dataStr  = new Date().toISOString().slice(0,10);
 
     return `
-      <div class="alerta-card${convidada ? ' convidada' : ''}">
+      <div class="alerta-card">
         <div class="alerta-info">
           <div class="alerta-nome">${c.nome}</div>
           <div class="alerta-detalhe">Parto previsto: ${c.dataParto} · ${c.mesRealizado} · ${[c.pacote1, c.pacote2].filter(Boolean).join(' + ')}</div>
-          ${convidada ? `<div class="alerta-data-convite">✓ Convidada em ${marc.data}</div>` : ''}
         </div>
         <div class="alerta-acao">
           <span class="alerta-urgencia ${urgClass}">${urgText}</span>
           <label class="alerta-check-wrap">
             <input type="checkbox" class="alerta-check"
-              ${convidada ? 'checked' : ''}
               onchange="toggleConvite('${c.nome.replace(/'/g, "\\'")}', this.checked, '${dataStr}')">
-            <span class="alerta-check-label">${convidada ? 'Convidada' : 'Convidar'}</span>
+            <span class="alerta-check-label">Convidar</span>
           </label>
         </div>
       </div>
@@ -1368,7 +1369,7 @@ function renderAlertas() {
   }).join('');
 
   wrap.innerHTML = `
-    <div class="alertas-titulo">Convidar para Pós-Parto — próximos 2 meses</div>
+    <div class="alertas-titulo">Convidar para Pós-Parto — a partir de maio</div>
     ${cards}
   `;
 }
