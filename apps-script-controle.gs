@@ -201,7 +201,7 @@ function sanitizar(v) {
 }
 
 function normalizar(v) {
-  if (v instanceof Date) {
+  if (v && typeof v === 'object' && typeof v.getDate === 'function') {
     const d = String(v.getDate()).padStart(2,'0');
     const m = String(v.getMonth()+1).padStart(2,'0');
     const y = v.getFullYear();
