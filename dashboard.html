@@ -1936,21 +1936,23 @@ function abrirModalEdicao(nome, dataParto) {
   limparModal();
 
   if (linha) {
-    document.getElementById('mf-nome').value         = linha[0]  || '';
-    document.getElementById('mf-dataParto').value    = linha[1]  || '';
-    document.getElementById('mf-mesPrevisto').value  = linha[2]  || '';
-    document.getElementById('mf-mesRealizado').value = linha[3]  || '';
-    document.getElementById('mf-origem').value       = linha[4]  || '';
-    document.getElementById('mf-pacote1').value      = linha[5]  || '';
-    document.getElementById('mf-pacote2').value      = linha[6]  || '';
-    document.getElementById('mf-extra').value        = linha[7]  || '';
-    document.getElementById('mf-valPacotes').value   = linha[8]  || '';
-    document.getElementById('mf-valExtra').value     = linha[9]  || '';
-    document.getElementById('mf-custo').value        = linha[10] || '';
-    document.getElementById('mf-valTotal').value     = linha[11] || '';
-    document.getElementById('mf-status').value       = linha[12] || 'Agendado';
-    document.getElementById('mf-dataVenda').value    = linha[14] || '';
-    document.getElementById('mf-mesVenda').value     = linha[15] || '';
+    document.getElementById('mf-nome').value       = linha[0]  || '';
+    document.getElementById('mf-dataParto').value  = linha[1]  || '';
+    document.getElementById('mf-extra').value      = linha[7]  || '';
+    document.getElementById('mf-valPacotes').value = linha[8]  || '';
+    document.getElementById('mf-valExtra').value   = linha[9]  || '';
+    document.getElementById('mf-custo').value      = linha[10] || '';
+    document.getElementById('mf-valTotal').value   = linha[11] || '';
+    document.getElementById('mf-dataVenda').value  = linha[14] || '';
+    // Selects: garante que o valor da planilha exista como opção antes de selecionar
+    ['mf-mesPrevisto','mf-mesRealizado','mf-origem','mf-pacote1','mf-pacote2','mf-mesVenda','mf-status'].forEach((id, idx) => {
+      const val = [linha[2], linha[3], linha[4], linha[5], linha[6], linha[15], linha[12] || 'Agendado'][idx] || '';
+      const sel = document.getElementById(id);
+      if (val && !Array.from(sel.options).some(o => o.value === val || o.text === val)) {
+        sel.appendChild(new Option(val, val));
+      }
+      sel.value = val;
+    });
   }
 
   document.getElementById('modal-venda').classList.add('on');
