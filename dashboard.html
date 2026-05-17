@@ -422,10 +422,11 @@ function popularAnosSeletor() {
   const anos = new Set();
   dadosInvest.forEach(r => { if (r[1]) anos.add(parseInt(r[1])); });
   dadosVendas.forEach(r => {
-    if (r[1]) {
-      const p = r[1].split('/');
-      if (p.length === 3) { const y = parseInt(p[2]); if (y > 2020) anos.add(y); }
-    }
+    // tenta ano da venda (col O) primeiro, depois data do parto (col B)
+    const anoVenda = anoDeData(r[14]);
+    const anoParto = anoDeData(r[1]);
+    const ano = anoVenda ?? anoParto;
+    if (ano) anos.add(ano);
   });
   if (anos.size === 0) anos.add(new Date().getFullYear());
   const sel = document.getElementById('sel-ano');
@@ -452,15 +453,23 @@ function mesAtual() { return new Date().getMonth(); }
 //          E=4 origem, F=5 pac1, G=6 pac2, H=7 extra, I=8 valPacotes,
 //          J=9 valExtra, K=10 custo, L=11 valTotal, M=12 status,
 //          N=13 dataContato, O=14 dataVenda, P=15 mesVenda
+function anoDeData(str) {
+  if (!str) return null;
+  const p = str.split('/');
+  if (p.length === 3) { const y = parseInt(p[2]); if (y > 2020) return y; }
+  return null;
+}
+
 function clientesDoAno(ano) {
   return dadosVendas
     .filter(r => {
       if (!r[0] || !r[3]) return false;
-      const dataStr = r[1];
-      if (!dataStr) return ano === anoAtual();
-      const p = dataStr.split('/');
-      if (p.length < 3) return ano === anoAtual();
-      return parseInt(p[2]) === ano;
+      // tenta determinar o ano pelo melhor campo disponível:
+      // 1ª opção: data da venda (col O), 2ª: data do parto (col B), 3ª: ano atual
+      const anoVenda = anoDeData(r[14]);
+      const anoParto = anoDeData(r[1]);
+      const anoRef   = anoVenda ?? anoParto ?? anoAtual();
+      return anoRef === ano;
     })
     .map(r => ({
       nome:         r[0] || '',
