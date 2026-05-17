@@ -265,6 +265,70 @@
     .atend-check-box:checked { background: var(--roxo); border-color: var(--roxo); }
     .atend-check-box:checked::after { content: '✓'; display: block; text-align: center; color: #fff; font-size: 11px; font-weight: 900; line-height: 14px; }
     .atend-check-label { font-size: 10px; font-weight: 600; color: var(--texto); white-space: nowrap; }
+
+    /* NAVEGAÇÃO POR ABAS */
+    .abas-nav { background: rgba(251,246,238,0.98); border-bottom: 1px solid var(--borda); display: flex; gap: 0; position: sticky; top: 57px; z-index: 90; }
+    .aba-btn { padding: 12px 28px; font-family: 'Outfit', sans-serif; font-size: 11px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: var(--texto); border: none; background: none; cursor: pointer; border-bottom: 2px solid transparent; transition: all .2s; }
+    .aba-btn:hover { color: var(--escuro); }
+    .aba-btn.ativa { color: var(--roxo); border-bottom-color: var(--roxo); }
+
+    /* ABA GERENCIAL — PAINEL ATENDIMENTOS */
+    .ger-section { margin-bottom: 36px; }
+    .ger-cliente-card { background: var(--card); border: 1px solid var(--borda); border-radius: 14px; padding: 18px 22px; box-shadow: var(--sombra); margin-bottom: 10px; display: flex; align-items: flex-start; justify-content: space-between; gap: 20px; flex-wrap: wrap; }
+    .ger-cliente-info { flex: 1; min-width: 200px; }
+    .ger-cliente-nome { font-size: 15px; font-weight: 800; color: var(--escuro); margin-bottom: 3px; }
+    .ger-cliente-detalhe { font-size: 12px; font-weight: 500; color: var(--texto); }
+    .ger-cliente-checks { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
+    .ger-check-grupo { display: flex; align-items: center; gap: 8px; }
+    .ger-check-label-grupo { font-size: 10px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: var(--texto); }
+    .cancel-check-box { width: 18px; height: 18px; border: 2px solid rgba(176,85,85,0.40); border-radius: 5px; appearance: none; -webkit-appearance: none; cursor: pointer; transition: all .2s; flex-shrink: 0; }
+    .cancel-check-box:checked { background: var(--vermelho); border-color: var(--vermelho); }
+    .cancel-check-box:checked::after { content: '✓'; display: block; text-align: center; color: #fff; font-size: 11px; font-weight: 900; line-height: 14px; }
+    .cancel-check-label { font-size: 11px; font-weight: 700; color: var(--vermelho); }
+    .ger-cliente-card.cancelada { opacity: 0.55; background: #FDF4F4; border-color: rgba(176,85,85,0.18); }
+
+    /* ABA GERENCIAL — TABELA DE VENDAS */
+    .ger-vendas-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; flex-wrap: wrap; gap: 10px; }
+    .ger-nova-venda-btn { display: flex; align-items: center; gap: 8px; background: var(--roxo); border: none; border-radius: 10px; padding: 10px 20px; font-family: 'Outfit', sans-serif; font-size: 12px; font-weight: 700; letter-spacing: 0.5px; color: #fff; cursor: pointer; transition: all .2s; }
+    .ger-nova-venda-btn:hover { background: var(--escuro); }
+    .ger-vendas-table-wrap { background: var(--card); border: 1px solid var(--borda); border-radius: 16px; overflow: hidden; box-shadow: var(--sombra); }
+    .ger-vendas-table { width: 100%; border-collapse: collapse; }
+    .ger-vendas-table th { font-size: 9px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--texto); padding: 12px 16px; text-align: left; border-bottom: 1px solid var(--borda); background: var(--bg2); }
+    .ger-vendas-table td { font-size: 13px; font-weight: 500; color: var(--texto2); padding: 13px 16px; border-bottom: 1px solid rgba(176,144,165,0.10); vertical-align: middle; }
+    .ger-vendas-table tr:last-child td { border-bottom: none; }
+    .ger-vendas-table td.nome { font-weight: 700; color: var(--escuro); }
+    .ger-editar-btn { background: var(--bg2); border: 1px solid var(--borda); border-radius: 8px; padding: 5px 14px; font-family: 'Outfit', sans-serif; font-size: 11px; font-weight: 700; color: var(--texto2); cursor: pointer; transition: all .2s; }
+    .ger-editar-btn:hover { background: var(--roxo); border-color: var(--roxo); color: #fff; }
+
+    /* MODAL DE VENDA */
+    .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(42,32,40,0.55); z-index: 500; align-items: center; justify-content: center; padding: 20px; }
+    .modal-overlay.on { display: flex; }
+    .modal-box { background: var(--card); border-radius: 20px; box-shadow: 0 8px 48px rgba(42,32,40,0.18); width: 100%; max-width: 680px; max-height: 90vh; overflow-y: auto; display: flex; flex-direction: column; }
+    .modal-header { padding: 24px 28px 16px; border-bottom: 1px solid var(--borda); display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; background: var(--card); z-index: 1; }
+    .modal-titulo { font-family: 'Cormorant Garamond', serif; font-size: 20px; font-weight: 600; color: var(--escuro); }
+    .modal-fechar { background: none; border: none; font-size: 22px; color: var(--texto); cursor: pointer; line-height: 1; padding: 4px 8px; border-radius: 6px; }
+    .modal-fechar:hover { background: var(--bg2); color: var(--escuro); }
+    .modal-body { padding: 24px 28px; display: flex; flex-direction: column; gap: 0; }
+    .modal-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px 20px; margin-bottom: 14px; }
+    .modal-grid.full { grid-template-columns: 1fr; }
+    .modal-campo { display: flex; flex-direction: column; gap: 5px; }
+    .modal-label { font-size: 9px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--texto); }
+    .modal-input { background: var(--bg); border: 1px solid var(--borda2); border-radius: 8px; padding: 9px 12px; font-family: 'Outfit', sans-serif; font-size: 13px; font-weight: 500; color: var(--escuro); outline: none; transition: border-color .2s; }
+    .modal-input:focus { border-color: var(--roxo); }
+    .modal-select { background: var(--bg); border: 1px solid var(--borda2); border-radius: 8px; padding: 9px 12px; font-family: 'Outfit', sans-serif; font-size: 13px; font-weight: 500; color: var(--escuro); outline: none; cursor: pointer; appearance: none; -webkit-appearance: none; }
+    .modal-select:focus { border-color: var(--roxo); }
+    .modal-footer { padding: 16px 28px 24px; display: flex; gap: 10px; justify-content: flex-end; border-top: 1px solid var(--borda); position: sticky; bottom: 0; background: var(--card); }
+    .modal-btn-salvar { background: var(--roxo); border: none; border-radius: 10px; padding: 10px 24px; font-family: 'Outfit', sans-serif; font-size: 12px; font-weight: 700; color: #fff; cursor: pointer; transition: all .2s; }
+    .modal-btn-salvar:hover { background: var(--escuro); }
+    .modal-btn-cancelar { background: var(--bg2); border: 1px solid var(--borda); border-radius: 10px; padding: 10px 20px; font-family: 'Outfit', sans-serif; font-size: 12px; font-weight: 700; color: var(--texto2); cursor: pointer; transition: all .2s; }
+    .modal-btn-cancelar:hover { background: var(--borda2); }
+    .modal-erro { font-size: 12px; color: var(--vermelho); padding: 4px 0; display: none; }
+    .modal-erro.on { display: block; }
+
+    @media (max-width: 600px) {
+      .modal-grid { grid-template-columns: 1fr; }
+      .modal-box { max-height: 95vh; }
+    }
   </style>
 </head>
 <body>
@@ -290,8 +354,15 @@
   </div>
 </header>
 
+<nav class="abas-nav" id="abas-nav" style="display:none">
+  <button class="aba-btn ativa" id="aba-btn-relatorios" onclick="trocarAba('relatorios')">Relatórios</button>
+  <button class="aba-btn" id="aba-btn-gerencial" onclick="trocarAba('gerencial')">Gerencial</button>
+</nav>
+
 <div id="dash">
-  <div class="cnt">
+
+  <div id="aba-relatorios">
+    <div class="cnt">
 
     <div id="alertas-wrap" class="alertas-wrap"></div>
 
@@ -372,6 +443,118 @@
     <div id="cal-detalhe-wrap"></div>
 
   </div>
+  </div>
+
+  <div id="aba-gerencial" style="display:none">
+    <div class="cnt">
+
+      <div class="sec">Atendimentos por Cliente</div>
+      <div id="ger-atendimentos-wrap"></div>
+
+      <div class="sec">Vendas — Cadastro e Edição</div>
+      <div class="ger-vendas-header">
+        <div></div>
+        <button class="ger-nova-venda-btn" onclick="abrirModalNovaVenda()">+ Nova Venda</button>
+      </div>
+      <div class="ger-vendas-table-wrap">
+        <table class="ger-vendas-table">
+          <thead><tr>
+            <th>Nome</th>
+            <th>Parto</th>
+            <th>Pacote</th>
+            <th>Status</th>
+            <th></th>
+          </tr></thead>
+          <tbody id="ger-vendas-body"></tbody>
+        </table>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+
+<!-- MODAL DE VENDA -->
+<div class="modal-overlay" id="modal-venda">
+  <div class="modal-box">
+    <div class="modal-header">
+      <div class="modal-titulo" id="modal-titulo">Nova Venda</div>
+      <button class="modal-fechar" onclick="fecharModal()">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="modal-grid">
+        <div class="modal-campo">
+          <label class="modal-label">Nome</label>
+          <input class="modal-input" id="mf-nome" type="text" placeholder="Nome completo">
+        </div>
+        <div class="modal-campo">
+          <label class="modal-label">Data do Parto (dd/mm/aaaa)</label>
+          <input class="modal-input" id="mf-dataParto" type="text" placeholder="dd/mm/aaaa">
+        </div>
+        <div class="modal-campo">
+          <label class="modal-label">Mês Previsto</label>
+          <input class="modal-input" id="mf-mesPrevisto" type="text" placeholder="Ex: Junho">
+        </div>
+        <div class="modal-campo">
+          <label class="modal-label">Mês Realizado</label>
+          <input class="modal-input" id="mf-mesRealizado" type="text" placeholder="Ex: Junho">
+        </div>
+        <div class="modal-campo">
+          <label class="modal-label">Origem</label>
+          <input class="modal-input" id="mf-origem" type="text" placeholder="Ex: Instagram">
+        </div>
+        <div class="modal-campo">
+          <label class="modal-label">Status</label>
+          <select class="modal-select" id="mf-status">
+            <option value="Agendado">Agendado</option>
+            <option value="Realizado">Realizado</option>
+            <option value="Cancelado">Cancelado</option>
+          </select>
+        </div>
+        <div class="modal-campo">
+          <label class="modal-label">Pacote 1</label>
+          <input class="modal-input" id="mf-pacote1" type="text" placeholder="Nome do pacote">
+        </div>
+        <div class="modal-campo">
+          <label class="modal-label">Pacote 2</label>
+          <input class="modal-input" id="mf-pacote2" type="text" placeholder="Opcional">
+        </div>
+        <div class="modal-campo">
+          <label class="modal-label">Extra</label>
+          <input class="modal-input" id="mf-extra" type="text" placeholder="Descrição do extra">
+        </div>
+        <div class="modal-campo">
+          <label class="modal-label">Valor Pacotes (R$)</label>
+          <input class="modal-input" id="mf-valPacotes" type="text" placeholder="0,00">
+        </div>
+        <div class="modal-campo">
+          <label class="modal-label">Valor Extra (R$)</label>
+          <input class="modal-input" id="mf-valExtra" type="text" placeholder="0,00">
+        </div>
+        <div class="modal-campo">
+          <label class="modal-label">Custo (R$)</label>
+          <input class="modal-input" id="mf-custo" type="text" placeholder="0,00">
+        </div>
+        <div class="modal-campo">
+          <label class="modal-label">Valor Total (R$)</label>
+          <input class="modal-input" id="mf-valTotal" type="text" placeholder="0,00">
+        </div>
+        <div class="modal-campo">
+          <label class="modal-label">Data da Venda (dd/mm/aaaa)</label>
+          <input class="modal-input" id="mf-dataVenda" type="text" placeholder="dd/mm/aaaa">
+        </div>
+        <div class="modal-campo">
+          <label class="modal-label">Mês da Venda</label>
+          <input class="modal-input" id="mf-mesVenda" type="text" placeholder="Ex: Março">
+        </div>
+      </div>
+      <div class="modal-erro" id="modal-erro"></div>
+    </div>
+    <div class="modal-footer">
+      <button class="modal-btn-cancelar" onclick="fecharModal()">Cancelar</button>
+      <button class="modal-btn-salvar" id="modal-btn-salvar" onclick="salvarVenda()">Salvar</button>
+    </div>
+  </div>
 </div>
 
 <script>
@@ -382,7 +565,7 @@ const GID_INVEST = '1973352773';
 const GID_LEADS  = '1947126829';
 const MESES = ['Janeiro','Fevereiro','Março','Abril','Maio','Junho',
                'Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
-const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbz8K9Fz2WNfpqg9tKxeundD-F2HdOV7NxeABGV2767h-nDaDWlKbjLtjkNZivYAu2pcKg/exec';
+const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyLnNZ-YvDm_2TuV050rt4E2LfZiMmsnYDcCc2x0tg2JVb63Jc3rmF--TrzoXEyBfGsSg/exec';
 
 // ─── ESTADO ──────────────────────────────────────────────────────────────────
 let dadosVendas = [], dadosInvest = [], dadosLeads = [];
@@ -391,6 +574,7 @@ let chartAtend = null, chartFechamentos = null, chartPacotes = null;
 let pacoteMode = 'qtd';
 let mesSelecionadoCal = -1;
 let marcacoes = [];
+let abaAtiva = 'relatorios';
 
 // ─── LOADER ──────────────────────────────────────────────────────────────────
 function setLoader(p) { document.getElementById('ld-fill').style.width = p + '%'; }
@@ -442,6 +626,7 @@ async function carregarDados() {
     setLoader(100);
     setTimeout(esconderLoader, 400);
     document.getElementById('dash').classList.add('on');
+    document.getElementById('abas-nav').style.display = '';
     document.getElementById('erro').classList.remove('on');
   } catch(e) {
     mostrarErro('Não foi possível carregar os dados. Verifique se a planilha está compartilhada como pública.');
@@ -1222,27 +1407,17 @@ function renderDetalheMes(cal) {
     const totalAtendCliente = pacotes.reduce((s, p) => s + atendimentosDoPacote(p), 0);
     const statusClass = c.status === 'Realizado' ? 'cal-status-realizado' : 'cal-status-agendado';
 
-    const checks = Array.from({ length: totalAtendCliente }, (_, i) => {
-      const tipo  = `atend_${i + 1}`;
-      const marc  = getMarcacao(c.nome, tipo);
-      const check = !!marc;
-      const label = i === 0 ? '1º' : i === 1 ? '2º' : '3º';
-      const nomeId = c.nome.replace(/\s/g,'_').replace(/[^a-zA-Z0-9_]/g,'');
-      return `
-        <div class="atend-check-item">
-          <input type="checkbox" class="atend-check-box"
-            id="chk_${nomeId}_${i}"
-            ${check ? 'checked' : ''}
-            onchange="toggleAtendimento('${c.nome.replace(/'/g, "\\'")}', ${i + 1}, this.checked)">
-          <label class="atend-check-label" for="chk_${nomeId}_${i}">${label}</label>
-        </div>
-      `;
-    }).join('');
+    const totalAtendMarcados = Array.from({ length: totalAtendCliente }, (_, i) =>
+      getMarcacao(c.nome, `atend_${i + 1}`)
+    ).filter(Boolean).length;
+    const progressoAtend = totalAtendCliente > 0
+      ? `${totalAtendMarcados}/${totalAtendCliente}`
+      : '—';
 
     return `<tr>
       <td class="nome">${c.nome}</td>
       <td class="pacotes">${pacotes.join(' + ') || '—'}</td>
-      <td><div class="atend-checks">${checks || '—'}</div></td>
+      <td class="atend-num">${progressoAtend}</td>
       <td><span class="cal-status-badge ${statusClass}">${c.status}</span></td>
       <td class="parto">${c.mesPrevisto || '—'}</td>
     </tr>`;
@@ -1261,7 +1436,7 @@ function renderDetalheMes(cal) {
         <thead><tr>
           <th>Cliente</th>
           <th>Pacote(s)</th>
-          <th>Atendimentos</th>
+          <th class="atend-num">Atend.</th>
           <th>Status</th>
           <th>Parto Previsto</th>
         </tr></thead>
@@ -1395,6 +1570,165 @@ async function toggleAtendimento(nome, numero, marcado) {
   renderDetalheMes(cal);
 }
 
+// ─── NAVEGAÇÃO POR ABAS ──────────────────────────────────────────────────────
+function trocarAba(aba) {
+  abaAtiva = aba;
+  document.getElementById('aba-relatorios').style.display = aba === 'relatorios' ? '' : 'none';
+  document.getElementById('aba-gerencial').style.display  = aba === 'gerencial'  ? '' : 'none';
+  document.getElementById('aba-btn-relatorios').classList.toggle('ativa', aba === 'relatorios');
+  document.getElementById('aba-btn-gerencial').classList.toggle('ativa', aba === 'gerencial');
+  if (aba === 'gerencial') {
+    renderGerencial();
+  }
+}
+
+// ─── RENDER GERENCIAL ────────────────────────────────────────────────────────
+function renderGerencial() {
+  renderGerAtendimentos();
+  renderGerVendas();
+}
+
+function renderGerAtendimentos() {
+  const wrap = document.getElementById('ger-atendimentos-wrap');
+  const todos = clientesDoAno(anoSelecionado);
+
+  if (!todos.length) {
+    wrap.innerHTML = '<p style="font-size:13px;color:var(--texto);font-style:italic;padding:20px 0">Nenhuma cliente no ano selecionado.</p>';
+    return;
+  }
+
+  wrap.innerHTML = todos.map(c => {
+    const pacotes = [c.pacote1, c.pacote2].filter(Boolean);
+    const totalAtendCliente = pacotes.reduce((s, p) => s + atendimentosDoPacote(p), 0);
+    const estaCancelada = !!getMarcacao(c.nome, 'cancelada');
+
+    const nomeEsc = c.nome.replace(/'/g, "\\'");
+    const dataEsc = c.dataParto.replace(/'/g, "\\'");
+
+    const checks = Array.from({ length: totalAtendCliente }, (_, i) => {
+      const tipo  = `atend_${i + 1}`;
+      const marc  = getMarcacao(c.nome, tipo);
+      const checked = !!marc;
+      const label = i === 0 ? '1º' : i === 1 ? '2º' : '3º';
+      const nomeId = c.nome.replace(/\s/g,'_').replace(/[^a-zA-Z0-9_]/g,'') + '_ger';
+      return `
+        <div class="atend-check-item">
+          <input type="checkbox" class="atend-check-box"
+            id="gchk_${nomeId}_${i}"
+            ${checked ? 'checked' : ''}
+            onchange="toggleAtendimentoGer('${nomeEsc}', '${dataEsc}', ${i + 1}, this.checked, ${totalAtendCliente})">
+          <label class="atend-check-label" for="gchk_${nomeId}_${i}">${label}</label>
+        </div>
+      `;
+    }).join('');
+
+    const cancelId = c.nome.replace(/\s/g,'_').replace(/[^a-zA-Z0-9_]/g,'') + '_cancel';
+    const cancelCheck = `
+      <div class="atend-check-item">
+        <input type="checkbox" class="cancel-check-box"
+          id="cchk_${cancelId}"
+          ${estaCancelada ? 'checked' : ''}
+          onchange="toggleCancelada('${nomeEsc}', '${dataEsc}', this.checked)">
+        <label class="cancel-check-label" for="cchk_${cancelId}">Cancelada</label>
+      </div>
+    `;
+
+    return `
+      <div class="ger-cliente-card${estaCancelada ? ' cancelada' : ''}">
+        <div class="ger-cliente-info">
+          <div class="ger-cliente-nome">${c.nome}</div>
+          <div class="ger-cliente-detalhe">
+            ${pacotes.join(' + ') || '—'} · Parto: ${c.dataParto || '—'} · ${c.mesRealizado || '—'}
+          </div>
+        </div>
+        <div class="ger-cliente-checks">
+          ${totalAtendCliente > 0 ? `
+            <div class="ger-check-grupo">
+              <span class="ger-check-label-grupo">Atendimentos</span>
+              <div class="atend-checks">${checks}</div>
+            </div>
+          ` : ''}
+          <div class="ger-check-grupo">${cancelCheck}</div>
+        </div>
+      </div>
+    `;
+  }).join('');
+}
+
+function renderGerVendas() {
+  const todos = clientesDoAno(anoSelecionado);
+  const tbody = document.getElementById('ger-vendas-body');
+
+  if (!todos.length) {
+    tbody.innerHTML = `<tr><td colspan="5" style="text-align:center;padding:28px;font-size:13px;color:var(--texto);font-style:italic">Nenhuma cliente no ano selecionado.</td></tr>`;
+    return;
+  }
+
+  tbody.innerHTML = todos.map(c => {
+    const pacotes = [c.pacote1, c.pacote2].filter(Boolean).join(' + ') || '—';
+    const nomeEsc = c.nome.replace(/'/g, "\\'");
+    const dataEsc = c.dataParto.replace(/'/g, "\\'");
+    const statusClass = c.status === 'Realizado' ? 'cal-status-realizado' : c.status === 'Cancelado' ? '' : 'cal-status-agendado';
+    return `<tr>
+      <td class="nome">${c.nome}</td>
+      <td>${c.dataParto || '—'}</td>
+      <td>${pacotes}</td>
+      <td><span class="cal-status-badge ${statusClass}">${c.status || '—'}</span></td>
+      <td><button class="ger-editar-btn" onclick="abrirModalEdicao('${nomeEsc}', '${dataEsc}')">Editar</button></td>
+    </tr>`;
+  }).join('');
+}
+
+// ─── TOGGLE GERENCIAL ────────────────────────────────────────────────────────
+async function toggleAtendimentoGer(nome, dataParto, numero, marcado, totalAtend) {
+  const tipo = `atend_${numero}`;
+  const data = new Date().toISOString().slice(0,10);
+  if (marcado) {
+    await salvarMarcacao(nome, tipo, data, '');
+  } else {
+    await removerMarcacao(nome, tipo);
+  }
+
+  const estaCancelada = !!getMarcacao(nome, 'cancelada');
+
+  // Verifica se todos os atendimentos estão marcados
+  const todosOsAtend = Array.from({ length: totalAtend }, (_, i) => getMarcacao(nome, `atend_${i + 1}`));
+  const todosMarcados = todosOsAtend.every(Boolean);
+
+  if (todosMarcados && !estaCancelada) {
+    await atualizarStatusNaPlanilha(nome, dataParto, 'Realizado');
+  } else if (!marcado && !estaCancelada) {
+    await atualizarStatusNaPlanilha(nome, dataParto, 'Agendado');
+  }
+
+  renderGerAtendimentos();
+}
+
+async function toggleCancelada(nome, dataParto, marcado) {
+  const tipo = 'cancelada';
+  const data = new Date().toISOString().slice(0,10);
+  if (marcado) {
+    await salvarMarcacao(nome, tipo, data, '');
+    await atualizarStatusNaPlanilha(nome, dataParto, 'Cancelado');
+  } else {
+    await removerMarcacao(nome, tipo);
+    await atualizarStatusNaPlanilha(nome, dataParto, 'Agendado');
+  }
+  renderGerAtendimentos();
+}
+
+async function atualizarStatusNaPlanilha(nome, dataParto, novoStatus) {
+  if (!APPS_SCRIPT_URL) return;
+  try {
+    await fetch(APPS_SCRIPT_URL, {
+      method: 'POST',
+      body: JSON.stringify({ action: 'atualizarStatus', nome, dataParto, novoStatus }),
+    });
+  } catch(e) {
+    console.warn('Erro ao atualizar status:', e);
+  }
+}
+
 // ─── RENDERIZAR ──────────────────────────────────────────────────────────────
 function renderizar() {
   renderAlertas();
@@ -1411,6 +1745,9 @@ function renderizar() {
   renderConversao();
   mesSelecionadoCal = -1;
   renderCalendario();
+  if (abaAtiva === 'gerencial') {
+    renderGerencial();
+  }
 }
 
 // ─── EVENTOS ─────────────────────────────────────────────────────────────────
@@ -1418,6 +1755,132 @@ document.getElementById('btn-atualizar').addEventListener('click', carregarDados
 document.getElementById('sel-ano').addEventListener('change', e => {
   anoSelecionado = parseInt(e.target.value);
   renderizar();
+});
+
+// ─── MODAL DE VENDA ──────────────────────────────────────────────────────────
+let modalModo = 'novo'; // 'novo' | 'editar'
+let modalNomeOriginal = '';
+let modalDataPartoOriginal = '';
+
+function abrirModalNovaVenda() {
+  modalModo = 'novo';
+  modalNomeOriginal = '';
+  modalDataPartoOriginal = '';
+  document.getElementById('modal-titulo').textContent = 'Nova Venda';
+  document.getElementById('modal-btn-salvar').textContent = 'Salvar';
+  limparModal();
+  document.getElementById('modal-venda').classList.add('on');
+}
+
+function abrirModalEdicao(nome, dataParto) {
+  modalModo = 'editar';
+  modalNomeOriginal = nome;
+  modalDataPartoOriginal = dataParto;
+  document.getElementById('modal-titulo').textContent = 'Editar Venda';
+  document.getElementById('modal-btn-salvar').textContent = 'Salvar Alterações';
+
+  const linha = dadosVendas.find(r =>
+    r[0].trim() === nome.trim() && r[1].trim() === dataParto.trim()
+  );
+
+  limparModal();
+
+  if (linha) {
+    document.getElementById('mf-nome').value         = linha[0]  || '';
+    document.getElementById('mf-dataParto').value    = linha[1]  || '';
+    document.getElementById('mf-mesPrevisto').value  = linha[2]  || '';
+    document.getElementById('mf-mesRealizado').value = linha[3]  || '';
+    document.getElementById('mf-origem').value       = linha[4]  || '';
+    document.getElementById('mf-pacote1').value      = linha[5]  || '';
+    document.getElementById('mf-pacote2').value      = linha[6]  || '';
+    document.getElementById('mf-extra').value        = linha[7]  || '';
+    document.getElementById('mf-valPacotes').value   = linha[8]  || '';
+    document.getElementById('mf-valExtra').value     = linha[9]  || '';
+    document.getElementById('mf-custo').value        = linha[10] || '';
+    document.getElementById('mf-valTotal').value     = linha[11] || '';
+    document.getElementById('mf-status').value       = linha[12] || 'Agendado';
+    // linha[13] = dataContato — não editamos
+    document.getElementById('mf-dataVenda').value    = linha[14] || '';
+    document.getElementById('mf-mesVenda').value     = linha[15] || '';
+  }
+
+  document.getElementById('modal-venda').classList.add('on');
+}
+
+function limparModal() {
+  ['nome','dataParto','mesPrevisto','mesRealizado','origem','pacote1','pacote2',
+   'extra','valPacotes','valExtra','custo','valTotal','dataVenda','mesVenda'].forEach(id => {
+    document.getElementById('mf-' + id).value = '';
+  });
+  document.getElementById('mf-status').value = 'Agendado';
+  document.getElementById('modal-erro').classList.remove('on');
+  document.getElementById('modal-erro').textContent = '';
+}
+
+function fecharModal() {
+  document.getElementById('modal-venda').classList.remove('on');
+}
+
+async function salvarVenda() {
+  const nome = document.getElementById('mf-nome').value.trim();
+  if (!nome) {
+    document.getElementById('modal-erro').textContent = 'O campo Nome é obrigatório.';
+    document.getElementById('modal-erro').classList.add('on');
+    return;
+  }
+
+  const dados = {
+    nome,
+    dataParto:    document.getElementById('mf-dataParto').value.trim(),
+    mesPrevisto:  document.getElementById('mf-mesPrevisto').value.trim(),
+    mesRealizado: document.getElementById('mf-mesRealizado').value.trim(),
+    origem:       document.getElementById('mf-origem').value.trim(),
+    pacote1:      document.getElementById('mf-pacote1').value.trim(),
+    pacote2:      document.getElementById('mf-pacote2').value.trim(),
+    extra:        document.getElementById('mf-extra').value.trim(),
+    valPacotes:   document.getElementById('mf-valPacotes').value.trim(),
+    valExtra:     document.getElementById('mf-valExtra').value.trim(),
+    custo:        document.getElementById('mf-custo').value.trim(),
+    valTotal:     document.getElementById('mf-valTotal').value.trim(),
+    status:       document.getElementById('mf-status').value,
+    dataVenda:    document.getElementById('mf-dataVenda').value.trim(),
+    mesVenda:     document.getElementById('mf-mesVenda').value.trim(),
+  };
+
+  const btn = document.getElementById('modal-btn-salvar');
+  const textoOriginal = btn.textContent;
+  btn.textContent = 'Salvando...';
+  btn.disabled = true;
+
+  try {
+    const payload = modalModo === 'novo'
+      ? { action: 'inserirVenda', dados }
+      : { action: 'editarVenda', nomeOriginal: modalNomeOriginal, dataPartoOriginal: modalDataPartoOriginal, dados };
+
+    const res  = await fetch(APPS_SCRIPT_URL, { method: 'POST', body: JSON.stringify(payload) });
+    const json = await res.json();
+
+    if (!json.ok) {
+      document.getElementById('modal-erro').textContent = json.erro || 'Erro ao salvar.';
+      document.getElementById('modal-erro').classList.add('on');
+      return;
+    }
+
+    fecharModal();
+    await carregarDados();
+
+  } catch(e) {
+    document.getElementById('modal-erro').textContent = 'Erro de conexão: ' + e.message;
+    document.getElementById('modal-erro').classList.add('on');
+  } finally {
+    btn.textContent = textoOriginal;
+    btn.disabled = false;
+  }
+}
+
+// Fecha modal ao clicar no overlay fora da box
+document.getElementById('modal-venda').addEventListener('click', function(e) {
+  if (e.target === this) fecharModal();
 });
 
 // ─── INIT ────────────────────────────────────────────────────────────────────
