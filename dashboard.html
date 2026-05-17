@@ -1903,6 +1903,19 @@ let modalModo = 'novo'; // 'novo' | 'editar'
 let modalNomeOriginal = '';
 let modalDataPartoOriginal = '';
 
+// HTML original dos selects fixos — capturado uma vez na primeira abertura
+const _selectsOriginais = {};
+function _salvarSelectsOriginais() {
+  ['mf-mesPrevisto','mf-mesRealizado','mf-pacote1','mf-pacote2','mf-mesVenda','mf-status'].forEach(id => {
+    if (!_selectsOriginais[id]) _selectsOriginais[id] = document.getElementById(id).innerHTML;
+  });
+}
+function _restaurarSelects() {
+  Object.entries(_selectsOriginais).forEach(([id, html]) => {
+    document.getElementById(id).innerHTML = html;
+  });
+}
+
 function popularOrigens() {
   const origens = [...new Set(dadosVendas.map(r => r[4]).filter(Boolean))].sort();
   const sel = document.getElementById('mf-origem');
@@ -1910,18 +1923,30 @@ function popularOrigens() {
     + origens.map(o => `<option>${o}</option>`).join('');
 }
 
+function _preencherSelect(id, val) {
+  const sel = document.getElementById(id);
+  if (!val) { sel.value = ''; return; }
+  if (!Array.from(sel.options).some(o => o.value === val || o.text === val)) {
+    sel.appendChild(new Option(val, val));
+  }
+  sel.value = val;
+}
+
 function abrirModalNovaVenda() {
+  _salvarSelectsOriginais();
   modalModo = 'novo';
   modalNomeOriginal = '';
   modalDataPartoOriginal = '';
   document.getElementById('modal-titulo').textContent = 'Nova Venda';
   document.getElementById('modal-btn-salvar').textContent = 'Salvar';
+  _restaurarSelects();
   popularOrigens();
   limparModal();
   document.getElementById('modal-venda').classList.add('on');
 }
 
 function abrirModalEdicao(nome, dataParto) {
+  _salvarSelectsOriginais();
   modalModo = 'editar';
   modalNomeOriginal = nome;
   modalDataPartoOriginal = dataParto;
@@ -1932,6 +1957,7 @@ function abrirModalEdicao(nome, dataParto) {
     r[0].trim() === nome.trim() && r[1].trim() === dataParto.trim()
   );
 
+  _restaurarSelects();
   popularOrigens();
   limparModal();
 
@@ -1944,15 +1970,13 @@ function abrirModalEdicao(nome, dataParto) {
     document.getElementById('mf-custo').value      = linha[10] || '';
     document.getElementById('mf-valTotal').value   = linha[11] || '';
     document.getElementById('mf-dataVenda').value  = linha[14] || '';
-    // Selects: garante que o valor da planilha exista como opção antes de selecionar
-    ['mf-mesPrevisto','mf-mesRealizado','mf-origem','mf-pacote1','mf-pacote2','mf-mesVenda','mf-status'].forEach((id, idx) => {
-      const val = [linha[2], linha[3], linha[4], linha[5], linha[6], linha[15], linha[12] || 'Agendado'][idx] || '';
-      const sel = document.getElementById(id);
-      if (val && !Array.from(sel.options).some(o => o.value === val || o.text === val)) {
-        sel.appendChild(new Option(val, val));
-      }
-      sel.value = val;
-    });
+    _preencherSelect('mf-mesPrevisto',  linha[2]  || '');
+    _preencherSelect('mf-mesRealizado', linha[3]  || '');
+    _preencherSelect('mf-origem',       linha[4]  || '');
+    _preencherSelect('mf-pacote1',      linha[5]  || '');
+    _preencherSelect('mf-pacote2',      linha[6]  || '');
+    _preencherSelect('mf-mesVenda',     linha[15] || '');
+    _preencherSelect('mf-status',       linha[12] || 'Agendado');
   }
 
   document.getElementById('modal-venda').classList.add('on');
