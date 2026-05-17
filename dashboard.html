@@ -2045,6 +2045,8 @@ async function salvarVenda() {
       return;
     }
 
+    btn.textContent = modalModo === 'novo' ? 'Salvar' : 'Salvar Alterações';
+    btn.disabled = false;
     fecharModal();
     mostrarToast('Venda salva com sucesso ✓');
     await carregarDados();
