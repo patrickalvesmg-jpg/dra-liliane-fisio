@@ -884,8 +884,9 @@ function calcular(ano) {
     cancelado:  canceladas.filter(c => mesIndex(c.mesRealizado) === idx).reduce((s,c) => s + c.valorTotal, 0),
   }));
 
+  // fechamentos usa apenas clientes cuja VENDA foi neste ano (não os atendidos vindos de anos anteriores)
   const fechamentosPorMes = MESES.map(mes => {
-    const todasDoMes = todos.filter(c => c.mesVenda === mes);
+    const todasDoMes = todosVendidos.filter(c => c.mesVenda === mes);
     const ativasDoMes = todasDoMes.filter(c => c.status !== 'Cancelado');
     return {
       mes,
