@@ -797,24 +797,23 @@ function trafegoPorMes(ano) {
 
 // ─── CÁLCULOS ────────────────────────────────────────────────────────────────
 function calcular(ano) {
-  // "todos" = clientes cuja venda foi fechada neste ano (base para faturamento/vendas)
-  // Para agendamentos/atendimentos futuros, inclui também clientes vendidas em anos
-  // anteriores mas com atendimento previsto neste ano (ex: venda em 2026, parto em 2027)
-  const todosVendidos   = clientesVendidosNoAno(ano);
-  const todosAtendidos  = clientesAtendidosNoAno(ano);
-  // Une sem duplicatas (pelo nome+dataParto como chave)
-  const chaves = new Set(todosVendidos.map(c => c.nome + '|' + c.dataParto));
-  const extras  = todosAtendidos.filter(c => !chaves.has(c.nome + '|' + c.dataParto));
-  const todos   = [...todosVendidos, ...extras];
+  // vendidos = venda fechada neste ano → base para faturamento, ritmo de vendas, jornada
+  // atendidos = atendimento previsto neste ano → base para calendário, projeções de atendimento
+  const todosVendidos  = clientesVendidosNoAno(ano);
+  const todosAtendidos = clientesAtendidosNoAno(ano);
+
   // Para ano futuro (ainda não começou): limita ao mês -1 para não contar nenhum mês como passado
   // Para ano passado: usa dezembro inteiro. Para ano atual: usa mês atual.
   const mesLimite = ano < anoAtual() ? 11 : (ano === anoAtual() ? mesAtual() : -1);
   const trafego   = trafegoPorMes(ano);
 
-  const realizadas  = todos.filter(c => c.status === 'Realizado');
-  const agendadas   = todos.filter(c => c.status === 'Agendado');
-  const canceladas  = todos.filter(c => c.status === 'Cancelado');
+  // financeiro/vendas: usa somente vendidos no ano
+  const realizadas  = todosVendidos.filter(c => c.status === 'Realizado');
+  const agendadas   = todosAtendidos.filter(c => c.status === 'Agendado');
+  const canceladas  = todosVendidos.filter(c => c.status === 'Cancelado');
   const ativas      = [...realizadas, ...agendadas];
+  // "todos" mantido para compatibilidade com jornada e pacotes (base: vendidos)
+  const todos = todosVendidos;
 
   const fatRealizado   = realizadas.reduce((s,c) => s + c.valorTotal, 0);
   const fatAgendado    = agendadas.reduce((s,c)  => s + c.valorTotal, 0);
