@@ -689,11 +689,13 @@ function popularAnosSeletor() {
   const anos = new Set();
   dadosInvest.forEach(r => { if (r[1]) anos.add(parseInt(r[1])); });
   dadosVendas.forEach(r => {
-    // tenta ano da venda (col O) primeiro, depois data do parto (col B)
+    // adiciona tanto o ano da venda quanto o ano do parto ao seletor
+    // assim clientes vendidas em 2026 com parto em 2027 aparecem nos dois anos
     const anoVenda = anoDeData(r[14]);
     const anoParto = anoDeData(r[1]);
-    const ano = anoVenda ?? anoParto;
-    if (ano) anos.add(ano);
+    if (anoVenda) anos.add(anoVenda);
+    if (anoParto) anos.add(anoParto);
+    if (!anoVenda && !anoParto) anos.add(anoAtual());
   });
   if (anos.size === 0) anos.add(new Date().getFullYear());
   const anosOrdenados = [...anos].sort((a,b) => b-a);
@@ -731,32 +733,55 @@ function anoDeData(str) {
   return null;
 }
 
-function clientesDoAno(ano) {
+function mapearCliente(r) {
+  return {
+    nome:         r[0] || '',
+    dataParto:    r[1] || '',
+    mesPrevisto:  r[2] || '',
+    mesRealizado: r[3] || '',
+    pacote1:      r[5] || '',
+    pacote2:      r[6] || '',
+    valorPacotes: parseBRL(r[8]),
+    valorExtra:   parseBRL(r[9]),
+    custo:        parseBRL(r[10]),
+    status:       r[12] || '',
+    dataVenda:    r[14] || '',
+    mesVenda:     r[15] || '',
+    get valorTotal() { return this.valorPacotes + this.valorExtra; }
+  };
+}
+
+// Clientes cuja VENDA foi fechada no ano — para faturamento, fechamentos, gráfico de vendas
+function clientesVendidosNoAno(ano) {
   return dadosVendas
     .filter(r => {
       if (!r[0]) return false;
-      // tenta determinar o ano pelo melhor campo disponível:
-      // 1ª opção: data da venda (col O), 2ª: data do parto (col B), 3ª: ano atual
       const anoVenda = anoDeData(r[14]);
       const anoParto = anoDeData(r[1]);
       const anoRef   = anoVenda ?? anoParto ?? anoAtual();
       return anoRef === ano;
     })
-    .map(r => ({
-      nome:         r[0] || '',
-      dataParto:    r[1] || '',
-      mesPrevisto:  r[2] || '',
-      mesRealizado: r[3] || '',
-      pacote1:      r[5] || '',
-      pacote2:      r[6] || '',
-      valorPacotes: parseBRL(r[8]),
-      valorExtra:   parseBRL(r[9]),
-      custo:        parseBRL(r[10]),
-      status:       r[12] || '',
-      dataVenda:    r[14] || '',
-      mesVenda:     r[15] || '',
-      get valorTotal() { return this.valorPacotes + this.valorExtra; }
-    }));
+    .map(mapearCliente);
+}
+
+// Clientes cujo ATENDIMENTO ocorre no ano (pelo parto) — para calendário, projeções, alertas
+// Inclui clientes vendidas em anos anteriores mas com parto/atendimento neste ano
+function clientesAtendidosNoAno(ano) {
+  return dadosVendas
+    .filter(r => {
+      if (!r[0]) return false;
+      const anoParto = anoDeData(r[1]);
+      if (anoParto) return anoParto === ano;
+      // fallback: usa ano da venda se não tiver data de parto
+      const anoVenda = anoDeData(r[14]);
+      return (anoVenda ?? anoAtual()) === ano;
+    })
+    .map(mapearCliente);
+}
+
+// Mantém compatibilidade: usa venda como critério principal (comportamento original para relatórios)
+function clientesDoAno(ano) {
+  return clientesVendidosNoAno(ano);
 }
 
 // ─── TRÁFEGO POR MÊS ─────────────────────────────────────────────────────────
@@ -772,7 +797,15 @@ function trafegoPorMes(ano) {
 
 // ─── CÁLCULOS ────────────────────────────────────────────────────────────────
 function calcular(ano) {
-  const todos     = clientesDoAno(ano);
+  // "todos" = clientes cuja venda foi fechada neste ano (base para faturamento/vendas)
+  // Para agendamentos/atendimentos futuros, inclui também clientes vendidas em anos
+  // anteriores mas com atendimento previsto neste ano (ex: venda em 2026, parto em 2027)
+  const todosVendidos   = clientesVendidosNoAno(ano);
+  const todosAtendidos  = clientesAtendidosNoAno(ano);
+  // Une sem duplicatas (pelo nome+dataParto como chave)
+  const chaves = new Set(todosVendidos.map(c => c.nome + '|' + c.dataParto));
+  const extras  = todosAtendidos.filter(c => !chaves.has(c.nome + '|' + c.dataParto));
+  const todos   = [...todosVendidos, ...extras];
   // Para ano futuro (ainda não começou): limita ao mês -1 para não contar nenhum mês como passado
   // Para ano passado: usa dezembro inteiro. Para ano atual: usa mês atual.
   const mesLimite = ano < anoAtual() ? 11 : (ano === anoAtual() ? mesAtual() : -1);
@@ -1333,7 +1366,7 @@ function atendimentosDoPacote(nome) {
 }
 
 function calcularCalendario(ano) {
-  const todos = clientesDoAno(ano);
+  const todos = clientesAtendidosNoAno(ano);
   const ativas = todos.filter(c => c.status !== 'Cancelado');
 
   return MESES.map((mes, idx) => {
@@ -1557,7 +1590,7 @@ function renderAlertasEm(wrapId) {
   // início fixo: 1º de maio do ano selecionado
   const inicio = new Date(anoSelecionado, 4, 1); // mês 4 = maio (0-based)
 
-  const todos = clientesDoAno(anoSelecionado);
+  const todos = clientesAtendidosNoAno(anoSelecionado);
   const candidatas = todos
     .filter(c => c.status !== 'Cancelado' && c.dataParto)
     .map(c => {
@@ -1727,7 +1760,7 @@ function selecionarMesGerVendas(idx) {
 
 function renderGerAtendimentos() {
   const wrap = document.getElementById('ger-atendimentos-wrap');
-  const todos = clientesDoAno(anoSelecionado);
+  const todos = clientesAtendidosNoAno(anoSelecionado);
 
   const filtrados = mesGerencial >= 0
     ? todos.filter(c => mesIndex(c.mesRealizado) === mesGerencial)
