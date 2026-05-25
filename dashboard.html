@@ -615,7 +615,7 @@ const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzX9YFC-7bPYnB7
 
 // ─── ESTADO ──────────────────────────────────────────────────────────────────
 let dadosVendas = [], dadosInvest = [], dadosLeads = [];
-let anoSelecionado = new Date().getFullYear();
+let anoSelecionado = new Date().getFullYear(); // sobrescrito por popularAnosSeletor()
 let chartAtend = null, chartFechamentos = null, chartPacotes = null;
 let pacoteMode = 'qtd';
 let mesSelecionadoCal = -1;
@@ -696,9 +696,12 @@ function popularAnosSeletor() {
     if (ano) anos.add(ano);
   });
   if (anos.size === 0) anos.add(new Date().getFullYear());
+  const anosOrdenados = [...anos].sort((a,b) => b-a);
+  // seleciona o ano mais recente disponível nos dados
+  if (!anos.has(anoSelecionado)) anoSelecionado = anosOrdenados[0];
   const sel = document.getElementById('sel-ano');
   sel.innerHTML = '';
-  [...anos].sort((a,b) => b-a).forEach(a => {
+  anosOrdenados.forEach(a => {
     const opt = document.createElement('option');
     opt.value = a; opt.textContent = a;
     if (a === anoSelecionado) opt.selected = true;
@@ -731,7 +734,7 @@ function anoDeData(str) {
 function clientesDoAno(ano) {
   return dadosVendas
     .filter(r => {
-      if (!r[0] || !r[3]) return false;
+      if (!r[0]) return false;
       // tenta determinar o ano pelo melhor campo disponível:
       // 1ª opção: data da venda (col O), 2ª: data do parto (col B), 3ª: ano atual
       const anoVenda = anoDeData(r[14]);
@@ -770,7 +773,9 @@ function trafegoPorMes(ano) {
 // ─── CÁLCULOS ────────────────────────────────────────────────────────────────
 function calcular(ano) {
   const todos     = clientesDoAno(ano);
-  const mesLimite = (ano === anoAtual()) ? mesAtual() : 11;
+  // Para ano futuro (ainda não começou): limita ao mês -1 para não contar nenhum mês como passado
+  // Para ano passado: usa dezembro inteiro. Para ano atual: usa mês atual.
+  const mesLimite = ano < anoAtual() ? 11 : (ano === anoAtual() ? mesAtual() : -1);
   const trafego   = trafegoPorMes(ano);
 
   const realizadas  = todos.filter(c => c.status === 'Realizado');
@@ -784,14 +789,14 @@ function calcular(ano) {
   const totalVendido   = fatRealizado + fatAgendado + totalCancelado;
 
   const custoUberMat     = realizadas.reduce((s,c) => s + c.custo, 0);
-  const trafegoRealizado = MESES.slice(0, mesLimite + 1).reduce((s, mes) => s + (trafego[mes] || 0), 0);
+  const trafegoRealizado = mesLimite < 0 ? 0 : MESES.slice(0, mesLimite + 1).reduce((s, mes) => s + (trafego[mes] || 0), 0);
 
   const custoMedioUberMat  = realizadas.length > 0 ? custoUberMat / realizadas.length : 0;
   const totalAtivas        = ativas.length || 1;
   const custoMedioTrafego  = trafegoRealizado / totalAtivas;
   const custoMedioTotal    = custoMedioUberMat + custoMedioTrafego;
 
-  const lucroLiquido = MESES.slice(0, mesLimite + 1).reduce((s, mes, idx) => {
+  const lucroLiquido = mesLimite < 0 ? 0 : MESES.slice(0, mesLimite + 1).reduce((s, mes, idx) => {
     const real    = realizadas.filter(c => mesIndex(c.mesRealizado) === idx);
     const fatMes  = real.reduce((a,c) => a + c.valorTotal, 0);
     const uberMes = real.reduce((a,c) => a + c.custo, 0);
@@ -801,8 +806,10 @@ function calcular(ano) {
   const totalFechadas    = realizadas.length + canceladas.length;
   const taxaCancelamento = totalFechadas > 0 ? canceladas.length / totalFechadas : 0;
 
-  const realizadasAteMes = realizadas.filter(c => mesIndex(c.mesRealizado) <= mesLimite && mesIndex(c.mesRealizado) >= 0);
-  const mesesDecorridos  = mesLimite + 1;
+  const realizadasAteMes = mesLimite >= 0
+    ? realizadas.filter(c => mesIndex(c.mesRealizado) <= mesLimite && mesIndex(c.mesRealizado) >= 0)
+    : [];
+  const mesesDecorridos  = Math.max(mesLimite + 1, 0);
   const mesesRestantes   = 12 - mesesDecorridos;
 
   const comValor    = ativas.filter(c => c.valorTotal > 0);
@@ -816,9 +823,9 @@ function calcular(ano) {
   const projFaturamentoAnual  = fatRealizado + fatAgendadoAjustado + estimativaMesesVazios;
   const projRestanteAno = fatAgendadoAjustado + estimativaMesesVazios;
 
-  const mesesComVenda = MESES.slice(0, mesesDecorridos).filter(mes =>
-    todos.some(c => c.mesVenda === mes && c.status !== 'Cancelado')
-  );
+  const mesesComVenda = mesesDecorridos > 0
+    ? MESES.slice(0, mesesDecorridos).filter(mes => todos.some(c => c.mesVenda === mes && c.status !== 'Cancelado'))
+    : [];
   const mesesComVendaCount = mesesComVenda.length || 1;
   const totalVendasFechadas = todos.filter(c => c.status !== 'Cancelado').length;
   const mediaVendasPorMes   = totalVendasFechadas / mesesComVendaCount;
@@ -1561,7 +1568,7 @@ function renderAlertasEm(wrapId) {
       const diasRestantes = Math.round((parto - hoje) / 86400000);
       return { ...c, parto, diasRestantes };
     })
-    // parto entre 1º de maio e hoje+60 dias, excluindo já convidadas
+    // parto entre 1º de maio do ano e refInicio+60 dias, excluindo já convidadas
     .filter(c => c && c.parto >= inicio && c.parto <= limite && !getMarcacao(c.nome, 'convite_preparto'))
     .sort((a, b) => a.diasRestantes - b.diasRestantes)
     .slice(0, 3);
