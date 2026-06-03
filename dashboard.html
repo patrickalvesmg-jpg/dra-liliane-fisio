@@ -952,10 +952,15 @@ function calcular(ano) {
   const projPorRitmoVendas     = fatRealizado + fatAgendadoAjustado + projNovasFuturas;
 
   // Projeção de fechamentos: baseada em vendas fechadas (mesVenda) até agora
+  // Usa apenas meses COMPLETOS para a média — exclui o mês atual (em andamento)
+  // Evita distorção quando o mês corrente tem poucas vendas por ainda não ter terminado
+  const mesesCompletos = Math.max(mesLimite, 0); // meses antes do atual
   const vendasFechadasAteMes = todos.filter(c =>
-    c.status !== 'Cancelado' && mesIndex(c.mesVenda) >= 0 && mesIndex(c.mesVenda) <= mesLimite
+    c.status !== 'Cancelado' && mesIndex(c.mesVenda) >= 0 && mesIndex(c.mesVenda) < mesLimite
   );
-  const mediaVendasMesAno  = mesesDecorridos > 0 ? vendasFechadasAteMes.length / mesesDecorridos : mediaVendasJanela;
+  const mediaVendasMesAno = mesesCompletos > 0
+    ? vendasFechadasAteMes.length / mesesCompletos
+    : mediaVendasJanela;
   const projFechamentos    = mediaVendasMesAno * 12;
   const projFechamentosAdj = projFechamentos * (1 - taxaCancelamentoBase);
   const projFechamentosRestantes = Math.round(mediaVendasMesAno * mesesRestantes * (1 - taxaCancelamentoBase));
