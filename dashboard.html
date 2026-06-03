@@ -844,15 +844,19 @@ function calcular(ano) {
 
   // Taxa de cancelamento baseada em ATENDIMENTOS do ano (anoParto = ano)
   // Numerador: cancelamentos com atendimento até o mês atual
-  // Denominador: todos realizados + todos cancelados com atendimento neste ano
+  // Denominador: realizados + cancelados (até mês atual) + agendados para o mês atual
+  //   → inclui agendados do mês atual pois já são compromissos assumidos
   const mesAtualReal = mesAtual();
-  const todosAtendAnoCancel = todosAtendidos.filter(c => c.status === 'Cancelado');
-  const todosAtendAnoReal   = todosAtendidos.filter(c => c.status === 'Realizado');
+  const todosAtendAnoCancel  = todosAtendidos.filter(c => c.status === 'Cancelado');
+  const todosAtendAnoReal    = todosAtendidos.filter(c => c.status === 'Realizado');
+  const agendadosMesAtual    = todosAtendidos.filter(c =>
+    c.status === 'Agendado' && mesIndex(c.mesRef) === mesAtualReal
+  );
   const canceladasAteMes = todosAtendAnoCancel.filter(c =>
     mesIndex(c.mesRef) >= 0 && mesIndex(c.mesRef) <= mesAtualReal
   );
   const realizadasAteMesAtend = todosAtendAnoReal;
-  const totalFechadas    = todosAtendAnoReal.length + todosAtendAnoCancel.length;
+  const totalFechadas    = todosAtendAnoReal.length + canceladasAteMes.length + agendadosMesAtual.length;
   const taxaCancelamento = totalFechadas > 0 ? canceladasAteMes.length / totalFechadas : 0;
 
   const realizadasAteMes = mesLimite >= 0
@@ -1210,7 +1214,7 @@ function renderCancelamentos(d) {
     <div class="card-cancel card">
       <div class="card-lbl">Taxa de Cancelamento</div>
       <div class="card-val vermelho">${fmtPct(d.taxaCancelamentoBase)}</div>
-      <div class="card-sub">${d.canceladasAteMes.length} até ${MESES[new Date().getMonth()]} de ${d.canceladas.length} no ano · base: ${d.totalFechadas} fechamentos</div>
+      <div class="card-sub">${d.canceladasAteMes.length} cancelamentos até ${MESES[new Date().getMonth()]} · base: ${d.totalFechadas} (realizados + agend. do mês)</div>
     </div>
     <div class="card-cancel card">
       <div class="card-lbl">Receita Perdida (Cancelamentos)</div>
