@@ -933,6 +933,13 @@ function calcular(ano) {
   const custoUberMatFuturo    = clientesFuturas * custoUberMatBase;
   const lucroProjetadoAnual   = projPorRitmoVendas - custoUberMat - custoUberMatFuturo - trafegoAnoTotal;
 
+  // Lucro por caixa do ano — só o que está agendado/realizado para atendimento NESTE ano
+  // Receita: realizado + agendado ajustado (o que vai de fato entrar no caixa)
+  const receitaCaixaAno        = fatRealizado + fatAgendadoAjustado;
+  const clientesCaixaAno       = realizadas.length + agendadas.length * (1 - taxaCancelamentoBase);
+  const custoUberMatCaixaAno   = clientesCaixaAno * custoUberMatBase;
+  const lucroProjetadoCaixaAno = receitaCaixaAno - custoUberMatCaixaAno - trafegoAnoTotal;
+
   const projFaturamento = projFaturamentoAnual;
 
   const mensal = MESES.map((mes, idx) => ({
@@ -1008,7 +1015,8 @@ function calcular(ano) {
     projFaturamento, projFaturamentoAnual, projRestanteAno,
     projPorRitmoVendas, mediaVendasPorMes, mediaVendasJanela, projNovasFuturas,
     ticketBase, custoUberMatBase, trafegoMensalBase,
-    lucroProjetadoAnual, trafegoAnoTotal, trafegoFuturo, TRAFEGO_MENSAL_FIXO, custoUberMatFuturo,
+    lucroProjetadoAnual, lucroProjetadoCaixaAno, receitaCaixaAno,
+    trafegoAnoTotal, trafegoFuturo, TRAFEGO_MENSAL_FIXO, custoUberMatFuturo,
     fatAgendadoAjustado, estimativaMesesVazios,
     mesesVaziosFuturos, mesesRestantes,
     projFechamentos, projFechamentosAdj, ticketMedio,
@@ -1095,24 +1103,45 @@ function renderCancelamentos(d) {
 
 // ─── RENDER LUCRO PROJETADO ──────────────────────────────────────────────────
 function renderLucroProjetado(d) {
-  const cor = d.lucroProjetadoAnual >= 0 ? 'var(--verde)' : 'var(--vermelho)';
+  const corVendas = d.lucroProjetadoAnual   >= 0 ? 'var(--verde)' : 'var(--vermelho)';
+  const corCaixa  = d.lucroProjetadoCaixaAno >= 0 ? 'var(--verde)' : 'var(--vermelho)';
   document.getElementById('lucro-projetado-wrap').innerHTML = `
-    <div class="lucro-proj-card">
-      <div class="lucro-proj-info">
-        <div class="lucro-proj-lbl">Lucro Líquido Projetado do Ano</div>
-        <div class="lucro-proj-sub">Faturamento pelo ritmo de vendas − todos os custos projetados</div>
-        <div class="lucro-proj-detalhe">
-          Faturamento projetado: ${fmtBRL(d.projPorRitmoVendas)}<br>
-          − Material/Uber (realizado + futuro): ${fmtBRL(d.custoUberMat + d.custoUberMatFuturo)}
-          <span style="opacity:.6">(${fmtBRL(d.custoUberMatBase)}/cliente · média 12 meses)</span><br>
-          − Tráfego passado ${fmtBRL(d.trafegoRealizado)} + ${d.mesesRestantes}× ${fmtBRL(d.trafegoMensalBase)}: ${fmtBRL(d.trafegoAnoTotal)}
-          <span style="opacity:.6">(média 12 meses)</span>
+    <div class="g2" style="margin-bottom:14px">
+
+      <div class="lucro-proj-card">
+        <div class="lucro-proj-info">
+          <div class="lucro-proj-lbl">Lucro pelo Ritmo de Vendas</div>
+          <div class="lucro-proj-sub">O que a empresa vai lucrar pelas vendas fechadas no ano</div>
+          <div class="lucro-proj-detalhe">
+            Faturamento projetado: ${fmtBRL(d.projPorRitmoVendas)}<br>
+            − Uber/Mat: ${fmtBRL(d.custoUberMat + d.custoUberMatFuturo)}
+            <span style="opacity:.6">(${fmtBRL(d.custoUberMatBase)}/cliente)</span><br>
+            − Tráfego: ${fmtBRL(d.trafegoAnoTotal)}
+            <span style="opacity:.6">(${fmtBRL(d.trafegoMensalBase)}/mês · média 12m)</span>
+          </div>
+        </div>
+        <div class="lucro-proj-valor">
+          <div style="font-size:clamp(24px,4vw,42px);font-weight:900;color:${corVendas};line-height:1">${fmtBRL(d.lucroProjetadoAnual)}</div>
+          <div style="font-size:11px;font-weight:600;color:var(--texto);margin-top:6px">margem: ${fmtPct(d.projPorRitmoVendas > 0 ? d.lucroProjetadoAnual / d.projPorRitmoVendas : 0)}</div>
         </div>
       </div>
-      <div class="lucro-proj-valor">
-        <div style="font-size:clamp(28px,5vw,48px);font-weight:900;color:${cor};line-height:1">${fmtBRL(d.lucroProjetadoAnual)}</div>
-        <div style="font-size:11px;font-weight:600;color:var(--texto);margin-top:6px">margem: ${fmtPct(d.projPorRitmoVendas > 0 ? d.lucroProjetadoAnual / d.projPorRitmoVendas : 0)}</div>
+
+      <div class="lucro-proj-card" style="background:#F4EEF2;border-color:var(--borda2)">
+        <div class="lucro-proj-info">
+          <div class="lucro-proj-lbl" style="color:var(--roxo)">Lucro pelo Caixa do Ano</div>
+          <div class="lucro-proj-sub">O que vai entrar no caixa este ano (realizado + agendado)</div>
+          <div class="lucro-proj-detalhe">
+            Receita do ano: ${fmtBRL(d.receitaCaixaAno)}<br>
+            Realizado: ${fmtBRL(d.fatRealizado)} · Agendado: ${fmtBRL(d.fatAgendadoAjustado)}<br>
+            − Uber/Mat + Tráfego: ${fmtBRL(d.trafegoAnoTotal + d.custoUberMat + d.custoUberMatFuturo)}
+          </div>
+        </div>
+        <div class="lucro-proj-valor">
+          <div style="font-size:clamp(24px,4vw,42px);font-weight:900;color:${corCaixa};line-height:1">${fmtBRL(d.lucroProjetadoCaixaAno)}</div>
+          <div style="font-size:11px;font-weight:600;color:var(--texto);margin-top:6px">margem: ${fmtPct(d.receitaCaixaAno > 0 ? d.lucroProjetadoCaixaAno / d.receitaCaixaAno : 0)}</div>
+        </div>
       </div>
+
     </div>
   `;
 }
