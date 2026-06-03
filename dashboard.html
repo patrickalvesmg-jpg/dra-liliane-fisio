@@ -842,22 +842,12 @@ function calcular(ano) {
     return s + fatMes - uberMes - (trafego[mes] || 0);
   }, 0);
 
-  // Taxa de cancelamento: usa todas as vendas do ano (realizadas + canceladas)
-  // filtradas pelo mesRef até o mês atual — independente de vir de vendidos ou atendidos
-  const mesAtualReal = mesAtual(); // mês real do sistema (sempre atual, independe do ano selecionado)
-  const todasVendasAno = dadosVendas.filter(r => {
-    if (!r[0]) return false;
-    const ap = anoDeData(r[1]); const av = anoDeData(r[14]);
-    return (ap === ano || av === ano || (!ap && !av && anoAtual() === ano));
-  }).map(mapearCliente);
-  const canceladasAteMes = todasVendasAno.filter(c =>
-    c.status === 'Cancelado' && mesIndex(c.mesRef) >= 0 && mesIndex(c.mesRef) <= mesAtualReal
-  );
-  const realizadasAteMesAtend = todasVendasAno.filter(c =>
-    c.status === 'Realizado' && mesIndex(c.mesRef) >= 0 && mesIndex(c.mesRef) <= mesAtualReal
-  );
-  const totalFechadas    = realizadasAteMesAtend.length + canceladasAteMes.length;
-  const taxaCancelamento = totalFechadas > 0 ? canceladasAteMes.length / totalFechadas : 0;
+  // Taxa de cancelamento: todos os realizados + cancelados do ano inteiro
+  // Inclui atendimentos passados e futuros — base mais representativa do negócio
+  const canceladasAteMes = canceladas; // todos os cancelados do ano
+  const realizadasAteMesAtend = realizadas; // todos os realizados do ano
+  const totalFechadas    = realizadas.length + canceladas.length;
+  const taxaCancelamento = totalFechadas > 0 ? canceladas.length / totalFechadas : 0;
 
   const realizadasAteMes = mesLimite >= 0
     ? realizadas.filter(c => mesIndex(c.mesRef) <= mesLimite && mesIndex(c.mesRef) >= 0)
@@ -1214,7 +1204,7 @@ function renderCancelamentos(d) {
     <div class="card-cancel card">
       <div class="card-lbl">Taxa de Cancelamento</div>
       <div class="card-val vermelho">${fmtPct(d.taxaCancelamentoBase)}</div>
-      <div class="card-sub">${d.canceladasAteMes.length} ${d.canceladasAteMes.length === 1 ? 'cancelamento' : 'cancelamentos'} até ${MESES[new Date().getMonth()]} · ${d.canceladas.length} no ano</div>
+      <div class="card-sub">${d.canceladas.length} ${d.canceladas.length === 1 ? 'cancelamento' : 'cancelamentos'} no ano · base: todos os realizados + cancelados</div>
     </div>
     <div class="card-cancel card">
       <div class="card-lbl">Receita Perdida (Cancelamentos)</div>
