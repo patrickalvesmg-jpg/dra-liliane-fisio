@@ -1220,7 +1220,7 @@ function renderLucroProjetado(d) {
         </div>
         <div class="lucro-proj-valor">
           <div style="font-size:clamp(24px,4vw,42px);font-weight:900;color:${corVendas};line-height:1">${fmtBRL(d.lucroProjetadoAnual)}</div>
-          <div style="font-size:11px;font-weight:600;color:var(--texto);margin-top:6px">margem: ${fmtPct(d.projPorRitmoVendas > 0 ? d.lucroProjetadoAnual / d.projPorRitmoVendas : 0)}</div>
+          <div style="font-size:11px;font-weight:600;color:var(--texto);margin-top:6px">margem: ${fmtPct(d.projFatVendasAno > 0 ? d.lucroProjetadoAnual / d.projFatVendasAno : 0)}</div>
         </div>
       </div>
 
