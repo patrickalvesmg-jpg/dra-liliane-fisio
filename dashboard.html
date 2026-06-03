@@ -734,11 +734,18 @@ function anoDeData(str) {
 }
 
 function mapearCliente(r) {
+  const mesPrevisto  = r[2] || '';
+  const mesRealizado = r[3] || '';
+  // Mês de referência para calendário e projeções:
+  // usa mesRealizado se preenchido, senão mesPrevisto (mais confiável que a data exata)
+  const mesRef = mesRealizado || mesPrevisto;
   return {
     nome:         r[0] || '',
     dataParto:    r[1] || '',
-    mesPrevisto:  r[2] || '',
-    mesRealizado: r[3] || '',
+    anoParto:     anoDeData(r[1]),
+    mesPrevisto,
+    mesRealizado,
+    mesRef,
     pacote1:      r[5] || '',
     pacote2:      r[6] || '',
     valorPacotes: parseBRL(r[8]),
@@ -764,15 +771,15 @@ function clientesVendidosNoAno(ano) {
     .map(mapearCliente);
 }
 
-// Clientes cujo ATENDIMENTO ocorre no ano (pelo parto) — para calendário, projeções, alertas
-// Inclui clientes vendidas em anos anteriores mas com parto/atendimento neste ano
+// Clientes cujo ATENDIMENTO ocorre no ano — para calendário, projeções, alertas
+// Ano confirmado pela dataParto; mês de referência é mesPrevisto (ou mesRealizado)
 function clientesAtendidosNoAno(ano) {
   return dadosVendas
     .filter(r => {
       if (!r[0]) return false;
-      const anoParto = anoDeData(r[1]);
+      const anoParto = anoDeData(r[1]); // data prevista do parto → confirma o ano
       if (anoParto) return anoParto === ano;
-      // fallback: usa ano da venda se não tiver data de parto
+      // sem data de parto: usa ano da venda como referência
       const anoVenda = anoDeData(r[14]);
       return (anoVenda ?? anoAtual()) === ano;
     })
@@ -829,7 +836,7 @@ function calcular(ano) {
   const custoMedioTotal    = custoMedioUberMat + custoMedioTrafego;
 
   const lucroLiquido = mesLimite < 0 ? 0 : MESES.slice(0, mesLimite + 1).reduce((s, mes, idx) => {
-    const real    = realizadas.filter(c => mesIndex(c.mesRealizado) === idx);
+    const real    = realizadas.filter(c => mesIndex(c.mesRef) === idx);
     const fatMes  = real.reduce((a,c) => a + c.valorTotal, 0);
     const uberMes = real.reduce((a,c) => a + c.custo, 0);
     return s + fatMes - uberMes - (trafego[mes] || 0);
@@ -839,13 +846,13 @@ function calcular(ano) {
   // Cancelamentos com atendimento em meses futuros não distorcem a taxa
   const canceladasAteMes = mesLimite >= 0
     ? canceladas.filter(c => {
-        const idx = mesIndex(c.mesRealizado);
+        const idx = mesIndex(c.mesRef);
         return idx >= 0 && idx <= mesLimite;
       })
     : [];
   const realizadasAteMesAtend = mesLimite >= 0
     ? realizadas.filter(c => {
-        const idx = mesIndex(c.mesRealizado);
+        const idx = mesIndex(c.mesRef);
         return idx >= 0 && idx <= mesLimite;
       })
     : [];
@@ -853,7 +860,7 @@ function calcular(ano) {
   const taxaCancelamento = totalFechadas > 0 ? canceladasAteMes.length / totalFechadas : 0;
 
   const realizadasAteMes = mesLimite >= 0
-    ? realizadas.filter(c => mesIndex(c.mesRealizado) <= mesLimite && mesIndex(c.mesRealizado) >= 0)
+    ? realizadas.filter(c => mesIndex(c.mesRef) <= mesLimite && mesIndex(c.mesRef) >= 0)
     : [];
   const mesesDecorridos  = Math.max(mesLimite + 1, 0);
   const mesesRestantes   = 12 - mesesDecorridos;
@@ -861,7 +868,7 @@ function calcular(ano) {
   const comValor    = ativas.filter(c => c.valorTotal > 0);
   const ticketMedio = comValor.length > 0 ? (fatRealizado + fatAgendado) / comValor.length : 0;
 
-  const mesesComAgendamento = new Set(agendadas.map(c => mesIndex(c.mesRealizado)).filter(i => i > mesLimite));
+  const mesesComAgendamento = new Set(agendadas.map(c => mesIndex(c.mesRef)).filter(i => i > mesLimite));
   const mesesVaziosFuturos  = MESES.slice(mesLimite + 1).filter((_, i) => !mesesComAgendamento.has(mesLimite + 1 + i)).length;
 
   // Calculados após janela de 12 meses — ver abaixo onde taxaCancelamentoBase é definida
@@ -955,7 +962,7 @@ function calcular(ano) {
 
   // Lucro pelo caixa do ano — só o que está garantido para entrar no caixa este ano
   // Tráfego proporcional: meses decorridos realizados + meses com agendamento projetados
-  const mesesComAtendimentoFuturo = new Set(agendadas.map(c => mesIndex(c.mesRealizado)).filter(i => i > mesLimite)).size;
+  const mesesComAtendimentoFuturo = new Set(agendadas.map(c => mesIndex(c.mesRef)).filter(i => i > mesLimite)).size;
   const trafegoProporcionado      = trafegoRealizado + mesesComAtendimentoFuturo * TRAFEGO_MENSAL_FIXO;
   const receitaCaixaAno           = fatRealizado + fatAgendadoAjustado;
   const clientesCaixaAno          = realizadas.length + agendadas.length * (1 - taxaCancelamentoBase);
@@ -963,8 +970,8 @@ function calcular(ano) {
   const lucroProjetadoCaixaAno    = receitaCaixaAno - custoUberMatCaixaAno - trafegoProporcionado;
 
   // A receber daqui pra frente — só meses futuros (agendado ainda não realizado)
-  const fatAgendadoFuturo        = agendadas.filter(c => mesIndex(c.mesRealizado) > mesLimite).reduce((s,c) => s + c.valorTotal, 0) * (1 - taxaCancelamentoBase);
-  const clientesFuturasCaixa     = agendadas.filter(c => mesIndex(c.mesRealizado) > mesLimite).length * (1 - taxaCancelamentoBase);
+  const fatAgendadoFuturo        = agendadas.filter(c => mesIndex(c.mesRef) > mesLimite).reduce((s,c) => s + c.valorTotal, 0) * (1 - taxaCancelamentoBase);
+  const clientesFuturasCaixa     = agendadas.filter(c => mesIndex(c.mesRef) > mesLimite).length * (1 - taxaCancelamentoBase);
   const custoUberMatFutCaixa     = clientesFuturasCaixa * custoUberMatBase;
   const trafegoFutCaixa          = mesesComAtendimentoFuturo * TRAFEGO_MENSAL_FIXO;
   const lucroAReceberFuturo      = fatAgendadoFuturo - custoUberMatFutCaixa - trafegoFutCaixa;
@@ -973,9 +980,9 @@ function calcular(ano) {
 
   const mensal = MESES.map((mes, idx) => ({
     mes,
-    realizado:  realizadas.filter(c => mesIndex(c.mesRealizado) === idx).reduce((s,c) => s + c.valorTotal, 0),
-    agendado:   agendadas.filter(c  => mesIndex(c.mesRealizado) === idx).reduce((s,c) => s + c.valorTotal, 0),
-    cancelado:  canceladas.filter(c => mesIndex(c.mesRealizado) === idx).reduce((s,c) => s + c.valorTotal, 0),
+    realizado:  realizadas.filter(c => mesIndex(c.mesRef) === idx).reduce((s,c) => s + c.valorTotal, 0),
+    agendado:   agendadas.filter(c  => mesIndex(c.mesRef) === idx).reduce((s,c) => s + c.valorTotal, 0),
+    cancelado:  canceladas.filter(c => mesIndex(c.mesRef) === idx).reduce((s,c) => s + c.valorTotal, 0),
   }));
 
   // fechamentos usa apenas clientes cuja VENDA foi neste ano (não os atendidos vindos de anos anteriores)
@@ -1003,7 +1010,7 @@ function calcular(ano) {
   // pacotes por mês — para o gráfico
   const pacotesNomes = [...new Set(ativas.flatMap(c => [c.pacote1, c.pacote2].filter(Boolean)))];
   const pacotesPorMes = MESES.map((mes, idx) => {
-    const clientesMes = ativas.filter(c => mesIndex(c.mesRealizado) === idx);
+    const clientesMes = ativas.filter(c => mesIndex(c.mesRef) === idx);
     const porPacote = {};
     pacotesNomes.forEach(p => { porPacote[p] = { qtd: 0, receita: 0 }; });
     clientesMes.forEach(c => {
@@ -1498,7 +1505,7 @@ function calcularCalendario(ano) {
   const ativas = todos.filter(c => c.status !== 'Cancelado');
 
   return MESES.map((mes, idx) => {
-    const clientesDoMes = ativas.filter(c => mesIndex(c.mesRealizado) === idx);
+    const clientesDoMes = ativas.filter(c => mesIndex(c.mesRef) === idx);
     const detalhes = [];
 
     clientesDoMes.forEach(c => {
@@ -1891,7 +1898,7 @@ function renderGerAtendimentos() {
   const todos = clientesAtendidosNoAno(anoSelecionado);
 
   const filtrados = mesGerencial >= 0
-    ? todos.filter(c => mesIndex(c.mesRealizado) === mesGerencial)
+    ? todos.filter(c => mesIndex(c.mesRef) === mesGerencial)
     : todos;
 
   if (!filtrados.length) {
