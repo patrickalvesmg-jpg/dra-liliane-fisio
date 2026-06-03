@@ -835,21 +835,21 @@ function calcular(ano) {
     return s + fatMes - uberMes - (trafego[mes] || 0);
   }, 0);
 
-  // Taxa de cancelamento: conta apenas cancelamentos até o mês atual
-  // Evita distorção de cancelamentos registrados em meses futuros
+  // Taxa de cancelamento: filtra pelo mês do atendimento (mesRealizado) até o mês atual
+  // Cancelamentos com atendimento em meses futuros não distorcem a taxa
   const canceladasAteMes = mesLimite >= 0
     ? canceladas.filter(c => {
-        const idx = mesIndex(c.mesVenda);
+        const idx = mesIndex(c.mesRealizado);
         return idx >= 0 && idx <= mesLimite;
       })
     : [];
-  const realizadasAteMesVenda = mesLimite >= 0
+  const realizadasAteMesAtend = mesLimite >= 0
     ? realizadas.filter(c => {
-        const idx = mesIndex(c.mesVenda);
+        const idx = mesIndex(c.mesRealizado);
         return idx >= 0 && idx <= mesLimite;
       })
     : [];
-  const totalFechadas    = realizadasAteMesVenda.length + canceladasAteMes.length;
+  const totalFechadas    = realizadasAteMesAtend.length + canceladasAteMes.length;
   const taxaCancelamento = totalFechadas > 0 ? canceladasAteMes.length / totalFechadas : 0;
 
   const realizadasAteMes = mesLimite >= 0
