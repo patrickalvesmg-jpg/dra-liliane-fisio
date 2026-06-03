@@ -960,6 +960,17 @@ function calcular(ano) {
   const projFechamentosAdj = projFechamentos * (1 - taxaCancelamentoBase);
   const projFechamentosRestantes = Math.round(mediaVendasMesAno * mesesRestantes * (1 - taxaCancelamentoBase));
 
+  // Antecedência média de fechamento (meses entre venda e atendimento)
+  // Calculada antecipadamente para filtrar novas vendas com atendimento ainda neste ano
+  const antecedenciaMedia = (() => {
+    const pares = todos.filter(c => c.mesVenda && c.mesPrevisto && c.status !== 'Cancelado').map(c => {
+      const iV = mesIndex(c.mesVenda);
+      const iP = mesIndex(c.mesPrevisto);
+      return iV >= 0 && iP >= 0 ? iP - iV : null;
+    }).filter(v => v !== null);
+    return pares.length > 0 ? pares.reduce((s, v) => s + v, 0) / pares.length : 3;
+  })();
+
   const TRAFEGO_MENSAL_FIXO = 1500;
 
   // Tráfego: meses já decorridos (realizado) + meses restantes × R$1.500 fixo
@@ -986,9 +997,14 @@ function calcular(ano) {
   const trafegoAgendFuturo        = mesesComAtendimentoFuturo * TRAFEGO_MENSAL_FIXO;
   const lucroAgendadoFuturo       = fatAgendadoFuturo - custoUberAgendFuturo - trafegoAgendFuturo;
 
-  // 3. Novas vendas estimadas que serão realizadas ainda este ano
-  // Usa o ritmo de vendas/mês e assume que serão realizadas nos meses restantes
-  const novasClientesAno          = mediaVendasMesAno * mesesRestantes * (1 - taxaCancelamentoBase);
+  // 3. Novas vendas estimadas cujo ATENDIMENTO ainda ocorre neste ano
+  // Uma venda fechada no mês M tem atendimento ~M + antecedênciaMedia
+  // Para o atendimento ser ≤ dezembro (mês 11): M ≤ 11 - antecedênciaMedia
+  // Logo, só contam vendas fechadas nos meses onde M + antecedênciaMedia ≤ 11
+  const mesLimiteNovaVenda = Math.max(0, 11 - Math.round(antecedenciaMedia));
+  // Meses restantes do ano em que ainda cabe fechar uma venda com atendimento em 2026
+  const mesesUteis = Math.max(0, mesLimiteNovaVenda - mesLimite);
+  const novasClientesAno          = mediaVendasMesAno * mesesUteis * (1 - taxaCancelamentoBase);
   const fatNovasVendasAno         = novasClientesAno * ticketBase;
   const custoUberNovasAno         = novasClientesAno * custoUberMatBase;
   // Tráfego já coberto pelo meses restantes — divide pelos meses sem agendamento
@@ -1080,7 +1096,7 @@ function calcular(ano) {
     mediaVendasJanela, projNovasFuturas, projFechamentosRestantes,
     ticketBase, custoUberMatBase, trafegoMensalBase,
     lucroProjetadoAnual, lucroProjetadoCaixaAno, receitaCaixaAno,
-    lucroJaRealizado, lucroAgendadoFuturo, lucroNovasVendasAno,
+    lucroJaRealizado, lucroAgendadoFuturo, lucroNovasVendasAno, antecedenciaMedia, mesesUteis,
     lucroAReceberFuturo, fatAgendadoFuturo, fatNovasVendasAno, novasClientesAno,
     trafegoAnoTotal, trafegoFuturo, trafegoProporcionado, TRAFEGO_MENSAL_FIXO, custoUberMatFuturo,
     custoUberMatCaixaAno,
@@ -1202,8 +1218,8 @@ function renderLucroProjetado(d) {
             <span style="opacity:.6">(fat. ${fmtBRL(d.fatRealizado)} − custos)</span><br>
             📅 Agendado confirmado: ${fmtBRL(d.lucroAgendadoFuturo)}
             <span style="opacity:.6">(${fmtBRL(d.fatAgendadoFuturo)} receita)</span><br>
-            📈 Novas vendas estimadas: ${fmtBRL(d.lucroNovasVendasAno)}
-            <span style="opacity:.6">(~${Math.round(d.novasClientesAno)} clientes × ${fmtBRL(d.ticketBase)})</span>
+            📈 Novas vendas c/ atend. em ${anoSelecionado}: ${fmtBRL(d.lucroNovasVendasAno)}
+            <span style="opacity:.6">(~${Math.round(d.novasClientesAno)} clientes · antec. média ${d.antecedenciaMedia.toFixed(1)}m · ${d.mesesUteis} meses úteis)</span>
           </div>
         </div>
         <div class="lucro-proj-valor">
@@ -1212,7 +1228,7 @@ function renderLucroProjetado(d) {
           <div style="margin-top:12px;padding-top:12px;border-top:1px solid var(--borda)">
             <div style="font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--roxo);margin-bottom:4px">Ainda a receber (lucro)</div>
             <div style="font-size:clamp(18px,3vw,28px);font-weight:900;color:${d.lucroAReceberFuturo >= 0 ? 'var(--roxo)' : 'var(--vermelho)'};line-height:1">${fmtBRL(d.lucroAReceberFuturo)}</div>
-            <div style="font-size:10px;font-weight:600;color:var(--texto);margin-top:3px">agendado + ~${Math.round(d.novasClientesAno)} novas vendas estimadas</div>
+            <div style="font-size:10px;font-weight:600;color:var(--texto);margin-top:3px">agendado confirmado + ~${Math.round(d.novasClientesAno)} novas vendas com atend. em ${anoSelecionado}</div>
           </div>
         </div>
       </div>
