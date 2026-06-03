@@ -926,19 +926,27 @@ function calcular(ano) {
   const projFechamentos    = mesesDecorridos > 0 ? (realizadasAteMes.length / mesesDecorridos) * 12 : 0;
   const projFechamentosAdj = projFechamentos * (1 - taxaCancelamentoBase);
 
-  const TRAFEGO_MENSAL_FIXO   = trafegoMensalBase;
-  const trafegoFuturo         = mesesRestantes * trafegoMensalBase;
-  const trafegoAnoTotal       = trafegoRealizado + trafegoFuturo;
-  const clientesFuturas       = agendadas.length * (1 - taxaCancelamentoBase) + (ticketBase > 0 ? projNovasFuturas / ticketBase : 0);
-  const custoUberMatFuturo    = clientesFuturas * custoUberMatBase;
-  const lucroProjetadoAnual   = projPorRitmoVendas - custoUberMat - custoUberMatFuturo - trafegoAnoTotal;
+  const TRAFEGO_MENSAL_FIXO = trafegoMensalBase;
 
-  // Lucro por caixa do ano — só o que está agendado/realizado para atendimento NESTE ano
-  // Receita: realizado + agendado ajustado (o que vai de fato entrar no caixa)
-  const receitaCaixaAno        = fatRealizado + fatAgendadoAjustado;
-  const clientesCaixaAno       = realizadas.length + agendadas.length * (1 - taxaCancelamentoBase);
-  const custoUberMatCaixaAno   = clientesCaixaAno * custoUberMatBase;
-  const lucroProjetadoCaixaAno = receitaCaixaAno - custoUberMatCaixaAno - trafegoAnoTotal;
+  // Tráfego: meses já decorridos (realizado) + meses restantes (projetado pela média 12m)
+  const trafegoFuturo   = mesesRestantes * trafegoMensalBase;
+  const trafegoAnoTotal = trafegoRealizado + trafegoFuturo;
+
+  // Clientes futuras = agendadas que não vão cancelar + novas vendas projetadas
+  const clientesFuturas    = agendadas.length * (1 - taxaCancelamentoBase) + (ticketBase > 0 ? projNovasFuturas / ticketBase : 0);
+  const custoUberMatFuturo = clientesFuturas * custoUberMatBase;
+
+  // Lucro pelo ritmo de vendas — considera todas as vendas do ano + projeção histórica
+  const lucroProjetadoAnual = projPorRitmoVendas - custoUberMat - custoUberMatFuturo - trafegoAnoTotal;
+
+  // Lucro pelo caixa do ano — só o que está garantido para entrar no caixa este ano
+  // Tráfego proporcional: meses decorridos realizados + meses com agendamento projetados
+  const mesesComAtendimentoFuturo = new Set(agendadas.map(c => mesIndex(c.mesRealizado)).filter(i => i > mesLimite)).size;
+  const trafegoProporcionado      = trafegoRealizado + mesesComAtendimentoFuturo * trafegoMensalBase;
+  const receitaCaixaAno           = fatRealizado + fatAgendadoAjustado;
+  const clientesCaixaAno          = realizadas.length + agendadas.length * (1 - taxaCancelamentoBase);
+  const custoUberMatCaixaAno      = clientesCaixaAno * custoUberMatBase;
+  const lucroProjetadoCaixaAno    = receitaCaixaAno - custoUberMatCaixaAno - trafegoProporcionado;
 
   const projFaturamento = projFaturamentoAnual;
 
@@ -1016,7 +1024,8 @@ function calcular(ano) {
     projPorRitmoVendas, mediaVendasPorMes, mediaVendasJanela, projNovasFuturas,
     ticketBase, custoUberMatBase, trafegoMensalBase,
     lucroProjetadoAnual, lucroProjetadoCaixaAno, receitaCaixaAno,
-    trafegoAnoTotal, trafegoFuturo, TRAFEGO_MENSAL_FIXO, custoUberMatFuturo,
+    trafegoAnoTotal, trafegoFuturo, trafegoProporcionado, TRAFEGO_MENSAL_FIXO, custoUberMatFuturo,
+    custoUberMatCaixaAno,
     fatAgendadoAjustado, estimativaMesesVazios,
     mesesVaziosFuturos, mesesRestantes,
     projFechamentos, projFechamentosAdj, ticketMedio,
@@ -1131,9 +1140,11 @@ function renderLucroProjetado(d) {
           <div class="lucro-proj-lbl" style="color:var(--roxo)">Lucro pelo Caixa do Ano</div>
           <div class="lucro-proj-sub">O que vai entrar no caixa este ano (realizado + agendado)</div>
           <div class="lucro-proj-detalhe">
-            Receita do ano: ${fmtBRL(d.receitaCaixaAno)}<br>
-            Realizado: ${fmtBRL(d.fatRealizado)} · Agendado: ${fmtBRL(d.fatAgendadoAjustado)}<br>
-            − Uber/Mat + Tráfego: ${fmtBRL(d.trafegoAnoTotal + d.custoUberMat + d.custoUberMatFuturo)}
+            Receita: ${fmtBRL(d.fatRealizado)} real. + ${fmtBRL(d.fatAgendadoAjustado)} agend.<br>
+            − Uber/Mat: ${fmtBRL(d.custoUberMatCaixaAno)}
+            <span style="opacity:.6">(${fmtBRL(d.custoUberMatBase)}/cliente · média 12m)</span><br>
+            − Tráfego: ${fmtBRL(d.trafegoProporcionado)}
+            <span style="opacity:.6">(proporcional aos meses com atend.)</span>
           </div>
         </div>
         <div class="lucro-proj-valor">
