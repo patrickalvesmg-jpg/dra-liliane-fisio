@@ -922,17 +922,33 @@ function calcular(ano) {
 
   // Taxa de cancelamento da janela de 12 meses (fallback quando ano não tem dados)
   const taxaCancelamentoJanela = (() => {
-    const todas   = dadosVendas.filter(r => r[0] && janela12.some(j => j.ano === anoDeData(r[14]) && j.mes === r[15]));
-    const cancel  = todas.filter(r => r[12] === 'Cancelado');
+    const todas  = dadosVendas.filter(r => r[0] && r[15] && janela12.some(j => j.mes === r[15] && j.ano === (anoDeData(r[14]) || anoDeData(r[1]))));
+    const cancel = todas.filter(r => r[12] === 'Cancelado');
     return todas.length > 0 ? cancel.length / todas.length : 0;
   })();
 
-  // Bases para projeção — sempre usa janela de 12 meses
-  const ticketBase             = ticketJanela > 0 ? ticketJanela : ticketMedio;
-  const custoUberMatBase       = custoUberMatJanela > 0 ? custoUberMatJanela : custoMedioUberMat;
-  const trafegoMensalBase      = trafegoJanela > 0 ? trafegoJanela : 1500;
-  const taxaCancelamentoBase   = totalFechadas > 0 ? taxaCancelamento : taxaCancelamentoJanela;
-  const ticketBase2            = ticketBase > 0 ? ticketBase : ticketMedio;
+  // Bases para projeção — para anos futuros sem dados, usa o ano anterior (mais recente e confiável)
+  // Ano anterior é sempre mais representativo que a janela de 12 meses que pode incluir períodos sem foco
+  const anoAnteriorDados = (() => {
+    const vendidosAnoAnt = clientesVendidosNoAno(ano - 1).filter(c => c.status !== 'Cancelado');
+    const realizadasAnoAnt = vendidosAnoAnt.filter(c => c.status === 'Realizado');
+    // Taxa de cancelamento do ano anterior até o mês de junho (mesmo ponto de comparação)
+    const cancelAnoAnt = clientesVendidosNoAno(ano - 1).filter(c => c.status === 'Cancelado');
+    const realAnoAnt   = clientesVendidosNoAno(ano - 1).filter(c => c.status === 'Realizado');
+    const taxaAnoAnt   = (realAnoAnt.length + cancelAnoAnt.length) > 0
+      ? cancelAnoAnt.length / (realAnoAnt.length + cancelAnoAnt.length) : 0;
+    const custoAnoAnt  = realizadasAnoAnt.length > 0
+      ? realizadasAnoAnt.reduce((s,c) => s + c.custo, 0) / realizadasAnoAnt.length : 0;
+    const ticketAnoAnt = vendidosAnoAnt.length > 0
+      ? vendidosAnoAnt.reduce((s,c) => s + c.valorTotal, 0) / vendidosAnoAnt.length : 0;
+    return { taxaCancel: taxaAnoAnt, custoUber: custoAnoAnt, ticket: ticketAnoAnt };
+  })();
+
+  const ticketBase           = ticketMedio > 0 ? ticketMedio : (ticketJanela > 0 ? ticketJanela : anoAnteriorDados.ticket);
+  const custoUberMatBase     = custoMedioUberMat > 0 ? custoMedioUberMat : (custoUberMatJanela > 0 ? custoUberMatJanela : anoAnteriorDados.custoUber);
+  const trafegoMensalBase    = 1500;
+  const taxaCancelamentoBase = totalFechadas > 0 ? taxaCancelamento : (taxaCancelamentoJanela > 0 ? taxaCancelamentoJanela : anoAnteriorDados.taxaCancel);
+  const ticketBase2          = ticketBase > 0 ? ticketBase : ticketMedio;
   const mediaVendasPorMes      = mediaVendasJanela;
 
   // Recalcula com taxaCancelamentoBase (corrige anos futuros sem dados)
