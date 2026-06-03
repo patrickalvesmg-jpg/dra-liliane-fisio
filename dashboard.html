@@ -967,9 +967,9 @@ function calcular(ano) {
   const vendasFechadasAteMes = todos.filter(c =>
     c.status !== 'Cancelado' &&
     mesIndex(c.mesVenda) >= MES_INICIO_MEDIA &&
-    mesIndex(c.mesVenda) < mesLimite  // só meses completos (exclui mês atual)
+    mesIndex(c.mesVenda) <= mesLimite  // inclui mês atual (vai crescendo ao longo do mês)
   );
-  const mesesCompletosMedian = Math.max(mesLimite - MES_INICIO_MEDIA, 1);
+  const mesesCompletosMedian = Math.max(mesLimite - MES_INICIO_MEDIA + 1, 1);
   const mediaVendasMesAno = vendasFechadasAteMes.length > 0
     ? vendasFechadasAteMes.length / mesesCompletosMedian
     : mediaVendasJanela;
