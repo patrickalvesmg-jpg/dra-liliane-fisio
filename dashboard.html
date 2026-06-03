@@ -1033,7 +1033,7 @@ function calcular(ano) {
     fatRealizado, fatAgendado, totalVendido, totalCancelado,
     lucroLiquido, custoUberMat, trafegoRealizado,
     custoMedioUberMat, custoMedioTrafego, custoMedioTotal,
-    canceladas, canceladasAteMes, taxaCancelamento,
+    canceladas, canceladasAteMes, taxaCancelamento, taxaCancelamentoBase,
     projFaturamento, projFaturamentoAnual, projRestanteAno,
     projPorRitmoVendas, mediaVendasPorMes, mediaVendasJanela, projNovasFuturas,
     ticketBase, custoUberMatBase, trafegoMensalBase,
@@ -1108,7 +1108,7 @@ function renderCancelamentos(d) {
   document.getElementById('cancelamentos').innerHTML = `
     <div class="card-cancel card">
       <div class="card-lbl">Taxa de Cancelamento</div>
-      <div class="card-val vermelho">${fmtPct(d.taxaCancelamento)}</div>
+      <div class="card-val vermelho">${fmtPct(d.taxaCancelamentoBase)}</div>
       <div class="card-sub">${d.canceladasAteMes.length} ${d.canceladasAteMes.length === 1 ? 'cancelamento' : 'cancelamentos'} até ${MESES[new Date().getMonth()]} · ${d.canceladas.length} no ano</div>
     </div>
     <div class="card-cancel card">
@@ -1180,7 +1180,7 @@ function renderProjecoes(d) {
       <div class="proj-val">${fmtBRL(d.projFaturamentoAnual)}</div>
       <div class="proj-hint">
         Realizado: ${fmtBRL(d.fatRealizado)}<br>
-        + Agendado (−${fmtPct(d.taxaCancelamento)} cancel.): ${fmtBRL(d.fatAgendadoAjustado)}<br>
+        + Agendado (−${fmtPct(d.taxaCancelamentoBase)} cancel.): ${fmtBRL(d.fatAgendadoAjustado)}<br>
         + ${d.mesesVaziosFuturos} ${d.mesesVaziosFuturos === 1 ? 'mês vazio' : 'meses vazios'} × ticket médio: ${fmtBRL(d.estimativaMesesVazios)}
       </div>
     </div>
@@ -1211,7 +1211,7 @@ function renderProjecoes(d) {
       <div class="proj-val">${Math.round(d.projFechamentosAdj)} clientes</div>
       <div class="proj-hint">
         Ritmo: ${(d.realizadasAteMes.length / d.mesesDecorridos).toFixed(1)} fechamentos/mês<br>
-        Bruto: ${Math.round(d.projFechamentos)} · Ajustado (−${fmtPct(d.taxaCancelamento)}): ${Math.round(d.projFechamentosAdj)}
+        Bruto: ${Math.round(d.projFechamentos)} · Ajustado (−${fmtPct(d.taxaCancelamentoBase)}): ${Math.round(d.projFechamentosAdj)}
       </div>
     </div>
   `;
