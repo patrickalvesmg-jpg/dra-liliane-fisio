@@ -391,8 +391,6 @@
         <div class="leg-item"><div class="leg-dot" style="background:#7BAF8E"></div>Realizado</div>
         <div class="leg-item"><div class="leg-dot" style="background:#C9AEC0"></div>Agendado</div>
         <div class="leg-item"><div class="leg-dot" style="background:#C47878"></div>Cancelado</div>
-        <div class="leg-item"><div class="leg-dot" style="background:#4E8B65"></div>Lucro Realizado</div>
-        <div class="leg-item"><div class="leg-dot" style="background:#9BC4AC;border:1.5px dashed #4E8B65"></div>Lucro Projetado</div>
       </div>
       <div class="grafico-canvas-wrap"><canvas id="chart-atend"></canvas></div>
     </div>
@@ -964,32 +962,21 @@ function calcular(ano) {
   const custoUberMatCaixaAno      = clientesCaixaAno * custoUberMatBase;
   const lucroProjetadoCaixaAno    = receitaCaixaAno - custoUberMatCaixaAno - trafegoProporcionado;
 
+  // A receber daqui pra frente — só meses futuros (agendado ainda não realizado)
+  const fatAgendadoFuturo        = agendadas.filter(c => mesIndex(c.mesRealizado) > mesLimite).reduce((s,c) => s + c.valorTotal, 0) * (1 - taxaCancelamentoBase);
+  const clientesFuturasCaixa     = agendadas.filter(c => mesIndex(c.mesRealizado) > mesLimite).length * (1 - taxaCancelamentoBase);
+  const custoUberMatFutCaixa     = clientesFuturasCaixa * custoUberMatBase;
+  const trafegoFutCaixa          = mesesComAtendimentoFuturo * TRAFEGO_MENSAL_FIXO;
+  const lucroAReceberFuturo      = fatAgendadoFuturo - custoUberMatFutCaixa - trafegoFutCaixa;
+
   const projFaturamento = projFaturamentoAnual;
 
-  const mensal = MESES.map((mes, idx) => {
-    const realMes    = realizadas.filter(c => mesIndex(c.mesRealizado) === idx);
-    const agendMes   = agendadas.filter(c  => mesIndex(c.mesRealizado) === idx);
-    const cancelMes  = canceladas.filter(c => mesIndex(c.mesRealizado) === idx);
-    const fatReal    = realMes.reduce((s,c)   => s + c.valorTotal, 0);
-    const fatAgend   = agendMes.reduce((s,c)  => s + c.valorTotal, 0);
-    const fatCancel  = cancelMes.reduce((s,c) => s + c.valorTotal, 0);
-    const uberReal   = realMes.reduce((s,c)   => s + c.custo, 0);
-    const trafegoMes = trafego[mes] || 0;
-    // Lucro realizado: faturamento realizado − uber/mat real − tráfego do mês
-    const lucroRealizado  = fatReal > 0 ? fatReal - uberReal - trafegoMes : null;
-    // Lucro projetado (agendado): faturamento agendado − custo estimado − tráfego fixo
-    const uberAgend       = agendMes.length * custoUberMatBase;
-    const trafegoAgend    = agendMes.length > 0 ? TRAFEGO_MENSAL_FIXO : 0;
-    const lucroProjetado  = fatAgend > 0 ? fatAgend - uberAgend - trafegoAgend : null;
-    return {
-      mes,
-      realizado: fatReal,
-      agendado:  fatAgend,
-      cancelado: fatCancel,
-      lucroRealizado,
-      lucroProjetado,
-    };
-  });
+  const mensal = MESES.map((mes, idx) => ({
+    mes,
+    realizado:  realizadas.filter(c => mesIndex(c.mesRealizado) === idx).reduce((s,c) => s + c.valorTotal, 0),
+    agendado:   agendadas.filter(c  => mesIndex(c.mesRealizado) === idx).reduce((s,c) => s + c.valorTotal, 0),
+    cancelado:  canceladas.filter(c => mesIndex(c.mesRealizado) === idx).reduce((s,c) => s + c.valorTotal, 0),
+  }));
 
   // fechamentos usa apenas clientes cuja VENDA foi neste ano (não os atendidos vindos de anos anteriores)
   const fechamentosPorMes = MESES.map(mes => {
@@ -1057,7 +1044,7 @@ function calcular(ano) {
     projFaturamento, projFaturamentoAnual, projRestanteAno,
     projPorRitmoVendas, mediaVendasPorMes, mediaVendasJanela, projNovasFuturas,
     ticketBase, custoUberMatBase, trafegoMensalBase,
-    lucroProjetadoAnual, lucroProjetadoCaixaAno, receitaCaixaAno,
+    lucroProjetadoAnual, lucroProjetadoCaixaAno, receitaCaixaAno, lucroAReceberFuturo, fatAgendadoFuturo,
     trafegoAnoTotal, trafegoFuturo, trafegoProporcionado, TRAFEGO_MENSAL_FIXO, custoUberMatFuturo,
     custoUberMatCaixaAno,
     fatAgendadoAjustado, estimativaMesesVazios,
@@ -1184,6 +1171,11 @@ function renderLucroProjetado(d) {
         <div class="lucro-proj-valor">
           <div style="font-size:clamp(24px,4vw,42px);font-weight:900;color:${corCaixa};line-height:1">${fmtBRL(d.lucroProjetadoCaixaAno)}</div>
           <div style="font-size:11px;font-weight:600;color:var(--texto);margin-top:6px">margem: ${fmtPct(d.receitaCaixaAno > 0 ? d.lucroProjetadoCaixaAno / d.receitaCaixaAno : 0)}</div>
+          <div style="margin-top:12px;padding-top:12px;border-top:1px solid var(--borda)">
+            <div style="font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--roxo);margin-bottom:4px">A receber daqui pra frente</div>
+            <div style="font-size:clamp(18px,3vw,28px);font-weight:900;color:${d.lucroAReceberFuturo >= 0 ? 'var(--roxo)' : 'var(--vermelho)'};line-height:1">${fmtBRL(d.lucroAReceberFuturo)}</div>
+            <div style="font-size:10px;font-weight:600;color:var(--texto);margin-top:3px">${fmtBRL(d.fatAgendadoFuturo)} agendado nos próximos meses</div>
+          </div>
         </div>
       </div>
 
@@ -1242,27 +1234,22 @@ function renderGraficoAtend(d) {
   if (chartAtend) { chartAtend.destroy(); chartAtend = null; }
   const ctx = document.getElementById('chart-atend').getContext('2d');
   const labels = MESES.map(m => m.substring(0,3));
-  const ticksFmt = v => v >= 1000 ? 'R$' + (v/1000).toFixed(0) + 'k' : 'R$' + v;
   chartAtend = new Chart(ctx, {
     type: 'bar',
     data: {
       labels,
       datasets: [
-        { label: 'Realizado',        data: d.mensal.map(m => m.realizado),      backgroundColor: 'rgba(123,175,142,0.80)', borderRadius: 5, borderSkipped: false, yAxisID: 'y' },
-        { label: 'Agendado',         data: d.mensal.map(m => m.agendado),        backgroundColor: 'rgba(201,174,192,0.60)', borderRadius: 5, borderSkipped: false, yAxisID: 'y' },
-        { label: 'Cancelado',        data: d.mensal.map(m => m.cancelado),       backgroundColor: 'rgba(196,120,120,0.70)', borderRadius: 5, borderSkipped: false, yAxisID: 'y' },
-        { label: 'Lucro Realizado',  data: d.mensal.map(m => m.lucroRealizado),  backgroundColor: 'rgba(78,139,101,0.90)',  borderRadius: 5, borderSkipped: false, yAxisID: 'y2', type: 'bar' },
-        { label: 'Lucro Projetado',  data: d.mensal.map(m => m.lucroProjetado),  backgroundColor: 'rgba(78,139,101,0.35)', borderRadius: 5, borderSkipped: false, yAxisID: 'y2', type: 'bar',
-          borderColor: 'rgba(78,139,101,0.70)', borderWidth: 1.5, borderDash: [4,3] },
+        { label: 'Realizado',  data: d.mensal.map(m => m.realizado),  backgroundColor: 'rgba(123,175,142,0.80)', borderRadius: 5, borderSkipped: false },
+        { label: 'Agendado',   data: d.mensal.map(m => m.agendado),   backgroundColor: 'rgba(201,174,192,0.60)', borderRadius: 5, borderSkipped: false },
+        { label: 'Cancelado',  data: d.mensal.map(m => m.cancelado),  backgroundColor: 'rgba(196,120,120,0.70)', borderRadius: 5, borderSkipped: false },
       ]
     },
     options: {
       responsive: true, maintainAspectRatio: false,
       plugins: { legend: { display: false } },
       scales: {
-        x:  { grid: { color: 'rgba(176,144,165,0.14)' }, ticks: { color: '#7A6872', font: { family: 'Outfit', size: 11 } } },
-        y:  { position: 'left',  grid: { color: 'rgba(176,144,165,0.14)' }, ticks: { color: '#7A6872', font: { family: 'Outfit', size: 11 }, callback: ticksFmt }, title: { display: true, text: 'Faturamento', color: '#7A6872', font: { size: 10 } } },
-        y2: { position: 'right', grid: { drawOnChartArea: false },           ticks: { color: '#4E8B65', font: { family: 'Outfit', size: 10 }, callback: ticksFmt }, title: { display: true, text: 'Lucro',        color: '#4E8B65', font: { size: 10 } } },
+        x: { grid: { color: 'rgba(176,144,165,0.14)' }, ticks: { color: '#7A6872', font: { family: 'Outfit', size: 11 } } },
+        y: { grid: { color: 'rgba(176,144,165,0.14)' }, ticks: { color: '#7A6872', font: { family: 'Outfit', size: 11 }, callback: v => v >= 1000 ? 'R$' + (v/1000).toFixed(0) + 'k' : 'R$' + v } }
       }
     }
   });
