@@ -926,10 +926,10 @@ function calcular(ano) {
   const projFechamentos    = mesesDecorridos > 0 ? (realizadasAteMes.length / mesesDecorridos) * 12 : 0;
   const projFechamentosAdj = projFechamentos * (1 - taxaCancelamentoBase);
 
-  const TRAFEGO_MENSAL_FIXO = trafegoMensalBase;
+  const TRAFEGO_MENSAL_FIXO = 1500;
 
-  // Tráfego: meses já decorridos (realizado) + meses restantes (projetado pela média 12m)
-  const trafegoFuturo   = mesesRestantes * trafegoMensalBase;
+  // Tráfego: meses já decorridos (realizado) + meses restantes × R$1.500 fixo
+  const trafegoFuturo   = mesesRestantes * TRAFEGO_MENSAL_FIXO;
   const trafegoAnoTotal = trafegoRealizado + trafegoFuturo;
 
   // Clientes futuras = agendadas que não vão cancelar + novas vendas projetadas
@@ -942,7 +942,7 @@ function calcular(ano) {
   // Lucro pelo caixa do ano — só o que está garantido para entrar no caixa este ano
   // Tráfego proporcional: meses decorridos realizados + meses com agendamento projetados
   const mesesComAtendimentoFuturo = new Set(agendadas.map(c => mesIndex(c.mesRealizado)).filter(i => i > mesLimite)).size;
-  const trafegoProporcionado      = trafegoRealizado + mesesComAtendimentoFuturo * trafegoMensalBase;
+  const trafegoProporcionado      = trafegoRealizado + mesesComAtendimentoFuturo * TRAFEGO_MENSAL_FIXO;
   const receitaCaixaAno           = fatRealizado + fatAgendadoAjustado;
   const clientesCaixaAno          = realizadas.length + agendadas.length * (1 - taxaCancelamentoBase);
   const custoUberMatCaixaAno      = clientesCaixaAno * custoUberMatBase;
@@ -1126,7 +1126,7 @@ function renderLucroProjetado(d) {
             − Uber/Mat: ${fmtBRL(d.custoUberMat + d.custoUberMatFuturo)}
             <span style="opacity:.6">(${fmtBRL(d.custoUberMatBase)}/cliente)</span><br>
             − Tráfego: ${fmtBRL(d.trafegoAnoTotal)}
-            <span style="opacity:.6">(${fmtBRL(d.trafegoMensalBase)}/mês · média 12m)</span>
+            <span style="opacity:.6">(R$ 1.500/mês fixo)</span>
           </div>
         </div>
         <div class="lucro-proj-valor">
@@ -1144,7 +1144,7 @@ function renderLucroProjetado(d) {
             − Uber/Mat: ${fmtBRL(d.custoUberMatCaixaAno)}
             <span style="opacity:.6">(${fmtBRL(d.custoUberMatBase)}/cliente · média 12m)</span><br>
             − Tráfego: ${fmtBRL(d.trafegoProporcionado)}
-            <span style="opacity:.6">(proporcional aos meses com atend.)</span>
+            <span style="opacity:.6">(R$ 1.500/mês · meses com atend.)</span>
           </div>
         </div>
         <div class="lucro-proj-valor">
