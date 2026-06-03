@@ -951,22 +951,7 @@ function calcular(ano) {
   const projPorRitmoVendas12m  = mediaVendasPorMes * 12 * ticketBase * (1 - taxaCancelamentoBase);
   const projPorRitmoVendas     = fatRealizado + fatAgendadoAjustado + projNovasFuturas;
 
-  // Projeção de fechamentos: baseada em vendas fechadas (mesVenda) até agora
-  // Usa apenas meses COMPLETOS para a média — exclui o mês atual (em andamento)
-  // Evita distorção quando o mês corrente tem poucas vendas por ainda não ter terminado
-  const mesesCompletos = Math.max(mesLimite, 0); // meses antes do atual
-  const vendasFechadasAteMes = todos.filter(c =>
-    c.status !== 'Cancelado' && mesIndex(c.mesVenda) >= 0 && mesIndex(c.mesVenda) < mesLimite
-  );
-  const mediaVendasMesAno = mesesCompletos > 0
-    ? vendasFechadasAteMes.length / mesesCompletos
-    : mediaVendasJanela;
-  const projFechamentos    = mediaVendasMesAno * 12;
-  const projFechamentosAdj = projFechamentos * (1 - taxaCancelamentoBase);
-  const projFechamentosRestantes = Math.round(mediaVendasMesAno * mesesRestantes * (1 - taxaCancelamentoBase));
-
-  // Antecedência média de fechamento (meses entre venda e atendimento)
-  // Calculada antecipadamente para filtrar novas vendas com atendimento ainda neste ano
+  // Antecedência média de fechamento (meses entre mesVenda e mesPrevisto)
   const antecedenciaMedia = (() => {
     const pares = todos.filter(c => c.mesVenda && c.mesPrevisto && c.status !== 'Cancelado').map(c => {
       const iV = mesIndex(c.mesVenda);
@@ -976,48 +961,70 @@ function calcular(ano) {
     return pares.length > 0 ? pares.reduce((s, v) => s + v, 0) / pares.length : 3;
   })();
 
+  // Média de vendas: apenas de março em diante (mês 2), meses já COMPLETOS
+  // Março é quando começou o foco em vendas — antes disso não representa o ritmo atual
+  const MES_INICIO_MEDIA = 2; // março = índice 2
+  const vendasFechadasAteMes = todos.filter(c =>
+    c.status !== 'Cancelado' &&
+    mesIndex(c.mesVenda) >= MES_INICIO_MEDIA &&
+    mesIndex(c.mesVenda) < mesLimite  // só meses completos (exclui mês atual)
+  );
+  const mesesCompletosMedian = Math.max(mesLimite - MES_INICIO_MEDIA, 1);
+  const mediaVendasMesAno = vendasFechadasAteMes.length > 0
+    ? vendasFechadasAteMes.length / mesesCompletosMedian
+    : mediaVendasJanela;
+
+  const projFechamentos    = mediaVendasMesAno * 12;
+  const projFechamentosAdj = projFechamentos * (1 - taxaCancelamentoBase);
+  // Meses restantes do ano inteiro (incluindo atual)
+  const projFechamentosRestantes = Math.round(mediaVendasMesAno * (mesesRestantes + 1) * (1 - taxaCancelamentoBase));
+
   const TRAFEGO_MENSAL_FIXO = 1500;
 
-  // Tráfego: meses já decorridos (realizado) + meses restantes × R$1.500 fixo
-  const trafegoFuturo   = mesesRestantes * TRAFEGO_MENSAL_FIXO;
+  // Tráfego: real da planilha para meses passados + R$1.500 fixo para futuros
+  // mesesRestantes não inclui o mês atual — adicionamos +1 para cobrir o mês corrente também
+  const trafegoFuturo   = (mesesRestantes + 1) * TRAFEGO_MENSAL_FIXO;
   const trafegoAnoTotal = trafegoRealizado + trafegoFuturo;
 
-  // Clientes futuras = agendadas que não vão cancelar + novas vendas projetadas
-  const clientesFuturas    = agendadas.length * (1 - taxaCancelamentoBase) + (ticketBase > 0 ? projNovasFuturas / ticketBase : 0);
-  const custoUberMatFuturo = clientesFuturas * custoUberMatBase;
+  // ── PROJEÇÃO 1: FATURAMENTO TOTAL DE VENDAS DO ANO ──────────────────────────
+  // Todas as novas vendas que serão fechadas de agora até dezembro,
+  // independente de o atendimento ser em 2026 ou 2027
+  const novasVendasTotaisAno    = mediaVendasMesAno * (mesesRestantes + 1) * (1 - taxaCancelamentoBase);
+  const fatNovasVendasTotais    = novasVendasTotaisAno * ticketBase;
+  const projFatVendasAno        = fatRealizado + fatAgendadoAjustado + fatNovasVendasTotais;
+  const custoUberNovasTotais    = novasVendasTotaisAno * custoUberMatBase;
+  const clientesFuturasTotais   = agendadas.length * (1 - taxaCancelamentoBase) + novasVendasTotaisAno;
+  const custoUberMatFuturo      = (clientesFuturasTotais - agendadas.length * (1 - taxaCancelamentoBase)) * custoUberMatBase;
+  const lucroProjetadoAnual     = projFatVendasAno - custoUberMat - (agendadas.length * (1-taxaCancelamentoBase) + novasVendasTotaisAno) * custoUberMatBase - trafegoAnoTotal;
 
-  // Lucro pelo ritmo de vendas — considera todas as vendas do ano + projeção histórica
-  const lucroProjetadoAnual = projPorRitmoVendas - custoUberMat - custoUberMatFuturo - trafegoAnoTotal;
+  // ── PROJEÇÃO 2: FATURAMENTO AGENDADO PARA ESTE ANO ──────────────────────────
+  // Novas vendas com atendimento previsto ainda neste ano
+  // Antecedência média = ~3 meses → venda fechada até outubro tem atendimento em 2026
+  const mesLimiteNovaVenda      = Math.max(0, 11 - Math.round(antecedenciaMedia));
+  const mesesUteis              = Math.max(0, mesLimiteNovaVenda - mesLimite); // meses restantes com atend. neste ano
+  const novasClientesAno        = mediaVendasMesAno * mesesUteis * (1 - taxaCancelamentoBase);
+  const fatNovasVendasAno       = novasClientesAno * ticketBase;
+  const custoUberNovasAno       = novasClientesAno * custoUberMatBase;
 
-  // ── LUCRO PELO CAIXA DO ANO — 3 componentes ─────────────────────────────────
-
-  // 1. Já realizado
-  const lucroJaRealizado = fatRealizado - custoUberMat - trafegoRealizado;
-
-  // 2. Agendado confirmado (ajustado pela taxa de cancelamento)
+  // Agendados confirmados com atendimento futuro neste ano
   const mesesComAtendimentoFuturo = new Set(agendadas.map(c => mesIndex(c.mesRef)).filter(i => i > mesLimite)).size;
   const fatAgendadoFuturo         = agendadas.filter(c => mesIndex(c.mesRef) > mesLimite).reduce((s,c) => s + c.valorTotal, 0) * (1 - taxaCancelamentoBase);
   const clientesAgendFuturas      = agendadas.filter(c => mesIndex(c.mesRef) > mesLimite).length * (1 - taxaCancelamentoBase);
   const custoUberAgendFuturo      = clientesAgendFuturas * custoUberMatBase;
   const trafegoAgendFuturo        = mesesComAtendimentoFuturo * TRAFEGO_MENSAL_FIXO;
-  const lucroAgendadoFuturo       = fatAgendadoFuturo - custoUberAgendFuturo - trafegoAgendFuturo;
 
-  // 3. Novas vendas estimadas cujo ATENDIMENTO ainda ocorre neste ano
-  // Uma venda fechada no mês M tem atendimento ~M + antecedênciaMedia
-  // Para o atendimento ser ≤ dezembro (mês 11): M ≤ 11 - antecedênciaMedia
-  // Logo, só contam vendas fechadas nos meses onde M + antecedênciaMedia ≤ 11
-  const mesLimiteNovaVenda = Math.max(0, 11 - Math.round(antecedenciaMedia));
-  // Meses restantes do ano em que ainda cabe fechar uma venda com atendimento em 2026
-  const mesesUteis = Math.max(0, mesLimiteNovaVenda - mesLimite);
-  const novasClientesAno          = mediaVendasMesAno * mesesUteis * (1 - taxaCancelamentoBase);
-  const fatNovasVendasAno         = novasClientesAno * ticketBase;
-  const custoUberNovasAno         = novasClientesAno * custoUberMatBase;
-  // Tráfego já coberto pelo meses restantes — divide pelos meses sem agendamento
-  const mesesSemAgendamento       = mesesRestantes - mesesComAtendimentoFuturo;
+  // Tráfego proporcional para novas vendas (meses sem agendamento já contado)
+  const mesesSemAgendamento       = Math.max(0, mesesUteis - mesesComAtendimentoFuturo);
   const trafegoNovasAno           = mesesSemAgendamento * TRAFEGO_MENSAL_FIXO;
-  const lucroNovasVendasAno       = fatNovasVendasAno - custoUberNovasAno - trafegoNovasAno;
 
-  // Total: soma dos 3 componentes
+  // ── LUCRO PELO CAIXA DO ANO — 3 componentes ─────────────────────────────────
+  // 1. Já realizado
+  const lucroJaRealizado    = fatRealizado - custoUberMat - trafegoRealizado;
+  // 2. Agendado confirmado
+  const lucroAgendadoFuturo = fatAgendadoFuturo - custoUberAgendFuturo - trafegoAgendFuturo;
+  // 3. Novas vendas com atendimento neste ano
+  const lucroNovasVendasAno = fatNovasVendasAno - custoUberNovasAno - trafegoNovasAno;
+
   const receitaCaixaAno        = fatRealizado + fatAgendadoFuturo + fatNovasVendasAno;
   const custoUberMatCaixaAno   = custoUberMat + custoUberAgendFuturo + custoUberNovasAno;
   const trafegoProporcionado   = trafegoRealizado + trafegoAgendFuturo + trafegoNovasAno;
@@ -1097,7 +1104,10 @@ function calcular(ano) {
     custoMedioUberMat, custoMedioTrafego, custoMedioTotal,
     canceladas, canceladasAteMes, taxaCancelamento, taxaCancelamentoBase,
     projFaturamento, projFaturamentoAnual, projRestanteAno,
-    projPorRitmoVendas, projPorRitmoVendas12m, mediaVendasPorMes, mediaVendasMesAno,
+    projPorRitmoVendas, projPorRitmoVendas12m, projFatVendasAno,
+    mediaVendasPorMes, mediaVendasMesAno, novasVendasTotaisAno, fatNovasVendasTotais,
+    vendasFechadasAteMes, mesesCompletosMedian, mesLimite,
+    fatNovasVendasAno, novasClientesAno, mesesUteis,
     mediaVendasJanela, projNovasFuturas, projFechamentosRestantes,
     ticketBase, custoUberMatBase, trafegoMensalBase,
     lucroProjetadoAnual, lucroProjetadoCaixaAno, receitaCaixaAno,
@@ -1244,26 +1254,28 @@ function renderLucroProjetado(d) {
 
 // ─── RENDER PROJEÇÕES ────────────────────────────────────────────────────────
 function renderProjecoes(d) {
+  const mesLimiteNova = Math.max(0, 11 - Math.round(d.antecedenciaMedia));
   document.getElementById('projecoes').innerHTML = `
     <div class="proj-card">
-      <div class="proj-lbl">Faturamento Estimado do Ano</div>
-      <div class="proj-titulo">Realizado + agendado + novas vendas estimadas até dezembro</div>
-      <div class="proj-val">${fmtBRL(d.projFaturamentoAnual)}</div>
+      <div class="proj-lbl">Faturamento Total de Vendas do Ano</div>
+      <div class="proj-titulo">Todas as vendas fechadas em ${anoSelecionado} — atendimento em ${anoSelecionado} ou ${anoSelecionado+1}</div>
+      <div class="proj-val">${fmtBRL(d.projFatVendasAno)}</div>
       <div class="proj-hint">
         Realizado: ${fmtBRL(d.fatRealizado)}<br>
         + Agendado (−${fmtPct(d.taxaCancelamentoBase)} cancel.): ${fmtBRL(d.fatAgendadoAjustado)}<br>
-        + Novas vendas estimadas (${d.mesesRestantes}m × ${d.mediaVendasJanela.toFixed(1)} vd/mês): ${fmtBRL(d.projNovasFuturas)}<br>
-        <span style="opacity:.7">Ticket médio 12m: ${fmtBRL(d.ticketBase)}</span>
+        + Novas vendas (${d.mesesRestantes+1}m × ${d.mediaVendasMesAno.toFixed(1)} vd/mês): ${fmtBRL(d.fatNovasVendasTotais)}<br>
+        <span style="opacity:.7">~${Math.round(d.novasVendasTotaisAno)} novas clientes · ticket ${fmtBRL(d.ticketBase)}</span>
       </div>
     </div>
     <div class="proj-card">
-      <div class="proj-lbl">A Receber até Dezembro</div>
-      <div class="proj-titulo">Agendado confirmado + novas vendas estimadas nos meses restantes</div>
-      <div class="proj-val">${fmtBRL(d.projRestanteAno)}</div>
+      <div class="proj-lbl">Faturamento Agendado para ${anoSelecionado}</div>
+      <div class="proj-titulo">Só vendas com atendimento ainda em ${anoSelecionado} (antec. ~${d.antecedenciaMedia.toFixed(0)}m → até ${MESES[mesLimiteNova]})</div>
+      <div class="proj-val">${fmtBRL(d.receitaCaixaAno)}</div>
       <div class="proj-hint">
-        Agendado ajustado: ${fmtBRL(d.fatAgendadoAjustado)}<br>
-        + Novas vendas estimadas: ${fmtBRL(d.projNovasFuturas)}<br>
-        Média de vendas/mês (ano atual): ${d.mediaVendasMesAno.toFixed(1)} vd/mês
+        Realizado: ${fmtBRL(d.fatRealizado)}<br>
+        + Agendado confirmado: ${fmtBRL(d.fatAgendadoFuturo)}<br>
+        + Novas vendas c/ atend. em ${anoSelecionado} (${d.mesesUteis}m úteis): ${fmtBRL(d.fatNovasVendasAno)}<br>
+        <span style="opacity:.7">~${Math.round(d.novasClientesAno)} novas clientes</span>
       </div>
     </div>
     <div class="proj-card">
@@ -1272,17 +1284,17 @@ function renderProjecoes(d) {
       <div class="proj-val">${fmtBRL(d.projPorRitmoVendas12m)}</div>
       <div class="proj-hint">
         12 meses × ${d.mediaVendasJanela.toFixed(1)} vd/mês × ${fmtBRL(d.ticketBase)}/venda<br>
-        <span style="opacity:.7">Base: ritmo dos últimos 12 meses corridos · taxa cancel. ${fmtPct(d.taxaCancelamentoBase)}</span>
+        <span style="opacity:.7">Janela 12 meses corridos · cancel. ${fmtPct(d.taxaCancelamentoBase)}</span>
       </div>
     </div>
     <div class="proj-card">
-      <div class="proj-lbl">Novas Vendas Estimadas até Dezembro</div>
-      <div class="proj-titulo">Quantos novos clientes a mais são esperados nos meses restantes</div>
-      <div class="proj-val">${d.projFechamentosRestantes} clientes</div>
+      <div class="proj-lbl">Ritmo de Vendas Atual</div>
+      <div class="proj-titulo">Média de março em diante — quando o foco em vendas começou</div>
+      <div class="proj-val">${d.mediaVendasMesAno.toFixed(1)} vd/mês</div>
       <div class="proj-hint">
-        Ritmo atual: ${d.mediaVendasMesAno.toFixed(1)} vendas/mês (${d.mesesDecorridos > 0 ? d.mesesDecorridos : '—'} meses de dados)<br>
-        ${d.mesesRestantes} meses restantes × ritmo − cancelamentos estimados<br>
-        <span style="opacity:.7">Além dos ${d.agendadas.length} já agendados</span>
+        ${d.vendasFechadasAteMes.length} vendas em ${d.mesesCompletosMedian} meses completos (mar–${MESES[d.mesLimite > 0 ? d.mesLimite-1 : 0]})<br>
+        Antecedência média: ${d.antecedenciaMedia.toFixed(1)}m · ticket ${fmtBRL(d.ticketBase)}<br>
+        <span style="opacity:.7">Taxa de cancelamento: ${fmtPct(d.taxaCancelamentoBase)}</span>
       </div>
     </div>
   `;
