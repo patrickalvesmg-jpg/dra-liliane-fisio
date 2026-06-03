@@ -1136,7 +1136,7 @@ function renderLucroProjetado(d) {
           <div class="lucro-proj-lbl">Lucro pelo Ritmo de Vendas</div>
           <div class="lucro-proj-sub">O que a empresa vai lucrar pelas vendas fechadas no ano</div>
           <div class="lucro-proj-detalhe">
-            Faturamento projetado: ${fmtBRL(d.projPorRitmoVendas)}<br>
+            Faturamento projetado: ${fmtBRL(d.projPorRitmoVendas)} <span style="opacity:.6">(−${fmtPct(d.taxaCancelamentoBase)} cancel.)</span><br>
             − Uber/Mat: ${fmtBRL(d.custoUberMat + d.custoUberMatFuturo)}
             <span style="opacity:.6">(${fmtBRL(d.custoUberMatBase)}/cliente)</span><br>
             − Tráfego: ${fmtBRL(d.trafegoAnoTotal)}
@@ -1154,7 +1154,7 @@ function renderLucroProjetado(d) {
           <div class="lucro-proj-lbl" style="color:var(--roxo)">Lucro pelo Caixa do Ano</div>
           <div class="lucro-proj-sub">O que vai entrar no caixa este ano (realizado + agendado)</div>
           <div class="lucro-proj-detalhe">
-            Receita: ${fmtBRL(d.fatRealizado)} real. + ${fmtBRL(d.fatAgendadoAjustado)} agend.<br>
+            Receita: ${fmtBRL(d.fatRealizado)} real. + ${fmtBRL(d.fatAgendadoAjustado)} agend. <span style="opacity:.6">(−${fmtPct(d.taxaCancelamentoBase)} cancel.)</span><br>
             − Uber/Mat: ${fmtBRL(d.custoUberMatCaixaAno)}
             <span style="opacity:.6">(${fmtBRL(d.custoUberMatBase)}/cliente · média 12m)</span><br>
             − Tráfego: ${fmtBRL(d.trafegoProporcionado)}
