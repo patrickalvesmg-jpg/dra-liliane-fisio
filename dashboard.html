@@ -929,28 +929,39 @@ function calcular(ano) {
 
   // Bases para projeção — para anos futuros sem dados, usa o ano anterior (mais recente e confiável)
   // Ano anterior é sempre mais representativo que a janela de 12 meses que pode incluir períodos sem foco
-  // Dados do ano anterior calculados com a mesma lógica do ano atual
-  // Taxa de cancelamento: até o mesmo mês corrente (mesAtual = mesAtual() independe do ano selecionado)
-  const anoAnteriorDados = (() => {
-    const mesAtualGlobal = mesAtual(); // mês atual real (independe do ano selecionado)
-    const todosAnoAnt    = clientesVendidosNoAno(ano - 1);
-    const realizadasAnt  = todosAnoAnt.filter(c => c.status === 'Realizado');
-    const cancelAnt      = todosAnoAnt.filter(c => c.status === 'Cancelado' && mesIndex(c.mesRef) >= 0 && mesIndex(c.mesRef) <= mesAtualGlobal);
-    const realAnt        = todosAnoAnt.filter(c => c.status === 'Realizado'  && mesIndex(c.mesRef) >= 0 && mesIndex(c.mesRef) <= mesAtualGlobal);
-    const taxaCancel     = (realAnt.length + cancelAnt.length) > 0
-      ? cancelAnt.length / (realAnt.length + cancelAnt.length) : 0;
-    const custoUber      = realizadasAnt.length > 0
-      ? realizadasAnt.reduce((s,c) => s + c.custo, 0) / realizadasAnt.length : 0;
-    const ticket         = todosAnoAnt.filter(c => c.status !== 'Cancelado' && c.valorTotal > 0).reduce((s,c,_,a) => s + c.valorTotal / a.length, 0);
-    return { taxaCancel, custoUber, ticket };
+  // Referência do ano atual real (anoAtual()) — usada como fallback para anos futuros
+  // Garante que 2027 use exatamente os mesmos valores calculados para 2026
+  const anoRef = anoAtual();
+  const refDados = (() => {
+    if (ano === anoRef) return null; // não precisa calcular — já temos os dados do próprio ano
+    const mesAtualGlobal  = mesAtual();
+    const atendRefAno     = clientesAtendidosNoAno(anoRef);
+    const cancelRefAno    = atendRefAno.filter(c => c.status === 'Cancelado');
+    const realRefAno      = atendRefAno.filter(c => c.status === 'Realizado');
+    const agendMesRef     = atendRefAno.filter(c => c.status === 'Agendado' && mesIndex(c.mesRef) === mesAtualGlobal);
+    const cancelAteMes    = cancelRefAno.filter(c => mesIndex(c.mesRef) >= 0 && mesIndex(c.mesRef) <= mesAtualGlobal);
+    const totalRef        = realRefAno.length + cancelAteMes.length + agendMesRef.length;
+    const taxaCancel      = totalRef > 0 ? cancelAteMes.length / totalRef : 0;
+    // Custo Uber/Mat: média das realizadas do ano de referência
+    const custoUber       = realRefAno.length > 0
+      ? realRefAno.reduce((s,c) => s + c.custo, 0) / realRefAno.length : 0;
+    // Ticket médio: clientes ativas do ano de referência
+    const ativasRef       = atendRefAno.filter(c => c.status !== 'Cancelado' && c.valorTotal > 0);
+    const ticket          = ativasRef.length > 0 ? ativasRef.reduce((s,c) => s + c.valorTotal, 0) / ativasRef.length : 0;
+    // Média de vendas: mesma lógica — março em diante, inclui mês atual
+    const MES_INI = 2;
+    const vendasRef = clientesVendidosNoAno(anoRef).filter(c =>
+      c.status !== 'Cancelado' && mesIndex(c.mesVenda) >= MES_INI && mesIndex(c.mesVenda) <= mesAtualGlobal
+    );
+    const mesesRef  = Math.max(mesAtualGlobal - MES_INI + 1, 1);
+    const mediaVendas = vendasRef.length > 0 ? vendasRef.length / mesesRef : 0;
+    return { taxaCancel, custoUber, ticket, mediaVendas };
   })();
 
-  const ticketBase           = ticketMedio > 0 ? ticketMedio : (ticketJanela > 0 ? ticketJanela : anoAnteriorDados.ticket);
-  const custoUberMatBase     = custoMedioUberMat > 0 ? custoMedioUberMat : (custoUberMatJanela > 0 ? custoUberMatJanela : anoAnteriorDados.custoUber);
+  const ticketBase           = ticketMedio > 0 ? ticketMedio : (refDados ? refDados.ticket : ticketJanela);
+  const custoUberMatBase     = custoMedioUberMat > 0 ? custoMedioUberMat : (refDados ? refDados.custoUber : custoUberMatJanela);
   const trafegoMensalBase    = 1500;
-  // Para anos futuros sem dados: usa a taxa real do ano anterior até o mês atual
-  // É a referência mais precisa — mesma lógica de cálculo, período equivalente
-  const taxaCancelamentoBase = totalFechadas > 0 ? taxaCancelamento : anoAnteriorDados.taxaCancel;
+  const taxaCancelamentoBase = totalFechadas > 0 ? taxaCancelamento : (refDados ? refDados.taxaCancel : taxaCancelamentoJanela);
   const ticketBase2          = ticketBase > 0 ? ticketBase : ticketMedio;
   const mediaVendasPorMes      = mediaVendasJanela;
 
@@ -1002,7 +1013,7 @@ function calcular(ano) {
 
   const mediaVendasMesAno = vendasFechadasAteMes.length > 0
     ? vendasFechadasAteMes.length / mesesCompletosMedian
-    : (mediaVendasAnoAnterior > 0 ? mediaVendasAnoAnterior : mediaVendasJanela);
+    : (refDados && refDados.mediaVendas > 0 ? refDados.mediaVendas : mediaVendasJanela);
 
   const projFechamentos    = mediaVendasMesAno * 12;
   const projFechamentosAdj = projFechamentos * (1 - taxaCancelamentoBase);
