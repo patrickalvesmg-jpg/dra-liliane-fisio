@@ -842,20 +842,20 @@ function calcular(ano) {
     return s + fatMes - uberMes - (trafego[mes] || 0);
   }, 0);
 
-  // Taxa de cancelamento: filtra pelo mês do atendimento (mesRealizado) até o mês atual
-  // Cancelamentos com atendimento em meses futuros não distorcem a taxa
-  const canceladasAteMes = mesLimite >= 0
-    ? canceladas.filter(c => {
-        const idx = mesIndex(c.mesRef);
-        return idx >= 0 && idx <= mesLimite;
-      })
-    : [];
-  const realizadasAteMesAtend = mesLimite >= 0
-    ? realizadas.filter(c => {
-        const idx = mesIndex(c.mesRef);
-        return idx >= 0 && idx <= mesLimite;
-      })
-    : [];
+  // Taxa de cancelamento: usa todas as vendas do ano (realizadas + canceladas)
+  // filtradas pelo mesRef até o mês atual — independente de vir de vendidos ou atendidos
+  const mesAtualReal = mesAtual(); // mês real do sistema (sempre atual, independe do ano selecionado)
+  const todasVendasAno = dadosVendas.filter(r => {
+    if (!r[0]) return false;
+    const ap = anoDeData(r[1]); const av = anoDeData(r[14]);
+    return (ap === ano || av === ano || (!ap && !av && anoAtual() === ano));
+  }).map(mapearCliente);
+  const canceladasAteMes = todasVendasAno.filter(c =>
+    c.status === 'Cancelado' && mesIndex(c.mesRef) >= 0 && mesIndex(c.mesRef) <= mesAtualReal
+  );
+  const realizadasAteMesAtend = todasVendasAno.filter(c =>
+    c.status === 'Realizado' && mesIndex(c.mesRef) >= 0 && mesIndex(c.mesRef) <= mesAtualReal
+  );
   const totalFechadas    = realizadasAteMesAtend.length + canceladasAteMes.length;
   const taxaCancelamento = totalFechadas > 0 ? canceladasAteMes.length / totalFechadas : 0;
 
@@ -989,9 +989,20 @@ function calcular(ano) {
     mesIndex(c.mesVenda) <= mesLimite  // inclui mês atual (vai crescendo ao longo do mês)
   );
   const mesesCompletosMedian = Math.max(mesLimite - MES_INICIO_MEDIA + 1, 1);
+  // Média do ano anterior (mesma lógica: março em diante, meses com mesVenda preenchido)
+  const mediaVendasAnoAnterior = (() => {
+    const vendAnt = clientesVendidosNoAno(ano - 1).filter(c =>
+      c.status !== 'Cancelado' &&
+      mesIndex(c.mesVenda) >= MES_INICIO_MEDIA &&
+      mesIndex(c.mesVenda) <= 11
+    );
+    const mesesAnt = Math.max(12 - MES_INICIO_MEDIA, 1);
+    return vendAnt.length > 0 ? vendAnt.length / mesesAnt : 0;
+  })();
+
   const mediaVendasMesAno = vendasFechadasAteMes.length > 0
     ? vendasFechadasAteMes.length / mesesCompletosMedian
-    : mediaVendasJanela;
+    : (mediaVendasAnoAnterior > 0 ? mediaVendasAnoAnterior : mediaVendasJanela);
 
   const projFechamentos    = mediaVendasMesAno * 12;
   const projFechamentosAdj = projFechamentos * (1 - taxaCancelamentoBase);
