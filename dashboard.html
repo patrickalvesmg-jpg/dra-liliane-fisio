@@ -884,9 +884,28 @@ function calcular(ano) {
       : 0;
   })();
 
+  // Custo médio Uber/Mat da janela de 12 meses
+  const custoUberMatJanela = (() => {
+    const com = vendasJanela.filter(r => r[12] === 'Realizado' && parseBRL(r[10]) > 0);
+    return com.length > 0
+      ? com.reduce((s, r) => s + parseBRL(r[10]), 0) / com.length
+      : 0;
+  })();
+
+  // Tráfego médio mensal da janela de 12 meses
+  const trafegoJanela = (() => {
+    const total = janela12.reduce((s, j) => {
+      const invest = dadosInvest.find(r => r[0] === j.mes && parseInt(r[1]) === j.ano);
+      return s + (invest ? parseFloat(String(invest[2]).replace('R$','').replace(/\./g,'').replace(',','.').trim()) || 0 : 0);
+    }, 0);
+    return total / 12;
+  })();
+
   // Sempre usa a janela de 12 meses como base da projeção — mais preciso e consistente
-  const ticketBase        = ticketJanela > 0 ? ticketJanela : ticketMedio;
-  const mediaVendasPorMes = mediaVendasJanela;
+  const ticketBase              = ticketJanela > 0 ? ticketJanela : ticketMedio;
+  const custoUberMatJanelaBase  = custoUberMatJanela > 0 ? custoUberMatJanela : custoMedioUberMat;
+  const trafegoMensalBase       = trafegoJanela > 0 ? trafegoJanela : 1500;
+  const mediaVendasPorMes       = mediaVendasJanela;
 
   const projNovasFuturas   = mediaVendasPorMes * mesesRestantes * ticketBase * (1 - taxaCancelamento);
   const projPorRitmoVendas = fatRealizado + fatAgendadoAjustado + projNovasFuturas;
@@ -894,11 +913,11 @@ function calcular(ano) {
   const projFechamentos    = mesesDecorridos > 0 ? (realizadasAteMes.length / mesesDecorridos) * 12 : 0;
   const projFechamentosAdj = projFechamentos * (1 - taxaCancelamento);
 
-  const TRAFEGO_MENSAL_FIXO   = 1500;
-  const trafegoFuturo         = mesesRestantes * TRAFEGO_MENSAL_FIXO;
+  const TRAFEGO_MENSAL_FIXO   = trafegoMensalBase;
+  const trafegoFuturo         = mesesRestantes * trafegoMensalBase;
   const trafegoAnoTotal       = trafegoRealizado + trafegoFuturo;
-  const clientesFuturas       = agendadas.length * (1 - taxaCancelamento) + (ticketMedio > 0 ? projNovasFuturas / ticketMedio : 0);
-  const custoUberMatFuturo    = clientesFuturas * custoMedioUberMat;
+  const clientesFuturas       = agendadas.length * (1 - taxaCancelamento) + (ticketBase > 0 ? projNovasFuturas / ticketBase : 0);
+  const custoUberMatFuturo    = clientesFuturas * custoUberMatJanelaBase;
   const lucroProjetadoAnual   = projPorRitmoVendas - custoUberMat - custoUberMatFuturo - trafegoAnoTotal;
 
   const projFaturamento = projFaturamentoAnual;
@@ -975,7 +994,7 @@ function calcular(ano) {
     canceladas, taxaCancelamento,
     projFaturamento, projFaturamentoAnual, projRestanteAno,
     projPorRitmoVendas, mediaVendasPorMes, mediaVendasJanela,
-    projNovasFuturas, ticketBase,
+    projNovasFuturas, ticketBase, custoUberMatJanelaBase, trafegoMensalBase,
     lucroProjetadoAnual, trafegoAnoTotal, trafegoFuturo, TRAFEGO_MENSAL_FIXO, custoUberMatFuturo,
     fatAgendadoAjustado, estimativaMesesVazios,
     mesesVaziosFuturos, mesesRestantes,
@@ -1072,8 +1091,9 @@ function renderLucroProjetado(d) {
         <div class="lucro-proj-detalhe">
           Faturamento projetado: ${fmtBRL(d.projPorRitmoVendas)}<br>
           − Material/Uber (realizado + futuro): ${fmtBRL(d.custoUberMat + d.custoUberMatFuturo)}
-          <span style="opacity:.6">(${fmtBRL(d.custoMedioUberMat)}/cliente)</span><br>
-          − Tráfego passado ${fmtBRL(d.trafegoRealizado)} + ${d.mesesRestantes}× R$${d.TRAFEGO_MENSAL_FIXO}: ${fmtBRL(d.trafegoAnoTotal)}
+          <span style="opacity:.6">(${fmtBRL(d.custoUberMatJanelaBase)}/cliente · média 12 meses)</span><br>
+          − Tráfego passado ${fmtBRL(d.trafegoRealizado)} + ${d.mesesRestantes}× ${fmtBRL(d.trafegoMensalBase)}: ${fmtBRL(d.trafegoAnoTotal)}
+          <span style="opacity:.6">(média 12 meses)</span>
         </div>
       </div>
       <div class="lucro-proj-valor">
