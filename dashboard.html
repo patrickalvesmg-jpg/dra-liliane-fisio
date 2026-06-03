@@ -973,21 +973,35 @@ function calcular(ano) {
   // Lucro pelo ritmo de vendas — considera todas as vendas do ano + projeção histórica
   const lucroProjetadoAnual = projPorRitmoVendas - custoUberMat - custoUberMatFuturo - trafegoAnoTotal;
 
-  // Lucro pelo caixa do ano — só o que está garantido para entrar no caixa este ano
-  // Tráfego proporcional: meses decorridos realizados + meses com agendamento projetados
-  const mesesComAtendimentoFuturo = new Set(agendadas.map(c => mesIndex(c.mesRef)).filter(i => i > mesLimite)).size;
-  const trafegoProporcionado      = trafegoRealizado + mesesComAtendimentoFuturo * TRAFEGO_MENSAL_FIXO;
-  const receitaCaixaAno           = fatRealizado + fatAgendadoAjustado;
-  const clientesCaixaAno          = realizadas.length + agendadas.length * (1 - taxaCancelamentoBase);
-  const custoUberMatCaixaAno      = clientesCaixaAno * custoUberMatBase;
-  const lucroProjetadoCaixaAno    = receitaCaixaAno - custoUberMatCaixaAno - trafegoProporcionado;
+  // ── LUCRO PELO CAIXA DO ANO — 3 componentes ─────────────────────────────────
 
-  // A receber daqui pra frente — só meses futuros (agendado ainda não realizado)
-  const fatAgendadoFuturo        = agendadas.filter(c => mesIndex(c.mesRef) > mesLimite).reduce((s,c) => s + c.valorTotal, 0) * (1 - taxaCancelamentoBase);
-  const clientesFuturasCaixa     = agendadas.filter(c => mesIndex(c.mesRef) > mesLimite).length * (1 - taxaCancelamentoBase);
-  const custoUberMatFutCaixa     = clientesFuturasCaixa * custoUberMatBase;
-  const trafegoFutCaixa          = mesesComAtendimentoFuturo * TRAFEGO_MENSAL_FIXO;
-  const lucroAReceberFuturo      = fatAgendadoFuturo - custoUberMatFutCaixa - trafegoFutCaixa;
+  // 1. Já realizado
+  const lucroJaRealizado = fatRealizado - custoUberMat - trafegoRealizado;
+
+  // 2. Agendado confirmado (ajustado pela taxa de cancelamento)
+  const mesesComAtendimentoFuturo = new Set(agendadas.map(c => mesIndex(c.mesRef)).filter(i => i > mesLimite)).size;
+  const fatAgendadoFuturo         = agendadas.filter(c => mesIndex(c.mesRef) > mesLimite).reduce((s,c) => s + c.valorTotal, 0) * (1 - taxaCancelamentoBase);
+  const clientesAgendFuturas      = agendadas.filter(c => mesIndex(c.mesRef) > mesLimite).length * (1 - taxaCancelamentoBase);
+  const custoUberAgendFuturo      = clientesAgendFuturas * custoUberMatBase;
+  const trafegoAgendFuturo        = mesesComAtendimentoFuturo * TRAFEGO_MENSAL_FIXO;
+  const lucroAgendadoFuturo       = fatAgendadoFuturo - custoUberAgendFuturo - trafegoAgendFuturo;
+
+  // 3. Novas vendas estimadas que serão realizadas ainda este ano
+  // Usa o ritmo de vendas/mês e assume que serão realizadas nos meses restantes
+  const novasClientesAno          = mediaVendasMesAno * mesesRestantes * (1 - taxaCancelamentoBase);
+  const fatNovasVendasAno         = novasClientesAno * ticketBase;
+  const custoUberNovasAno         = novasClientesAno * custoUberMatBase;
+  // Tráfego já coberto pelo meses restantes — divide pelos meses sem agendamento
+  const mesesSemAgendamento       = mesesRestantes - mesesComAtendimentoFuturo;
+  const trafegoNovasAno           = mesesSemAgendamento * TRAFEGO_MENSAL_FIXO;
+  const lucroNovasVendasAno       = fatNovasVendasAno - custoUberNovasAno - trafegoNovasAno;
+
+  // Total: soma dos 3 componentes
+  const receitaCaixaAno        = fatRealizado + fatAgendadoFuturo + fatNovasVendasAno;
+  const custoUberMatCaixaAno   = custoUberMat + custoUberAgendFuturo + custoUberNovasAno;
+  const trafegoProporcionado   = trafegoRealizado + trafegoAgendFuturo + trafegoNovasAno;
+  const lucroProjetadoCaixaAno = lucroJaRealizado + lucroAgendadoFuturo + lucroNovasVendasAno;
+  const lucroAReceberFuturo    = lucroAgendadoFuturo + lucroNovasVendasAno;
 
   const projFaturamento = projFaturamentoAnual;
 
@@ -1065,7 +1079,9 @@ function calcular(ano) {
     projPorRitmoVendas, projPorRitmoVendas12m, mediaVendasPorMes, mediaVendasMesAno,
     mediaVendasJanela, projNovasFuturas, projFechamentosRestantes,
     ticketBase, custoUberMatBase, trafegoMensalBase,
-    lucroProjetadoAnual, lucroProjetadoCaixaAno, receitaCaixaAno, lucroAReceberFuturo, fatAgendadoFuturo,
+    lucroProjetadoAnual, lucroProjetadoCaixaAno, receitaCaixaAno,
+    lucroJaRealizado, lucroAgendadoFuturo, lucroNovasVendasAno,
+    lucroAReceberFuturo, fatAgendadoFuturo, fatNovasVendasAno, novasClientesAno,
     trafegoAnoTotal, trafegoFuturo, trafegoProporcionado, TRAFEGO_MENSAL_FIXO, custoUberMatFuturo,
     custoUberMatCaixaAno,
     fatAgendadoAjustado, estimativaMesesVazios,
@@ -1180,22 +1196,23 @@ function renderLucroProjetado(d) {
       <div class="lucro-proj-card" style="background:#F4EEF2;border-color:var(--borda2)">
         <div class="lucro-proj-info">
           <div class="lucro-proj-lbl" style="color:var(--roxo)">Lucro pelo Caixa do Ano</div>
-          <div class="lucro-proj-sub">O que vai entrar no caixa este ano (realizado + agendado)</div>
+          <div class="lucro-proj-sub">Realizado + agendado confirmado + novas vendas estimadas até dezembro</div>
           <div class="lucro-proj-detalhe">
-            Receita: ${fmtBRL(d.fatRealizado)} real. + ${fmtBRL(d.fatAgendadoAjustado)} agend. <span style="opacity:.6">(−${fmtPct(d.taxaCancelamentoBase)} cancel.)</span><br>
-            − Uber/Mat: ${fmtBRL(d.custoUberMatCaixaAno)}
-            <span style="opacity:.6">(${fmtBRL(d.custoUberMatBase)}/cliente · média 12m)</span><br>
-            − Tráfego: ${fmtBRL(d.trafegoProporcionado)}
-            <span style="opacity:.6">(R$ 1.500/mês · meses com atend.)</span>
+            ✅ Já realizado: ${fmtBRL(d.lucroJaRealizado)}
+            <span style="opacity:.6">(fat. ${fmtBRL(d.fatRealizado)} − custos)</span><br>
+            📅 Agendado confirmado: ${fmtBRL(d.lucroAgendadoFuturo)}
+            <span style="opacity:.6">(${fmtBRL(d.fatAgendadoFuturo)} receita)</span><br>
+            📈 Novas vendas estimadas: ${fmtBRL(d.lucroNovasVendasAno)}
+            <span style="opacity:.6">(~${Math.round(d.novasClientesAno)} clientes × ${fmtBRL(d.ticketBase)})</span>
           </div>
         </div>
         <div class="lucro-proj-valor">
           <div style="font-size:clamp(24px,4vw,42px);font-weight:900;color:${corCaixa};line-height:1">${fmtBRL(d.lucroProjetadoCaixaAno)}</div>
           <div style="font-size:11px;font-weight:600;color:var(--texto);margin-top:6px">margem: ${fmtPct(d.receitaCaixaAno > 0 ? d.lucroProjetadoCaixaAno / d.receitaCaixaAno : 0)}</div>
           <div style="margin-top:12px;padding-top:12px;border-top:1px solid var(--borda)">
-            <div style="font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--roxo);margin-bottom:4px">A receber daqui pra frente</div>
+            <div style="font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--roxo);margin-bottom:4px">Ainda a receber (lucro)</div>
             <div style="font-size:clamp(18px,3vw,28px);font-weight:900;color:${d.lucroAReceberFuturo >= 0 ? 'var(--roxo)' : 'var(--vermelho)'};line-height:1">${fmtBRL(d.lucroAReceberFuturo)}</div>
-            <div style="font-size:10px;font-weight:600;color:var(--texto);margin-top:3px">${fmtBRL(d.fatAgendadoFuturo)} agendado nos próximos meses</div>
+            <div style="font-size:10px;font-weight:600;color:var(--texto);margin-top:3px">agendado + ~${Math.round(d.novasClientesAno)} novas vendas estimadas</div>
           </div>
         </div>
       </div>
