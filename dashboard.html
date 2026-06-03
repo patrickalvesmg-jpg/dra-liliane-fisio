@@ -850,10 +850,11 @@ function calcular(ano) {
   const mesesComAgendamento = new Set(agendadas.map(c => mesIndex(c.mesRealizado)).filter(i => i > mesLimite));
   const mesesVaziosFuturos  = MESES.slice(mesLimite + 1).filter((_, i) => !mesesComAgendamento.has(mesLimite + 1 + i)).length;
 
-  const fatAgendadoAjustado  = fatAgendado * (1 - taxaCancelamento);
-  const estimativaMesesVazios = mesesVaziosFuturos * ticketMedio * (1 - taxaCancelamento);
-  const projFaturamentoAnual  = fatRealizado + fatAgendadoAjustado + estimativaMesesVazios;
-  const projRestanteAno = fatAgendadoAjustado + estimativaMesesVazios;
+  // Calculados após janela de 12 meses — ver abaixo onde taxaCancelamentoBase é definida
+  let fatAgendadoAjustado   = 0;
+  let estimativaMesesVazios = 0;
+  let projFaturamentoAnual  = 0;
+  let projRestanteAno       = 0;
 
   // ── JANELA DESLIZANTE DE 12 MESES ───────────────────────────────────────────
   // Usada para projeção — evita que anos futuros (2027+) colem em zero
@@ -898,22 +899,37 @@ function calcular(ano) {
     return total / 12;
   })();
 
-  // Bases para projeção — sempre usa janela de 12 meses
-  const ticketBase          = ticketJanela > 0 ? ticketJanela : ticketMedio;
-  const custoUberMatBase    = custoUberMatJanela > 0 ? custoUberMatJanela : custoMedioUberMat;
-  const trafegoMensalBase   = trafegoJanela > 0 ? trafegoJanela : 1500;
-  const mediaVendasPorMes   = mediaVendasJanela;
+  // Taxa de cancelamento da janela de 12 meses (fallback quando ano não tem dados)
+  const taxaCancelamentoJanela = (() => {
+    const todas   = dadosVendas.filter(r => r[0] && janela12.some(j => j.ano === anoDeData(r[14]) && j.mes === r[15]));
+    const cancel  = todas.filter(r => r[12] === 'Cancelado');
+    return todas.length > 0 ? cancel.length / todas.length : 0;
+  })();
 
-  const projNovasFuturas     = mediaVendasPorMes * mesesRestantes * ticketBase * (1 - taxaCancelamento);
+  // Bases para projeção — sempre usa janela de 12 meses
+  const ticketBase             = ticketJanela > 0 ? ticketJanela : ticketMedio;
+  const custoUberMatBase       = custoUberMatJanela > 0 ? custoUberMatJanela : custoMedioUberMat;
+  const trafegoMensalBase      = trafegoJanela > 0 ? trafegoJanela : 1500;
+  const taxaCancelamentoBase   = totalFechadas > 0 ? taxaCancelamento : taxaCancelamentoJanela;
+  const ticketBase2            = ticketBase > 0 ? ticketBase : ticketMedio;
+  const mediaVendasPorMes      = mediaVendasJanela;
+
+  // Recalcula com taxaCancelamentoBase (corrige anos futuros sem dados)
+  fatAgendadoAjustado   = fatAgendado * (1 - taxaCancelamentoBase);
+  estimativaMesesVazios = mesesVaziosFuturos * ticketBase2 * (1 - taxaCancelamentoBase);
+  projFaturamentoAnual  = fatRealizado + fatAgendadoAjustado + estimativaMesesVazios;
+  projRestanteAno       = fatAgendadoAjustado + estimativaMesesVazios;
+
+  const projNovasFuturas     = mediaVendasPorMes * mesesRestantes * ticketBase * (1 - taxaCancelamentoBase);
   const projPorRitmoVendas   = fatRealizado + fatAgendadoAjustado + projNovasFuturas;
 
   const projFechamentos    = mesesDecorridos > 0 ? (realizadasAteMes.length / mesesDecorridos) * 12 : 0;
-  const projFechamentosAdj = projFechamentos * (1 - taxaCancelamento);
+  const projFechamentosAdj = projFechamentos * (1 - taxaCancelamentoBase);
 
   const TRAFEGO_MENSAL_FIXO   = trafegoMensalBase;
   const trafegoFuturo         = mesesRestantes * trafegoMensalBase;
   const trafegoAnoTotal       = trafegoRealizado + trafegoFuturo;
-  const clientesFuturas       = agendadas.length * (1 - taxaCancelamento) + (ticketBase > 0 ? projNovasFuturas / ticketBase : 0);
+  const clientesFuturas       = agendadas.length * (1 - taxaCancelamentoBase) + (ticketBase > 0 ? projNovasFuturas / ticketBase : 0);
   const custoUberMatFuturo    = clientesFuturas * custoUberMatBase;
   const lucroProjetadoAnual   = projPorRitmoVendas - custoUberMat - custoUberMatFuturo - trafegoAnoTotal;
 
