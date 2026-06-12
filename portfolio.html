@@ -45,9 +45,29 @@
       --shadow-warm:    0 12px 40px rgba(123,94,146,0.10);
       --radius-card:    14px;
       --radius-btn:     10px;
+      /* easing refinado — usado em reveals e micro-interações */
+      --ease-soft:      cubic-bezier(0.22, 1, 0.36, 1);
+      --ease-spring:    cubic-bezier(0.34, 1.4, 0.64, 1);
     }
 
     html { scroll-behavior: smooth; }
+
+    /* ============================================================
+       TEXTURA DE GRÃO — profundidade tátil sobre o creme
+       overlay fixo, leve, não interativo
+    ============================================================ */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      z-index: 1;
+      pointer-events: none;
+      opacity: 0.5;
+      mix-blend-mode: multiply;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.045'/%3E%3C/svg%3E");
+    }
+    /* garante que o conteúdo fique acima do grão */
+    .hero, section, footer, .progress-bar-wrap, .aviso-fixo { position: relative; z-index: 2; }
 
     body {
       font-family: 'Inter', 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
@@ -416,6 +436,23 @@
       animation: float 5s ease-in-out infinite;
       position: relative;
     }
+    /* Glow suave atrás da logo — halo de luz quente */
+    .hero-logo-wrap::before {
+      content: '';
+      position: absolute;
+      top: 50%; left: 50%;
+      width: 220px; height: 220px;
+      transform: translate(-50%, -50%);
+      background: radial-gradient(circle, rgba(201,174,192,0.40) 0%, rgba(244,238,242,0) 68%);
+      border-radius: 50%;
+      z-index: 0;
+      animation: glow-pulse 6s ease-in-out infinite;
+      pointer-events: none;
+    }
+    @keyframes glow-pulse {
+      0%, 100% { opacity: 0.7; transform: translate(-50%, -50%) scale(1); }
+      50%       { opacity: 1;   transform: translate(-50%, -50%) scale(1.08); }
+    }
     .hero-logo-img {
       height: 130px;
       width: auto;
@@ -469,13 +506,20 @@
 
     .hero-quote {
       font-family: 'Cormorant Garamond', serif;
-      font-size: clamp(1.5rem, 3.5vw, 2.2rem);
+      font-size: clamp(1.55rem, 3.6vw, 2.25rem);
       font-style: italic;
       color: var(--texto-escuro);
-      line-height: 1.5;
+      line-height: 1.58;
       max-width: 680px;
       margin: 0 auto;
       position: relative;
+      letter-spacing: 0.004em;
+    }
+    /* última frase ganha cor da marca — fecha o pensamento com ênfase */
+    .hero-quote strong {
+      font-weight: 600;
+      font-style: italic;
+      color: var(--roxo-escuro);
     }
     .hero-quote::before {
       content: '"';
@@ -913,7 +957,7 @@
     .ba-track {
       display: flex;
       width: 100%;
-      transition: transform 0.45s cubic-bezier(0.4,0,0.2,1);
+      transition: transform 0.55s var(--ease-soft);
     }
 
     .ba-slide {
@@ -940,15 +984,25 @@
     }
 
     .ba-label {
-      text-align: center;
+      align-self: center;
       font-family: 'Outfit', sans-serif;
-      font-size: 0.72rem;
-      font-weight: 700;
+      font-size: 0.66rem;
+      font-weight: 800;
       text-transform: uppercase;
-      letter-spacing: 0.1em;
+      letter-spacing: 0.12em;
+      padding: 4px 14px;
+      border-radius: 20px;
+      line-height: 1.4;
     }
-    .ba-label.antes  { color: var(--texto-cinza); }
-    .ba-label.depois { color: var(--roxo-principal); }
+    .ba-label.antes  {
+      color: var(--texto-cinza);
+      background: var(--creme-escuro);
+    }
+    .ba-label.depois {
+      color: #fff;
+      background: linear-gradient(135deg, var(--roxo-escuro) 0%, var(--roxo-principal) 100%);
+      box-shadow: 0 3px 10px rgba(123,94,146,0.28);
+    }
 
     .ph-depois { background: #7B5EA7 !important; }
 
@@ -1266,11 +1320,29 @@
 
     .fb-caption {
       font-family: 'Outfit', sans-serif;
-      font-size: 0.75rem;
-      font-weight: 600;
+      font-size: 0.72rem;
+      font-weight: 700;
       color: var(--roxo-principal);
       text-align: center;
       letter-spacing: 0.02em;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      align-self: center;
+      background: rgba(176,144,165,0.10);
+      border: 1px solid rgba(176,144,165,0.22);
+      padding: 5px 14px;
+      border-radius: 20px;
+    }
+    /* selo verde de "verificado" antes do texto do caption */
+    .fb-caption::before {
+      content: '';
+      width: 7px; height: 7px;
+      border-radius: 50%;
+      background: #25D366;
+      box-shadow: 0 0 0 3px rgba(37,211,102,0.18);
+      flex-shrink: 0;
     }
 
     /* ============================================================
@@ -1369,17 +1441,18 @@
       display: flex;
       flex-direction: column;
       background: var(--branco);
-      border: 1px solid rgba(176,144,165,0.18);
+      border: 1px solid rgba(176,144,165,0.22);
       border-radius: 18px;
       padding: 0;
-      box-shadow: var(--shadow-warm);
+      box-shadow: 0 6px 28px rgba(123,94,146,0.09);
       position: relative;
       height: 100%;
       overflow: hidden;
-      transition: box-shadow 0.32s ease;
+      transition: box-shadow 0.4s var(--ease-soft), transform 0.4s var(--ease-soft);
     }
     .plan-card:hover {
-      box-shadow: 0 12px 36px rgba(123,94,146,0.14);
+      box-shadow: 0 18px 48px rgba(123,94,146,0.18);
+      transform: translateY(-4px);
     }
 
     /* Cabeçalho colorido do card */
@@ -1414,7 +1487,20 @@
       text-decoration: none;
       box-shadow: 0 6px 16px rgba(123,94,146,0.28);
       transition: background 0.22s ease, transform 0.22s ease, box-shadow 0.22s ease;
+      position: relative;
+      overflow: hidden;
     }
+    /* brilho que cruza o botão no hover — convite tátil */
+    .plan-cta::after {
+      content: '';
+      position: absolute;
+      top: 0; left: -100%;
+      width: 60%; height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.28), transparent);
+      transform: skewX(-20deg);
+      pointer-events: none;
+    }
+    .plan-cta:hover::after { animation: shimmer 0.9s ease; }
     .plan-cta:hover {
       background: #6a4d96;
       transform: translateY(-2px);
@@ -1957,6 +2043,29 @@
       .grupo-label, .grupo-desc, .planos-grid, .quote-barra,
       .aviso-wrap, .timeline-wrap, .fb-grid, .enc-inner,
       .sobre-inner { padding-left: 20px; padding-right: 20px; }
+
+      /* ── REFINAMENTO MOBILE — respiro e leitura ─────────────────── */
+      /* Ritmo vertical: 100px é demais no celular — reduz para um fôlego confortável */
+      .sobre, .por-que, .como-funciona, .feedbacks, .planos { padding-top: 64px; padding-bottom: 64px; }
+      .planos { padding-bottom: 180px; } /* mantém espaço p/ barra fixa */
+
+      /* Leitura de corpo: linha um pouco mais alta e largura confortável */
+      .sobre-text, .recurso-text, .section-subtexto, .tl-text,
+      .planos-intro p, .planos-upsell p, .enc-text {
+        font-size: 1rem;
+        line-height: 1.8;
+      }
+
+      /* Títulos de seção: menos aperto, mais presença */
+      .section-title { font-size: clamp(1.6rem, 7.5vw, 2.1rem); line-height: 1.22; }
+      .section-header-centered { margin-bottom: 40px; }
+
+      /* Frase emocional do hero respira melhor */
+      .hero-quote { font-size: clamp(1.4rem, 6vw, 1.85rem); line-height: 1.62; }
+      .hero-quote::before { font-size: 5.5rem; top: -28px; left: -8px; }
+
+      /* Foto sobre/encerramento com leve elevação tátil */
+      .sobre-photo, .enc-photo { box-shadow: 0 16px 44px rgba(123,94,146,0.16); }
     }
 
     @media (min-width: 768px) and (max-width: 1023px) {
@@ -2078,7 +2187,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <blockquote class="hero-quote">
       Sei que você está grávida, que o parto se aproxima<br>
       e que talvez você ainda não saiba o que esperar do seu corpo depois.<br>
-      Eu vim aqui pra te ajudar com isso.
+      <strong>Eu vim aqui pra te ajudar com isso.</strong>
     </blockquote>
   </div>
 
