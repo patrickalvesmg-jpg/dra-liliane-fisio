@@ -363,6 +363,7 @@
 <nav class="abas-nav" id="abas-nav" style="display:none">
   <button class="aba-btn ativa" id="aba-btn-relatorios" onclick="trocarAba('relatorios')">Relatórios</button>
   <button class="aba-btn" id="aba-btn-gerencial" onclick="trocarAba('gerencial')">Gerencial</button>
+  <button class="aba-btn" id="aba-btn-calcinha" onclick="trocarAba('calcinha')">Calcinha Pós-Parto</button>
 </nav>
 
 <div id="dash">
@@ -459,6 +460,39 @@
     <div id="cal-detalhe-wrap"></div>
 
   </div>
+  </div>
+
+  <div id="aba-calcinha" style="display:none">
+    <div class="cnt">
+      <div class="sec">Visão Geral — Calcinha Pós-Parto</div>
+      <div class="g4" id="calc-kpis"></div>
+
+      <div class="sec">Evolução Mensal</div>
+      <div class="grafico-wrap">
+        <div class="grafico-titulo">Calcinhas Vendidas por Mês</div>
+        <div class="grafico-sub">Quantidade e receita mês a mês</div>
+        <div class="grafico-legenda">
+          <div class="leg-item"><div class="leg-dot" style="background:#B090A5"></div>Quantidade vendida</div>
+          <div class="leg-item"><div class="leg-dot" style="background:#7BAF8E"></div>Receita (R$)</div>
+        </div>
+        <div class="grafico-canvas-wrap" style="height:280px"><canvas id="chart-calcinha"></canvas></div>
+      </div>
+
+      <div class="sec">Vendas por Cliente</div>
+      <div class="conv-table-wrap">
+        <table class="conv-table">
+          <thead><tr>
+            <th>Nome</th>
+            <th>Mês</th>
+            <th class="num">Qtd. Calcinhas</th>
+            <th class="num">Receita</th>
+            <th class="num">Custo (R$ 50/un)</th>
+            <th class="num">Lucro</th>
+          </tr></thead>
+          <tbody id="calc-body"></tbody>
+        </table>
+      </div>
+    </div>
   </div>
 
   <div id="aba-gerencial" style="display:none">
@@ -572,15 +606,15 @@
           </select>
         </div>
         <div class="modal-campo">
-          <label class="modal-label">Extra</label>
-          <input class="modal-input" id="mf-extra" type="text" placeholder="Descrição do extra">
+          <label class="modal-label">Calcinha Pós-Parto (qtd)</label>
+          <input class="modal-input" id="mf-extra" type="text" placeholder="Qtd. de calcinhas vendidas">
         </div>
         <div class="modal-campo">
           <label class="modal-label">Valor Pacotes (R$)</label>
           <input class="modal-input" id="mf-valPacotes" type="text" placeholder="0,00">
         </div>
         <div class="modal-campo">
-          <label class="modal-label">Valor Extra (R$)</label>
+          <label class="modal-label">Valor Calcinha (R$)</label>
           <input class="modal-input" id="mf-valExtra" type="text" placeholder="0,00">
         </div>
         <div class="modal-campo">
@@ -737,7 +771,8 @@ function mesAtual() { return new Date().getMonth(); }
 // Colunas: A=0 nome, B=1 dataParto, C=2 mesPrevisto, D=3 mesRealizado,
 //          E=4 origem, F=5 pac1, G=6 pac2, H=7 extra, I=8 valPacotes,
 //          J=9 valExtra, K=10 custo, L=11 valTotal, M=12 status,
-//          N=13 dataContato, O=14 dataVenda, P=15 mesVenda
+//          N=13 dataContato, O=14 dataVenda, P=15 mesVenda,
+//          Q=16 qtdCalcinha, R=17 valCalcinha
 function anoDeData(str) {
   if (!str) return null;
   const p = str.split('/');
@@ -766,6 +801,8 @@ function mapearCliente(r) {
     status:       r[12] || '',
     dataVenda:    r[14] || '',
     mesVenda:     r[15] || '',
+    qtdCalcinha:  parseInt(r[16]) || 0,
+    valCalcinha:  parseBRL(r[17]),
     get valorTotal() { return this.valorPacotes + this.valorExtra; }
   };
 }
@@ -2031,10 +2068,15 @@ function trocarAba(aba) {
   abaAtiva = aba;
   document.getElementById('aba-relatorios').style.display = aba === 'relatorios' ? '' : 'none';
   document.getElementById('aba-gerencial').style.display  = aba === 'gerencial'  ? '' : 'none';
+  document.getElementById('aba-calcinha').style.display   = aba === 'calcinha'   ? '' : 'none';
   document.getElementById('aba-btn-relatorios').classList.toggle('ativa', aba === 'relatorios');
   document.getElementById('aba-btn-gerencial').classList.toggle('ativa', aba === 'gerencial');
+  document.getElementById('aba-btn-calcinha').classList.toggle('ativa', aba === 'calcinha');
   if (aba === 'gerencial') {
     renderGerencial();
+  }
+  if (aba === 'calcinha') {
+    renderCalcinha();
   }
 }
 
@@ -2277,6 +2319,111 @@ function mostrarToast(msg, erro) {
   t._timer = setTimeout(() => t.classList.remove('on'), 4000);
 }
 
+// ─── CALCINHA PÓS-PARTO ──────────────────────────────────────────────────────
+const CUSTO_CALCINHA = 50;
+let chartCalcinha = null;
+
+function renderCalcinha() {
+  const todos = clientesDoAno(anoSelecionado).filter(c => c.qtdCalcinha > 0);
+
+  const totalQtd     = todos.reduce((s, c) => s + c.qtdCalcinha, 0);
+  const totalReceita = todos.reduce((s, c) => s + c.valCalcinha, 0);
+  const totalCusto   = totalQtd * CUSTO_CALCINHA;
+  const totalLucro   = totalReceita - totalCusto;
+  const ticketMedio  = totalQtd > 0 ? totalReceita / totalQtd : 0;
+  const margem       = totalReceita > 0 ? totalLucro / totalReceita : 0;
+
+  // KPIs
+  document.getElementById('calc-kpis').innerHTML = `
+    <div class="card">
+      <div class="card-lbl">Calcinhas Vendidas</div>
+      <div class="card-val roxo">${totalQtd}</div>
+      <div class="card-sub">unidades no ano</div>
+    </div>
+    <div class="card">
+      <div class="card-lbl">Receita Total</div>
+      <div class="card-val verde">${fmtBRL(totalReceita)}</div>
+      <div class="card-sub">valor cobrado das clientes</div>
+    </div>
+    <div class="card">
+      <div class="card-lbl">Lucro Total</div>
+      <div class="card-val ${totalLucro >= 0 ? 'verde' : 'vermelho'}">${fmtBRL(totalLucro)}</div>
+      <div class="card-sub">Custo atacado: ${fmtBRL(totalCusto)} (R$ 50/un) · Margem: ${fmtPct(margem)}</div>
+    </div>
+    <div class="card">
+      <div class="card-lbl">Ticket Médio por Unidade</div>
+      <div class="card-val amarelo">${ticketMedio > 0 ? fmtBRL(ticketMedio) : '—'}</div>
+      <div class="card-sub">receita ÷ unidades vendidas</div>
+    </div>
+  `;
+
+  // Gráfico por mês
+  const porMes = MESES.map(mes => {
+    const clientesMes = todos.filter(c => (c.mesVenda || c.mesRef) === mes);
+    return {
+      qtd:     clientesMes.reduce((s, c) => s + c.qtdCalcinha, 0),
+      receita: clientesMes.reduce((s, c) => s + c.valCalcinha, 0),
+    };
+  });
+
+  if (chartCalcinha) { chartCalcinha.destroy(); chartCalcinha = null; }
+  const ctx = document.getElementById('chart-calcinha').getContext('2d');
+  chartCalcinha = new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: MESES.map(m => m.substring(0, 3)),
+      datasets: [
+        {
+          label: 'Quantidade',
+          data: porMes.map(m => m.qtd),
+          backgroundColor: 'rgba(176,144,165,0.70)',
+          borderRadius: 5,
+          borderSkipped: false,
+          yAxisID: 'y',
+        },
+        {
+          label: 'Receita',
+          data: porMes.map(m => m.receita),
+          backgroundColor: 'rgba(123,175,142,0.65)',
+          borderRadius: 5,
+          borderSkipped: false,
+          yAxisID: 'y2',
+        },
+      ]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { display: false } },
+      scales: {
+        x: { grid: { color: 'rgba(176,144,165,0.14)' }, ticks: { color: '#7A6872', font: { family: 'Outfit', size: 11 } } },
+        y:  { position: 'left',  grid: { color: 'rgba(176,144,165,0.14)' }, ticks: { color: '#B090A5', font: { family: 'Outfit', size: 10 }, stepSize: 1 }, title: { display: true, text: 'Qtd', color: '#B090A5', font: { size: 10 } } },
+        y2: { position: 'right', grid: { drawOnChartArea: false }, ticks: { color: '#4E8B65', font: { family: 'Outfit', size: 10 }, callback: v => v >= 1000 ? 'R$' + (v/1000).toFixed(0) + 'k' : 'R$' + v }, title: { display: true, text: 'Receita', color: '#4E8B65', font: { size: 10 } } },
+      }
+    }
+  });
+
+  // Tabela por cliente
+  const tbody = document.getElementById('calc-body');
+  if (!todos.length) {
+    tbody.innerHTML = `<tr><td colspan="6" style="text-align:center;padding:28px;font-size:13px;color:var(--texto);font-style:italic">Nenhuma venda de calcinha registrada. Preencha as colunas "Calcinha pós-parto" e "Valor calcinha" na planilha.</td></tr>`;
+    return;
+  }
+
+  const ordenados = [...todos].sort((a, b) => MESES.indexOf(a.mesVenda || a.mesRef) - MESES.indexOf(b.mesVenda || b.mesRef));
+  tbody.innerHTML = ordenados.map(c => {
+    const custo = c.qtdCalcinha * CUSTO_CALCINHA;
+    const lucro = c.valCalcinha - custo;
+    return `<tr>
+      <td class="mes-nome">${c.nome}</td>
+      <td>${c.mesVenda || c.mesRef || '—'}</td>
+      <td class="num">${c.qtdCalcinha}</td>
+      <td class="num" style="color:var(--verde);font-weight:700">${fmtBRL(c.valCalcinha)}</td>
+      <td class="custo">${fmtBRL(custo)}</td>
+      <td class="num" style="color:${lucro >= 0 ? 'var(--verde)' : 'var(--vermelho)'};font-weight:800">${fmtBRL(lucro)}</td>
+    </tr>`;
+  }).join('');
+}
+
 // ─── RENDERIZAR ──────────────────────────────────────────────────────────────
 function renderizar() {
   const d = calcular(anoSelecionado);
@@ -2295,6 +2442,9 @@ function renderizar() {
   renderCalendario();
   if (abaAtiva === 'gerencial') {
     renderGerencial();
+  }
+  if (abaAtiva === 'calcinha') {
+    renderCalcinha();
   }
 }
 
