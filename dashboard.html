@@ -737,7 +737,7 @@ function popularAnosSeletor() {
   dadosVendas.forEach(r => {
     // adiciona tanto o ano da venda quanto o ano do parto ao seletor
     // assim clientes vendidas em 2026 com parto em 2027 aparecem nos dois anos
-    const anoVenda = anoDeData(r[14]);
+    const anoVenda = anoDeData(r[13]);
     const anoParto = anoDeData(r[1]);
     if (anoVenda) anos.add(anoVenda);
     if (anoParto) anos.add(anoParto);
@@ -768,11 +768,14 @@ function anoAtual() { return new Date().getFullYear(); }
 function mesAtual() { return new Date().getMonth(); }
 
 // ─── CLIENTES DO ANO ─────────────────────────────────────────────────────────
-// Colunas: A=0 nome, B=1 dataParto, C=2 mesPrevisto, D=3 mesRealizado,
+// Colunas (conforme cabeçalho atual da planilha):
+//          A=0 nome, B=1 dataParto, C=2 mesPrevisto, D=3 mesRealizado,
 //          E=4 origem, F=5 pac1, G=6 pac2, H=7 extra, I=8 valPacotes,
 //          J=9 valExtra, K=10 custo, L=11 valTotal, M=12 status,
-//          N=13 dataContato, O=14 dataVenda, P=15 mesVenda,
-//          Q=16 qtdCalcinha, R=17 valCalcinha
+//          N=13 dataVenda, O=14 mesVenda
+// OBS: a antiga coluna "Data do Contato" foi removida da planilha; por isso
+//      dataVenda/mesVenda recuaram uma posição (eram 14/15, agora 13/14).
+//      A planilha atual não possui mais colunas separadas de qtd/valor de calcinha.
 function anoDeData(str) {
   if (!str) return null;
   const p = str.split('/');
@@ -799,8 +802,8 @@ function mapearCliente(r) {
     valorExtra:   parseBRL(r[9]),
     custo:        parseBRL(r[10]),
     status:       r[12] || '',
-    dataVenda:    r[14] || '',
-    mesVenda:     r[15] || '',
+    dataVenda:    r[13] || '',
+    mesVenda:     r[14] || '',
     qtdCalcinha:  parseInt(r[16]) || 0,
     valCalcinha:  parseBRL(r[17]),
     get valorTotal() { return this.valorPacotes + this.valorExtra; }
@@ -812,7 +815,7 @@ function clientesVendidosNoAno(ano) {
   return dadosVendas
     .filter(r => {
       if (!r[0]) return false;
-      const anoVenda = anoDeData(r[14]);
+      const anoVenda = anoDeData(r[13]);
       const anoParto = anoDeData(r[1]);
       const anoRef   = anoVenda ?? anoParto ?? anoAtual();
       return anoRef === ano;
@@ -829,7 +832,7 @@ function clientesAtendidosNoAno(ano) {
       const anoParto = anoDeData(r[1]); // data prevista do parto → confirma o ano
       if (anoParto) return anoParto === ano;
       // sem data de parto: usa ano da venda como referência
-      const anoVenda = anoDeData(r[14]);
+      const anoVenda = anoDeData(r[13]);
       return (anoVenda ?? anoAtual()) === ano;
     })
     .map(mapearCliente);
@@ -937,12 +940,12 @@ function calcular(ano) {
 
   // Vendas dos últimos 12 meses (não canceladas, com mesVenda preenchido)
   const vendasJanela = dadosVendas.filter(r => {
-    if (!r[0] || !r[15]) return false;
-    const av = anoDeData(r[14]);
-    return janela12.some(j => j.ano === av && j.mes === r[15]) && r[12] !== 'Cancelado';
+    if (!r[0] || !r[14]) return false;
+    const av = anoDeData(r[13]);
+    return janela12.some(j => j.ano === av && j.mes === r[14]) && r[12] !== 'Cancelado';
   });
   const mesesComVendaJanela = janela12.filter(j =>
-    vendasJanela.some(r => anoDeData(r[14]) === j.ano && r[15] === j.mes)
+    vendasJanela.some(r => anoDeData(r[13]) === j.ano && r[14] === j.mes)
   ).length || 1;
   const mediaVendasJanela = vendasJanela.length / mesesComVendaJanela;
 
@@ -971,7 +974,7 @@ function calcular(ano) {
 
   // Taxa de cancelamento da janela de 12 meses (fallback quando ano não tem dados)
   const taxaCancelamentoJanela = (() => {
-    const todas  = dadosVendas.filter(r => r[0] && r[15] && janela12.some(j => j.mes === r[15] && j.ano === (anoDeData(r[14]) || anoDeData(r[1]))));
+    const todas  = dadosVendas.filter(r => r[0] && r[14] && janela12.some(j => j.mes === r[14] && j.ano === (anoDeData(r[13]) || anoDeData(r[1]))));
     const cancel = todas.filter(r => r[12] === 'Cancelado');
     return todas.length > 0 ? cancel.length / todas.length : 0;
   })();
@@ -2528,13 +2531,13 @@ function abrirModalEdicao(nome, dataParto) {
     document.getElementById('mf-valExtra').value   = parseBRL(linha[9])  || '';
     document.getElementById('mf-custo').value      = parseBRL(linha[10]) || '';
     document.getElementById('mf-valTotal').value   = parseBRL(linha[11]) || '';
-    document.getElementById('mf-dataVenda').value  = linha[14] || '';
+    document.getElementById('mf-dataVenda').value  = linha[13] || '';
     _preencherSelect('mf-mesPrevisto',  linha[2]  || '');
     _preencherSelect('mf-mesRealizado', linha[3]  || '');
     _preencherSelect('mf-origem',       linha[4]  || '');
     _preencherSelect('mf-pacote1',      linha[5]  || '');
     _preencherSelect('mf-pacote2',      linha[6]  || '');
-    _preencherSelect('mf-mesVenda',     linha[15] || '');
+    _preencherSelect('mf-mesVenda',     linha[14] || '');
     _preencherSelect('mf-status',       linha[12] || 'Agendado');
   }
 
