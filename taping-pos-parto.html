@@ -232,17 +232,42 @@
 
   /* ══ ANTES/DEPOIS ══ */
   .ba { background: var(--creme); padding: 52px 0 56px; text-align: center; }
-  .ba-carousel { position: relative; border-radius: 20px; overflow: hidden; box-shadow: var(--shadow); margin-top: 24px; aspect-ratio: 1 / 1; }
-  .ba-slide { position: absolute; inset: 0; opacity: 0; transition: opacity .8s ease; display: grid; grid-template-columns: 1fr 1fr; gap: 3px; background: var(--roxo-claro); }
-  .ba-slide.ativo { opacity: 1; }
-  .ba-item { position: relative; overflow: hidden; }
-  .ba-item img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .ba-carousel {
+    position: relative; margin-top: 24px;
+    display: grid; /* todos os slides ocupam a mesma célula; só o ativo aparece */
+  }
+  .ba-slide {
+    grid-area: 1 / 1; /* empilha todos os slides no mesmo lugar */
+    opacity: 0; visibility: hidden; pointer-events: none;
+    transition: opacity .6s ease;
+    display: grid; grid-template-columns: 1fr; gap: 12px; /* mobile: empilhado */
+  }
+  .ba-slide.ativo { opacity: 1; visibility: visible; pointer-events: auto; }
+  .ba-item {
+    position: relative; overflow: hidden; border-radius: 16px;
+    background: var(--roxo-bg); box-shadow: var(--shadow-sm);
+  }
+  /* mostra a foto inteira (sem corte); a proporção segue a imagem, com teto de altura */
+  .ba-item img {
+    width: 100%; height: auto; max-height: 62vh; object-fit: contain; display: block; margin: 0 auto;
+  }
   .ba-label {
     position: absolute; bottom: 10px; left: 10px; font-size: 10px; font-weight: 700;
     letter-spacing: .08em; text-transform: uppercase; padding: 4px 10px; border-radius: 20px; color: #fff;
+    z-index: 2;
   }
   .ba-label.antes { background: rgba(42,32,40,.72); }
   .ba-label.depois { background: var(--roxo); }
+  /* desktop / telas largas: Antes e Depois lado a lado, sem espremer */
+  @media (min-width: 560px) {
+    .ba-slide { grid-template-columns: 1fr 1fr; gap: 14px; align-items: start; }
+    .ba-item img { max-height: 48vh; }
+    /* deixa o carrossel escapar do wrap de 480px e usar mais tela no desktop */
+    .ba .ba-carousel {
+      width: min(760px, calc(100vw - 3rem));
+      margin-left: 50%; transform: translateX(-50%);
+    }
+  }
   .ba-nav { display: flex; justify-content: center; align-items: center; gap: 16px; margin-top: 18px; }
   .carr-btn {
     width: 40px; height: 40px; border-radius: 50%; border: 2px solid var(--roxo-claro);
