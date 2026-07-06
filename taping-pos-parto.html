@@ -61,6 +61,8 @@
   <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
   html { scroll-behavior: smooth; }
+  /* âncoras dos sitelinks do Google Ads não colam no topo ao rolar */
+  #resultados, #acompanhamento, #atendimento, #depoimentos { scroll-margin-top: 16px; }
 
   :root {
     --roxo:        #B090A5;
@@ -453,7 +455,7 @@
 </section>
 
 <!-- ══ 3. ANTES/DEPOIS ══ -->
-<section class="ba" aria-label="Resultados antes e depois do taping">
+<section class="ba" id="resultados" aria-label="Resultados antes e depois do taping">
   <div class="wrap">
     <span class="sec-tag reveal">Resultados reais</span>
     <h2 class="sec-titulo reveal reveal-d1">Antes e depois do <span>taping</span></h2>
@@ -486,7 +488,7 @@
 </section>
 
 <!-- ══ 3.5 ACOMPANHAMENTO — MUITO ALÉM DO TAPE ══ -->
-<section class="acomp" aria-label="Acompanhamento pós-parto completo">
+<section class="acomp" id="acompanhamento" aria-label="Acompanhamento pós-parto completo">
   <div class="wrap">
     <span class="sec-tag reveal">Muito além do tape</span>
     <h2 class="sec-titulo reveal reveal-d1">O taping é a ferramenta.<br>O <span>acompanhamento</span> é o cuidado.</h2>
@@ -569,7 +571,7 @@
 </section>
 
 <!-- ══ 5. ATENDO EM CASA ══ -->
-<section class="casa" aria-label="Atendimento domiciliar">
+<section class="casa" id="atendimento" aria-label="Atendimento domiciliar">
   <div class="wrap">
     <span class="sec-tag reveal">Comodidade total</span>
     <h2 class="sec-titulo reveal reveal-d1">Eu vou até <span>você</span></h2>
@@ -587,7 +589,7 @@
 </section>
 
 <!-- ══ 6. DEPOIMENTOS ══ -->
-<section class="depos" aria-label="Depoimentos de pacientes">
+<section class="depos" id="depoimentos" aria-label="Depoimentos de pacientes">
   <div class="wrap" style="text-align:center">
     <span class="sec-tag reveal">O que elas dizem</span>
     <h2 class="sec-titulo reveal reveal-d1">Não acredite só em mim.<br>Acredite <span>nelas.</span></h2>
