@@ -296,6 +296,17 @@
       border-radius: var(--radius-card);
       display: block;
     }
+    /* Foto de antes/depois já unificada numa imagem só — mostra inteira, sem corte */
+    .ba-item.ba-uni {
+      width: 100%;
+      max-width: 460px;
+      margin: 0 auto;
+    }
+    .ba-item.ba-uni .ba-slot {
+      aspect-ratio: auto;
+      height: auto;
+      object-fit: contain;
+    }
     /* Drenagem — quadrado */
     .ba-slot-square {
       aspect-ratio: 1/1;
@@ -2466,39 +2477,33 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         <div class="ba-track-outer">
           <div class="ba-track">
             <div class="ba-slide">
-              <div class="ba-par">
-                <div class="ba-item">
-                  <img src="Foto%208%20Antes.jpg" alt="Antes — Taping Compressivo" loading="lazy" class="ba-slot" />
-                  <span class="ba-label antes">Antes</span>
-                </div>
-                <div class="ba-item">
-                  <img src="Foto%208%20Depois.jpg" alt="Depois — Taping Compressivo" loading="lazy" class="ba-slot" />
-                  <span class="ba-label depois">Depois</span>
-                </div>
+              <div class="ba-item ba-uni">
+                <img src="Antes%20e%20depois%20taping%201.jpeg" alt="Antes e depois — Taping Compressivo pós-parto" loading="lazy" class="ba-slot" />
               </div>
             </div>
             <div class="ba-slide">
-              <div class="ba-par">
-                <div class="ba-item">
-                  <img src="Foto%209%20Antes.jpg" alt="Antes — Taping Compressivo" loading="lazy" class="ba-slot" />
-                  <span class="ba-label antes">Antes</span>
-                </div>
-                <div class="ba-item">
-                  <img src="Foto%209%20Depois.jpg" alt="Depois — Taping Compressivo" loading="lazy" class="ba-slot" />
-                  <span class="ba-label depois">Depois</span>
-                </div>
+              <div class="ba-item ba-uni">
+                <img src="Antes%20e%20depois%20taping%202.jpeg" alt="Antes e depois — Taping Compressivo pós-parto" loading="lazy" class="ba-slot" />
               </div>
             </div>
             <div class="ba-slide">
-              <div class="ba-par">
-                <div class="ba-item">
-                  <img src="Foto%2010%20Antes.jpg" alt="Antes — Taping Compressivo" loading="lazy" class="ba-slot" />
-                  <span class="ba-label antes">Antes</span>
-                </div>
-                <div class="ba-item">
-                  <img src="Foto%2010%20Depois.jpg" alt="Depois — Taping Compressivo" loading="lazy" class="ba-slot" />
-                  <span class="ba-label depois">Depois</span>
-                </div>
+              <div class="ba-item ba-uni">
+                <img src="Antes%20e%20depois%20taping%203.jpeg" alt="Antes e depois — Taping Compressivo pós-parto" loading="lazy" class="ba-slot" />
+              </div>
+            </div>
+            <div class="ba-slide">
+              <div class="ba-item ba-uni">
+                <img src="Antes%20e%20depois%20taping%204.jpeg" alt="Antes e depois — Taping Compressivo pós-parto" loading="lazy" class="ba-slot" />
+              </div>
+            </div>
+            <div class="ba-slide">
+              <div class="ba-item ba-uni">
+                <img src="Antes%20e%20depois%20taping%205.jpeg" alt="Antes e depois — Taping Compressivo pós-parto" loading="lazy" class="ba-slot" />
+              </div>
+            </div>
+            <div class="ba-slide">
+              <div class="ba-item ba-uni">
+                <img src="Antes%20e%20depois%20taping%206.jpeg" alt="Antes e depois — Taping Compressivo pós-parto" loading="lazy" class="ba-slot" />
               </div>
             </div>
           </div>
@@ -2506,9 +2511,12 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         <div class="ba-controls">
           <button class="ba-btn ba-prev" aria-label="Anterior">&#8249;</button>
           <div class="ba-dots">
-            <button class="ba-dot active" aria-label="Par 1"></button>
-            <button class="ba-dot" aria-label="Par 2"></button>
-            <button class="ba-dot" aria-label="Par 3"></button>
+            <button class="ba-dot active" aria-label="Foto 1"></button>
+            <button class="ba-dot" aria-label="Foto 2"></button>
+            <button class="ba-dot" aria-label="Foto 3"></button>
+            <button class="ba-dot" aria-label="Foto 4"></button>
+            <button class="ba-dot" aria-label="Foto 5"></button>
+            <button class="ba-dot" aria-label="Foto 6"></button>
           </div>
           <button class="ba-btn ba-next" aria-label="Próximo">&#8250;</button>
         </div>

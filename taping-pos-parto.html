@@ -260,10 +260,13 @@
   }
   .ba-label.antes { background: rgba(42,32,40,.72); }
   .ba-label.depois { background: var(--roxo); }
+  /* foto de antes/depois já unificada — 1 imagem só, centralizada */
+  .ba-item.uni { max-width: 420px; margin: 0 auto; width: 100%; }
+
   /* desktop / telas largas: Antes e Depois lado a lado, sem espremer */
   @media (min-width: 560px) {
-    .ba-slide { grid-template-columns: 1fr 1fr; gap: 14px; align-items: start; }
-    .ba-item img { max-height: 48vh; }
+    .ba-slide { grid-template-columns: 1fr; gap: 14px; align-items: start; justify-items: center; }
+    .ba-item img { max-height: 62vh; }
     /* deixa o carrossel escapar do wrap de 480px e usar mais tela no desktop */
     .ba .ba-carousel {
       width: min(760px, calc(100vw - 3rem));
@@ -462,23 +465,29 @@
 
     <div class="ba-carousel reveal-scale" id="baCarousel" aria-live="polite">
       <div class="ba-slide ativo" role="group" aria-label="Resultado 1">
-        <div class="ba-item"><img src="Foto%208%20Antes.jpg" alt="Antes do taping compressivo pós-parto" loading="lazy" /><span class="ba-label antes">Antes</span></div>
-        <div class="ba-item"><img src="Foto%208%20Depois.jpg" alt="Depois do taping compressivo pós-parto" loading="lazy" /><span class="ba-label depois">Depois</span></div>
+        <div class="ba-item uni"><img src="Antes%20e%20depois%20taping%201.jpeg" alt="Antes e depois do taping compressivo pós-parto" loading="lazy" /></div>
       </div>
       <div class="ba-slide" role="group" aria-label="Resultado 2">
-        <div class="ba-item"><img src="Foto%209%20Antes.jpg" alt="Antes do taping pós-parto" loading="lazy" /><span class="ba-label antes">Antes</span></div>
-        <div class="ba-item"><img src="Foto%209%20Depois.jpg" alt="Depois do taping pós-parto" loading="lazy" /><span class="ba-label depois">Depois</span></div>
+        <div class="ba-item uni"><img src="Antes%20e%20depois%20taping%202.jpeg" alt="Antes e depois do taping pós-parto" loading="lazy" /></div>
       </div>
       <div class="ba-slide" role="group" aria-label="Resultado 3">
-        <div class="ba-item"><img src="Foto%2010%20Antes.jpg" alt="Antes do tape pós-parto" loading="lazy" /><span class="ba-label antes">Antes</span></div>
-        <div class="ba-item"><img src="Foto%2010%20Depois.jpg" alt="Depois do tape pós-parto" loading="lazy" /><span class="ba-label depois">Depois</span></div>
+        <div class="ba-item uni"><img src="Antes%20e%20depois%20taping%203.jpeg" alt="Antes e depois do tape pós-parto" loading="lazy" /></div>
+      </div>
+      <div class="ba-slide" role="group" aria-label="Resultado 4">
+        <div class="ba-item uni"><img src="Antes%20e%20depois%20taping%204.jpeg" alt="Antes e depois do taping pós-parto" loading="lazy" /></div>
+      </div>
+      <div class="ba-slide" role="group" aria-label="Resultado 5">
+        <div class="ba-item uni"><img src="Antes%20e%20depois%20taping%205.jpeg" alt="Antes e depois do taping compressivo" loading="lazy" /></div>
+      </div>
+      <div class="ba-slide" role="group" aria-label="Resultado 6">
+        <div class="ba-item uni"><img src="Antes%20e%20depois%20taping%206.jpeg" alt="Antes e depois do tape pós-parto" loading="lazy" /></div>
       </div>
     </div>
 
     <div class="ba-nav" aria-hidden="true">
       <button class="carr-btn" id="ba-prev" aria-label="Resultado anterior">&#8249;</button>
       <div class="dots" id="baDots">
-        <div class="dot on"></div><div class="dot"></div><div class="dot"></div>
+        <div class="dot on"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div>
       </div>
       <button class="carr-btn" id="ba-next" aria-label="Próximo resultado">&#8250;</button>
     </div>
