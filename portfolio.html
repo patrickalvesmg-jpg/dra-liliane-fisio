@@ -1343,6 +1343,26 @@
       display: block;
       border-radius: 8px;
     }
+    /* Card com 2 prints curtos empilhados — preenche melhor a moldura vertical */
+    .fb-print.dupla {
+      flex-direction: column;
+      justify-content: center;       /* agrupa os dois prints no centro da moldura */
+      gap: 14px;                     /* espaço pequeno entre os dois prints */
+      padding: 12px 10px;
+    }
+    .fb-print.dupla .fb-shot {
+      flex: 0 1 auto;
+      min-height: 0;
+      max-height: calc(50% - 7px);
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .fb-print.dupla .fb-shot img {
+      max-width: 100%;
+      max-height: 100%;
+    }
     /* Placeholder visual enquanto não há imagem real */
     .fb-print-placeholder {
       width: 100%;
@@ -2709,16 +2729,13 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
   <div class="fb-carousel fade-in">
     <div class="fb-track" id="fbTrack">
+      <!-- Individuais (prints médios/retrato preenchem bem a moldura) -->
       <div class="fb-card">
         <div class="fb-print"><img src="Print%20Depoimento%201.jpg" alt="Depoimento de paciente via WhatsApp" loading="lazy" /></div>
         <p class="fb-caption">Depoimento via WhatsApp</p>
       </div>
       <div class="fb-card">
         <div class="fb-print"><img src="Print%20Depoimento%202.jpg" alt="Depoimento de paciente via WhatsApp" loading="lazy" /></div>
-        <p class="fb-caption">Depoimento via WhatsApp</p>
-      </div>
-      <div class="fb-card">
-        <div class="fb-print"><img src="Print%20Depoimento%203.jpg" alt="Depoimento de paciente via WhatsApp" loading="lazy" /></div>
         <p class="fb-caption">Depoimento via WhatsApp</p>
       </div>
       <div class="fb-card">
@@ -2730,28 +2747,31 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         <p class="fb-caption">Depoimento via WhatsApp</p>
       </div>
       <div class="fb-card">
-        <div class="fb-print"><img src="Print%20Depoimento%206.jpeg" alt="Depoimento de paciente via WhatsApp" loading="lazy" /></div>
-        <p class="fb-caption">Depoimento via WhatsApp</p>
-      </div>
-      <div class="fb-card">
-        <div class="fb-print"><img src="Print%20Depoimento%207.jpeg" alt="Depoimento de paciente via WhatsApp" loading="lazy" /></div>
-        <p class="fb-caption">Depoimento via WhatsApp</p>
-      </div>
-      <div class="fb-card">
-        <div class="fb-print"><img src="Print%20Depoimento%208.jpeg" alt="Depoimento de paciente via WhatsApp" loading="lazy" /></div>
-        <p class="fb-caption">Depoimento via WhatsApp</p>
-      </div>
-      <div class="fb-card">
-        <div class="fb-print"><img src="Print%20Depoimento%209.jpeg" alt="Depoimento de paciente via WhatsApp" loading="lazy" /></div>
-        <p class="fb-caption">Depoimento via WhatsApp</p>
-      </div>
-      <div class="fb-card">
-        <div class="fb-print"><img src="Print%20Depoimento%2010.jpeg" alt="Depoimento de paciente via WhatsApp" loading="lazy" /></div>
-        <p class="fb-caption">Depoimento via WhatsApp</p>
-      </div>
-      <div class="fb-card">
         <div class="fb-print"><img src="Print%20Depoimento%2011.jpeg" alt="Depoimento de paciente via WhatsApp" loading="lazy" /></div>
         <p class="fb-caption">Depoimento via WhatsApp</p>
+      </div>
+
+      <!-- Pares empilhados (prints curtos preenchem a moldura juntos) -->
+      <div class="fb-card">
+        <div class="fb-print dupla">
+          <div class="fb-shot"><img src="Print%20Depoimento%203.jpg" alt="Depoimento de paciente via WhatsApp" loading="lazy" /></div>
+          <div class="fb-shot"><img src="Print%20Depoimento%206.jpeg" alt="Depoimento de paciente via WhatsApp" loading="lazy" /></div>
+        </div>
+        <p class="fb-caption">Depoimentos via WhatsApp</p>
+      </div>
+      <div class="fb-card">
+        <div class="fb-print dupla">
+          <div class="fb-shot"><img src="Print%20Depoimento%207.jpeg" alt="Depoimento de paciente via WhatsApp" loading="lazy" /></div>
+          <div class="fb-shot"><img src="Print%20Depoimento%208.jpeg" alt="Depoimento de paciente via WhatsApp" loading="lazy" /></div>
+        </div>
+        <p class="fb-caption">Depoimentos via WhatsApp</p>
+      </div>
+      <div class="fb-card">
+        <div class="fb-print dupla">
+          <div class="fb-shot"><img src="Print%20Depoimento%209.jpeg" alt="Depoimento de paciente via WhatsApp" loading="lazy" /></div>
+          <div class="fb-shot"><img src="Print%20Depoimento%2010.jpeg" alt="Depoimento de paciente via WhatsApp" loading="lazy" /></div>
+        </div>
+        <p class="fb-caption">Depoimentos via WhatsApp</p>
       </div>
     </div>
 
