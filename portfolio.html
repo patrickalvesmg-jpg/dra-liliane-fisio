@@ -1328,7 +1328,7 @@
       aspect-ratio: 4 / 5;           /* moldura compacta — os prints preenchem sem sobrar vazio */
       border-radius: 10px;
       overflow: hidden;
-      background: #E5DDD5;            /* fundo estilo WhatsApp preenche as sobras */
+      background: #FFFFFF;            /* fundo branco */
       display: flex;
       align-items: center;
       justify-content: center;
@@ -1358,6 +1358,11 @@
       display: flex;
       align-items: center;
       justify-content: center;
+    }
+    /* separação entre os dois prints — deixa claro que são depoimentos diferentes */
+    .fb-print.dupla .fb-shot:first-child {
+      padding-bottom: 14px;
+      border-bottom: 1px solid rgba(176,144,165,0.35);
     }
     .fb-print.dupla .fb-shot img {
       max-width: 100%;
