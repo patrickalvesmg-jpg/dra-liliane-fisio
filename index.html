@@ -389,7 +389,8 @@
     position: relative;
     border-radius: 20px;
     overflow: hidden;
-    aspect-ratio: 1 / 1;
+    aspect-ratio: 4 / 5;
+    background: #fff;
     box-shadow: var(--shadow);
   }
 
@@ -404,7 +405,7 @@
   .slide img {
     width: 100%;
     height: 100%;
-    object-fit: cover;
+    object-fit: contain;
     display: block;
   }
   .slide-ph {
@@ -413,15 +414,6 @@
     background: var(--roxo-claro);
   }
 
-  /* Overlay gradiente no carrossel */
-  .carrossel-wrap::after {
-    content: '';
-    position: absolute;
-    bottom: 0; left: 0; right: 0;
-    height: 40%;
-    background: linear-gradient(to top, rgba(42,32,40,0.3), transparent);
-    pointer-events: none;
-  }
 
   /* Dots */
   .dots {
@@ -526,41 +518,41 @@
     padding: 52px 0 56px;
   }
 
-  .depos-scroll {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 16px;
-    padding: 4px 1.5rem 8px;
+  /* Carrossel de depoimentos (mesmo padrão do portfolio) */
+  .fb-carousel { position: relative; padding: 4px 1.5rem 0; }
+  .fb-track {
+    display: flex; gap: 14px; overflow-x: auto;
+    scroll-snap-type: x mandatory; scroll-behavior: smooth;
+    padding: 4px 4px 16px; -webkit-overflow-scrolling: touch; scrollbar-width: none;
   }
-
-  .depo-card {
-    width: 100%;
-    max-width: 400px;
-    border-radius: 16px;
-    overflow: hidden;
-    box-shadow: var(--shadow-sm);
-    transition: transform 0.25s ease, box-shadow 0.25s ease;
+  .fb-track::-webkit-scrollbar { display: none; }
+  .fb-card {
+    background: var(--branco); border-radius: 16px; padding: 12px;
+    box-shadow: var(--shadow-sm); overflow: hidden;
+    flex: 0 0 clamp(230px, 78%, 300px); scroll-snap-align: center;
   }
-  .depo-card:hover {
-    transform: translateY(-4px);
-    box-shadow: var(--shadow);
+  /* moldura do print — compacta, fundo branco, imagem inteira centralizada */
+  .fb-print {
+    width: 100%; aspect-ratio: 4 / 5; border-radius: 10px; overflow: hidden;
+    background: #FFFFFF; display: flex; align-items: center; justify-content: center; padding: 8px;
   }
-  .depo-card img {
-    width: 100%;
-    display: block;
-    object-fit: cover;
+  .fb-print img { max-width: 100%; max-height: 100%; width: auto; height: auto; object-fit: contain; display: block; border-radius: 8px; }
+  /* 2 prints curtos empilhados com separação */
+  .fb-print.dupla { flex-direction: column; justify-content: center; gap: 12px; padding: 10px 8px; }
+  .fb-print.dupla .fb-shot { flex: 0 1 auto; min-height: 0; max-height: calc(50% - 6px); width: 100%; display: flex; align-items: center; justify-content: center; }
+  .fb-print.dupla .fb-shot img { max-width: 100%; max-height: 100%; }
+  .fb-print.dupla .fb-shot:first-child { padding-bottom: 12px; border-bottom: 1px solid rgba(176,144,165,0.35); }
+  /* navegação */
+  .fb-nav { display: flex; justify-content: center; align-items: center; gap: 16px; margin-top: 6px; }
+  .fb-btn {
+    width: 42px; height: 42px; border-radius: 50%; border: 2px solid var(--roxo-claro);
+    background: var(--branco); color: var(--roxo); font-size: 1.3rem; cursor: pointer;
+    display: flex; align-items: center; justify-content: center; line-height: 1;
+    transition: background .2s, color .2s, border-color .2s, opacity .2s;
   }
-
-  .depos-hint {
-    font-size: 10px;
-    font-weight: 500;
-    color: var(--cinza);
-    letter-spacing: 0.08em;
-    text-align: center;
-    margin-top: 16px;
-    opacity: 0.7;
-  }
+  .fb-btn:hover { background: var(--roxo); color: #fff; border-color: var(--roxo); }
+  .fb-btn:disabled { opacity: 0.35; cursor: default; }
+  .fb-hint { font-size: 11px; font-weight: 500; color: var(--roxo); letter-spacing: 0.02em; opacity: 0.75; }
 
   /* ════════════════════════════════════════════
      5. CTA FINAL
@@ -740,34 +732,46 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <section class="galeria" aria-label="Galeria de atendimentos">
   <div class="wrap" style="text-align:center">
 
-    <span class="sec-tag reveal">O cuidado em prática</span>
+    <span class="sec-tag reveal">Resultados reais</span>
     <h2 class="sec-titulo reveal reveal-d1">
-      Cada sessão é única.<br>Como você.
+      Antes e depois do<br>tape pós-parto.
     </h2>
 
-    <!-- Carrossel -->
+    <!-- Carrossel de antes/depois (fotos unificadas) -->
     <div class="carrossel-wrap reveal-scale" id="carrosselWrap" aria-live="polite">
 
-      <div class="slide ativo" role="img" aria-label="Foto de atendimento 1">
-        <img src="Bio%20site%201.png" alt="Atendimento de fisioterapia — gestação e pós-parto" loading="lazy"
+      <div class="slide ativo" role="img" aria-label="Antes e depois 1">
+        <img src="Antes%20e%20depois%20taping%201.jpeg" alt="Antes e depois — taping compressivo pós-parto" loading="lazy"
              onerror="this.style.display='none'; this.nextElementSibling.style.display='block';" />
         <div class="slide-ph" style="display:none"></div>
       </div>
 
-      <div class="slide" role="img" aria-label="Foto de atendimento 2">
-        <img src="Bio%20site%202.png" alt="Fisioterapia pós-parto — taping e reabilitação" loading="lazy"
+      <div class="slide" role="img" aria-label="Antes e depois 2">
+        <img src="Antes%20e%20depois%20taping%202.jpeg" alt="Antes e depois — taping compressivo pós-parto" loading="lazy"
              onerror="this.style.display='none'; this.nextElementSibling.style.display='block';" />
         <div class="slide-ph" style="display:none"></div>
       </div>
 
-      <div class="slide" role="img" aria-label="Foto de atendimento 3">
-        <img src="Bio%20site%203.png" alt="Fisioterapia gestacional — cuidado e recuperação" loading="lazy"
+      <div class="slide" role="img" aria-label="Antes e depois 3">
+        <img src="Antes%20e%20depois%20taping%203.jpeg" alt="Antes e depois — taping pós-parto" loading="lazy"
              onerror="this.style.display='none'; this.nextElementSibling.style.display='block';" />
         <div class="slide-ph" style="display:none"></div>
       </div>
 
-      <div class="slide" role="img" aria-label="Foto de atendimento 4">
-        <img src="Bio%20site%204.png" alt="Acompanhamento fisioterapêutico especializado" loading="lazy"
+      <div class="slide" role="img" aria-label="Antes e depois 4">
+        <img src="Antes%20e%20depois%20taping%204.jpeg" alt="Antes e depois — taping pós-parto" loading="lazy"
+             onerror="this.style.display='none'; this.nextElementSibling.style.display='block';" />
+        <div class="slide-ph" style="display:none"></div>
+      </div>
+
+      <div class="slide" role="img" aria-label="Antes e depois 5">
+        <img src="Antes%20e%20depois%20taping%205.jpeg" alt="Antes e depois — taping compressivo" loading="lazy"
+             onerror="this.style.display='none'; this.nextElementSibling.style.display='block';" />
+        <div class="slide-ph" style="display:none"></div>
+      </div>
+
+      <div class="slide" role="img" aria-label="Antes e depois 6">
+        <img src="Antes%20e%20depois%20taping%206.jpeg" alt="Antes e depois — tape pós-parto" loading="lazy"
              onerror="this.style.display='none'; this.nextElementSibling.style.display='block';" />
         <div class="slide-ph" style="display:none"></div>
       </div>
@@ -782,13 +786,15 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         <div class="dot"></div>
         <div class="dot"></div>
         <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
       </div>
       <button class="carr-btn" id="carr-next" aria-label="Próxima foto">&#8250;</button>
     </div>
 
     <!-- Legenda -->
     <p class="galeria-legenda reveal reveal-d2">
-      "Cada sessão é pensada para o seu corpo,<br>no seu momento."
+      "Taping compressivo aplicado pela Dra. Liliane."
     </p>
 
   </div>
@@ -842,30 +848,51 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
   </div>
 
-  <!-- Scroll horizontal -->
-  <div class="depos-scroll reveal">
-
-    <div class="depo-card">
-      <img src="Print%20Depoimento%201.jpg"
-           alt="Depoimento de paciente — pós-parto João Pessoa"
-           loading="lazy"
-           onerror="this.parentElement.style.display='none'" />
+  <!-- Carrossel de depoimentos -->
+  <div class="fb-carousel reveal">
+    <div class="fb-track" id="fbTrack">
+      <!-- Individuais -->
+      <div class="fb-card">
+        <div class="fb-print"><img src="Print%20Depoimento%201.jpg" alt="Depoimento de paciente via WhatsApp" loading="lazy" /></div>
+      </div>
+      <div class="fb-card">
+        <div class="fb-print"><img src="Print%20Depoimento%202.jpg" alt="Depoimento de paciente via WhatsApp" loading="lazy" /></div>
+      </div>
+      <div class="fb-card">
+        <div class="fb-print"><img src="Print%20Depoimento%204.jpeg" alt="Depoimento de paciente via WhatsApp" loading="lazy" /></div>
+      </div>
+      <div class="fb-card">
+        <div class="fb-print"><img src="Print%20Depoimento%205.jpeg" alt="Depoimento de paciente via WhatsApp" loading="lazy" /></div>
+      </div>
+      <div class="fb-card">
+        <div class="fb-print"><img src="Print%20Depoimento%2011.jpeg" alt="Depoimento de paciente via WhatsApp" loading="lazy" /></div>
+      </div>
+      <!-- Pares empilhados (prints curtos) -->
+      <div class="fb-card">
+        <div class="fb-print dupla">
+          <div class="fb-shot"><img src="Print%20Depoimento%203.jpg" alt="Depoimento de paciente via WhatsApp" loading="lazy" /></div>
+          <div class="fb-shot"><img src="Print%20Depoimento%206.jpeg" alt="Depoimento de paciente via WhatsApp" loading="lazy" /></div>
+        </div>
+      </div>
+      <div class="fb-card">
+        <div class="fb-print dupla">
+          <div class="fb-shot"><img src="Print%20Depoimento%207.jpeg" alt="Depoimento de paciente via WhatsApp" loading="lazy" /></div>
+          <div class="fb-shot"><img src="Print%20Depoimento%208.jpeg" alt="Depoimento de paciente via WhatsApp" loading="lazy" /></div>
+        </div>
+      </div>
+      <div class="fb-card">
+        <div class="fb-print dupla">
+          <div class="fb-shot"><img src="Print%20Depoimento%209.jpeg" alt="Depoimento de paciente via WhatsApp" loading="lazy" /></div>
+          <div class="fb-shot"><img src="Print%20Depoimento%2010.jpeg" alt="Depoimento de paciente via WhatsApp" loading="lazy" /></div>
+        </div>
+      </div>
     </div>
 
-    <div class="depo-card">
-      <img src="Print%20Depoimento%202.jpg"
-           alt="Depoimento de paciente — fisioterapia gestacional"
-           loading="lazy"
-           onerror="this.parentElement.style.display='none'" />
+    <div class="fb-nav">
+      <button class="fb-btn" id="fbPrev" aria-label="Depoimentos anteriores">&#8249;</button>
+      <span class="fb-hint">Arraste para ver mais →</span>
+      <button class="fb-btn" id="fbNext" aria-label="Próximos depoimentos">&#8250;</button>
     </div>
-
-    <div class="depo-card">
-      <img src="Print%20Depoimento%203.jpg"
-           alt="Depoimento de paciente — resultado real"
-           loading="lazy"
-           onerror="this.parentElement.style.display='none'" />
-    </div>
-
   </div>
 
 </section>
@@ -960,6 +987,30 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     const diff = touchStartX - e.changedTouches[0].clientX;
     if (Math.abs(diff) > 45) goTo(diff > 0 ? atual + 1 : atual - 1);
   }, { passive: true });
+
+  /* Carrossel de depoimentos — navegação por setas + estado dos botões */
+  (function () {
+    const track = document.getElementById('fbTrack');
+    const prev = document.getElementById('fbPrev');
+    const next = document.getElementById('fbNext');
+    if (!track || !prev || !next) return;
+    function step() {
+      const card = track.querySelector('.fb-card');
+      if (!card) return track.clientWidth;
+      const gap = parseInt(getComputedStyle(track).columnGap || getComputedStyle(track).gap || '14', 10) || 14;
+      return card.getBoundingClientRect().width + gap;
+    }
+    function update() {
+      prev.disabled = track.scrollLeft <= 4;
+      next.disabled = track.scrollLeft + track.clientWidth >= track.scrollWidth - 4;
+    }
+    prev.addEventListener('click', () => track.scrollBy({ left: -step(), behavior: 'smooth' }));
+    next.addEventListener('click', () => track.scrollBy({ left: step(), behavior: 'smooth' }));
+    track.addEventListener('scroll', update, { passive: true });
+    window.addEventListener('resize', update);
+    track.querySelectorAll('img').forEach(img => { if (!img.complete) img.addEventListener('load', update, { once: true }); });
+    update();
+  })();
 </script>
 
 
