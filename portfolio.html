@@ -1322,18 +1322,26 @@
       box-shadow: 0 14px 44px rgba(176,144,165,0.15);
     }
 
-    /* Imagem do print de WhatsApp — exibe completo, sem corte */
+    /* Print de WhatsApp — moldura de proporção fixa; imagem centralizada e inteira dentro dela */
     .fb-print {
       width: 100%;
+      aspect-ratio: 9 / 16;          /* moldura vertical consistente (estilo 1080x1920) */
       border-radius: 10px;
       overflow: hidden;
-      background: #E5DDD5;
+      background: #E5DDD5;            /* fundo estilo WhatsApp preenche as sobras */
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 10px;
     }
     .fb-print img {
-      width: 100%;
+      max-width: 100%;
+      max-height: 100%;
+      width: auto;
       height: auto;
+      object-fit: contain;           /* mostra o print inteiro, sem corte */
       display: block;
-      border-radius: 10px;
+      border-radius: 8px;
     }
     /* Placeholder visual enquanto não há imagem real */
     .fb-print-placeholder {
