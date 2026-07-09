@@ -1253,14 +1253,24 @@
       padding: 100px 0;
     }
 
-    .fb-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 24px;
+    /* Carrossel de depoimentos — track deslizante horizontal */
+    .fb-carousel {
       max-width: 1140px;
       margin: 0 auto;
       padding: 0 32px;
+      position: relative;
     }
+    .fb-track {
+      display: flex;
+      gap: 24px;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      scroll-behavior: smooth;
+      padding: 4px 4px 20px;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+    }
+    .fb-track::-webkit-scrollbar { display: none; }
 
     .fb-card {
       background: var(--branco);
@@ -1273,6 +1283,39 @@
       display: flex;
       flex-direction: column;
       gap: 12px;
+      flex: 0 0 clamp(260px, 30%, 340px);
+      scroll-snap-align: center;
+    }
+
+    /* Navegação do carrossel */
+    .fb-nav {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 18px;
+      margin-top: 12px;
+    }
+    .fb-btn {
+      width: 46px; height: 46px;
+      border-radius: 50%;
+      border: 2px solid var(--roxo-claro, #C9AEC0);
+      background: var(--branco);
+      color: var(--roxo-principal, #B090A5);
+      font-size: 1.4rem;
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      line-height: 1;
+      transition: background 0.2s, color 0.2s, border-color 0.2s, opacity 0.2s;
+    }
+    .fb-btn:hover { background: var(--roxo-principal, #B090A5); color: #fff; border-color: var(--roxo-principal, #B090A5); }
+    .fb-btn:disabled { opacity: 0.35; cursor: default; }
+    .fb-hint {
+      font-family: 'Outfit', sans-serif;
+      font-size: 0.72rem;
+      font-weight: 500;
+      color: var(--roxo-principal, #B090A5);
+      letter-spacing: 0.02em;
+      opacity: 0.7;
     }
     .fb-card:hover {
       transform: translateY(-5px);
@@ -2656,32 +2699,91 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <p class="section-subtexto">Mulheres reais. Resultados reais. Aqui em João Pessoa.</p>
   </div>
 
-  <div class="fb-grid">
-    <!-- Card 1 -->
-    <div class="fb-card fade-in">
-      <div class="fb-print">
-        <img src="Print%20Depoimento%201.jpg" alt="Depoimento de paciente via WhatsApp" loading="lazy" />
+  <div class="fb-carousel fade-in">
+    <div class="fb-track" id="fbTrack">
+      <div class="fb-card">
+        <div class="fb-print"><img src="Print%20Depoimento%201.jpg" alt="Depoimento de paciente via WhatsApp" loading="lazy" /></div>
+        <p class="fb-caption">Depoimento via WhatsApp</p>
       </div>
-      <p class="fb-caption">Depoimento via WhatsApp</p>
+      <div class="fb-card">
+        <div class="fb-print"><img src="Print%20Depoimento%202.jpg" alt="Depoimento de paciente via WhatsApp" loading="lazy" /></div>
+        <p class="fb-caption">Depoimento via WhatsApp</p>
+      </div>
+      <div class="fb-card">
+        <div class="fb-print"><img src="Print%20Depoimento%203.jpg" alt="Depoimento de paciente via WhatsApp" loading="lazy" /></div>
+        <p class="fb-caption">Depoimento via WhatsApp</p>
+      </div>
+      <div class="fb-card">
+        <div class="fb-print"><img src="Print%20Depoimento%204.jpeg" alt="Depoimento de paciente via WhatsApp" loading="lazy" /></div>
+        <p class="fb-caption">Depoimento via WhatsApp</p>
+      </div>
+      <div class="fb-card">
+        <div class="fb-print"><img src="Print%20Depoimento%205.jpeg" alt="Depoimento de paciente via WhatsApp" loading="lazy" /></div>
+        <p class="fb-caption">Depoimento via WhatsApp</p>
+      </div>
+      <div class="fb-card">
+        <div class="fb-print"><img src="Print%20Depoimento%206.jpeg" alt="Depoimento de paciente via WhatsApp" loading="lazy" /></div>
+        <p class="fb-caption">Depoimento via WhatsApp</p>
+      </div>
+      <div class="fb-card">
+        <div class="fb-print"><img src="Print%20Depoimento%207.jpeg" alt="Depoimento de paciente via WhatsApp" loading="lazy" /></div>
+        <p class="fb-caption">Depoimento via WhatsApp</p>
+      </div>
+      <div class="fb-card">
+        <div class="fb-print"><img src="Print%20Depoimento%208.jpeg" alt="Depoimento de paciente via WhatsApp" loading="lazy" /></div>
+        <p class="fb-caption">Depoimento via WhatsApp</p>
+      </div>
+      <div class="fb-card">
+        <div class="fb-print"><img src="Print%20Depoimento%209.jpeg" alt="Depoimento de paciente via WhatsApp" loading="lazy" /></div>
+        <p class="fb-caption">Depoimento via WhatsApp</p>
+      </div>
+      <div class="fb-card">
+        <div class="fb-print"><img src="Print%20Depoimento%2010.jpeg" alt="Depoimento de paciente via WhatsApp" loading="lazy" /></div>
+        <p class="fb-caption">Depoimento via WhatsApp</p>
+      </div>
+      <div class="fb-card">
+        <div class="fb-print"><img src="Print%20Depoimento%2011.jpeg" alt="Depoimento de paciente via WhatsApp" loading="lazy" /></div>
+        <p class="fb-caption">Depoimento via WhatsApp</p>
+      </div>
     </div>
 
-    <!-- Card 2 -->
-    <div class="fb-card fade-in" style="transition-delay:0.12s">
-      <div class="fb-print">
-        <img src="Print%20Depoimento%202.jpg" alt="Depoimento de paciente via WhatsApp" loading="lazy" />
-      </div>
-      <p class="fb-caption">Depoimento via WhatsApp</p>
-    </div>
-
-    <!-- Card 3 -->
-    <div class="fb-card fade-in" style="transition-delay:0.24s">
-      <div class="fb-print">
-        <img src="Print%20Depoimento%203.jpg" alt="Depoimento de paciente via WhatsApp" loading="lazy" />
-      </div>
-      <p class="fb-caption">Depoimento via WhatsApp</p>
+    <div class="fb-nav">
+      <button class="fb-btn" id="fbPrev" aria-label="Depoimentos anteriores">&#8249;</button>
+      <span class="fb-hint">Arraste para ver mais →</span>
+      <button class="fb-btn" id="fbNext" aria-label="Próximos depoimentos">&#8250;</button>
     </div>
   </div>
 </section>
+
+<script>
+  /* Carrossel de depoimentos — navegação por setas + estado dos botões */
+  (function () {
+    var track = document.getElementById('fbTrack');
+    var prev = document.getElementById('fbPrev');
+    var next = document.getElementById('fbNext');
+    if (!track || !prev || !next) return;
+
+    function step() {
+      var card = track.querySelector('.fb-card');
+      if (!card) return track.clientWidth;
+      var gap = parseInt(getComputedStyle(track).columnGap || getComputedStyle(track).gap || '24', 10) || 24;
+      return card.getBoundingClientRect().width + gap;
+    }
+    function update() {
+      prev.disabled = track.scrollLeft <= 4;
+      next.disabled = track.scrollLeft + track.clientWidth >= track.scrollWidth - 4;
+    }
+    prev.addEventListener('click', function () { track.scrollBy({ left: -step(), behavior: 'smooth' }); });
+    next.addEventListener('click', function () { track.scrollBy({ left: step(), behavior: 'smooth' }); });
+    track.addEventListener('scroll', update, { passive: true });
+    window.addEventListener('resize', update);
+    // reavalia quando as imagens carregam (o scrollWidth muda)
+    track.querySelectorAll('img').forEach(function (img) {
+      if (!img.complete) img.addEventListener('load', update, { once: true });
+    });
+    update();
+  })();
+</script>
 
 <!-- ====================================================
      SEÇÃO 7 — PLANOS
