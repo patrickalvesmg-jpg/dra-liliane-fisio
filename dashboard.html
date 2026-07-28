@@ -316,6 +316,9 @@
     .modal-label { font-size: 9px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--texto); }
     .modal-input { background: var(--bg); border: 1px solid var(--borda2); border-radius: 8px; padding: 9px 12px; font-family: 'Outfit', sans-serif; font-size: 13px; font-weight: 500; color: var(--escuro); outline: none; transition: border-color .2s; }
     .modal-input:focus { border-color: var(--roxo); }
+    /* Campo calculado automaticamente (Valor Total) — não editável */
+    .modal-input-auto { background: var(--bg2); color: var(--texto2); cursor: not-allowed; font-weight: 700; }
+    .modal-input-auto:focus { border-color: var(--borda2); }
     .modal-select { background: var(--bg); border: 1px solid var(--borda2); border-radius: 8px; padding: 9px 12px; font-family: 'Outfit', sans-serif; font-size: 13px; font-weight: 500; color: var(--escuro); outline: none; cursor: pointer; appearance: none; -webkit-appearance: none; }
     .modal-select:focus { border-color: var(--roxo); }
     .modal-footer { padding: 16px 28px 24px; display: flex; gap: 10px; justify-content: flex-end; border-top: 1px solid var(--borda); position: sticky; bottom: 0; background: var(--card); }
@@ -622,8 +625,10 @@
           <input class="modal-input" id="mf-custo" type="text" placeholder="0,00">
         </div>
         <div class="modal-campo">
-          <label class="modal-label">Valor Total (R$)</label>
-          <input class="modal-input" id="mf-valTotal" type="text" placeholder="0,00">
+          <label class="modal-label">Valor Total (R$) <span style="font-weight:400;opacity:.6">— calculado</span></label>
+          <input class="modal-input modal-input-auto" id="mf-valTotal" type="text"
+                 placeholder="0,00" readonly tabindex="-1"
+                 title="Soma automática de Valor Pacotes + Valor Calcinha">
         </div>
         <div class="modal-campo">
           <label class="modal-label">Data da Venda (dd/mm/aaaa)</label>
@@ -2566,7 +2571,8 @@ function abrirModalEdicao(nome, dataParto) {
     document.getElementById('mf-valPacotes').value = parseBRL(linha[COL.valPacotes])  || '';
     document.getElementById('mf-valExtra').value   = parseBRL(linha[COL.valCalcinha]) || '';
     document.getElementById('mf-custo').value      = parseBRL(linha[COL.custo])       || '';
-    document.getElementById('mf-valTotal').value   = parseBRL(linha[COL.valTotal])    || '';
+    // Valor Total não é lido da planilha: é sempre recalculado de Pacotes + Calcinha
+    // (assim linhas antigas com o total digitado errado se corrigem ao salvar)
     document.getElementById('mf-dataVenda').value  = linha[COL.dataVenda] || '';
     _preencherSelect('mf-mesPrevisto',  linha[COL.mesPrevisto]  || '');
     _preencherSelect('mf-mesRealizado', linha[COL.mesRealizado] || '');
@@ -2575,10 +2581,29 @@ function abrirModalEdicao(nome, dataParto) {
     _preencherSelect('mf-pacote2',      linha[COL.pacote2]      || '');
     _preencherSelect('mf-mesVenda',     linha[COL.mesVenda]     || '');
     _preencherSelect('mf-status',       linha[COL.status]       || 'Agendado');
+    recalcularValorTotal();
   }
 
   document.getElementById('modal-venda').classList.add('on');
 }
+
+// ─── VALOR TOTAL AUTOMÁTICO ──────────────────────────────────────────────────
+// Espelha a fórmula da planilha: VALOR TOTAL = Valor Pacotes + Valor Calcinha.
+// O campo é readonly no formulário; esta função é a única que o preenche.
+function recalcularValorTotal() {
+  const pacotes  = parseBRL(document.getElementById('mf-valPacotes').value);
+  const calcinha = parseBRL(document.getElementById('mf-valExtra').value);
+  const total    = pacotes + calcinha;
+  document.getElementById('mf-valTotal').value =
+    total > 0 ? total.toFixed(2).replace('.', ',') : '';
+}
+
+// Recalcula a cada digitação nos dois campos que compõem o total
+['mf-valPacotes', 'mf-valExtra'].forEach(id => {
+  document.addEventListener('input', e => {
+    if (e.target && e.target.id === id) recalcularValorTotal();
+  });
+});
 
 function limparModal() {
   ['nome','dataParto','extra','valPacotes','valExtra','custo','valTotal','dataVenda'].forEach(id => {
@@ -2616,7 +2641,9 @@ async function salvarVenda() {
     valPacotes:   parseBRL(document.getElementById('mf-valPacotes').value) || '',
     valExtra:     parseBRL(document.getElementById('mf-valExtra').value) || '',
     custo:        parseBRL(document.getElementById('mf-custo').value) || '',
-    valTotal:     parseBRL(document.getElementById('mf-valTotal').value) || '',
+    // sempre a soma, nunca o que estiver no campo (que é readonly)
+    valTotal:     (parseBRL(document.getElementById('mf-valPacotes').value)
+                 + parseBRL(document.getElementById('mf-valExtra').value)) || '',
     status:       document.getElementById('mf-status').value,
     dataVenda:    document.getElementById('mf-dataVenda').value.trim(),
     mesVenda:     document.getElementById('mf-mesVenda').value,
