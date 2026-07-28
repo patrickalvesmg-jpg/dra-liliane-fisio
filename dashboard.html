@@ -817,9 +817,20 @@ function anoVendaDe(r)       { return anoDeColuna(r, COL.anoVenda,       COL.dat
 function mapearCliente(r) {
   const mesPrevisto  = r[COL.mesPrevisto]  || '';
   const mesRealizado = r[COL.mesRealizado] || '';
-  // Mês de referência para calendário e projeções:
-  // usa mesRealizado se preenchido, senão mesPrevisto (mais confiável que a data exata)
-  const mesRef = mesRealizado || mesPrevisto;
+  const status       = r[COL.status] || '';
+
+  // MÊS DE REFERÊNCIA — onde o dinheiro é contabilizado.
+  // Enquanto o atendimento não aconteceu (Agendado/Cancelado), vale o mês
+  // PREVISTO. Só quando o status vira "Realizado" é que o mês REALIZADO passa
+  // a mandar — assim um parto que antecipa ou atrasa move o faturamento para
+  // o mês em que o dinheiro realmente entrou.
+  //
+  // O status é quem decide, não o simples preenchimento da coluna: hoje 49
+  // vendas ainda Agendadas já vêm com o mês realizado copiado do previsto, e
+  // considerá-lo cedo demais faria o valor contar no mês errado se a data mudar.
+  const mesRef = (status === 'Realizado' && mesRealizado)
+    ? mesRealizado
+    : (mesPrevisto || mesRealizado);
   return {
     nome:            r[COL.nome]      || '',
     dataParto:       r[COL.dataParto] || '',
