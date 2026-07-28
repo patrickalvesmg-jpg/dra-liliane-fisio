@@ -651,14 +651,13 @@
 
 <script>
 // ─── CONFIG ───────────────────────────────────────────────────────────────────
-// Planilha "Controle de Vendas 2026-2028" (17 colunas na aba Vendas)
-const SHEET_ID   = '1U36W0abt4e_Fvi6qH2vMPOeB7p-JIY80o-j5NdJ1Pp8';
-const GID_VENDAS = '1246185189';
-const GID_INVEST = '470768834';
-const GID_LEADS  = '517397463';
+const SHEET_ID   = '1DPxDKTXGy4hBnsggdWfPfIkAiznT-GEEn01oFKB3GR4';
+const GID_VENDAS = '436702235';
+const GID_INVEST = '1973352773';
+const GID_LEADS  = '1947126829';
 const MESES = ['Janeiro','Fevereiro','Março','Abril','Maio','Junho',
                'Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
-const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwTJbIY7NA8-jmsI-jrHxI_B1g4Xvai3c50O3qaLRH61ECqimYmIA0Bzfsm2WOjzrH2/exec';
+const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzX9YFC-7bPYnB7OaJrU6SmM4wC08zxukmkVTzyXoN1f__QyzH6uIcbL1vxP_eXzMFpsw/exec';
 
 // ─── ESTADO ──────────────────────────────────────────────────────────────────
 let dadosVendas = [], dadosInvest = [], dadosLeads = [];
@@ -712,10 +711,9 @@ async function carregarDados() {
     setLoader(75);
     const leads = await fetchGviz(GID_LEADS);
     setLoader(90);
-    dadosVendas = vendas.filter(r => r[COL.nome] && String(r[COL.nome]).trim() !== '');
-    // Investimentos e Leads seguem Mês|Ano|Valor — estrutura inalterada
-    dadosInvest = invest.filter(r => r[0] && String(r[0]).trim() !== '');
-    dadosLeads  = leads.filter(r => r[0] && String(r[0]).trim() !== '');
+    dadosVendas = vendas.filter(r => r[0] && r[0].trim() !== '');
+    dadosInvest = invest.filter(r => r[0] && r[0].trim() !== '');
+    dadosLeads  = leads.filter(r => r[0] && r[0].trim() !== '');
     await carregarMarcacoes();
     popularAnosSeletor();
     renderizar();
@@ -737,13 +735,13 @@ function popularAnosSeletor() {
   const anos = new Set();
   dadosInvest.forEach(r => { if (r[1]) anos.add(parseInt(r[1])); });
   dadosVendas.forEach(r => {
-    // adiciona tanto o ano da venda quanto o ano do atendimento ao seletor
-    // assim clientes vendidas em 2026 com atendimento em 2027 aparecem nos dois anos
-    const av = anoVendaDe(r);
-    const aa = anoAtendimentoDe(r);
-    if (av) anos.add(av);
-    if (aa) anos.add(aa);
-    if (!av && !aa) anos.add(anoAtual());
+    // adiciona tanto o ano da venda quanto o ano do parto ao seletor
+    // assim clientes vendidas em 2026 com parto em 2027 aparecem nos dois anos
+    const anoVenda = anoDeData(r[13]);
+    const anoParto = anoDeData(r[1]);
+    if (anoVenda) anos.add(anoVenda);
+    if (anoParto) anos.add(anoParto);
+    if (!anoVenda && !anoParto) anos.add(anoAtual());
   });
   if (anos.size === 0) anos.add(new Date().getFullYear());
   const anosOrdenados = [...anos].sort((a,b) => b-a);
@@ -769,95 +767,73 @@ function mesIndex(nome) { return MESES.indexOf(nome); }
 function anoAtual() { return new Date().getFullYear(); }
 function mesAtual() { return new Date().getMonth(); }
 
-// ─── MAPA DE COLUNAS DA ABA "Vendas" ─────────────────────────────────────────
-// Planilha 2026-2028: 17 colunas. As duas colunas de ANO são novas e explícitas,
-// então o dashboard nunca mais precisa deduzir o ano a partir de uma data.
-//
-//   A=0  nome              J=9   valPacotes
-//   B=1  dataParto         K=10  valCalcinha
-//   C=2  mesPrevisto       L=11  custo (Uber/Mat)
-//   D=3  ANO ATENDIMENTO   M=12  valTotal
-//   E=4  mesRealizado      N=13  status
-//   F=5  origem            O=14  dataVenda
-//   G=6  pacote1           P=15  mesVenda
-//   H=7  pacote2           Q=16  ANO DA VENDA
-//   I=8  qtdCalcinha
-//
-// Sempre use COL.xxx — nunca índices soltos. Se a planilha mudar de ordem,
-// basta corrigir este bloco.
-const COL = {
-  nome: 0, dataParto: 1, mesPrevisto: 2, anoAtendimento: 3, mesRealizado: 4,
-  origem: 5, pacote1: 6, pacote2: 7, qtdCalcinha: 8, valPacotes: 9,
-  valCalcinha: 10, custo: 11, valTotal: 12, status: 13, dataVenda: 14,
-  mesVenda: 15, anoVenda: 16
-};
-
+// ─── CLIENTES DO ANO ─────────────────────────────────────────────────────────
+// Colunas (conforme cabeçalho atual da planilha):
+//          A=0 nome, B=1 dataParto, C=2 mesPrevisto, D=3 mesRealizado,
+//          E=4 origem, F=5 pac1, G=6 pac2, H=7 extra, I=8 valPacotes,
+//          J=9 valExtra, K=10 custo, L=11 valTotal, M=12 status,
+//          N=13 dataVenda, O=14 mesVenda
+// OBS: a antiga coluna "Data do Contato" foi removida da planilha; por isso
+//      dataVenda/mesVenda recuaram uma posição (eram 14/15, agora 13/14).
+//      A planilha atual não possui mais colunas separadas de qtd/valor de calcinha.
 function anoDeData(str) {
   if (!str) return null;
-  const p = String(str).split('/');
+  const p = str.split('/');
   if (p.length === 3) { const y = parseInt(p[2]); if (y > 2020) return y; }
   return null;
 }
 
-// Lê o ano de uma coluna dedicada (D ou Q). Cai para a data só se estiver vazia,
-// o que mantém compatibilidade com linhas antigas ainda não preenchidas.
-function anoDeColuna(r, idxAno, idxDataFallback) {
-  const v = parseInt(r[idxAno]);
-  if (v > 2020) return v;
-  return idxDataFallback != null ? anoDeData(r[idxDataFallback]) : null;
-}
-function anoAtendimentoDe(r) { return anoDeColuna(r, COL.anoAtendimento, COL.dataParto); }
-function anoVendaDe(r)       { return anoDeColuna(r, COL.anoVenda,       COL.dataVenda); }
-
 function mapearCliente(r) {
-  const mesPrevisto  = r[COL.mesPrevisto]  || '';
-  const mesRealizado = r[COL.mesRealizado] || '';
+  const mesPrevisto  = r[2] || '';
+  const mesRealizado = r[3] || '';
   // Mês de referência para calendário e projeções:
   // usa mesRealizado se preenchido, senão mesPrevisto (mais confiável que a data exata)
   const mesRef = mesRealizado || mesPrevisto;
   return {
-    nome:            r[COL.nome]      || '',
-    dataParto:       r[COL.dataParto] || '',
-    anoParto:        anoAtendimentoDe(r),   // coluna D (ANO DO ATENDIMENTO)
-    anoAtendimento:  anoAtendimentoDe(r),
-    anoVenda:        anoVendaDe(r),         // coluna Q (ANO DA VENDA)
+    nome:         r[0] || '',
+    dataParto:    r[1] || '',
+    anoParto:     anoDeData(r[1]),
     mesPrevisto,
     mesRealizado,
     mesRef,
-    origem:       r[COL.origem]  || '',
-    pacote1:      r[COL.pacote1] || '',
-    pacote2:      r[COL.pacote2] || '',
-    valorPacotes: parseBRL(r[COL.valPacotes]),
-    valorExtra:   parseBRL(r[COL.valCalcinha]),
-    custo:        parseBRL(r[COL.custo]),
-    status:       r[COL.status]    || '',
-    dataVenda:    r[COL.dataVenda] || '',
-    mesVenda:     r[COL.mesVenda]  || '',
-    qtdCalcinha:  parseInt(r[COL.qtdCalcinha]) || 0,
-    valCalcinha:  parseBRL(r[COL.valCalcinha]),
+    pacote1:      r[5] || '',
+    pacote2:      r[6] || '',
+    valorPacotes: parseBRL(r[8]),
+    valorExtra:   parseBRL(r[9]),
+    custo:        parseBRL(r[10]),
+    status:       r[12] || '',
+    dataVenda:    r[13] || '',
+    mesVenda:     r[14] || '',
+    qtdCalcinha:  parseInt(r[16]) || 0,
+    valCalcinha:  parseBRL(r[17]),
     get valorTotal() { return this.valorPacotes + this.valorExtra; }
   };
 }
 
-// EIXO COMERCIAL — vendas fechadas no ano (coluna Q "Ano da Venda").
-// Usado em: Total Vendido, Vendas Fechadas, gráfico de vendas.
-// Uma venda fechada em 2026 para atender em 2027 conta aqui em 2026.
+// Clientes cuja VENDA foi fechada no ano — para faturamento, fechamentos, gráfico de vendas
 function clientesVendidosNoAno(ano) {
   return dadosVendas
     .filter(r => {
-      if (!r[COL.nome]) return false;
-      return (anoVendaDe(r) ?? anoAtendimentoDe(r) ?? anoAtual()) === ano;
+      if (!r[0]) return false;
+      const anoVenda = anoDeData(r[13]);
+      const anoParto = anoDeData(r[1]);
+      const anoRef   = anoVenda ?? anoParto ?? anoAtual();
+      return anoRef === ano;
     })
     .map(mapearCliente);
 }
 
-// EIXO DE ENTREGA — atendimentos que acontecem no ano (coluna D "Ano do Atendimento").
-// Usado em: Faturamento Realizado/Agendado, Lucro, Custo, calendário, projeções.
+// Clientes cujo ATENDIMENTO ocorre no ano — para calendário, projeções, alertas
+// Ano confirmado pela dataParto; mês de referência é mesPrevisto (ou mesRealizado)
 function clientesAtendidosNoAno(ano) {
   return dadosVendas
     .filter(r => {
-      if (!r[COL.nome]) return false;
-      return (anoAtendimentoDe(r) ?? anoVendaDe(r) ?? anoAtual()) === ano;
+      if (!r[0]) return false;
+      const anoParto = anoDeData(r[1]); // data prevista do parto → confirma o ano
+      if (anoParto) return anoParto === ano;
+      // sem data de parto: usa ano da venda como referência
+      const anoVenda = anoDeData(r[13]);
+      return (anoVenda ?? anoAtual()) === ano;
     })
     .map(mapearCliente);
 }
@@ -890,13 +866,8 @@ function calcular(ano) {
   const mesLimite = ano < anoAtual() ? 11 : (ano === anoAtual() ? mesAtual() : -1);
   const trafego   = trafegoPorMes(ano);
 
-  // REGRA DE DOIS EIXOS (igual à da planilha 2026-2028):
-  //  • Faturamento Realizado/Agendado, Custo e Lucro → ANO DO ATENDIMENTO (entrega)
-  //  • Total Vendido e Vendas Fechadas               → ANO DA VENDA       (comercial)
-  // Consequência esperada: Realizado + Agendado NÃO fecha com Total Vendido
-  // quando há vendas cruzando o ano — a diferença é o que foi vendido num ano
-  // para ser atendido em outro.
-  const realizadas  = todosAtendidos.filter(c => c.status === 'Realizado');
+  // financeiro/vendas: usa somente vendidos no ano
+  const realizadas  = todosVendidos.filter(c => c.status === 'Realizado');
   const agendadas   = todosAtendidos.filter(c => c.status === 'Agendado');
   const canceladas  = todosVendidos.filter(c => c.status === 'Cancelado');
   const ativas      = [...realizadas, ...agendadas];
@@ -906,10 +877,7 @@ function calcular(ano) {
   const fatRealizado   = realizadas.reduce((s,c) => s + c.valorTotal, 0);
   const fatAgendado    = agendadas.reduce((s,c)  => s + c.valorTotal, 0);
   const totalCancelado = canceladas.reduce((s,c) => s + c.valorTotal, 0);
-  // Total Vendido = esforço comercial do ano (não canceladas), pelo ANO DA VENDA
-  const totalVendido   = todosVendidos
-    .filter(c => c.status !== 'Cancelado')
-    .reduce((s,c) => s + c.valorTotal, 0);
+  const totalVendido   = fatRealizado + fatAgendado + totalCancelado;
 
   const custoUberMat     = realizadas.reduce((s,c) => s + c.custo, 0);
   const trafegoRealizado = mesLimite < 0 ? 0 : MESES.slice(0, mesLimite + 1).reduce((s, mes) => s + (trafego[mes] || 0), 0);
@@ -972,27 +940,25 @@ function calcular(ano) {
 
   // Vendas dos últimos 12 meses (não canceladas, com mesVenda preenchido)
   const vendasJanela = dadosVendas.filter(r => {
-    if (!r[COL.nome] || !r[COL.mesVenda]) return false;
-    const av = anoVendaDe(r);
-    return janela12.some(j => j.ano === av && j.mes === r[COL.mesVenda])
-           && r[COL.status] !== 'Cancelado';
+    if (!r[0] || !r[14]) return false;
+    const av = anoDeData(r[13]);
+    return janela12.some(j => j.ano === av && j.mes === r[14]) && r[12] !== 'Cancelado';
   });
   const mesesComVendaJanela = janela12.filter(j =>
-    vendasJanela.some(r => anoVendaDe(r) === j.ano && r[COL.mesVenda] === j.mes)
+    vendasJanela.some(r => anoDeData(r[13]) === j.ano && r[14] === j.mes)
   ).length || 1;
   const mediaVendasJanela = vendasJanela.length / mesesComVendaJanela;
 
   // Ticket médio dos últimos 12 meses
   const ticketJanela = (() => {
-    const val = r => parseBRL(r[COL.valPacotes]) + parseBRL(r[COL.valCalcinha]);
-    const com = vendasJanela.filter(r => val(r) > 0);
-    return com.length > 0 ? com.reduce((s, r) => s + val(r), 0) / com.length : 0;
+    const com = vendasJanela.filter(r => parseBRL(r[8]) + parseBRL(r[9]) > 0);
+    return com.length > 0 ? com.reduce((s, r) => s + parseBRL(r[8]) + parseBRL(r[9]), 0) / com.length : 0;
   })();
 
   // Custo Uber/Mat médio por cliente dos últimos 12 meses
   const custoUberMatJanela = (() => {
-    const com = vendasJanela.filter(r => r[COL.status] === 'Realizado' && parseBRL(r[COL.custo]) > 0);
-    return com.length > 0 ? com.reduce((s, r) => s + parseBRL(r[COL.custo]), 0) / com.length : 0;
+    const com = vendasJanela.filter(r => r[12] === 'Realizado' && parseBRL(r[10]) > 0);
+    return com.length > 0 ? com.reduce((s, r) => s + parseBRL(r[10]), 0) / com.length : 0;
   })();
 
   // Tráfego médio mensal dos últimos 12 meses — usando trafegoPorMes() por ano
@@ -1008,9 +974,8 @@ function calcular(ano) {
 
   // Taxa de cancelamento da janela de 12 meses (fallback quando ano não tem dados)
   const taxaCancelamentoJanela = (() => {
-    const todas  = dadosVendas.filter(r => r[COL.nome] && r[COL.mesVenda]
-      && janela12.some(j => j.mes === r[COL.mesVenda] && j.ano === (anoVendaDe(r) || anoAtendimentoDe(r))));
-    const cancel = todas.filter(r => r[COL.status] === 'Cancelado');
+    const todas  = dadosVendas.filter(r => r[0] && r[14] && janela12.some(j => j.mes === r[14] && j.ano === (anoDeData(r[13]) || anoDeData(r[1]))));
+    const cancel = todas.filter(r => r[12] === 'Cancelado');
     return todas.length > 0 ? cancel.length / todas.length : 0;
   })();
 
@@ -2514,7 +2479,7 @@ function _restaurarSelects() {
 }
 
 function popularOrigens() {
-  const origens = [...new Set(dadosVendas.map(r => r[COL.origem]).filter(Boolean))].sort();
+  const origens = [...new Set(dadosVendas.map(r => r[4]).filter(Boolean))].sort();
   const sel = document.getElementById('mf-origem');
   sel.innerHTML = '<option value="">— selecione —</option>'
     + origens.map(o => `<option>${o}</option>`).join('');
@@ -2551,8 +2516,7 @@ function abrirModalEdicao(nome, dataParto) {
   document.getElementById('modal-btn-salvar').textContent = 'Salvar Alterações';
 
   const linha = dadosVendas.find(r =>
-    String(r[COL.nome]).trim() === nome.trim()
-    && String(r[COL.dataParto]).trim() === dataParto.trim()
+    r[0].trim() === nome.trim() && r[1].trim() === dataParto.trim()
   );
 
   _restaurarSelects();
@@ -2560,21 +2524,21 @@ function abrirModalEdicao(nome, dataParto) {
   limparModal();
 
   if (linha) {
-    document.getElementById('mf-nome').value       = linha[COL.nome]      || '';
-    document.getElementById('mf-dataParto').value  = linha[COL.dataParto] || '';
-    document.getElementById('mf-extra').value      = linha[COL.qtdCalcinha] || '';
-    document.getElementById('mf-valPacotes').value = parseBRL(linha[COL.valPacotes])  || '';
-    document.getElementById('mf-valExtra').value   = parseBRL(linha[COL.valCalcinha]) || '';
-    document.getElementById('mf-custo').value      = parseBRL(linha[COL.custo])       || '';
-    document.getElementById('mf-valTotal').value   = parseBRL(linha[COL.valTotal])    || '';
-    document.getElementById('mf-dataVenda').value  = linha[COL.dataVenda] || '';
-    _preencherSelect('mf-mesPrevisto',  linha[COL.mesPrevisto]  || '');
-    _preencherSelect('mf-mesRealizado', linha[COL.mesRealizado] || '');
-    _preencherSelect('mf-origem',       linha[COL.origem]       || '');
-    _preencherSelect('mf-pacote1',      linha[COL.pacote1]      || '');
-    _preencherSelect('mf-pacote2',      linha[COL.pacote2]      || '');
-    _preencherSelect('mf-mesVenda',     linha[COL.mesVenda]     || '');
-    _preencherSelect('mf-status',       linha[COL.status]       || 'Agendado');
+    document.getElementById('mf-nome').value       = linha[0]  || '';
+    document.getElementById('mf-dataParto').value  = linha[1]  || '';
+    document.getElementById('mf-extra').value      = linha[7]  || '';
+    document.getElementById('mf-valPacotes').value = parseBRL(linha[8])  || '';
+    document.getElementById('mf-valExtra').value   = parseBRL(linha[9])  || '';
+    document.getElementById('mf-custo').value      = parseBRL(linha[10]) || '';
+    document.getElementById('mf-valTotal').value   = parseBRL(linha[11]) || '';
+    document.getElementById('mf-dataVenda').value  = linha[13] || '';
+    _preencherSelect('mf-mesPrevisto',  linha[2]  || '');
+    _preencherSelect('mf-mesRealizado', linha[3]  || '');
+    _preencherSelect('mf-origem',       linha[4]  || '');
+    _preencherSelect('mf-pacote1',      linha[5]  || '');
+    _preencherSelect('mf-pacote2',      linha[6]  || '');
+    _preencherSelect('mf-mesVenda',     linha[14] || '');
+    _preencherSelect('mf-status',       linha[12] || 'Agendado');
   }
 
   document.getElementById('modal-venda').classList.add('on');
