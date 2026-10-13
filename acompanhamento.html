@@ -2193,10 +2193,10 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     if (ctaFinal) new IntersectionObserver(function (e) { finalVisivel = e[0].isIntersecting; aplica(); }, { threshold: 0.25 }).observe(ctaFinal);
   })();
 
-  /* Clique no WhatsApp: dispara o Lead do Pixel do Meta (mesmo evento que o GTM usa
-     nas outras páginas da Dra.) dizendo qual botão ou plano foi clicado.
-     Os gatilhos do GTM-W8N43S2W só reconhecem os botões das outras páginas,
-     por isso o evento sai daqui. Também vai para o dataLayer, para uso futuro no GTM. */
+  /* Clique no WhatsApp: envia o evento "WhatsApp Click" para o GTM (mesmo nome da
+     landing de taping), com o botão ou plano clicado em "botao_whatsapp".
+     O que dispara a partir dele (Lead do Pixel, conversão do Google Ads, GA4)
+     é configurado no GTM — por isso a página não chama o Pixel direto. */
   window.dataLayer = window.dataLayer || [];
   function origemDoClique(link) {
     var plano = link.closest('.plan-card');
@@ -2209,11 +2209,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   }
   document.querySelectorAll('a[href*="wa.me/"]').forEach(function (link) {
     link.addEventListener('click', function () {
-      var origem = origemDoClique(link);
-      window.dataLayer.push({ event: 'WhatsApp Click', botao_whatsapp: origem });
-      if (typeof window.fbq === 'function') {
-        window.fbq('track', 'Lead', { content_name: origem, content_category: 'WhatsApp' });
-      }
+      window.dataLayer.push({ event: 'WhatsApp Click', botao_whatsapp: origemDoClique(link) });
     });
   });
 </script>
