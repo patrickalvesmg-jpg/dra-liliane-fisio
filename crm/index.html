@@ -1,0 +1,1795 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, interactive-widget=resizes-content">
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#FFFDFB">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Atendimento">
+<title>Atendimento Dra. Liliane</title>
+<link rel="icon" href="../Logo.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@500;600;700&family=Inter:wght@400;500;600&family=Cormorant+Garamond:ital,wght@1,500;1,600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --roxo:#B090A5; --roxo-escuro:#7B5E92; --roxo-forte:#7B5EA7; --roxo-tinta:#5E4383; --roxo-claro:#C9AEC0;
+  --lilas-bg:#F4EEF2; --lilas-2:#EADFEC; --lilas-3:#E2D2E6;
+  --creme:#FBF6EE; --creme-2:#F7EFE3; --creme-3:#EDE3D6;
+  --texto:#2A2028; --texto-2:#4A3A45; --cinza:#6F5E68; --cinza-2:#9A8A94;
+  --linha:#EFE6EC; --superficie:#FFFDFB; --branco:#FFFFFF;
+  --enviada:#EBDDF0;
+  --ouro:#C8A04D; --ouro-escuro:#7E5F1C; --ouro-bg:#FFF8E6; --ouro-linha:#E3C27A;
+  --perigo:#A3302A;
+  --sombra-1:0 1px 1.5px rgba(42,32,40,.08);
+  --sombra-sheet:0 -10px 40px rgba(42,32,40,.18);
+  --ease:cubic-bezier(.22,1,.36,1);
+  --safe-b:env(safe-area-inset-bottom,0px);
+  --safe-t:env(safe-area-inset-top,0px);
+  --tab-h:64px;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{height:100%;margin:0}
+body{font-family:'Inter',system-ui,-apple-system,'Segoe UI',sans-serif;color:var(--texto);background:var(--superficie);font-size:15px;line-height:1.4;overflow:hidden;-webkit-font-smoothing:antialiased;-webkit-text-size-adjust:100%;text-size-adjust:100%}
+button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:pointer;text-align:inherit}
+input,textarea,select{font:inherit;color:inherit}
+[hidden]{display:none!important}
+:focus-visible{outline:2px solid var(--roxo-forte);outline-offset:2px;border-radius:8px}
+svg.i{width:24px;height:24px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;flex:none}
+svg.i.mini{width:13px;height:13px;stroke-width:2.2}
+svg.i.peq{width:16px;height:16px;stroke-width:2}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+
+/* ---------- casca ---------- */
+.app{position:fixed;inset:0;display:flex;flex-direction:column;background:var(--superficie)}
+.panes{flex:1;position:relative;min-height:0}
+.pane{position:absolute;inset:0;display:none;flex-direction:column;min-height:0}
+.app[data-aba=conversas] .pane-conversas,.app[data-aba=funil] .pane-funil,.app[data-aba=envios] .pane-envios,.app[data-aba=automacoes] .pane-automacoes{display:flex}
+
+.tabbar{display:flex;height:calc(var(--tab-h) + var(--safe-b));padding-bottom:var(--safe-b);border-top:1px solid var(--linha);background:var(--superficie);flex:none}
+.tab{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;font-size:12px;font-weight:500;color:var(--cinza)}
+.tab .ic{position:relative;width:58px;height:30px;display:grid;place-items:center;border-radius:999px;transition:background .2s}
+.tab[aria-current=page]{color:var(--texto);font-weight:600}
+.tab[aria-current=page] .ic{background:var(--lilas-2);color:var(--roxo-tinta)}
+.badge{position:absolute;top:-4px;right:4px;min-width:18px;height:18px;padding:0 5px;border-radius:9px;background:var(--roxo-forte);color:#fff;font-size:11px;font-weight:600;display:grid;place-items:center;line-height:1}
+.badge.ouro{background:var(--ouro);color:#2A2028}
+
+/* ---------- cabeçalhos ---------- */
+.top{padding:calc(8px + var(--safe-t)) 8px 4px 16px;display:flex;align-items:center;gap:4px;min-height:60px;flex:none}
+.marca{font-family:'Cormorant Garamond',Georgia,serif;font-style:italic;font-weight:600;font-size:29px;color:var(--roxo-escuro);line-height:1;letter-spacing:-.01em}
+.top .marca,.top .titulo{flex:1;min-width:0}
+.titulo{font-family:'Outfit',sans-serif;font-weight:600;font-size:23px;margin:0;letter-spacing:-.01em}
+.icbtn{width:44px;height:44px;display:grid;place-items:center;border-radius:50%;color:var(--texto-2);flex:none}
+.icbtn:active{background:var(--lilas-bg)}
+.eu-av{width:34px;height:34px;border-radius:50%;object-fit:cover;object-position:50% 12%;background:var(--lilas-2);margin-right:2px}
+
+.busca{margin:4px 16px 10px;display:flex;align-items:center;gap:10px;background:var(--lilas-bg);border-radius:999px;padding:0 16px;height:44px;color:var(--cinza);flex:none}
+.busca input{border:0;background:none;outline:none;flex:1;font-size:16px;min-width:0;color:var(--texto)}
+.busca input::placeholder{color:var(--cinza)}
+.busca input::-webkit-search-cancel-button{display:none}
+
+.chips{display:flex;gap:8px;overflow-x:auto;padding:0 16px 10px;scrollbar-width:none;flex:none}
+.chips::-webkit-scrollbar{display:none}
+.chip{flex:none;height:34px;padding:0 13px;border-radius:999px;background:#F3EDF1;color:var(--texto-2);font-size:14px;font-weight:500;display:inline-flex;align-items:center;gap:6px;white-space:nowrap;border:1px solid transparent}
+.chip[aria-pressed=true]{background:var(--lilas-2);color:var(--roxo-tinta);border-color:var(--roxo-claro)}
+.chip .dot{width:8px;height:8px;border-radius:50%;background:var(--c)}
+.chip .cnt{font-size:12px;color:var(--cinza);font-weight:500}
+.chip[aria-pressed=true] .cnt{color:var(--roxo-tinta)}
+.chip.tracejado{background:none;border:1px dashed var(--roxo-claro);color:var(--roxo-tinta)}
+
+/* ---------- lista de conversas ---------- */
+.lista{flex:1;overflow-y:auto;overscroll-behavior:contain;padding-bottom:96px}
+.row{display:flex;gap:12px;padding:9px 16px;align-items:center;width:100%;text-align:left}
+.row:active,.row.ativa{background:var(--lilas-bg)}
+.av{width:50px;height:50px;border-radius:50%;display:grid;place-items:center;font-family:'Outfit',sans-serif;font-weight:600;font-size:17px;color:#fff;background:var(--c);flex:none;letter-spacing:.02em}
+.row-main{flex:1;min-width:0}
+.row-l1{display:flex;align-items:baseline;gap:8px}
+.nome{font-family:'Outfit',sans-serif;font-weight:600;font-size:16.5px;flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.hora{font-size:12px;color:var(--cinza);flex:none}
+.row.unread .hora{color:var(--roxo-forte);font-weight:600}
+.row-l2{display:flex;align-items:center;gap:4px;margin-top:1px}
+.prev{flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:var(--cinza);font-size:14.5px}
+.row.unread .prev{color:var(--texto-2)}
+.nl{min-width:21px;height:21px;padding:0 6px;border-radius:11px;background:var(--roxo-forte);color:#fff;font-size:12px;font-weight:600;display:grid;place-items:center;flex:none}
+.row-l3{display:flex;gap:6px;margin-top:5px;align-items:center;min-width:0}
+.pill{display:inline-flex;align-items:center;gap:4px;font-size:11.5px;font-weight:600;padding:2px 8px;border-radius:6px;background:var(--bg);color:var(--fg);white-space:nowrap;flex:none;line-height:1.45}
+.etapa-txt{font-size:12.5px;color:var(--cinza);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0;flex:1}
+.prog{display:inline-flex;align-items:center;gap:3px;color:var(--ouro-escuro);font-size:12px;font-weight:600;flex:none}
+.tk{width:17px;height:11px;fill:none;stroke:var(--cinza-2);stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round;flex:none}
+.tk.lida{stroke:var(--roxo-forte)}
+.vazio{padding:48px 32px;text-align:center;color:var(--cinza)}
+.vazio b{display:block;font-family:'Outfit';font-weight:600;color:var(--texto-2);font-size:16px;margin-bottom:4px}
+
+.fab{position:absolute;right:16px;bottom:16px;height:56px;min-width:56px;padding:0 16px;border-radius:18px;background:var(--roxo-forte);color:#fff;display:flex;align-items:center;justify-content:center;gap:8px;font-weight:600;box-shadow:0 6px 18px rgba(94,67,131,.32);z-index:2}
+.fab:active{transform:scale(.97)}
+
+/* ---------- conversa ---------- */
+.chat{position:fixed;inset:0;z-index:20;display:flex;flex-direction:column;background:var(--lilas-bg);transform:translateX(100%);visibility:hidden;transition:transform .32s var(--ease),visibility 0s linear .32s}
+.app.chat-aberto .chat{transform:none;visibility:visible;transition:transform .32s var(--ease)}
+.chat-vazio{display:none}
+.chat-top{display:flex;align-items:center;gap:2px;padding:calc(6px + var(--safe-t)) 4px 6px 2px;background:var(--superficie);flex:none}
+.chat-quem{flex:1;display:flex;align-items:center;gap:10px;min-width:0;text-align:left;padding:4px 6px;border-radius:12px}
+.chat-quem:active{background:var(--lilas-bg)}
+.chat-quem .av{width:40px;height:40px;font-size:14.5px}
+.chat-nome{font-family:'Outfit',sans-serif;font-weight:600;font-size:16.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:block}
+.chat-sub{font-size:12.5px;color:var(--cinza);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:block}
+
+.faixa{display:flex;gap:6px;overflow-x:auto;padding:4px 12px 10px;background:var(--superficie);border-bottom:1px solid var(--linha);scrollbar-width:none;flex:none;align-items:center}
+.faixa::-webkit-scrollbar{display:none}
+.etapa-btn{height:30px;padding:0 8px 0 12px;border-radius:999px;background:var(--roxo-tinta);color:#fff;font-size:13px;font-weight:600;display:inline-flex;align-items:center;gap:4px;white-space:nowrap;flex:none}
+.etapa-btn svg{width:16px;height:16px}
+.faixa .pill{height:30px;padding:0 10px;font-size:12.5px;border-radius:999px}
+.faixa .info{height:30px;padding:0 10px;border-radius:999px;background:var(--creme-2);color:var(--texto-2);font-size:12.5px;font-weight:500;display:inline-flex;align-items:center;gap:5px;white-space:nowrap;flex:none}
+.add-tag{height:30px;padding:0 10px;border-radius:999px;border:1px dashed var(--roxo-claro);color:var(--roxo-tinta);font-size:12.5px;font-weight:600;display:inline-flex;align-items:center;gap:4px;white-space:nowrap;flex:none}
+
+.msgs{flex:1;overflow-y:auto;overscroll-behavior:contain;padding:10px 12px 10px;display:flex;flex-direction:column;background-color:var(--lilas-bg);background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='132' height='132' viewBox='0 0 132 132'%3E%3Cg fill='none' stroke='%23C9AEC0' stroke-opacity='.42' stroke-width='1.2' stroke-linecap='round'%3E%3Ccircle cx='20' cy='24' r='5'/%3E%3Cpath d='M84 16c7 0 11 4 11 11-7 0-11-4-11-11z'/%3E%3Ccircle cx='106' cy='90' r='3'/%3E%3Cpath d='M28 92c4-6 13-6 17 0'/%3E%3Cpath d='M64 64v8M60 68h8'/%3E%3C/g%3E%3C/svg%3E")}
+.msg{max-width:min(84%,540px);padding:6px 9px 7px;border-radius:10px;font-size:15px;line-height:1.38;box-shadow:var(--sombra-1);position:relative;overflow-wrap:anywhere;margin-top:2px}
+.msg .txt{white-space:pre-wrap}
+.msg .txt::after{content:'';display:inline-block;width:var(--mw,44px)}
+.msg.ela{align-self:flex-start;background:#fff;--mw:40px}
+.msg.eu{align-self:flex-end;background:var(--enviada);--mw:64px}
+.msg.first{margin-top:8px}
+.msg.ela.first{border-top-left-radius:3px}
+.msg.eu.first{border-top-right-radius:3px}
+.msg .meta{position:absolute;right:8px;bottom:4px;font-size:11px;color:var(--cinza);display:inline-flex;gap:3px;align-items:center;white-space:nowrap}
+.msg .autor{display:flex;align-items:center;gap:4px;font-size:11.5px;font-weight:600;color:var(--ouro-escuro);margin-bottom:2px}
+.msg.anexo .txt{font-weight:500}
+.sep{align-self:center;margin:12px 0 6px;background:rgba(255,255,255,.92);color:var(--texto-2);font-size:12.5px;font-weight:500;padding:4px 12px;border-radius:8px;box-shadow:var(--sombra-1)}
+.sis{align-self:center;margin:8px 0 4px;color:var(--cinza);font-size:12px;padding:3px 10px;border-radius:8px;background:rgba(255,253,251,.7);text-align:center;max-width:90%}
+.sep-prog{display:inline-flex;align-items:center;gap:6px;background:var(--ouro-bg);color:var(--ouro-escuro);box-shadow:none;border:1px solid var(--ouro-linha)}
+.msg.programada{align-self:flex-end;background:var(--ouro-bg);border:1.5px dashed var(--ouro-linha);box-shadow:none;color:var(--texto-2);text-align:left;width:auto;margin-top:6px;--mw:0px;cursor:pointer}
+.msg.programada:active{background:#FFF1CF}
+.msg.programada .quando{display:flex;gap:5px;align-items:center;font-size:12px;color:var(--ouro-escuro);margin-top:6px;font-weight:600;flex-wrap:wrap}
+.msg.programada .quando em{font-style:normal;font-weight:500;color:var(--cinza)}
+.mais-prog{align-self:flex-end;margin-top:6px;font-size:12.5px;font-weight:600;color:var(--ouro-escuro);padding:6px 10px;border-radius:8px}
+
+.composer-wrap{position:relative;flex:none;background:transparent}
+.composer{display:flex;align-items:flex-end;gap:6px;padding:6px 8px calc(8px + var(--safe-b))}
+.campo{flex:1;display:flex;align-items:flex-end;background:#fff;border-radius:24px;min-height:48px;padding:0 2px;box-shadow:var(--sombra-1);min-width:0}
+.campo textarea{flex:1;border:0;outline:none;resize:none;background:none;font-size:16px;line-height:1.35;padding:13px 2px;max-height:132px;min-width:0;color:var(--texto)}
+.campo textarea::placeholder{color:var(--cinza-2)}
+.campo .icbtn{width:40px;height:48px;border-radius:20px;color:var(--cinza)}
+.campo .icbtn.relogio{color:var(--ouro-escuro)}
+.enviar{width:48px;height:48px;border-radius:50%;background:var(--roxo-forte);color:#fff;display:grid;place-items:center;flex:none;box-shadow:0 2px 6px rgba(94,67,131,.3)}
+.enviar:active{transform:scale(.95)}
+.rapidas{position:absolute;left:8px;right:8px;bottom:100%;background:#fff;border-radius:16px;box-shadow:0 8px 30px rgba(42,32,40,.16);max-height:46vh;overflow-y:auto;padding:6px}
+.rapidas h3{font-family:'Outfit';font-size:13px;font-weight:600;color:var(--cinza);margin:6px 10px 4px}
+.rapida{display:block;width:100%;text-align:left;padding:10px;border-radius:10px}
+.rapida:active,.rapida:hover{background:var(--lilas-bg)}
+.rapida b{display:block;font-weight:600;font-size:14px;margin-bottom:2px}
+.rapida b span{color:var(--roxo-forte);font-weight:500;margin-left:6px}
+.rapida .p{margin:0;font-size:13px;color:var(--cinza);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+
+/* ---------- funil ---------- */
+.resumo{display:flex;gap:8px;padding:2px 16px 12px;overflow-x:auto;scrollbar-width:none;flex:none}
+.resumo::-webkit-scrollbar{display:none}
+.res{flex:0 0 auto;display:flex;align-items:center;gap:8px;padding:8px 12px;border-radius:12px;background:var(--creme-2)}
+.res b{font-family:'Outfit';font-size:22px;font-weight:600;line-height:1}
+.res span{font-size:12px;color:var(--cinza);line-height:1.2;max-width:100px}
+.res.ouro{background:var(--ouro-bg)}
+.res.ouro b{color:var(--ouro-escuro)}
+.colunas{flex:1;display:flex;gap:10px;overflow-x:auto;scroll-snap-type:x mandatory;scroll-padding:0 16px;padding:0 16px 14px;min-height:0;overscroll-behavior-x:contain}
+.colunas::after{content:'';flex:0 0 6px}
+.col{flex:none;width:min(84vw,310px);scroll-snap-align:start;display:flex;flex-direction:column;background:var(--lilas-bg);border-radius:18px;min-height:0;transition:box-shadow .15s,background .15s}
+.col.alvo{background:var(--lilas-2);box-shadow:inset 0 0 0 2px var(--roxo-claro)}
+.col-cab{padding:12px 12px 8px 14px}
+.col-cab h3{font-family:'Outfit';font-size:16px;font-weight:600;margin:0;display:flex;gap:8px;align-items:baseline}
+.col-cab h3 .n{font-size:13px;color:var(--cinza);font-weight:500;font-family:'Inter'}
+.col-auto{display:flex;gap:6px;align-items:flex-start;margin-top:8px;font-size:12.5px;line-height:1.35;color:var(--ouro-escuro);background:var(--ouro-bg);padding:7px 9px;border-radius:10px;text-align:left;width:100%;border:1px solid #F3E1B4}
+.col-auto svg{margin-top:1px}
+.col-auto.pausada{color:var(--cinza);background:var(--creme-2);border-color:var(--creme-3)}
+.col-cards{flex:1;overflow-y:auto;padding:2px 8px 12px;display:flex;flex-direction:column;gap:8px;min-height:60px}
+.card{background:#fff;border-radius:12px;padding:11px 12px;text-align:left;box-shadow:var(--sombra-1);width:100%;cursor:pointer;position:relative}
+.card:active{background:#FCFAFB}
+.card.arrastando{opacity:.45}
+.card-l1{display:flex;align-items:center;gap:8px}
+.card-l1 .av{width:28px;height:28px;font-size:11px}
+.card-l1 b{font-family:'Outfit';font-weight:600;font-size:15px;flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.card-tags{display:flex;gap:5px;flex-wrap:wrap;margin-top:8px}
+.card-info{display:flex;align-items:center;gap:5px;font-size:12.5px;color:var(--texto-2);margin-top:8px}
+.card-info.ouro{color:var(--ouro-escuro);font-weight:600}
+.col-vazia{font-size:13px;color:var(--cinza-2);text-align:center;padding:18px 8px;border:1.5px dashed var(--lilas-3);border-radius:12px}
+
+/* ---------- envios ---------- */
+.seg{display:flex;margin:2px 16px 12px;background:#F3EDF1;border-radius:12px;padding:3px;flex:none}
+.seg button{flex:1;text-align:center;height:36px;border-radius:9px;font-size:14px;font-weight:500;color:var(--cinza)}
+.seg button[aria-pressed=true]{background:#fff;color:var(--texto);font-weight:600;box-shadow:var(--sombra-1)}
+.dia{padding:14px 16px 4px;font-family:'Outfit';font-weight:600;font-size:14.5px;color:var(--texto-2)}
+.envio{display:flex;gap:12px;padding:10px 16px 0;width:100%;text-align:left}
+.envio:active{background:var(--lilas-bg)}
+.envio .h{width:44px;flex:none;font-family:'Outfit';font-weight:600;font-size:15px;padding-top:1px;color:var(--texto)}
+.envio .corpo{flex:1;min-width:0;padding-bottom:12px;border-bottom:1px solid var(--linha)}
+.envio .quem{display:flex;align-items:center;gap:6px;font-weight:600;font-size:14.5px}
+.envio .quem span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.envio .origem{display:flex;align-items:center;gap:4px;font-size:12px;color:var(--ouro-escuro);font-weight:500;margin-top:2px}
+.envio .origem.manual{color:var(--roxo-tinta)}
+.envio .quem .av{width:22px;height:22px;font-size:9px}
+.envio .p{display:-webkit-box;margin:4px 0 0;font-size:13.5px;color:var(--cinza);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.cond{display:inline-flex;align-items:center;gap:4px;margin-top:6px;font-size:11.5px;font-weight:600;color:var(--roxo-tinta);background:var(--lilas-bg);padding:2px 8px;border-radius:6px}
+
+/* ---------- automações e etiquetas ---------- */
+.auto-card{display:flex;gap:12px;padding:12px 16px;width:100%;text-align:left;align-items:flex-start}
+.auto-card:active{background:var(--lilas-bg)}
+.auto-ic{width:42px;height:42px;border-radius:13px;background:var(--ouro-bg);color:var(--ouro-escuro);display:grid;place-items:center;flex:none;border:1px solid #F3E1B4}
+.auto-card.off .auto-ic{background:var(--creme-2);color:var(--cinza-2);border-color:var(--creme-3)}
+.auto-main{flex:1;min-width:0;padding-bottom:12px;border-bottom:1px solid var(--linha)}
+.auto-main b{font-family:'Outfit';font-weight:600;font-size:15.5px;display:block}
+.auto-main .gat{font-size:13px;color:var(--texto-2);margin-top:2px}
+.auto-main .det{font-size:12.5px;color:var(--cinza);margin-top:3px}
+.switch{width:46px;height:28px;border-radius:14px;background:#D9CDD5;position:relative;flex:none;margin-top:6px;transition:background .2s}
+.switch::after{content:'';position:absolute;top:3px;left:3px;width:22px;height:22px;border-radius:50%;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.2);transition:transform .2s var(--ease)}
+.switch[aria-checked=true]{background:var(--roxo-forte)}
+.switch[aria-checked=true]::after{transform:translateX(18px)}
+.grupo-h{display:flex;align-items:baseline;justify-content:space-between;gap:10px;padding:16px 16px 4px}
+.grupo-h h3{font-family:'Outfit';font-weight:600;font-size:15px;margin:0;color:var(--texto-2)}
+.grupo-h span{font-size:12px;color:var(--cinza);text-align:right}
+.tag-row{display:flex;gap:12px;align-items:center;padding:0 16px;width:100%;text-align:left;min-height:52px}
+.tag-row:active{background:var(--lilas-bg)}
+.tag-row .bolinha{width:12px;height:12px;border-radius:50%;background:var(--c);flex:none;margin:0 6px}
+.tag-row .tmain{flex:1;min-width:0;display:flex;align-items:center;gap:8px;min-height:52px;border-bottom:1px solid var(--linha)}
+.tag-row .tmain b{font-weight:500;font-size:15px;flex:1;min-width:0}
+.tag-row .tmain small{font-size:12px;color:var(--cinza);font-weight:400;margin-left:6px}
+.tag-row .qtd{font-size:13px;color:var(--cinza)}
+.tag-row .raio{color:var(--ouro-escuro);display:inline-flex}
+
+/* ---------- painéis (ficha e editor) ---------- */
+.painel{position:fixed;inset:0;z-index:30;background:var(--superficie);display:flex;flex-direction:column;transform:translateX(100%);visibility:hidden;transition:transform .32s var(--ease),visibility 0s linear .32s}
+.painel.on{transform:none;visibility:visible;transition:transform .32s var(--ease)}
+.painel-corpo{flex:1;overflow-y:auto;overscroll-behavior:contain;padding:0 16px calc(28px + var(--safe-b))}
+.btn-txt{height:40px;padding:0 14px;border-radius:999px;font-weight:600;color:#fff;background:var(--roxo-forte);flex:none;margin-right:6px}
+.ficha-hero{display:flex;flex-direction:column;align-items:center;text-align:center;padding:4px 0 18px}
+.ficha-hero .av{width:84px;height:84px;font-size:28px}
+.ficha-hero h2{font-family:'Outfit';font-weight:600;font-size:22px;margin:12px 0 2px}
+.ficha-hero p{margin:0;color:var(--cinza);font-size:14px}
+.bloco{background:#fff;border:1px solid var(--linha);border-radius:16px;padding:14px;margin-bottom:12px}
+.bloco h3{font-family:'Outfit';font-weight:600;font-size:14.5px;margin:0 0 10px;color:var(--texto-2);display:flex;align-items:center;gap:6px}
+.bloco h3 .cnt{color:var(--cinza);font-weight:500}
+.linha-btn{display:flex;align-items:center;gap:10px;width:100%;text-align:left;min-height:44px}
+.linha-btn .rot{flex:1}
+.linha-btn .rot b{display:block;font-weight:600}
+.linha-btn .rot small{color:var(--cinza);font-size:12.5px}
+.campo-data{display:flex;align-items:center;gap:10px;padding:6px 0}
+.campo-data label{flex:1;font-size:14px;color:var(--texto-2)}
+.campo-data input{border:1px solid var(--linha);border-radius:10px;padding:8px 10px;background:var(--creme);font-size:16px;max-width:60%}
+.dica{font-size:12.5px;color:var(--cinza);margin:4px 0 0;line-height:1.4}
+.dica.ouro{color:var(--ouro-escuro)}
+.tags-wrap{display:flex;flex-wrap:wrap;gap:6px}
+.tags-wrap .pill{font-size:13px;padding:5px 10px;border-radius:999px}
+.mini-envio{display:flex;gap:10px;width:100%;text-align:left;padding:8px 0;border-top:1px solid var(--linha)}
+.mini-envio:first-of-type{border-top:0}
+.mini-envio .q{font-size:12.5px;font-weight:600;color:var(--ouro-escuro);display:flex;align-items:center;gap:4px}
+.mini-envio .p{margin:2px 0 0;font-size:13.5px;color:var(--texto-2);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.notas{width:100%;min-height:84px;border:1px solid var(--linha);border-radius:12px;padding:10px 12px;background:var(--creme);resize:vertical;font-size:16px;line-height:1.4}
+.hist{font-size:13px;color:var(--texto-2);padding:6px 0;border-top:1px solid var(--linha);display:flex;gap:10px}
+.hist:first-of-type{border-top:0}
+.hist time{color:var(--cinza);flex:none;width:88px;font-size:12.5px}
+
+.campo-l{display:block;font-size:13.5px;font-weight:600;color:var(--texto-2);margin:14px 0 0}
+.campo-l input,.campo-l select,.campo-l textarea{display:block;width:100%;margin-top:6px;border:1px solid var(--linha);border-radius:12px;padding:11px 12px;background:#fff;font-size:16px;font-weight:400;color:var(--texto)}
+.campo-l textarea{resize:vertical;line-height:1.4}
+.linha-switch{display:flex;align-items:center;gap:12px;margin:16px 0 0;font-weight:500}
+.linha-switch span{flex:1}
+.linha-switch .switch{margin:0}
+.passos{list-style:none;margin:18px 0 0;padding:0 0 0 30px;position:relative;counter-reset:passo}
+.passos::before{content:'';position:absolute;left:12px;top:14px;bottom:24px;width:2px;background:var(--lilas-3)}
+.passo{position:relative;background:#fff;border:1px solid var(--linha);border-radius:16px;padding:12px;margin-bottom:12px;counter-increment:passo}
+.passo::before{content:counter(passo);position:absolute;left:-30px;top:10px;width:26px;height:26px;border-radius:50%;background:var(--ouro-bg);border:1.5px solid var(--ouro-linha);color:var(--ouro-escuro);font-family:'Outfit';font-weight:600;font-size:13px;display:grid;place-items:center}
+.passo-quando{display:flex;flex-wrap:wrap;align-items:center;gap:6px;font-size:14px;font-weight:500}
+.passo-quando input,.passo-quando select{border:1px solid var(--linha);border-radius:10px;padding:7px 8px;background:var(--creme);font-size:16px}
+.passo-quando input{width:64px}
+.passo-desc{font-size:12.5px;color:var(--ouro-escuro);margin:6px 0 0;font-weight:500}
+.passo textarea{field-sizing:content;max-height:260px;width:100%;margin-top:10px;border:1px solid var(--linha);border-radius:12px;padding:10px 12px;background:var(--creme);font-size:16px;line-height:1.4;resize:vertical;min-height:96px}
+.vars{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px;align-items:center;font-size:12.5px;color:var(--cinza)}
+.vars button{font-size:12.5px;padding:4px 9px;border-radius:999px;background:var(--lilas-bg);color:var(--roxo-tinta);font-weight:500}
+.check-l{display:flex;gap:10px;align-items:flex-start;margin-top:12px;font-size:14px;line-height:1.35}
+.check-l input{width:20px;height:20px;accent-color:var(--roxo-forte);margin:0;flex:none}
+.passo-rodape{display:flex;justify-content:flex-end;margin-top:8px}
+.btn-perigo-txt{font-size:13px;color:var(--perigo);font-weight:500;padding:6px 8px;border-radius:8px;display:inline-flex;gap:4px;align-items:center}
+.btn-sec{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;height:48px;border-radius:14px;border:1.5px dashed var(--roxo-claro);color:var(--roxo-tinta);font-weight:600}
+
+/* ---------- folha inferior ---------- */
+.scrim{position:fixed;inset:0;background:rgba(42,32,40,.4);opacity:0;pointer-events:none;transition:opacity .25s;z-index:40}
+.scrim.on{opacity:1;pointer-events:auto}
+.sheet{position:fixed;left:0;right:0;bottom:0;z-index:41;background:var(--superficie);border-radius:22px 22px 0 0;max-height:90vh;max-height:90dvh;display:flex;flex-direction:column;transform:translateY(105%);transition:transform .32s var(--ease);padding-bottom:var(--safe-b);box-shadow:var(--sombra-sheet);max-width:560px;margin:0 auto;visibility:hidden}
+.sheet.on{transform:none;visibility:visible}
+.alca{width:38px;height:4px;border-radius:2px;background:var(--creme-3);margin:8px auto 6px;flex:none}
+.sheet-cab{padding:4px 20px 8px;flex:none}
+.sheet-cab h2{font-family:'Outfit';font-size:19px;font-weight:600;margin:0;display:flex;align-items:center;gap:8px}
+.sheet-cab p{margin:3px 0 0;color:var(--cinza);font-size:14px}
+.sheet-corpo{overflow-y:auto;padding:4px 20px 20px;overscroll-behavior:contain}
+.sheet-corpo h3{font-family:'Outfit';font-weight:600;font-size:14px;color:var(--cinza);margin:14px 0 4px}
+.opcao{display:flex;align-items:center;gap:14px;width:100%;min-height:52px;padding:6px 4px;text-align:left;font-size:15.5px;border-radius:12px}
+.opcao:active{background:var(--lilas-bg)}
+.opcao svg{color:var(--texto-2)}
+.opcao.perigo,.opcao.perigo svg{color:var(--perigo)}
+.opcao .rot{flex:1}
+.opcao .rot small{display:block;color:var(--cinza);font-size:12.5px;margin-top:1px}
+.opcao .marca-ok{color:var(--roxo-forte)}
+.opcao[aria-current=true]{font-weight:600}
+.opcao .num{width:26px;height:26px;border-radius:50%;background:var(--lilas-bg);color:var(--roxo-tinta);font-size:12px;font-weight:600;display:grid;place-items:center;flex:none;font-family:'Outfit'}
+.opcao[aria-current=true] .num{background:var(--roxo-forte);color:#fff}
+.opcao .raio-auto{color:var(--ouro-escuro);display:inline-flex}
+.presets{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
+.presets .chip{height:38px}
+.btn-prim{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;height:52px;border-radius:16px;background:var(--roxo-forte);color:#fff;font-weight:600;font-size:16px;margin-top:18px}
+.btn-prim:active{transform:scale(.99)}
+.btn-prim[disabled]{opacity:.45}
+.texto-sheet{width:100%;min-height:110px;border:1px solid var(--linha);border-radius:14px;padding:12px;background:#fff;font-size:16px;line-height:1.4;resize:vertical;margin-top:6px}
+.cartao-ouro{background:var(--ouro-bg);border:1px solid #F3E1B4;border-radius:12px;padding:10px 12px;color:var(--ouro-escuro);font-size:13.5px;display:flex;gap:8px;align-items:flex-start;margin-top:8px}
+.tags-sel{display:flex;flex-wrap:wrap;gap:8px;margin-top:6px}
+.pill-sel{font-size:13.5px;padding:7px 12px;border-radius:999px;background:#fff;color:var(--texto-2);border:1px solid var(--linha);font-weight:500;line-height:1.2}
+.pill-sel[aria-pressed=true]{background:var(--bg);color:var(--fg);border-color:transparent;font-weight:600}
+.pill-sel[aria-pressed=true]::before{content:'✓';margin-right:2px}
+.cores{display:flex;gap:10px;flex-wrap:wrap;margin-top:8px}
+.cores button{width:34px;height:34px;border-radius:50%;background:var(--c);border:3px solid #fff;box-shadow:0 0 0 1px var(--linha)}
+.cores button[aria-pressed=true]{box-shadow:0 0 0 2px var(--texto)}
+.mini-row{display:flex;align-items:center;gap:10px;padding:6px 0;width:100%;text-align:left}
+.mini-row .av{width:34px;height:34px;font-size:12px}
+.mini-row b{font-weight:600;font-size:14.5px;display:block}
+.mini-row small{color:var(--cinza);font-size:12.5px}
+
+/* ---------- aviso ---------- */
+.toast{position:fixed;left:50%;bottom:calc(92px + var(--safe-b));transform:translate(-50%,16px);background:var(--texto);color:#fff;padding:12px 16px;border-radius:14px;font-size:14px;line-height:1.35;width:max-content;max-width:calc(100% - 32px);display:flex;gap:10px;align-items:flex-start;opacity:0;transition:opacity .25s,transform .25s var(--ease);z-index:60;pointer-events:none;box-shadow:0 8px 24px rgba(42,32,40,.25)}
+.toast.on{opacity:1;transform:translate(-50%,0);pointer-events:auto}
+.toast svg{color:var(--ouro-linha);margin-top:-1px}
+.toast button{color:var(--ouro-linha);font-weight:600;white-space:nowrap;margin-left:4px}
+
+/* ---------- computador ---------- */
+@media (min-width:900px){
+  .app{flex-direction:row}
+  .tabbar{order:-1;flex-direction:column;justify-content:flex-start;width:88px;height:auto;padding:20px 0 0;border-top:0;border-right:1px solid var(--linha);gap:8px}
+  .tab{flex:none;height:66px}
+  .panes{display:flex}
+  .pane{position:relative;inset:auto;flex:1;min-width:0}
+  .app[data-aba=conversas] .pane-conversas{flex:none;width:400px;border-right:1px solid var(--linha)}
+  .chat{position:relative;inset:auto;transform:none;visibility:visible;transition:none;flex:1;min-width:0;display:none;z-index:1}
+  .app[data-aba=conversas] .chat{display:flex}
+  .chat.sem-chat>*:not(.chat-vazio){display:none}
+  .chat.sem-chat .chat-vazio{display:flex;flex:1;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:12px;padding:40px;background:var(--creme)}
+  .chat-vazio .marca{font-size:44px}
+  .chat-vazio p{max-width:34ch;color:var(--cinza);margin:0}
+  .voltar{display:none!important}
+  .painel{left:auto;width:430px;box-shadow:-12px 0 40px rgba(42,32,40,.14)}
+  .painel.editor{width:580px}
+  .toast{bottom:auto;top:20px;transform:translate(-50%,-16px)}
+  .col{width:300px}
+  .colunas{scroll-snap-type:none}
+  .card{cursor:grab}
+  .lista-larga{max-width:760px;width:100%;margin:0 auto}
+  .pane-envios .seg,.pane-automacoes .seg,.pane-envios .resumo{max-width:728px;margin-left:auto;margin-right:auto;width:calc(100% - 32px)}
+  .pane-envios .resumo{padding:2px 0 12px}
+  .row:hover,.envio:hover,.auto-card:hover,.tag-row:hover{background:#FAF5F8}
+}
+@media (prefers-reduced-motion:reduce){
+  *{transition-duration:.01ms!important;animation-duration:.01ms!important}
+}
+</style>
+</head>
+<body>
+<div class="app" id="app" data-aba="conversas">
+  <div class="panes">
+    <!-- Conversas -->
+    <section class="pane pane-conversas" aria-label="Conversas">
+      <header class="top">
+        <span class="marca">Liliane Araújo</span>
+        <img class="eu-av" src="../img/lp/dra-liliane-recorte.webp" alt="Dra. Liliane">
+        <button class="icbtn" data-acao="menu-conversas" aria-label="Mais opções" data-ic="more"></button>
+      </header>
+      <label class="busca"><span data-ic="search"></span><span class="sr">Pesquisar</span><input id="busca" type="search" placeholder="Pesquisar nome, etiqueta ou etapa" autocomplete="off" enterkeyhint="search"></label>
+      <div class="chips" id="chipsConv" role="group" aria-label="Filtrar conversas"></div>
+      <div class="lista" id="listaConv"></div>
+      <button class="fab" data-acao="novo-contato" aria-label="Adicionar contato" data-ic="addUser"></button>
+    </section>
+
+    <!-- Funil -->
+    <section class="pane pane-funil" aria-label="Funil">
+      <header class="top">
+        <h1 class="titulo">Funil</h1>
+        <button class="icbtn" data-acao="novo-contato" aria-label="Adicionar contato" data-ic="addUser"></button>
+      </header>
+      <div class="resumo" id="resumoFunil"></div>
+      <div class="chips" id="navFunil" role="group" aria-label="Ir para a etapa"></div>
+      <div class="colunas" id="colunas"></div>
+    </section>
+
+    <!-- Envios -->
+    <section class="pane pane-envios" aria-label="Envios">
+      <header class="top"><h1 class="titulo">Envios</h1></header>
+      <div class="seg" role="group" aria-label="Tipo de envio">
+        <button data-seg-envios="prog" aria-pressed="true">Programados</button>
+        <button data-seg-envios="feitos" aria-pressed="false">Enviados</button>
+      </div>
+      <div class="resumo" id="resumoEnvios"></div>
+      <div class="lista" id="listaEnvios"></div>
+    </section>
+
+    <!-- Automações -->
+    <section class="pane pane-automacoes" aria-label="Automações">
+      <header class="top"><h1 class="titulo">Automações</h1></header>
+      <div class="seg" role="group" aria-label="Seção">
+        <button data-seg-auto="auto" aria-pressed="true">Automações</button>
+        <button data-seg-auto="tags" aria-pressed="false">Etiquetas</button>
+      </div>
+      <div class="lista" id="listaAuto"></div>
+      <button class="fab" id="fabAuto" data-acao="nova-auto"></button>
+    </section>
+
+    <!-- Conversa aberta -->
+    <section class="chat sem-chat" id="chat" aria-label="Conversa">
+      <div class="chat-vazio">
+        <span class="marca">Liliane Araújo</span>
+        <p>Escolha uma conversa para ver a ficha, as etiquetas e as mensagens programadas.</p>
+      </div>
+      <header class="chat-top" id="chatTop"></header>
+      <div class="faixa" id="faixa"></div>
+      <div class="msgs" id="msgs"></div>
+      <div class="composer-wrap">
+        <div class="rapidas" id="rapidas" hidden></div>
+        <div class="composer">
+          <div class="campo">
+            <button class="icbtn" data-acao="rapidas" aria-label="Respostas rápidas" data-ic="lista"></button>
+            <textarea id="texto" rows="1" placeholder="Mensagem" aria-label="Mensagem"></textarea>
+            <button class="icbtn" data-acao="anexo" aria-label="Anexar arquivo" data-ic="clip"></button>
+            <button class="icbtn relogio" data-acao="programar" aria-label="Programar envio" data-ic="clock"></button>
+          </div>
+          <button class="enviar" id="btnEnviar" data-acao="enviar" aria-label="Enviar"></button>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <nav class="tabbar" aria-label="Seções">
+    <button class="tab" data-tab="conversas"><span class="ic"><span data-ic="chat"></span><span class="badge" id="bdConv" hidden></span></span>Conversas</button>
+    <button class="tab" data-tab="funil"><span class="ic" data-ic="funil"></span>Funil</button>
+    <button class="tab" data-tab="envios"><span class="ic"><span data-ic="clock"></span><span class="badge ouro" id="bdEnv" hidden></span></span>Envios</button>
+    <button class="tab" data-tab="automacoes"><span class="ic" data-ic="bolt"></span>Automações</button>
+  </nav>
+</div>
+
+<aside class="painel" id="ficha" aria-label="Ficha da cliente"></aside>
+<aside class="painel editor" id="editor" aria-label="Editar automação"></aside>
+<div class="scrim" id="scrim"></div>
+<div class="sheet" id="sheet" role="dialog" aria-modal="true"></div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+'use strict';
+/* =========================================================
+   Utilidades
+   ========================================================= */
+const $ = (s, el = document) => el.querySelector(s);
+const $$ = (s, el = document) => [...el.querySelectorAll(s)];
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const pad = n => String(n).padStart(2, '0');
+const DIAS = ['dom','seg','ter','qua','qui','sex','sáb'];
+const DIAS_L = ['domingo','segunda','terça','quarta','quinta','sexta','sábado'];
+const MESES = ['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
+const MESES_C = ['jan','fev','mar','abr','mai','jun','jul','ago','set','out','nov','dez'];
+const MIN = 60000, HORA = 60 * MIN, DIA = 24 * HORA;
+const UN = { min: MIN, hora: HORA, dia: DIA };
+const UN_NOME = { min: ['minuto','minutos'], hora: ['hora','horas'], dia: ['dia','dias'] };
+const agora = () => new Date();
+const T = (dias, h, m = 0) => { const d = new Date(); d.setDate(d.getDate() + dias); d.setHours(h, m, 0, 0); return d; };
+const atras = min => new Date(Date.now() - min * MIN);
+const somaDias = (d, n) => { const x = new Date(d); x.setDate(x.getDate() + n); return x; };
+const mesmoDia = (a, b) => a.getFullYear() === b.getFullYear() && a.getMonth() === b.getMonth() && a.getDate() === b.getDate();
+const hhmm = d => pad(d.getHours()) + ':' + pad(d.getMinutes());
+const horaFala = d => d.getMinutes() ? hhmm(d) : d.getHours() + 'h';
+const cap = s => s.charAt(0).toUpperCase() + s.slice(1);
+const primeiro = n => n.split(' ')[0];
+const iniciais = n => { const p = n.split(' '); return (p[0][0] + (p.length > 1 ? p[p.length - 1][0] : '')).toUpperCase(); };
+const plural = (n, s, p) => n === 1 ? s : p;
+let seq = 0; const uid = p => p + (++seq);
+const ehDesktop = () => matchMedia('(min-width: 900px)').matches;
+
+function diaRel(d) {
+  const h = agora();
+  if (mesmoDia(d, h)) return 'hoje';
+  if (mesmoDia(d, somaDias(h, 1))) return 'amanhã';
+  if (mesmoDia(d, somaDias(h, -1))) return 'ontem';
+  return DIAS[d.getDay()] + ', ' + pad(d.getDate()) + '/' + pad(d.getMonth() + 1);
+}
+function quando(d) {
+  const diff = d - agora();
+  if (diff > 0 && diff < HORA) return 'em ' + Math.max(1, Math.round(diff / MIN)) + ' min';
+  return diaRel(d) + ' às ' + hhmm(d);
+}
+function quandoCurto(d) {
+  const h = agora();
+  if (mesmoDia(d, h)) return hhmm(d);
+  if (mesmoDia(d, somaDias(h, 1))) return 'amanhã';
+  return pad(d.getDate()) + '/' + pad(d.getMonth() + 1);
+}
+function horaLista(d) {
+  const h = agora();
+  if (mesmoDia(d, h)) return hhmm(d);
+  if (mesmoDia(d, somaDias(h, -1))) return 'Ontem';
+  if (h - d < 6 * DIA) return cap(DIAS_L[d.getDay()]);
+  return pad(d.getDate()) + '/' + pad(d.getMonth() + 1) + '/' + d.getFullYear();
+}
+function sepDia(d) {
+  const h = agora();
+  if (mesmoDia(d, h)) return 'Hoje';
+  if (mesmoDia(d, somaDias(h, -1))) return 'Ontem';
+  if (h - d < 6 * DIA) return cap(DIAS_L[d.getDay()]);
+  return d.getDate() + ' de ' + MESES[d.getMonth()].toLowerCase() + (d.getFullYear() !== h.getFullYear() ? ' de ' + d.getFullYear() : '');
+}
+const dataLonga = d => DIAS_L[d.getDay()] + ', ' + pad(d.getDate()) + '/' + pad(d.getMonth() + 1);
+const isoData = d => d.getFullYear() + '-' + pad(d.getMonth() + 1) + '-' + pad(d.getDate());
+const isoLocal = d => isoData(d) + 'T' + hhmm(d);
+
+function mix(hex, alvo, p) {
+  const a = parseInt(hex.slice(1), 16), b = parseInt(alvo.slice(1), 16);
+  const c = s => Math.round(((a >> s) & 255) * p + ((b >> s) & 255) * (1 - p));
+  return '#' + [16, 8, 0].map(s => c(s).toString(16).padStart(2, '0')).join('');
+}
+const pillStyle = cor => `--bg:${mix(cor, '#FFFFFF', .17)};--fg:${mix(cor, '#2A2028', .55)}`;
+
+/* =========================================================
+   Ícones
+   ========================================================= */
+const P = {
+  back:'<path d="M15 5l-7 7 7 7"/>',
+  close:'<path d="M6 6l12 12M18 6L6 18"/>',
+  search:'<circle cx="11" cy="11" r="6.5"/><path d="M20 20l-4.2-4.2"/>',
+  more:'<circle cx="12" cy="5" r="1.7" fill="currentColor" stroke="none"/><circle cx="12" cy="12" r="1.7" fill="currentColor" stroke="none"/><circle cx="12" cy="19" r="1.7" fill="currentColor" stroke="none"/>',
+  chat:'<path d="M20 11.5a8 8 0 0 1-11.7 7.1L4 19.8l1.2-4.1A8 8 0 1 1 20 11.5z"/>',
+  funil:'<rect x="3.5" y="4.5" width="4.6" height="15" rx="1.4"/><rect x="9.7" y="4.5" width="4.6" height="10" rx="1.4"/><rect x="15.9" y="4.5" width="4.6" height="6.5" rx="1.4"/>',
+  clock:'<circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/>',
+  bolt:'<path d="M13.2 3L5 13.6h6.2L10.6 21 19 10.4h-6.2z"/>',
+  plus:'<path d="M12 5v14M5 12h14"/>',
+  addUser:'<circle cx="10" cy="8" r="3.8"/><path d="M3 20a7 7 0 0 1 12.2-4.6M18 14v6M15 17h6"/>',
+  tag:'<path d="M3.5 12.2V4.5a1 1 0 0 1 1-1h7.7l8.3 8.3a1 1 0 0 1 0 1.4l-7.3 7.3a1 1 0 0 1-1.4 0z"/><circle cx="8" cy="8" r="1.3"/>',
+  phone:'<path d="M5 4h3.5l1.7 4.3-2.2 1.4a11 11 0 0 0 6.3 6.3l1.4-2.2L20 15.5V19a1 1 0 0 1-1 1A16 16 0 0 1 4 5a1 1 0 0 1 1-1z"/>',
+  cal:'<rect x="3.5" y="5" width="17" height="15" rx="2"/><path d="M3.5 10h17M8 3v4M16 3v4"/>',
+  pencil:'<path d="M4 20l1-4.5L15.5 5a2 2 0 0 1 2.8 0l.7.7a2 2 0 0 1 0 2.8L8.5 19z"/>',
+  clip:'<path d="M20 11.5l-8.2 8.2a5 5 0 0 1-7.1-7.1l8.6-8.6a3.3 3.3 0 0 1 4.7 4.7l-8.5 8.5a1.7 1.7 0 0 1-2.4-2.4l7.8-7.8"/>',
+  mic:'<rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5.5 11a6.5 6.5 0 0 0 13 0M12 17.5V21"/>',
+  send:'<path d="M3.5 20.2L21 12 3.5 3.8 3.4 10l11.6 2-11.6 2z" fill="currentColor" stroke="none"/>',
+  lista:'<path d="M9 6.5h11M9 12h11M9 17.5h7"/><circle cx="4.8" cy="6.5" r="1" fill="currentColor"/><circle cx="4.8" cy="12" r="1" fill="currentColor"/><circle cx="4.8" cy="17.5" r="1" fill="currentColor"/>',
+  user:'<circle cx="12" cy="8" r="4"/><path d="M4 20a8 8 0 0 1 16 0"/>',
+  trash:'<path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3"/>',
+  arrow:'<path d="M5 12h14M13 6l6 6-6 6"/>',
+  check:'<path d="M5 12.5l4.5 4.5L19 7.5"/>',
+  down:'<path d="M7 10l5 5 5-5"/>',
+  reply:'<path d="M10 8L4 13l6 5M4 13h10a6 6 0 0 1 6 6"/>',
+  later:'<circle cx="12" cy="13" r="7.5"/><path d="M12 9.5V13l2.5 1.5M9 3h6"/>',
+  info:'<circle cx="12" cy="12" r="8.5"/><path d="M12 11v5M12 8h.01"/>',
+  refresh:'<path d="M20 12a8 8 0 1 1-2.3-5.6M20 4v4.5h-4.5"/>'
+};
+const ic = (n, cls = '') => `<svg class="i ${cls}" viewBox="0 0 24 24" aria-hidden="true">${P[n]}</svg>`;
+const ticks = s => s === 'enviada'
+  ? `<svg class="tk" viewBox="0 0 17 11" aria-label="enviada"><path d="M4 6l3 3 6.5-6.5"/></svg>`
+  : `<svg class="tk ${s === 'lida' ? 'lida' : ''}" viewBox="0 0 17 11" aria-label="${s === 'lida' ? 'lida' : 'entregue'}"><path d="M1 6l3 3L10.5 2.5M7.2 8.4l.6.6L15.5 2.5"/></svg>`;
+
+/* =========================================================
+   Etapas, etiquetas e automações
+   ========================================================= */
+const ETAPAS = [
+  { id:'novo', nome:'Novo contato' },
+  { id:'conversa', nome:'Em conversa' },
+  { id:'planos', nome:'Planos enviados' },
+  { id:'avaliacao', nome:'Avaliação agendada' },
+  { id:'fechou', nome:'Plano fechado' },
+  { id:'aguardando', nome:'Aguardando o parto' },
+  { id:'atendimento', nome:'Em acompanhamento' },
+  { id:'concluida', nome:'Concluída' }
+];
+const etapa = id => ETAPAS.find(e => e.id === id);
+
+const GRUPOS = [
+  { id:'mes', nome:'Mês do parto', desc:'Aplicada sozinha pela data do parto' },
+  { id:'fase', nome:'Fase' },
+  { id:'plano', nome:'Plano' },
+  { id:'parto', nome:'Tipo de parto' },
+  { id:'origem', nome:'De onde veio' }
+];
+const CORES_MES = ['#B5838D','#8E7CC3','#5E93BF','#5FA08B','#C99A4E','#B86E8F'];
+const CORES_NOVAS = ['#B5838D','#8E7CC3','#5E93BF','#5FA08B','#C99A4E','#B86E8F','#7B5E92','#8C7F88'];
+const TAGS = [];
+function garantirTagMes(d) {
+  const id = `m${d.getFullYear()}-${d.getMonth() + 1}`;
+  let t = TAGS.find(x => x.id === id);
+  if (!t) {
+    const n = (d.getFullYear() * 12 + d.getMonth()) % CORES_MES.length;
+    t = { id, nome: MESES[d.getMonth()], grupo:'mes', cor: CORES_MES[n], ano: d.getFullYear(), mes: d.getMonth() };
+    const chave = x => x.ano * 12 + x.mes;
+    let i = TAGS.findIndex(x => x.grupo === 'mes' && chave(x) > chave(t));
+    if (i < 0) { i = 0; TAGS.forEach((x, k) => { if (x.grupo === 'mes') i = k + 1; }); }
+    TAGS.splice(i, 0, t);
+  }
+  return t;
+}
+for (let k = 0; k < 9; k++) garantirTagMes(new Date(2026, 7 + k, 15));
+TAGS.push(
+  { id:'gestante', nome:'Gestante', grupo:'fase', cor:'#B090A5' },
+  { id:'puerpera', nome:'Puérpera', grupo:'fase', cor:'#7B5E92' },
+  { id:'bemgestar', nome:'Bem Gestar', grupo:'plano', cor:'#B89236' },
+  { id:'bgpremium', nome:'Bem Gestar Premium', grupo:'plano', cor:'#B89236' },
+  { id:'gestarmov', nome:'Gestar em Movimento', grupo:'plano', cor:'#B89236' },
+  { id:'essencials', nome:'Essencials', grupo:'plano', cor:'#A27A2E' },
+  { id:'advanced', nome:'Advanced', grupo:'plano', cor:'#A27A2E' },
+  { id:'exclusive', nome:'Exclusive', grupo:'plano', cor:'#A27A2E' },
+  { id:'cesarea', nome:'Cesárea', grupo:'parto', cor:'#5FA08B' },
+  { id:'normal', nome:'Parto normal', grupo:'parto', cor:'#5FA08B' },
+  { id:'meta', nome:'Anúncio Meta', grupo:'origem', cor:'#857581' },
+  { id:'google', nome:'Google', grupo:'origem', cor:'#857581' },
+  { id:'instagram', nome:'Instagram', grupo:'origem', cor:'#857581' },
+  { id:'indicacao', nome:'Indicação', grupo:'origem', cor:'#857581' }
+);
+const tag = id => TAGS.find(t => t.id === id);
+const tagMesDe = c => c.tags.map(tag).find(t => t && t.grupo === 'mes');
+const tagPlanoDe = c => c.tags.map(tag).find(t => t && t.grupo === 'plano');
+const pill = t => t ? `<span class="pill" style="${pillStyle(t.cor)}">${esc(t.nome)}</span>` : '';
+
+const AUTOS = [
+  { id:'a-boasvindas', nome:'Boas-vindas ao novo contato', ativa:true, gatilho:{ tipo:'etapa', valor:'novo' }, passos:[
+    { qtd:0, un:'min', ref:'entrada', cond:false, texto:'Oi, {nome}! Aqui é a Dra. Liliane Araújo, fisioterapeuta especialista em gestação e pós-parto 💜 Que bom que você chegou até aqui. Me conta: você está com quantas semanas?' },
+    { qtd:1, un:'dia', ref:'entrada', cond:true, texto:'Oi, {nome}, passando para saber se você viu minha mensagem. Se preferir, me diz o mês previsto do parto que eu já te explico como funciona o acompanhamento.' }
+  ]},
+  { id:'a-planos', nome:'Retomar quem recebeu os planos', ativa:true, gatilho:{ tipo:'etapa', valor:'planos' }, passos:[
+    { qtd:2, un:'dia', ref:'entrada', cond:true, texto:'{nome}, ficou alguma dúvida sobre os planos? Posso te explicar por aqui mesmo ou numa ligação rápida, como for melhor pra você.' },
+    { qtd:5, un:'dia', ref:'entrada', cond:true, texto:'Oi, {nome}! Quer que eu reserve um horário para a sua avaliação? Assim a gente conversa com calma sobre o melhor plano para o seu parto em {mes_parto}.' }
+  ]},
+  { id:'a-avaliacao', nome:'Confirmação e lembretes da avaliação', ativa:true, gatilho:{ tipo:'etapa', valor:'avaliacao' }, passos:[
+    { qtd:0, un:'min', ref:'entrada', cond:false, texto:'Prontinho, {nome}! Sua avaliação está confirmada para {data}, às {hora}. Qualquer imprevisto é só me avisar por aqui.' },
+    { qtd:1, un:'dia', ref:'avaliacao', cond:false, texto:'Oi, {nome}! Passando para lembrar da nossa avaliação amanhã, às {hora}. Até lá 💜' },
+    { qtd:2, un:'hora', ref:'avaliacao', cond:false, texto:'{nome}, daqui a pouco, às {hora}, a gente se fala. Vou te mandar o link por aqui.' }
+  ]},
+  { id:'a-fechou', nome:'Boas-vindas ao plano', ativa:true, gatilho:{ tipo:'etapa', valor:'fechou' }, passos:[
+    { qtd:0, un:'min', ref:'entrada', cond:false, texto:'Seja bem-vinda ao acompanhamento, {nome}! A partir de agora eu estou com você, da maternidade até a sua casa. Já já te mando o passo a passo.' },
+    { qtd:1, un:'dia', ref:'entrada', cond:false, texto:'{nome}, aqui vai o passo a passo:\n1. Quando der entrada na maternidade, me avisa por aqui.\n2. Eu vou até você nas primeiras 24 horas depois do parto.\n3. Depois seguimos com os retornos na sua casa.' }
+  ]},
+  { id:'a-retafinal', nome:'Reta final da gestação', ativa:true, gatilho:{ tipo:'etiqueta', valor:'mes' }, passos:[
+    { qtd:30, un:'dia', ref:'dpp', cond:false, texto:'{nome}, falta mais ou menos um mês para o seu bebê chegar! Quando for para a maternidade, me avisa por aqui para eu me organizar e estar com você nas primeiras 24 horas.' },
+    { qtd:7, un:'dia', ref:'dpp', cond:false, texto:'Reta final, {nome}! A bolsa da maternidade já está pronta? Não esquece de me chamar assim que der entrada 💜' }
+  ]},
+  { id:'a-checkin', nome:'Check-in pós-parto', ativa:true, gatilho:{ tipo:'etapa', valor:'atendimento' }, passos:[
+    { qtd:3, un:'dia', ref:'entrada', cond:false, texto:'Como vocês estão, {nome}? Me conta como foram os primeiros dias em casa e se está sentindo alguma dor para sentar, levantar ou amamentar.' }
+  ]},
+  { id:'a-depoimento', nome:'Pedido de depoimento', ativa:true, gatilho:{ tipo:'etapa', valor:'concluida' }, passos:[
+    { qtd:7, un:'dia', ref:'entrada', cond:false, texto:'{nome}, foi um prazer te acompanhar nessa fase 💜 Se puder, me conta em poucas palavras como foi a sua recuperação? O seu relato ajuda outras mães que estão chegando agora.' }
+  ]},
+  { id:'a-cesarea', nome:'Orientações para cesárea', ativa:false, gatilho:{ tipo:'etiqueta', valor:'cesarea' }, passos:[
+    { qtd:0, un:'min', ref:'entrada', cond:false, texto:'{nome}, como o seu parto vai ser cesárea, separei algumas orientações para os primeiros dias: como levantar da cama, como se posicionar para amamentar e quando começar os exercícios. Te mando aqui em seguida!' }
+  ]}
+];
+const autoPorId = id => AUTOS.find(a => a.id === id);
+const autoDaEtapa = id => AUTOS.find(a => a.gatilho.tipo === 'etapa' && a.gatilho.valor === id);
+const autosDaTag = id => AUTOS.filter(a => a.gatilho.tipo === 'etiqueta' && (a.gatilho.valor === id || (a.gatilho.valor === 'mes' && tag(id)?.grupo === 'mes')));
+
+const RAPIDAS = [
+  { atalho:'pos', titulo:'Planos do pós-parto', texto:'Os planos do pós-parto são três: Essencials (R$ 400), Advanced (R$ 600) e Exclusive (R$ 800). Todos começam na maternidade, nas primeiras 24 horas, e seguem com retornos na sua casa. Quer que eu te explique a diferença entre eles?' },
+  { atalho:'gestacao', titulo:'Planos da gestação', texto:'Na gestação eu tenho o Bem Gestar (R$ 150 por sessão), o Bem Gestar Premium (pacote com 4 sessões) e o Gestar em Movimento (R$ 1.200). Me conta o que você está sentindo que eu te indico o melhor.' },
+  { atalho:'casa', titulo:'Atendimento em casa', texto:'Eu atendo na maternidade e na sua casa, em João Pessoa. Você não precisa sair com o bebê: eu levo todo o material.' },
+  { atalho:'funciona', titulo:'Como funciona', texto:'Funciona assim: fazemos uma consulta antes do parto (online), eu te atendo na maternidade nas primeiras 24 horas e depois sigo com os retornos em casa. No meio de tudo isso, você tem o meu suporte por aqui.' },
+  { atalho:'pix', titulo:'Pagamento', texto:'Te mando a chave Pix aqui embaixo. Assim que o pagamento cair, eu já reservo a sua data 💜' }
+];
+
+/* =========================================================
+   Estado e dados de exemplo
+   ========================================================= */
+const S = { tab:'conversas', chatId:null, filtro:'todas', busca:'', segEnvios:'prog', segAuto:'auto', contatos:[], fila:[], ctx:{}, rascunho:null, fichaId:null };
+const contato = id => S.contatos.find(c => c.id === id);
+const pendentes = cid => S.fila.filter(x => x.cid === cid).sort((a, b) => a.quando - b.quando);
+const ultima = c => [...c.msgs].reverse().find(m => m.de !== 'sis') || c.msgs[c.msgs.length - 1];
+
+function preencher(t, c) {
+  const av = c.avaliacao;
+  return t.replace(/\{nome\}/g, primeiro(c.nome))
+    .replace(/\{data\}/g, av ? dataLonga(av) : '(data da avaliação)')
+    .replace(/\{hora\}/g, av ? horaFala(av) : '(horário)')
+    .replace(/\{mes_parto\}/g, c.dpp ? MESES[c.dpp.getMonth()].toLowerCase() : 'breve');
+}
+function calcQuando(p, c, base) {
+  if (p.ref === 'avaliacao') return c.avaliacao ? new Date(c.avaliacao - p.qtd * UN[p.un]) : null;
+  if (p.ref === 'dpp') {
+    if (!c.dpp) return null;
+    const d = new Date(c.dpp); d.setHours(9, 0, 0, 0);
+    return p.un === 'dia' ? somaDias(d, -p.qtd) : new Date(d - p.qtd * UN[p.un]);
+  }
+  return new Date(base.getTime() + p.qtd * UN[p.un]);
+}
+function tempoTxt(p) {
+  if (p.ref === 'entrada' && p.qtd === 0) return 'na hora';
+  const u = UN_NOME[p.un][p.qtd === 1 ? 0 : 1];
+  if (p.ref === 'avaliacao') return `${p.qtd} ${u} antes da avaliação`;
+  if (p.ref === 'dpp') return `${p.qtd} ${u} antes da data do parto`;
+  return `${p.qtd} ${u} depois`;
+}
+function gatilhoTxt(a) {
+  if (a.gatilho.tipo === 'etapa') return `Quando entra em ${etapa(a.gatilho.valor).nome}`;
+  if (a.gatilho.valor === 'mes') return 'Quando recebe a etiqueta do mês do parto';
+  return `Quando recebe a etiqueta ${tag(a.gatilho.valor)?.nome || ''}`;
+}
+const juntar = l => l.length < 2 ? l.join('') : l.slice(0, -1).join(', ') + ' e ' + l[l.length - 1];
+/* resumo em uma frase: "Envia na hora; reenvia 1 dia depois, se ela não responder" */
+function resumoAuto(a) {
+  const grupos = [];
+  a.passos.forEach(p => {
+    const g = grupos[grupos.length - 1];
+    if (g && g.cond === !!p.cond && g.ref === p.ref) g.ps.push(p); else grupos.push({ cond:!!p.cond, ref:p.ref, ps:[p] });
+  });
+  const suf = { entrada:' depois', avaliacao:' antes da avaliação', dpp:' antes da data do parto' };
+  let txt = '', verboAnt = null;
+  grupos.forEach(g => {
+    const resto = g.ps.filter(p => !(p.ref === 'entrada' && p.qtd === 0));
+    const tempos = resto.length < g.ps.length ? ['na hora'] : [];
+    if (resto.length) {
+      const mesma = resto.every(p => p.un === resto[0].un);
+      const t = mesma
+        ? juntar(resto.map(p => String(p.qtd))) + ' ' + UN_NOME[resto[0].un][resto.length === 1 && resto[0].qtd === 1 ? 0 : 1]
+        : juntar(resto.map(p => p.qtd + ' ' + UN_NOME[p.un][p.qtd === 1 ? 0 : 1]));
+      tempos.push(t + suf[g.ref]);
+    }
+    const verbo = g.cond ? 'reenvia' : 'envia';
+    const parte = juntar(tempos) + (g.cond ? ', se ela não responder' : '');
+    txt += !txt ? verbo + ' ' + parte : verbo === verboAnt ? ', ' + parte : '; ' + verbo + ' ' + parte;
+    verboAnt = verbo;
+  });
+  return cap(txt);
+}
+
+/* contatos fictícios: datas relativas a hoje, para a demonstração sempre parecer atual */
+const BASE = [
+  { id:'c1', nome:'Camila Rocha', tel:'(83) 98812-4410', etapa:'avaliacao', entrou:T(-1,20,52), avaliacao:T(1,19,0), dpp:'2026-12-05', tags:['gestante','advanced','meta'], notas:'Primeiro filho. Quer o acompanhamento desde a maternidade.', msgs:[
+    ['sis','Chegou pelo anúncio do Meta',T(-3,10,1)],
+    ['ela','Oi! Vi o anúncio, queria saber como funciona o acompanhamento pós-parto',T(-3,10,1)],
+    ['eu',{a:'a-boasvindas',p:0},T(-3,10,2)],
+    ['ela','31 semanas! O parto está previsto para o começo de dezembro',T(-3,10,15)],
+    ['eu','Que fase linda, Camila! O acompanhamento começa na maternidade, nas primeiras 24 horas depois do parto, e continua na sua casa. Vou te mandar os planos aqui.',T(-3,10,19)],
+    ['eu','📄 Planos pós-parto.pdf',T(-3,10,20)],
+    ['sis','Movida para Planos enviados',T(-3,10,20)],
+    ['ela','Gostei do Advanced. Dá pra fazer uma avaliação antes de fechar?',T(-1,20,40)],
+    ['eu',`Dá sim! Pode ser ${DIAS_L[T(1,19).getDay()]}, às 19h, online?`,T(-1,20,46)],
+    ['ela','Pode sim 🙏',T(-1,20,51)]
+  ]},
+  { id:'c2', nome:'Juliana Mendes', tel:'(83) 99641-2287', etapa:'atendimento', entrou:T(-5,9,0), dpp:'2026-10-08', tags:['puerpera','exclusive','cesarea','instagram'], naoLidas:2, notas:'Cesárea em 08/10. Cicatriz sensível, usando taping.', msgs:[
+    ['sis','Chegou pelo Instagram',T(-50,15,20)],
+    ['ela','Oi, Dra. Liliane! Uma amiga me mandou seu perfil. Vou ter bebê em outubro e queria o acompanhamento completo',T(-50,15,20)],
+    ['eu',{a:'a-boasvindas',p:0},T(-50,15,21)],
+    ['ela','Fechei o Exclusive! Já fiz o Pix 💜',T(-46,10,5)],
+    ['sis','Movida para Plano fechado',T(-46,10,6)],
+    ['eu',{a:'a-fechou',p:0},T(-46,10,6)],
+    ['eu',{a:'a-fechou',p:1},T(-45,10,6)],
+    ['ela','Dra, minha bolsa estourou! Estou indo para o hospital',T(-5,4,12)],
+    ['eu','Estou indo, Juliana! Fica tranquila, nos vemos aí 💜',T(-5,4,20)],
+    ['eu','Bom dia, Juliana! Chego aí às 10h para o nosso retorno. Separa uma almofada para a gente treinar a posição de amamentar.',T(-1,8,10)],
+    ['ela','Bom dia, Dra! Combinado',T(-1,8,32)],
+    ['ela','Dra, hoje a cicatriz está repuxando quando levanto da cama, é normal?',atras(38)],
+    ['ela','Mas consegui dormir bem melhor depois do taping 🙌',atras(37)]
+  ]},
+  { id:'c3', nome:'Beatriz Albuquerque', tel:'(83) 98730-1956', etapa:'planos', entrou:T(-1,16,20), dpp:'2027-01-20', tags:['gestante','meta'], msgs:[
+    ['sis','Chegou pelo anúncio do Meta',T(-2,11,5)],
+    ['ela','Olá! Quanto custa o acompanhamento depois do parto?',T(-2,11,5)],
+    ['eu',{a:'a-boasvindas',p:0},T(-2,11,6)],
+    ['ela','Estou com 26 semanas, parto em janeiro',T(-1,15,58)],
+    ['sis','Movida para Em conversa',T(-1,16,2)],
+    ['eu','Que bom, Beatriz! Te mando abaixo os três planos do pós-parto: Essencials, Advanced e Exclusive. A diferença está na quantidade de retornos em casa e nos recursos incluídos.',T(-1,16,19)],
+    ['eu','📄 Planos pós-parto.pdf',T(-1,16,20)]
+  ]},
+  { id:'c4', nome:'Mariana Queiroga', tel:'(83) 99188-0342', etapa:'novo', entrou:atras(51), tags:['gestante','meta'], naoLidas:2, msgs:[
+    ['sis','Chegou pelo anúncio do Meta',atras(52)],
+    ['ela','Oii',atras(52)],
+    ['ela','Queria saber os valores do acompanhamento na maternidade',atras(51.5)]
+  ]},
+  { id:'c5', nome:'Tatiane Farias', tel:'(83) 98205-7719', etapa:'novo', entrou:atras(16), dpp:'2027-02-09', tags:['gestante','instagram'], naoLidas:2, msgs:[
+    ['sis','Chegou pelo Instagram',atras(16.5)],
+    ['ela','Oi, tudo bem? Vi seu perfil. A senhora faz taping na gestação?',atras(16.4)],
+    ['ela','Estou com 22 semanas e sentindo muita dor na lombar',atras(4)]
+  ]},
+  { id:'c6', nome:'Letícia Brandão', tel:'(83) 99902-6631', etapa:'novo', entrou:T(-1,21,30), dpp:'2027-01-08', tags:['gestante','google'], msgs:[
+    ['sis','Chegou pelo Google',T(-1,21,29)],
+    ['ela','Olá, vocês atendem em Cabedelo?',T(-1,21,29)]
+  ]},
+  { id:'c7', nome:'Renata Lins', tel:'(83) 98877-4520', etapa:'conversa', entrou:T(-2,14,4), dpp:'2026-12-22', tags:['gestante','gestarmov','meta'], msgs:[
+    ['sis','Chegou pelo anúncio do Meta',T(-2,14,0)],
+    ['ela','Oi! Queria entender os planos para a gestação',T(-2,14,0)],
+    ['eu',{a:'a-boasvindas',p:0},T(-2,14,1)],
+    ['ela','28 semanas, parto previsto para 22 de dezembro',T(-2,14,3)],
+    ['eu','Que bom, Renata! Para essa fase eu indico o Gestar em Movimento: exercícios terapêuticos durante a gestação, para você chegar no parto com mais mobilidade e menos dor.',T(-1,18,30)],
+    ['ela','E dá para emendar com o pós-parto?',T(-1,18,52)],
+    ['eu','Dá sim! Muitas mães fazem os dois. Quer que eu te mande os valores juntos?',T(-1,19,0)],
+    ['ela','Quero! Vou ver aqui com meu marido e te aviso',T(-1,19,4)]
+  ]},
+  { id:'c8', nome:'Fernanda Lucena', tel:'(83) 99350-8814', etapa:'conversa', entrou:atras(129), dpp:'2026-11-19', tags:['gestante','cesarea','indicacao'], naoLidas:2, msgs:[
+    ['sis','Chegou por indicação',atras(131)],
+    ['ela','Oi, Dra. Liliane! A Juliana Mendes me passou seu contato',atras(131)],
+    ['eu','Oi, Fernanda! Que bom que a Juliana te indicou 💜 Me conta: de quantas semanas você está?',atras(130)],
+    ['ela','Estou com 34 semanas. Ainda dá tempo de fazer o acompanhamento?',atras(12)],
+    ['ela','Minha cesárea está marcada para 19/11',atras(11)]
+  ]},
+  { id:'c9', nome:'Isabela Toscano', tel:'(83) 98641-3307', etapa:'avaliacao', entrou:T(-2,11,40), avaliacao:T(2,10,0), dpp:'2026-12-30', tags:['gestante','bgpremium','instagram'], msgs:[
+    ['sis','Chegou pelo Instagram',T(-6,9,12)],
+    ['ela','Bom dia! Tenho interesse no Bem Gestar Premium',T(-6,9,12)],
+    ['eu',{a:'a-boasvindas',p:0},T(-6,9,13)],
+    ['ela','27 semanas! Tenho sentido muito inchaço nas pernas',T(-6,9,40)],
+    ['eu','Entendo, Isabela. A drenagem linfática ajuda muito nessa fase. Vamos marcar uma avaliação para eu ver direitinho?',T(-2,11,20)],
+    ['ela',`Vamos! Pode ser ${DIAS_L[T(2,10).getDay()]}, às 10h?`,T(-2,11,36)]
+  ]},
+  { id:'c10', nome:'Larissa Pontes', tel:'(83) 99712-0458', etapa:'fechou', entrou:T(-5,15,10), dpp:'2026-11-12', tags:['gestante','advanced','normal','meta'], msgs:[
+    ['sis','Chegou pelo anúncio do Meta',T(-20,13,0)],
+    ['ela','Oi! Quero saber sobre o pós-parto',T(-20,13,0)],
+    ['eu',{a:'a-boasvindas',p:0},T(-20,13,1)],
+    ['ela','Decidi pelo Advanced 😊 pode me mandar o Pix?',T(-5,14,48)],
+    ['eu','Que alegria, Larissa! Já te mando.',T(-5,14,55)],
+    ['ela','Pago! Comprovante enviado',T(-5,15,8)],
+    ['ela','Perfeito, Dra! Já salvei seu número nos favoritos 😅',T(-4,15,40)]
+  ]},
+  { id:'c11', nome:'Patrícia Nóbrega', tel:'(83) 98113-9025', etapa:'aguardando', entrou:T(-8,10,0), dpp:'2026-10-28', tags:['gestante','exclusive','cesarea','meta'], msgs:[
+    ['sis','Chegou pelo anúncio do Meta',T(-41,19,30)],
+    ['ela','Boa noite! Quero o acompanhamento completo, da maternidade até em casa',T(-41,19,30)],
+    ['eu',{a:'a-boasvindas',p:0},T(-41,19,31)],
+    ['sis','Movida para Plano fechado',T(-30,11,0)],
+    ['eu',{a:'a-fechou',p:0},T(-30,11,0)],
+    ['eu',{a:'a-fechou',p:1},T(-29,11,0)],
+    ['ela','Dra, a cesárea ficou marcada para o dia 28!',T(-8,9,50)],
+    ['eu','Anotado, Patrícia! Já reservei o dia 28 para você. Agora é descansar 💜',T(-8,10,0)]
+  ]},
+  { id:'c12', nome:'Amanda Cavalcanti', tel:'(83) 99475-6108', etapa:'concluida', entrou:T(-5,16,0), dpp:'2026-08-20', tags:['puerpera','advanced','normal','google'], msgs:[
+    ['sis','Chegou pelo Google',T(-75,10,0)],
+    ['ela','Olá! Vi no Google que a senhora atende pós-parto em casa',T(-75,10,0)],
+    ['eu',{a:'a-boasvindas',p:0},T(-75,10,1)],
+    ['ela','Dra, hoje fiz a série de exercícios sozinha e não senti dor nenhuma!',T(-6,18,0)],
+    ['eu','Que notícia boa, Amanda! Você se dedicou muito. Encerramos o acompanhamento com chave de ouro 💜',T(-5,15,58)]
+  ]},
+  { id:'c13', nome:'Débora Vasconcelos', tel:'(83) 98560-2271', etapa:'atendimento', entrou:T(-12,10,0), dpp:'2026-09-30', tags:['puerpera','essencials','normal','google'], msgs:[
+    ['sis','Chegou pelo Google',T(-60,16,0)],
+    ['ela','Oi, gostaria de saber sobre fisioterapia pós-parto',T(-60,16,0)],
+    ['eu',{a:'a-boasvindas',p:0},T(-60,16,1)],
+    ['ela','As dores nas costas melhoraram muito com os exercícios!',T(-1,15,22)],
+    ['eu','Que ótimo, Débora! Continua fazendo duas vezes ao dia, que no próximo retorno a gente evolui.',T(-1,15,40)]
+  ]},
+  { id:'c14', nome:'Gabriela Souto', tel:'(83) 99238-5574', etapa:'planos', entrou:T(-4,11,0), dpp:'2027-03-15', tags:['gestante','bgpremium','meta'], msgs:[
+    ['sis','Chegou pelo anúncio do Meta',T(-5,9,30)],
+    ['ela','Oi! Queria começar a fisioterapia na gestação',T(-5,9,30)],
+    ['eu',{a:'a-boasvindas',p:0},T(-5,9,31)],
+    ['ela','13 semanas!',T(-5,9,44)],
+    ['eu','Que bom que você quer começar cedo, Gabriela! Te mandei os planos da gestação. O Bem Gestar Premium é um pacote de 4 sessões, bom para quem quer começar agora.',T(-4,10,58)],
+    ['eu','📄 Planos gestação.pdf',T(-4,11,0)]
+  ]},
+  { id:'c15', nome:'Priscila Ramalho', tel:'(83) 98019-4463', etapa:'conversa', entrou:T(-3,17,31), dpp:'2027-01-28', tags:['gestante','meta'], naoLidas:1, msgs:[
+    ['sis','Chegou pelo anúncio do Meta',T(-3,17,10)],
+    ['ela','Oi, posso fazer exercício na gestação?',T(-3,17,10)],
+    ['eu',{a:'a-boasvindas',p:0},T(-3,17,11)],
+    ['ela','Estou com 24 semanas, parto previsto para o fim de janeiro',T(-3,17,30)],
+    ['eu','Pode sim, Priscila! Com a orientação certa, é até recomendado. Quer que eu te explique como funciona o Gestar em Movimento?',T(-3,17,50)],
+    ['ela','Quero sim! Hoje à noite consigo ler com calma',atras(200)]
+  ]}
+];
+
+function semear() {
+  const now = Date.now();
+  BASE.forEach(b => {
+    const c = { id:b.id, nome:b.nome, tel:b.tel, etapa:b.etapa, entrou:b.entrou, dpp: b.dpp ? new Date(b.dpp + 'T12:00:00') : null,
+      avaliacao:b.avaliacao || null, tags:[...b.tags], notas:b.notas || '', naoLidas:b.naoLidas || 0, msgs:[] };
+    if (c.dpp) c.tags.unshift(garantirTagMes(c.dpp).id);
+    c.msgs = b.msgs.map(([de, texto, t]) => {
+      if (typeof texto === 'object') { const a = autoPorId(texto.a); return { id:uid('m'), de:'eu', t, texto:preencher(a.passos[texto.p].texto, c), auto:a.nome }; }
+      return { id:uid('m'), de, t, texto };
+    });
+    if (c.etapa !== 'novo') c.msgs.push({ id:uid('m'), de:'sis', t:c.entrou, texto:`Movida para ${etapa(c.etapa).nome}` });
+    S.contatos.push(c);
+    const inicio = c.msgs.reduce((m, x) => x.t < m ? x.t : m, c.msgs[0].t);
+    const lista = [[autoDaEtapa(c.etapa), c.entrou]];
+    if (c.dpp) autosDaTag(tagMesDe(c).id).forEach(a => lista.push([a, inicio]));
+    lista.forEach(([a, base]) => {
+      if (!a || !a.ativa) return;
+      a.passos.forEach((p, i) => {
+        const q = calcQuando(p, c, base);
+        if (!q || q < base) return;
+        const respondeu = c.msgs.some(m => m.de === 'ela' && m.t > base && (q.getTime() <= now ? m.t < q : true));
+        if (p.cond && respondeu) return;
+        const texto = preencher(p.texto, c);
+        if (q.getTime() <= now) c.msgs.push({ id:uid('m'), de:'eu', t:q, texto, auto:a.nome });
+        else S.fila.push({ id:uid('e'), cid:c.id, autoId:a.id, autoNome:a.nome, passo:i, total:a.passos.length, texto, quando:q, cond:!!p.cond });
+      });
+    });
+    c.msgs.sort((x, y) => x.t - y.t);
+    const ultEla = [...c.msgs].reverse().find(m => m.de === 'ela');
+    c.msgs.forEach(m => { if (m.de === 'eu') m.status = (ultEla && m.t <= ultEla.t) || now - m.t > 3 * DIA ? 'lida' : 'entregue'; });
+  });
+}
+
+/* =========================================================
+   Regras do CRM
+   ========================================================= */
+function programarAuto(a, c, base) {
+  if (!a || !a.ativa) return 0;
+  const now = Date.now(); let n = 0;
+  a.passos.forEach((p, i) => {
+    let q = calcQuando(p, c, base);
+    if (!q) return;
+    if (p.ref === 'entrada' && p.qtd === 0) q = new Date(now + 2500);
+    else if (q.getTime() < now) return;
+    S.fila.push({ id:uid('e'), cid:c.id, autoId:a.id, autoNome:a.nome, passo:i, total:a.passos.length, texto:preencher(p.texto, c), quando:q, cond:!!p.cond });
+    n++;
+  });
+  return n;
+}
+function cancelarDaAuto(cid, autoId) {
+  const antes = S.fila.length;
+  S.fila = S.fila.filter(x => !(x.cid === cid && x.autoId === autoId));
+  return antes - S.fila.length;
+}
+function moverEtapa(cid, novaId, extra = {}) {
+  const c = contato(cid);
+  if (!c || c.etapa === novaId) return;
+  if (novaId === 'avaliacao' && !extra.avaliacao) { pedirAvaliacao(cid); return; }
+  if (extra.avaliacao) c.avaliacao = extra.avaliacao;
+  const antiga = autoDaEtapa(c.etapa);
+  const canceladas = antiga ? cancelarDaAuto(cid, antiga.id) : 0;
+  c.etapa = novaId; c.entrou = new Date();
+  c.msgs.push({ id:uid('m'), de:'sis', t:new Date(), texto:`Movida para ${etapa(novaId).nome}` });
+  const a = autoDaEtapa(novaId);
+  const n = programarAuto(a, c, new Date());
+  render();
+  let msg = `${primeiro(c.nome)} foi para ${etapa(novaId).nome}.`;
+  if (n) msg += ` A automação programou ${n} ${plural(n, 'mensagem', 'mensagens')}.`;
+  if (canceladas) msg += ` ${canceladas} ${plural(canceladas, 'envio da etapa anterior foi cancelado', 'envios da etapa anterior foram cancelados')}.`;
+  toast(msg, { bolt: !!n, dur: 5200 });
+}
+function enviarItem(it, silencioso) {
+  S.fila = S.fila.filter(x => x !== it);
+  const c = contato(it.cid); if (!c) return;
+  const m = { id:uid('m'), de:'eu', texto:it.texto, t:new Date(), auto:it.autoNome || null, status:'enviada' };
+  c.msgs.push(m);
+  setTimeout(() => { m.status = 'entregue'; renderChat(); renderConversas(); }, 1100);
+  render(it.cid === S.chatId);
+  if (!silencioso) toast(it.autoNome ? `Automação enviou para ${primeiro(c.nome)}: ${it.autoNome}.` : `Mensagem programada enviada para ${primeiro(c.nome)}.`, { bolt: !!it.autoNome });
+}
+function enviarManual(texto) {
+  const c = contato(S.chatId); if (!c || !texto.trim()) return;
+  const m = { id:uid('m'), de:'eu', texto:texto.trim(), t:new Date(), status:'enviada' };
+  c.msgs.push(m); c.naoLidas = 0;
+  setTimeout(() => { m.status = 'entregue'; renderChat(); renderConversas(); }, 700);
+  render(true);
+  if (c.etapa === 'novo') setTimeout(() => moverEtapa(c.id, 'conversa'), 500);
+}
+function simularResposta(cid) {
+  const c = contato(cid); if (!c) return;
+  const frases = ['Oi, Dra! Vi sim, obrigada 💜', 'Combinado! Pode deixar', 'Oi! Desculpa a demora, estava resolvendo umas coisas aqui', 'Perfeito, obrigada!'];
+  c.msgs.forEach(m => { if (m.de === 'eu') m.status = 'lida'; });
+  c.msgs.push({ id:uid('m'), de:'ela', texto:frases[Math.floor(Math.random() * frases.length)], t:new Date() });
+  const cond = S.fila.filter(x => x.cid === cid && x.cond);
+  S.fila = S.fila.filter(x => !(x.cid === cid && x.cond));
+  if (!(S.chatId === cid && chatVisivel())) c.naoLidas++;
+  render(true);
+  toast(cond.length
+    ? `${primeiro(c.nome)} respondeu. ${cond.length} ${plural(cond.length, 'reenvio foi cancelado, porque só sairia', 'reenvios foram cancelados, porque só sairiam')} se ela não respondesse.`
+    : `${primeiro(c.nome)} respondeu.`, { bolt: !!cond.length, dur: 5600 });
+}
+function aplicarDpp(c, d) {
+  c.dpp = d;
+  const velha = tagMesDe(c);
+  c.tags = c.tags.filter(id => tag(id)?.grupo !== 'mes');
+  const nova = garantirTagMes(d);
+  c.tags.unshift(nova.id);
+  let n = 0;
+  autosDaTag(nova.id).forEach(a => { cancelarDaAuto(c.id, a.id); n += programarAuto(a, c, new Date()); });
+  render();
+  toast(`Etiqueta ${nova.nome} aplicada${velha && velha.id !== nova.id ? ` no lugar de ${velha.nome}` : ''}.${n ? ` Reta final da gestação programou ${n} ${plural(n, 'mensagem', 'mensagens')}.` : ''}`, { bolt: !!n, dur: 5200 });
+}
+function alternarTag(c, id) {
+  const t = tag(id);
+  if (c.tags.includes(id)) {
+    c.tags = c.tags.filter(x => x !== id);
+    autosDaTag(id).forEach(a => cancelarDaAuto(c.id, a.id));
+  } else {
+    if (t.grupo === 'mes') c.tags = c.tags.filter(x => tag(x)?.grupo !== 'mes');
+    c.tags.push(id);
+    let n = 0, nomes = [];
+    autosDaTag(id).filter(a => a.ativa).forEach(a => { cancelarDaAuto(c.id, a.id); const k = programarAuto(a, c, new Date()); if (k) { n += k; nomes.push(a.nome); } });
+    if (n) toast(`${nomes.join(', ')}: ${n} ${plural(n, 'mensagem programada', 'mensagens programadas')} para ${primeiro(c.nome)}.`, { bolt:true });
+    else if (t.grupo === 'mes' && !c.dpp) toast('Para a automação do mês funcionar, preencha a data do parto na ficha.');
+  }
+  render();
+}
+
+/* =========================================================
+   Camadas (conversa, ficha, editor, folha) e botão voltar
+   ========================================================= */
+const camadas = [];
+function abrirCamada(n) { if (!camadas.includes(n)) camadas.push(n); if (!(history.state && history.state.crm)) history.pushState({ crm:1 }, ''); }
+function fecharCamada(n) { const i = camadas.lastIndexOf(n); if (i > -1) camadas.splice(i, 1); }
+const FECHAR = { chat:() => fecharChat(), ficha:() => fecharFicha(), editor:() => fecharEditor(), sheet:() => fecharSheet() };
+addEventListener('popstate', () => {
+  const topo = camadas[camadas.length - 1];
+  if (!topo) return;
+  FECHAR[topo]();
+  if (camadas.length) history.pushState({ crm:1 }, '');
+});
+addEventListener('keydown', e => {
+  if (e.key === 'Escape') { const topo = camadas[camadas.length - 1]; if (topo && (topo !== 'chat' || !ehDesktop())) FECHAR[topo](); }
+});
+
+const chatVisivel = () => ehDesktop() ? S.tab === 'conversas' : $('#app').classList.contains('chat-aberto');
+function abrirChat(cid) {
+  S.chatId = cid;
+  const c = contato(cid); if (c) c.naoLidas = 0;
+  if (ehDesktop()) { if (S.tab !== 'conversas') S.tab = 'conversas'; }
+  else { $('#app').classList.add('chat-aberto'); abrirCamada('chat'); }
+  $('#rapidas').hidden = true;
+  render(true);
+}
+function fecharChat() {
+  $('#app').classList.remove('chat-aberto');
+  fecharCamada('chat');
+  $('#texto').blur();
+  render();
+}
+function abrirSheet(html) {
+  const sh = $('#sheet');
+  sh.innerHTML = '<div class="alca"></div>' + html;
+  sh.classList.add('on'); $('#scrim').classList.add('on');
+  abrirCamada('sheet');
+}
+function fecharSheet() { $('#sheet').classList.remove('on'); $('#scrim').classList.remove('on'); fecharCamada('sheet'); }
+function abrirFicha(cid) { S.fichaId = cid; renderFicha(); $('#ficha').classList.add('on'); abrirCamada('ficha'); }
+function fecharFicha() { $('#ficha').classList.remove('on'); fecharCamada('ficha'); S.fichaId = null; }
+function fecharEditor() { $('#editor').classList.remove('on'); fecharCamada('editor'); S.rascunho = null; }
+
+let toastT;
+function toast(msg, o = {}) {
+  const t = $('#toast');
+  t.innerHTML = `${o.bolt ? ic('bolt', 'peq') : ''}<span>${esc(msg)}</span>${o.acao ? `<button type="button">${esc(o.acao)}</button>` : ''}`;
+  if (o.acao) t.querySelector('button').onclick = () => { t.classList.remove('on'); o.fn(); };
+  t.classList.add('on');
+  clearTimeout(toastT);
+  toastT = setTimeout(() => t.classList.remove('on'), o.dur || 4200);
+}
+
+/* =========================================================
+   Desenho das telas
+   ========================================================= */
+const avatar = (c, cls = '') => `<span class="av ${cls}" style="--c:${corAv(c.id)}" aria-hidden="true">${iniciais(c.nome)}</span>`;
+const AVC = ['#9A7590','#7B5E92','#8C5F7C','#7D6BB3','#4F7AA3','#4D8574','#9C7334','#9A6470'];
+function corAv(id) { let h = 7; for (const ch of id) h = (h * 31 + ch.charCodeAt(0)) >>> 0; return AVC[h % AVC.length]; }
+
+function render(rolar) {
+  const app = $('#app');
+  app.dataset.aba = S.tab;
+  $$('.tab').forEach(b => b.setAttribute('aria-current', b.dataset.tab === S.tab ? 'page' : 'false'));
+  const nl = S.contatos.filter(c => c.naoLidas > 0).length;
+  $('#bdConv').hidden = !nl; $('#bdConv').textContent = nl;
+  const hoje = S.fila.filter(x => mesmoDia(x.quando, agora())).length;
+  $('#bdEnv').hidden = !hoje; $('#bdEnv').textContent = hoje;
+  renderConversas(); renderFunil(); renderEnvios(); renderAutomacoes(); renderChat(rolar);
+  if (S.fichaId && !$('#ficha').contains(document.activeElement)) renderFicha();
+}
+/* troca o conteúdo de uma lista sem perder a posição de rolagem */
+function trocar(el, html) { const y = el.scrollTop, x = el.scrollLeft; el.innerHTML = html; el.scrollTop = y; el.scrollLeft = x; }
+
+function contatosFiltrados() {
+  let l = [...S.contatos];
+  const f = S.filtro;
+  if (f === 'naolidas') l = l.filter(c => c.naoLidas > 0);
+  else if (f === 'programado') l = l.filter(c => pendentes(c.id).length);
+  else if (f.startsWith('tag:')) l = l.filter(c => c.tags.includes(f.slice(4)));
+  else if (f.startsWith('etapa:')) l = l.filter(c => c.etapa === f.slice(6));
+  const q = S.busca.trim().toLowerCase();
+  if (q) l = l.filter(c => c.nome.toLowerCase().includes(q) || etapa(c.etapa).nome.toLowerCase().includes(q) || c.tags.some(id => tag(id)?.nome.toLowerCase().includes(q)));
+  return l.sort((a, b) => ultima(b).t - ultima(a).t);
+}
+function renderConversas() {
+  const nl = S.contatos.filter(c => c.naoLidas > 0).length;
+  const meses = TAGS.filter(t => t.grupo === 'mes' && S.contatos.some(c => c.tags.includes(t.id) && c.etapa !== 'concluida' && c.dpp && c.dpp > somaDias(agora(), -20)));
+  const chip = (id, txt, extra = '') => `<button class="chip" data-filtro="${id}" aria-pressed="${S.filtro === id}">${extra}${txt}</button>`;
+  let chips = chip('todas', 'Todas') + chip('naolidas', `Não lidas${nl ? ` <span class="cnt">${nl}</span>` : ''}`) + chip('programado', 'Com envio programado', ic('clock', 'peq'));
+  chips += meses.map(t => chip('tag:' + t.id, esc(t.nome), `<span class="dot" style="--c:${t.cor}"></span>`)).join('');
+  const fx = S.filtro.startsWith('tag:') ? tag(S.filtro.slice(4)) : null;
+  if (fx && fx.grupo !== 'mes') chips += chip(S.filtro, esc(fx.nome), `<span class="dot" style="--c:${fx.cor}"></span>`);
+  if (S.filtro.startsWith('etapa:')) chips += chip(S.filtro, esc(etapa(S.filtro.slice(6)).nome));
+  chips += `<button class="chip tracejado" data-acao="filtro-etiquetas">${ic('tag', 'peq')}Etiquetas</button>`;
+  $('#chipsConv').innerHTML = chips;
+
+  const l = contatosFiltrados();
+  trocar($('#listaConv'), l.length ? l.map(c => {
+    const u = ultima(c), prox = pendentes(c.id)[0], mes = tagMesDe(c);
+    const prev = u.de === 'sis' ? u.texto : u.texto;
+    return `<button class="row ${c.naoLidas ? 'unread' : ''} ${ehDesktop() && S.chatId === c.id ? 'ativa' : ''}" data-abrir="${c.id}">
+      ${avatar(c)}
+      <span class="row-main">
+        <span class="row-l1"><span class="nome">${esc(c.nome)}</span><span class="hora">${horaLista(u.t)}</span></span>
+        <span class="row-l2">${u.de === 'eu' ? ticks(u.status) : ''}${u.auto ? `<span class="prog" title="Enviada pela automação">${ic('bolt', 'mini')}</span>` : ''}<span class="prev">${esc(prev)}</span>${c.naoLidas ? `<span class="nl">${c.naoLidas}</span>` : ''}</span>
+        <span class="row-l3">${pill(mes)}<span class="etapa-txt">${esc(etapa(c.etapa).nome)}</span>${prox ? `<span class="prog" title="Próximo envio programado">${ic('clock', 'mini')}${quandoCurto(prox.quando)}</span>` : ''}</span>
+      </span>
+    </button>`;
+  }).join('') : `<div class="vazio"><b>Nenhuma conversa aqui</b>Troque o filtro ou pesquise outro nome.</div>`);
+}
+
+function renderChat(rolar) {
+  const chat = $('#chat');
+  const c = contato(S.chatId);
+  chat.classList.toggle('sem-chat', !c);
+  if (!c) return;
+  const pend = pendentes(c.id);
+  $('#chatTop').innerHTML = `
+    <button class="icbtn voltar" data-acao="voltar-chat" aria-label="Voltar">${ic('back')}</button>
+    <button class="chat-quem" data-acao="ficha" aria-label="Abrir ficha de ${esc(c.nome)}">
+      ${avatar(c)}
+      <span style="min-width:0"><span class="chat-nome">${esc(c.nome)}</span><span class="chat-sub">Toque para ver a ficha</span></span>
+    </button>
+    <button class="icbtn" data-acao="ligar" aria-label="Ligar">${ic('phone')}</button>
+    <button class="icbtn" data-acao="menu-chat" aria-label="Mais opções">${ic('more')}</button>`;
+
+  const tags = c.tags.map(tag).filter(Boolean);
+  $('#faixa').innerHTML = `
+    <button class="etapa-btn" data-acao="mover" aria-label="Etapa: ${esc(etapa(c.etapa).nome)}. Toque para mudar">${esc(etapa(c.etapa).nome)}${ic('down')}</button>
+    ${c.etapa === 'avaliacao' && c.avaliacao ? `<span class="info">${ic('cal', 'peq')}${esc(cap(quando(c.avaliacao)))}</span>` : ''}
+    ${tags.map(t => `<button class="pill" style="${pillStyle(t.cor)}" data-acao="etiquetas">${esc(t.nome)}</button>`).join('')}
+    <button class="add-tag" data-acao="etiquetas">${ic('plus', 'peq')}Etiqueta</button>`;
+
+  const box = $('#msgs');
+  const perto = box.scrollHeight - box.scrollTop - box.clientHeight < 120;
+  let h = '', dia = null, ant = null;
+  c.msgs.forEach(m => {
+    if (!dia || !mesmoDia(m.t, dia)) { h += `<div class="sep">${sepDia(m.t)}</div>`; dia = m.t; ant = null; }
+    if (m.de === 'sis') { h += `<div class="sis">${esc(m.texto)}</div>`; ant = null; return; }
+    const first = ant !== m.de;
+    const anexo = m.texto.startsWith('📄');
+    h += `<div class="msg ${m.de} ${first ? 'first' : ''} ${anexo ? 'anexo' : ''}">
+      ${m.auto ? `<span class="autor">${ic('bolt', 'mini')}${esc(m.auto)}</span>` : ''}
+      <span class="txt">${esc(m.texto)}</span>
+      <span class="meta">${hhmm(m.t)}${m.de === 'eu' ? ticks(m.status) : ''}</span>
+    </div>`;
+    ant = m.de;
+  });
+  if (pend.length) {
+    h += `<div class="sep sep-prog">${ic('clock', 'peq')}${pend.length} ${plural(pend.length, 'mensagem programada', 'mensagens programadas')}</div>`;
+    pend.slice(0, 2).forEach(p => {
+      h += `<button class="msg programada" data-envio="${p.id}">
+        <span class="autor">${p.autoNome ? ic('bolt', 'mini') + esc(p.autoNome) : ic('pencil', 'mini') + 'Programada por você'}</span>
+        <span class="txt">${esc(p.texto)}</span>
+        <span class="quando">${ic('clock', 'mini')}Sai ${esc(quando(p.quando))}${p.cond ? '<em>só se ela não responder</em>' : ''}</span>
+      </button>`;
+    });
+    if (pend.length > 2) h += `<button class="mais-prog" data-acao="ficha">Ver as outras ${pend.length - 2} na ficha</button>`;
+  }
+  box.innerHTML = h;
+  if (rolar || perto) box.scrollTop = box.scrollHeight;
+}
+
+function renderFunil() {
+  const ativos = S.contatos.filter(c => ['novo','conversa','planos','avaliacao'].includes(c.etapa)).length;
+  const sem = S.contatos.filter(c => c.avaliacao && c.etapa === 'avaliacao' && c.avaliacao > agora() && c.avaliacao - agora() < 7 * DIA).length;
+  const clientes = S.contatos.filter(c => ['fechou','aguardando','atendimento'].includes(c.etapa)).length;
+  const hoje = S.fila.filter(x => mesmoDia(x.quando, agora())).length;
+  $('#resumoFunil').innerHTML = `
+    <div class="res"><b>${ativos}</b><span>em negociação</span></div>
+    <div class="res"><b>${sem}</b><span>${plural(sem, 'avaliação', 'avaliações')} nos próximos 7 dias</span></div>
+    <div class="res"><b>${clientes}</b><span>clientes em acompanhamento</span></div>
+    <div class="res ouro"><b>${hoje}</b><span>${plural(hoje, 'envio automático', 'envios automáticos')} hoje</span></div>`;
+  const nav = $('#navFunil');
+  const ativo = nav.dataset.ativo || 'novo';
+  nav.innerHTML = ETAPAS.map(e => `<button class="chip" data-ir-col="${e.id}" aria-pressed="${e.id === ativo}">${esc(e.nome)} <span class="cnt">${S.contatos.filter(c => c.etapa === e.id).length}</span></button>`).join('');
+  trocar($('#colunas'), ETAPAS.map(e => {
+    const cs = S.contatos.filter(c => c.etapa === e.id).sort((a, b) => ultima(b).t - ultima(a).t);
+    const a = autoDaEtapa(e.id);
+    return `<div class="col" data-etapa="${e.id}" id="col-${e.id}">
+      <div class="col-cab">
+        <h3>${esc(e.nome)} <span class="n">${cs.length}</span></h3>
+        ${a ? `<button class="col-auto ${a.ativa ? '' : 'pausada'}" data-auto="${a.id}">${ic('bolt', 'peq')}<span>${a.ativa ? esc(resumoAuto(a)) : 'Automação pausada: ' + esc(a.nome)}</span></button>` : ''}
+      </div>
+      <div class="col-cards">${cs.length ? cs.map(cardFunil).join('') : `<div class="col-vazia">Ninguém nesta etapa</div>`}</div>
+    </div>`;
+  }).join(''));
+}
+function cardFunil(c) {
+  const prox = pendentes(c.id)[0];
+  return `<div class="card" draggable="true" data-card="${c.id}" role="button" tabindex="0" aria-label="${esc(c.nome)}">
+    <div class="card-l1">${avatar(c)}<b>${esc(c.nome)}</b>${c.naoLidas ? `<span class="nl">${c.naoLidas}</span>` : `<span class="hora">${horaLista(ultima(c).t)}</span>`}</div>
+    <div class="card-tags">${pill(tagMesDe(c))}${pill(tagPlanoDe(c))}</div>
+    ${c.etapa === 'avaliacao' && c.avaliacao ? `<div class="card-info">${ic('cal', 'peq')}Avaliação ${esc(quando(c.avaliacao))}</div>` : ''}
+    ${prox ? `<div class="card-info ouro">${ic('clock', 'peq')}${prox.cond ? 'Reenvio' : 'Envio'} ${esc(quando(prox.quando))}</div>` : ''}
+  </div>`;
+}
+
+function grupoDia(d) {
+  const h = agora();
+  if (mesmoDia(d, h)) return 'Hoje';
+  if (mesmoDia(d, somaDias(h, 1))) return 'Amanhã';
+  if (d - h < 7 * DIA) return cap(DIAS_L[d.getDay()]) + ', ' + d.getDate() + ' de ' + MESES[d.getMonth()].toLowerCase();
+  return 'Mais adiante';
+}
+function renderEnvios() {
+  $$('[data-seg-envios]').forEach(b => b.setAttribute('aria-pressed', b.dataset.segEnvios === S.segEnvios));
+  const fila = [...S.fila].sort((a, b) => a.quando - b.quando);
+  const hoje = fila.filter(x => mesmoDia(x.quando, agora())).length;
+  const semana = fila.filter(x => x.quando - agora() < 7 * DIA).length;
+  const reenv = fila.filter(x => x.cond).length;
+  const res = $('#resumoEnvios');
+  const lista = $('#listaEnvios');
+  if (S.segEnvios === 'prog') {
+    res.hidden = false;
+    res.innerHTML = `<div class="res ouro"><b>${hoje}</b><span>para hoje</span></div><div class="res"><b>${semana}</b><span>nos próximos 7 dias</span></div><div class="res"><b>${reenv}</b><span>${plural(reenv, 'reenvio', 'reenvios')} se ela não responder</span></div>`;
+    if (!fila.length) { lista.innerHTML = `<div class="vazio"><b>Nenhum envio programado</b>Programe uma mensagem pelo relógio na conversa ou ligue uma automação.</div>`; return; }
+    let h = '', g = null;
+    fila.forEach(it => {
+      const gd = grupoDia(it.quando);
+      if (gd !== g) { h += `<div class="dia">${gd}</div>`; g = gd; }
+      const c = contato(it.cid);
+      h += `<button class="envio" data-envio="${it.id}">
+        <span class="h">${gd === 'Mais adiante' ? pad(it.quando.getDate()) + '/' + pad(it.quando.getMonth() + 1) : hhmm(it.quando)}</span>
+        <span class="corpo">
+          <span class="quem">${avatar(c, '')}<span>${esc(c.nome)}</span></span>
+          <span class="origem ${it.autoNome ? '' : 'manual'}">${it.autoNome ? ic('bolt', 'mini') + esc(it.autoNome) : ic('pencil', 'mini') + 'Programada por você'}</span>
+          <span class="p">${esc(it.texto)}</span>
+          ${it.cond ? `<span class="cond">${ic('reply', 'mini')}Só sai se ela não responder</span>` : ''}
+        </span>
+      </button>`;
+    });
+    trocar(lista, `<div class="lista-larga">${h}</div>`);
+  } else {
+    res.hidden = true;
+    const feitos = S.contatos.flatMap(c => c.msgs.filter(m => m.auto).map(m => ({ c, m }))).sort((a, b) => b.m.t - a.m.t).slice(0, 60);
+    let h = '', g = null;
+    feitos.forEach(({ c, m }) => {
+      const gd = sepDia(m.t);
+      if (gd !== g) { h += `<div class="dia">${gd}</div>`; g = gd; }
+      h += `<button class="envio" data-abrir="${c.id}">
+        <span class="h">${hhmm(m.t)}</span>
+        <span class="corpo">
+          <span class="quem"><span>${esc(c.nome)}</span>${ticks(m.status)}</span>
+          <span class="origem">${ic('bolt', 'mini')}${esc(m.auto)}</span>
+          <span class="p">${esc(m.texto)}</span>
+        </span>
+      </button>`;
+    });
+    trocar(lista, `<div class="lista-larga">${h || '<div class="vazio"><b>Nada enviado ainda</b></div>'}</div>`);
+  }
+}
+
+function renderAutomacoes() {
+  $$('[data-seg-auto]').forEach(b => b.setAttribute('aria-pressed', b.dataset.segAuto === S.segAuto));
+  const fab = $('#fabAuto');
+  fab.innerHTML = ic('plus') + (S.segAuto === 'auto' ? 'Nova automação' : 'Nova etiqueta');
+  fab.dataset.acao = S.segAuto === 'auto' ? 'nova-auto' : 'nova-tag';
+  const box = $('#listaAuto');
+  if (S.segAuto === 'auto') {
+    trocar(box, '<div class="lista-larga">' + AUTOS.map(a => {
+      const pend = S.fila.filter(x => x.autoId === a.id);
+      const pessoas = new Set(pend.map(x => x.cid)).size;
+      return `<div class="auto-card ${a.ativa ? '' : 'off'}" data-auto="${a.id}" role="button" tabindex="0">
+        <span class="auto-ic">${ic('bolt')}</span>
+        <span class="auto-main">
+          <b>${esc(a.nome)}</b>
+          <span class="gat" style="display:block">${esc(gatilhoTxt(a))}</span>
+          <span class="det" style="display:block">${esc(resumoAuto(a))}.${a.ativa ? (pessoas ? ` Na fila para ${pessoas} ${plural(pessoas, 'contato', 'contatos')}.` : '') : ' Pausada.'}</span>
+        </span>
+        <button class="switch" role="switch" aria-checked="${a.ativa}" aria-label="Ligar ou pausar ${esc(a.nome)}" data-switch-auto="${a.id}"></button>
+      </div>`;
+    }).join('') + '<div style="height:24px"></div></div>');
+  } else {
+    trocar(box, '<div class="lista-larga">' + GRUPOS.map(g => {
+      const ts = TAGS.filter(t => t.grupo === g.id);
+      return `<div class="grupo-h"><h3>${esc(g.nome)}</h3>${g.desc ? `<span>${esc(g.desc)}</span>` : ''}</div>` + ts.map(t => {
+        const n = S.contatos.filter(c => c.tags.includes(t.id)).length;
+        const au = autosDaTag(t.id).find(a => a.ativa);
+        return `<button class="tag-row" data-tag="${t.id}">
+          <span class="bolinha" style="--c:${t.cor}"></span>
+          <span class="tmain"><b>${esc(t.nome)}${t.grupo === 'mes' ? `<small>parto em ${MESES_C[t.mes]}/${t.ano}</small>` : ''}</b>${au ? `<span class="raio" title="${esc(au.nome)}">${ic('bolt', 'peq')}</span>` : ''}<span class="qtd">${n}</span></span>
+        </button>`;
+      }).join('');
+    }).join('') + '<div style="height:24px"></div></div>');
+  }
+}
+
+function renderFicha() {
+  const c = contato(S.fichaId); if (!c) return;
+  const pend = pendentes(c.id);
+  const hist = c.msgs.filter(m => m.auto).slice().reverse();
+  const corpo = $('#ficha .painel-corpo');
+  const scroll = corpo ? corpo.scrollTop : 0;
+  $('#ficha').innerHTML = `
+    <header class="top"><button class="icbtn" data-acao="fechar-ficha" aria-label="Fechar">${ic(ehDesktop() ? 'close' : 'back')}</button><h2 class="titulo" style="font-size:18px">Ficha da cliente</h2></header>
+    <div class="painel-corpo">
+      <div class="ficha-hero">${avatar(c)}<h2>${esc(c.nome)}</h2><p>${esc(c.tel)}</p></div>
+      <div class="bloco">
+        <h3>Etapa do funil</h3>
+        <button class="linha-btn" data-acao="mover"><span class="rot"><b>${esc(etapa(c.etapa).nome)}</b><small>${autoDaEtapa(c.etapa)?.ativa ? 'Com automação nesta etapa' : 'Sem automação nesta etapa'}</small></span><span class="chip" style="height:32px">Mudar</span></button>
+      </div>
+      <div class="bloco">
+        <h3>Datas</h3>
+        <div class="campo-data"><label for="fDpp">Data provável do parto</label><input type="date" id="fDpp" value="${c.dpp ? isoData(c.dpp) : ''}"></div>
+        <p class="dica">${tagMesDe(c) ? `Etiqueta <b>${esc(tagMesDe(c).nome)}</b> aplicada pela data. Se a data mudar, a etiqueta e os lembretes acompanham.` : 'Preencha para aplicar a etiqueta do mês e programar os lembretes da reta final.'}</p>
+        ${c.avaliacao ? `<div class="campo-data" style="margin-top:8px"><label>Avaliação</label><span style="font-weight:600">${esc(cap(quando(c.avaliacao)))}</span></div>` : ''}
+      </div>
+      <div class="bloco">
+        <h3>Etiquetas</h3>
+        <div class="tags-wrap">${c.tags.map(tag).filter(Boolean).map(t => `<span class="pill" style="${pillStyle(t.cor)}">${esc(t.nome)}</span>`).join('')}<button class="add-tag" data-acao="etiquetas">${ic('plus', 'peq')}Editar</button></div>
+      </div>
+      <div class="bloco">
+        <h3>${ic('clock', 'peq')}Próximos envios <span class="cnt">${pend.length}</span></h3>
+        ${pend.length ? pend.map(p => `<button class="mini-envio" data-envio="${p.id}"><span style="flex:1;min-width:0"><span class="q">${esc(cap(quando(p.quando)))}${p.cond ? ' · se não responder' : ''}</span><span style="display:block;font-size:12px;color:var(--cinza);margin-top:1px">${esc(p.autoNome || 'Programada por você')}</span><span class="p">${esc(p.texto)}</span></span></button>`).join('') : '<p class="dica">Nenhum envio programado para ela.</p>'}
+        <button class="btn-sec" style="margin-top:10px;height:44px" data-acao="programar-ficha">${ic('clock', 'peq')}Programar mensagem</button>
+      </div>
+      <div class="bloco">
+        <h3>Anotações</h3>
+        <textarea class="notas" id="fNotas" placeholder="Ex.: maternidade, nome do bebê, queixas…">${esc(c.notas)}</textarea>
+      </div>
+      <div class="bloco">
+        <h3>${ic('bolt', 'peq')}Enviadas pela automação <span class="cnt">${hist.length}</span></h3>
+        ${hist.length ? hist.map(m => `<div class="hist"><time>${pad(m.t.getDate())}/${pad(m.t.getMonth() + 1)} ${hhmm(m.t)}</time><span>${esc(m.auto)}</span></div>`).join('') : '<p class="dica">Nada ainda.</p>'}
+      </div>
+    </div>`;
+  const novo = $('#ficha .painel-corpo'); if (novo) novo.scrollTop = scroll;
+  $('#fDpp').onchange = e => { if (e.target.value) aplicarDpp(c, new Date(e.target.value + 'T12:00:00')); };
+  $('#fNotas').oninput = e => { c.notas = e.target.value; };
+}
+
+/* =========================================================
+   Folhas (sheets)
+   ========================================================= */
+function sheetMover(cid) {
+  const c = contato(cid); S.ctx = { cid };
+  abrirSheet(`<div class="sheet-cab"><h2>Mover ${esc(primeiro(c.nome))} para</h2><p>Etapas com raio disparam mensagens sozinhas.</p></div>
+    <div class="sheet-corpo">${ETAPAS.map((e, i) => {
+      const a = autoDaEtapa(e.id);
+      return `<button class="opcao" data-acao="mover-para" data-id="${e.id}" aria-current="${c.etapa === e.id}">
+        <span class="num">${i + 1}</span><span class="rot">${esc(e.nome)}${a && a.ativa ? `<small>${esc(a.nome)}</small>` : ''}</span>
+        ${a && a.ativa ? `<span class="raio-auto">${ic('bolt', 'peq')}</span>` : ''}${c.etapa === e.id ? `<span class="marca-ok">${ic('check')}</span>` : ''}
+      </button>`;
+    }).join('')}</div>`);
+}
+function pedirAvaliacao(cid) {
+  const c = contato(cid); S.ctx = { cid, data:null };
+  const op = [[T(1,10,0), 'Amanhã, 10h'], [T(1,19,0), 'Amanhã, 19h'], [T(2,10,0), cap(DIAS_L[T(2,10).getDay()]) + ', 10h'], [T(3,19,0), cap(DIAS_L[T(3,19).getDay()]) + ', 19h']];
+  S.ctx.op = op.map(o => o[0]);
+  abrirSheet(`<div class="sheet-cab"><h2>${ic('cal')}Quando é a avaliação?</h2><p>${esc(c.nome)} vai para Avaliação agendada. A confirmação sai na hora e os lembretes ficam programados.</p></div>
+    <div class="sheet-corpo">
+      <div class="presets">${op.map((o, i) => `<button class="chip" data-acao="aval-preset" data-i="${i}" aria-pressed="false">${o[1]}</button>`).join('')}</div>
+      <label class="campo-l">Ou escolha a data e o horário<input type="datetime-local" id="avalData" min="${isoLocal(agora())}"></label>
+      <button class="btn-prim" data-acao="aval-ok" id="avalOk" disabled>Agendar avaliação</button>
+    </div>`);
+  $('#avalData').oninput = e => { S.ctx.data = e.target.value ? new Date(e.target.value) : null; $$('[data-acao=aval-preset]').forEach(b => b.setAttribute('aria-pressed', 'false')); $('#avalOk').disabled = !S.ctx.data; };
+}
+function sheetEtiquetas(cid) {
+  const c = contato(cid); S.ctx = { cid };
+  const corpo = $('#sheet .sheet-corpo');
+  const scroll = corpo ? corpo.scrollTop : 0;
+  abrirSheet(`<div class="sheet-cab"><h2>${ic('tag')}Etiquetas</h2><p>${esc(c.nome)}</p></div>
+    <div class="sheet-corpo">${GRUPOS.map(g => `
+      <h3>${esc(g.nome)}</h3>${g.id === 'mes' ? '<p class="dica" style="margin:0 0 4px">Aplicada sozinha pela data do parto. Você também pode escolher aqui.</p>' : ''}
+      <div class="tags-sel">${TAGS.filter(t => t.grupo === g.id).map(t => `<button class="pill-sel" style="${pillStyle(t.cor)}" aria-pressed="${c.tags.includes(t.id)}" data-acao="toggle-tag" data-id="${t.id}">${esc(t.nome)}${t.grupo === 'mes' ? ` ${MESES_C[t.mes]}/${String(t.ano).slice(2)}` : ''}${autosDaTag(t.id).some(a => a.ativa) ? ' ' + ic('bolt', 'mini') : ''}</button>`).join('')}</div>`).join('')}
+      <button class="btn-prim" data-acao="fechar-sheet">Pronto</button>
+    </div>`);
+  const novo = $('#sheet .sheet-corpo'); if (novo) novo.scrollTop = scroll;
+}
+function sheetProgramar(cid, textoInicial) {
+  const c = contato(cid);
+  const h = agora().getHours();
+  const op = [];
+  op.push([new Date(Date.now() + HORA), 'Em 1 hora']);
+  if (h < 17) op.push([T(0,18,0), 'Hoje, 18h']);
+  op.push([T(1,9,0), 'Amanhã, 9h']);
+  op.push([T(2,9,0), cap(DIAS_L[T(2,9).getDay()]) + ', 9h']);
+  S.ctx = { cid, op:op.map(o => o[0]), data:op[op.length > 3 ? 2 : 1][0], reenvio:false, dias:2 };
+  const sel = op.length > 3 ? 2 : 1;
+  abrirSheet(`<div class="sheet-cab"><h2>${ic('clock')}Programar mensagem</h2><p>Para ${esc(c.nome)}</p></div>
+    <div class="sheet-corpo">
+      <textarea class="texto-sheet" id="pgTexto" placeholder="Escreva a mensagem">${esc(textoInicial || '')}</textarea>
+      <h3>Quando enviar</h3>
+      <div class="presets">${op.map((o, i) => `<button class="chip" data-acao="pg-preset" data-i="${i}" aria-pressed="${i === sel}">${o[1]}</button>`).join('')}</div>
+      <label class="campo-l">Outra data e horário<input type="datetime-local" id="pgData" min="${isoLocal(agora())}"></label>
+      <div class="linha-switch"><span>Reenviar se ela não responder</span><button class="switch" role="switch" aria-checked="false" data-acao="pg-reenvio" aria-label="Reenviar se ela não responder"></button></div>
+      <div id="pgReenvio" hidden>
+        <div class="presets">${[1,2,3,7].map(d => `<button class="chip" data-acao="pg-dias" data-d="${d}" aria-pressed="${d === 2}">${d} ${plural(d, 'dia', 'dias')} depois</button>`).join('')}</div>
+        <label class="campo-l">Texto do reenvio<textarea id="pgTexto2" rows="3">Oi, ${esc(primeiro(c.nome))}! Conseguiu ver a minha mensagem? 💜</textarea></label>
+        <div class="cartao-ouro">${ic('reply', 'peq')}<span>Se ela responder antes, o reenvio é cancelado sozinho.</span></div>
+      </div>
+      <button class="btn-prim" data-acao="pg-ok">Programar envio</button>
+    </div>`);
+  $('#pgData').oninput = e => { if (e.target.value) { S.ctx.data = new Date(e.target.value); $$('[data-acao=pg-preset]').forEach(b => b.setAttribute('aria-pressed', 'false')); } };
+}
+function sheetEnvio(id) {
+  const it = S.fila.find(x => x.id === id); if (!it) return;
+  const c = contato(it.cid); S.ctx = { id };
+  abrirSheet(`<div class="sheet-cab"><h2>${ic('clock')}Envio programado</h2><p>Para ${esc(c.nome)}, ${esc(quando(it.quando))}</p></div>
+    <div class="sheet-corpo">
+      ${it.autoNome ? `<div class="cartao-ouro" style="margin-top:0">${ic('bolt', 'peq')}<span>${esc(it.autoNome)}, mensagem ${it.passo + 1} de ${it.total}</span></div>` : `<div class="cartao-ouro" style="margin-top:0">${ic('pencil', 'peq')}<span>Programada por você</span></div>`}
+      ${it.cond ? `<p class="dica">Só sai se ${esc(primeiro(c.nome))} não responder até lá.</p>` : ''}
+      <textarea class="texto-sheet" id="envTexto" style="margin-top:12px">${esc(it.texto)}</textarea>
+      <button class="btn-prim" data-acao="env-agora">${ic('send', 'peq')}Enviar agora</button>
+      <div style="margin-top:8px">
+        <button class="opcao" data-acao="env-salvar">${ic('check')}<span class="rot">Salvar texto</span></button>
+        <button class="opcao" data-acao="env-adiar">${ic('later')}<span class="rot">Adiar 1 dia<small>${esc(quando(somaDias(it.quando, 1)))}</small></span></button>
+        <button class="opcao" data-acao="env-conversa">${ic('chat')}<span class="rot">Abrir conversa</span></button>
+        <button class="opcao perigo" data-acao="env-cancelar">${ic('trash')}<span class="rot">Cancelar este envio</span></button>
+      </div>
+    </div>`);
+}
+function sheetCard(cid) {
+  const c = contato(cid); S.ctx = { cid };
+  abrirSheet(`<div class="sheet-cab"><h2>${esc(c.nome)}</h2><p>${esc(etapa(c.etapa).nome)}</p></div>
+    <div class="sheet-corpo">
+      <button class="opcao" data-acao="card-abrir">${ic('chat')}<span class="rot">Abrir conversa</span></button>
+      <button class="opcao" data-acao="card-ficha">${ic('user')}<span class="rot">Ver ficha</span></button>
+      <button class="opcao" data-acao="card-tags">${ic('tag')}<span class="rot">Etiquetas</span></button>
+      <h3>Mover para</h3>
+      ${ETAPAS.map((e, i) => { const a = autoDaEtapa(e.id); return `<button class="opcao" data-acao="mover-para" data-id="${e.id}" aria-current="${c.etapa === e.id}"><span class="num">${i + 1}</span><span class="rot">${esc(e.nome)}</span>${a && a.ativa ? `<span class="raio-auto">${ic('bolt', 'peq')}</span>` : ''}${c.etapa === e.id ? `<span class="marca-ok">${ic('check')}</span>` : ''}</button>`; }).join('')}
+    </div>`);
+}
+function sheetMenuChat(cid) {
+  const c = contato(cid); S.ctx = { cid };
+  abrirSheet(`<div class="sheet-cab"><h2>${esc(c.nome)}</h2></div>
+    <div class="sheet-corpo">
+      <button class="opcao" data-acao="ficha">${ic('user')}<span class="rot">Ver ficha</span></button>
+      <button class="opcao" data-acao="mover">${ic('funil')}<span class="rot">Mudar etapa</span></button>
+      <button class="opcao" data-acao="etiquetas">${ic('tag')}<span class="rot">Etiquetas</span></button>
+      <button class="opcao" data-acao="programar">${ic('clock')}<span class="rot">Programar mensagem</span></button>
+      <h3>Demonstração</h3>
+      <button class="opcao" data-acao="simular">${ic('reply')}<span class="rot">Simular resposta da cliente<small>Mostra o reenvio sendo cancelado quando ela responde</small></span></button>
+    </div>`);
+}
+function sheetMenuConversas() {
+  abrirSheet(`<div class="sheet-cab"><h2>Opções</h2></div>
+    <div class="sheet-corpo">
+      <button class="opcao" data-acao="ir-etiquetas">${ic('tag')}<span class="rot">Gerenciar etiquetas</span></button>
+      <button class="opcao" data-acao="ir-automacoes">${ic('bolt')}<span class="rot">Automações</span></button>
+      <button class="opcao" data-acao="sobre">${ic('info')}<span class="rot">Sobre esta demonstração</span></button>
+      <button class="opcao" data-acao="recomecar">${ic('refresh')}<span class="rot">Recomeçar a demonstração<small>Volta os dados de exemplo ao início</small></span></button>
+    </div>`);
+}
+function sheetFiltroEtiquetas() {
+  abrirSheet(`<div class="sheet-cab"><h2>${ic('tag')}Filtrar por etiqueta</h2></div>
+    <div class="sheet-corpo">${GRUPOS.map(g => `<h3>${esc(g.nome)}</h3><div class="tags-sel">${TAGS.filter(t => t.grupo === g.id).map(t => {
+      const n = S.contatos.filter(c => c.tags.includes(t.id)).length;
+      return `<button class="pill-sel" style="${pillStyle(t.cor)}" aria-pressed="${S.filtro === 'tag:' + t.id}" data-acao="filtrar-tag" data-id="${t.id}">${esc(t.nome)} <span style="opacity:.7">${n}</span></button>`;
+    }).join('')}</div>`).join('')}
+    <h3>Etapa do funil</h3><div class="tags-sel">${ETAPAS.map(e => `<button class="pill-sel" style="${pillStyle('#7B5EA7')}" aria-pressed="${S.filtro === 'etapa:' + e.id}" data-acao="filtrar-etapa" data-id="${e.id}">${esc(e.nome)}</button>`).join('')}</div>
+    </div>`);
+}
+function sheetTag(id) {
+  const t = tag(id); S.ctx = { tagId:id };
+  const cs = S.contatos.filter(c => c.tags.includes(id));
+  const au = autosDaTag(id);
+  abrirSheet(`<div class="sheet-cab"><h2><span class="bolinha" style="width:14px;height:14px;border-radius:50%;background:${t.cor};display:inline-block"></span>${esc(t.nome)}</h2><p>${cs.length} ${plural(cs.length, 'contato', 'contatos')}${t.grupo === 'mes' ? `, parto em ${MESES_C[t.mes]}/${t.ano}` : ''}</p></div>
+    <div class="sheet-corpo">
+      ${au.map(a => `<button class="cartao-ouro" style="width:100%;text-align:left;margin-top:0;margin-bottom:8px" data-auto="${a.id}">${ic('bolt', 'peq')}<span><b>${esc(a.nome)}</b>${a.ativa ? '' : ' (pausada)'}<br>${esc(resumoAuto(a))}</span></button>`).join('')}
+      ${cs.length ? `<button class="btn-prim" style="margin-top:4px" data-acao="disparo">${ic('send', 'peq')}Enviar mensagem para ${cs.length === 1 ? 'ela' : `as ${cs.length}`}</button>
+      <button class="opcao" data-acao="ver-tag">${ic('chat')}<span class="rot">Ver essas conversas</span></button>
+      <h3>Contatos</h3>
+      ${cs.map(c => `<button class="mini-row" data-abrir="${c.id}">${avatar(c)}<span><b>${esc(c.nome)}</b><small>${esc(etapa(c.etapa).nome)}</small></span></button>`).join('')}` : '<p class="dica">Nenhum contato com esta etiqueta ainda.</p>'}
+    </div>`);
+}
+function sheetDisparo(tagId) {
+  const t = tag(tagId); const cs = S.contatos.filter(c => c.tags.includes(tagId));
+  S.ctx = { tagId, data:null, agoraSim:true };
+  abrirSheet(`<div class="sheet-cab"><h2>${ic('send')}Mensagem para ${esc(t.nome)}</h2><p>${cs.length} ${plural(cs.length, 'contato recebe', 'contatos recebem')}, cada uma na própria conversa.</p></div>
+    <div class="sheet-corpo">
+      <textarea class="texto-sheet" id="dsTexto">Oi, {nome}! ${t.grupo === 'mes' ? `Estou organizando a agenda das mamães de ${t.nome.toLowerCase()} e quis passar aqui para saber como você está 💜` : 'Passando para saber como você está 💜'}</textarea>
+      <div class="vars"><span>Inserir:</span><button data-var-ds="{nome}">nome</button><button data-var-ds="{mes_parto}">mês do parto</button></div>
+      <h3>Quando enviar</h3>
+      <div class="presets"><button class="chip" data-acao="ds-quando" data-q="agora" aria-pressed="true">Agora</button><button class="chip" data-acao="ds-quando" data-q="amanha" aria-pressed="false">Amanhã, 9h</button></div>
+      <button class="btn-prim" data-acao="ds-ok">Programar para ${cs.length} ${plural(cs.length, 'contato', 'contatos')}</button>
+    </div>`);
+}
+function sheetNovoContato() {
+  S.ctx = {};
+  abrirSheet(`<div class="sheet-cab"><h2>${ic('addUser')}Novo contato</h2><p>Ela entra em Novo contato e a boas-vindas sai sozinha.</p></div>
+    <div class="sheet-corpo">
+      <label class="campo-l">Nome<input id="ncNome" autocomplete="off" placeholder="Nome da gestante ou mãe"></label>
+      <label class="campo-l">WhatsApp<input id="ncTel" inputmode="tel" placeholder="(83) 9 0000-0000"></label>
+      <label class="campo-l">Data provável do parto<input id="ncDpp" type="date"></label>
+      <label class="campo-l">De onde veio<select id="ncOrigem">${TAGS.filter(t => t.grupo === 'origem').map(t => `<option value="${t.id}">${esc(t.nome)}</option>`).join('')}</select></label>
+      <button class="btn-prim" data-acao="nc-ok">Adicionar e abrir conversa</button>
+    </div>`);
+  setTimeout(() => $('#ncNome')?.focus({ preventScroll:true }), 350);
+}
+function sheetNovaTag() {
+  S.ctx = { cor:CORES_NOVAS[0] };
+  abrirSheet(`<div class="sheet-cab"><h2>${ic('tag')}Nova etiqueta</h2></div>
+    <div class="sheet-corpo">
+      <label class="campo-l">Nome<input id="ntNome" autocomplete="off" placeholder="Ex.: Gêmeos, Maternidade X"></label>
+      <label class="campo-l">Grupo<select id="ntGrupo">${GRUPOS.filter(g => g.id !== 'mes').map(g => `<option value="${g.id}">${esc(g.nome)}</option>`).join('')}</select></label>
+      <h3>Cor</h3>
+      <div class="cores">${CORES_NOVAS.map((c, i) => `<button style="--c:${c}" data-acao="nt-cor" data-c="${c}" aria-pressed="${i === 0}" aria-label="Cor ${i + 1}"></button>`).join('')}</div>
+      <button class="btn-prim" data-acao="nt-ok">Criar etiqueta</button>
+    </div>`);
+}
+function sheetSobre() {
+  abrirSheet(`<div class="sheet-cab"><h2>Sobre esta demonstração</h2></div>
+    <div class="sheet-corpo" style="font-size:15px;line-height:1.5;color:var(--texto-2)">
+      <p style="margin-top:0">Este é o desenho do CRM de atendimento da Dra. Liliane, só a parte visual. Os contatos são fictícios e nenhuma mensagem sai de verdade.</p>
+      <p>O que dá para testar:</p>
+      <p>• Mover uma cliente de etapa (no funil ou pelo botão roxo dentro da conversa) e ver a automação programar as mensagens.<br>• Programar uma mensagem pelo relógio, com reenvio se ela não responder.<br>• Usar o menu da conversa para simular a resposta da cliente e ver o reenvio ser cancelado.<br>• Mudar a data do parto na ficha e ver a etiqueta do mês trocar sozinha.<br>• Enviar uma mensagem para todas as gestantes de um mês, em Automações › Etiquetas.</p>
+      <button class="btn-prim" data-acao="fechar-sheet">Entendi</button>
+    </div>`);
+}
+
+/* =========================================================
+   Editor de automação
+   ========================================================= */
+function abrirEditor(id) {
+  const a = id ? autoPorId(id) : null;
+  S.rascunho = a ? JSON.parse(JSON.stringify(a)) : { id:null, nome:'Nova automação', ativa:true, gatilho:{ tipo:'etapa', valor:'novo' }, passos:[{ qtd:0, un:'min', ref:'entrada', cond:false, texto:'Oi, {nome}! ' }] };
+  renderEditor();
+  $('#editor').classList.add('on');
+  abrirCamada('editor');
+}
+function descPasso(p, r) {
+  const g = r.gatilho;
+  const base = g.tipo === 'etapa' ? `ela entrar em ${etapa(g.valor).nome}` : 'ela receber a etiqueta';
+  let s;
+  if (p.ref === 'avaliacao') s = `Sai ${tempoTxt(p)}.`;
+  else if (p.ref === 'dpp') s = `Sai ${tempoTxt(p)}, às 9h.`;
+  else s = p.qtd === 0 ? `Sai assim que ${base}.` : `Sai ${tempoTxt(p)} que ${base}.`;
+  return s + (p.cond ? ' Só se ela não tiver respondido.' : '');
+}
+function renderEditor() {
+  const r = S.rascunho;
+  const gat = r.gatilho.tipo + ':' + r.gatilho.valor;
+  const corpo = $('#editor .painel-corpo');
+  const scroll = corpo ? corpo.scrollTop : 0;
+  $('#editor').innerHTML = `
+    <header class="top"><button class="icbtn" data-acao="fechar-editor" aria-label="Voltar sem salvar">${ic(ehDesktop() ? 'close' : 'back')}</button><h2 class="titulo" style="font-size:18px">${r.id ? 'Editar automação' : 'Nova automação'}</h2><button class="btn-txt" data-acao="salvar-auto">Salvar</button></header>
+    <div class="painel-corpo">
+      <label class="campo-l" style="margin-top:4px">Nome<input id="edNome" value="${esc(r.nome)}"></label>
+      <label class="campo-l">Quando começa<select id="edGatilho">
+        <optgroup label="Etapa do funil">${ETAPAS.map(e => `<option value="etapa:${e.id}" ${gat === 'etapa:' + e.id ? 'selected' : ''}>Quando entra em ${esc(e.nome)}</option>`).join('')}</optgroup>
+        <optgroup label="Etiqueta"><option value="etiqueta:mes" ${gat === 'etiqueta:mes' ? 'selected' : ''}>Quando recebe a etiqueta do mês do parto</option>${TAGS.filter(t => t.grupo !== 'mes').map(t => `<option value="etiqueta:${t.id}" ${gat === 'etiqueta:' + t.id ? 'selected' : ''}>Quando recebe a etiqueta ${esc(t.nome)}</option>`).join('')}</optgroup>
+      </select></label>
+      <div class="linha-switch"><span>Automação ligada</span><button class="switch" role="switch" aria-checked="${r.ativa}" data-acao="ed-ativa" aria-label="Automação ligada"></button></div>
+      <ol class="passos">${r.passos.map((p, i) => `
+        <li class="passo">
+          <div class="passo-quando">
+            <span>Enviar</span>
+            <input type="number" min="0" inputmode="numeric" value="${p.qtd}" data-ed="qtd" data-i="${i}" aria-label="Quantidade">
+            <select data-ed="un" data-i="${i}" aria-label="Unidade">${Object.keys(UN_NOME).map(u => `<option value="${u}" ${p.un === u ? 'selected' : ''}>${UN_NOME[u][1]}</option>`).join('')}</select>
+            <select data-ed="ref" data-i="${i}" aria-label="Referência">
+              <option value="entrada" ${p.ref === 'entrada' ? 'selected' : ''}>depois de começar</option>
+              <option value="avaliacao" ${p.ref === 'avaliacao' ? 'selected' : ''}>antes da avaliação</option>
+              <option value="dpp" ${p.ref === 'dpp' ? 'selected' : ''}>antes da data do parto</option>
+            </select>
+          </div>
+          <p class="passo-desc" id="desc-${i}">${esc(descPasso(p, r))}</p>
+          <textarea data-ed="texto" data-i="${i}" aria-label="Mensagem ${i + 1}">${esc(p.texto)}</textarea>
+          <div class="vars"><span>Inserir:</span><button data-var="{nome}" data-i="${i}">nome</button><button data-var="{data}" data-i="${i}">data da avaliação</button><button data-var="{hora}" data-i="${i}">horário</button><button data-var="{mes_parto}" data-i="${i}">mês do parto</button></div>
+          <label class="check-l"><input type="checkbox" data-ed="cond" data-i="${i}" ${p.cond ? 'checked' : ''}><span>Só enviar se ela não tiver respondido (reenvio)</span></label>
+          ${r.passos.length > 1 ? `<div class="passo-rodape"><button class="btn-perigo-txt" data-acao="rm-passo" data-i="${i}">${ic('trash', 'peq')}Remover</button></div>` : ''}
+        </li>`).join('')}
+      </ol>
+      <button class="btn-sec" data-acao="add-passo">${ic('plus', 'peq')}Adicionar mensagem</button>
+      <p class="dica" style="margin-top:14px">Exemplo: {nome} vira o primeiro nome da cliente. Mudanças valem para quem entrar daqui em diante; o que já está na fila continua igual.</p>
+    </div>`;
+  const novo = $('#editor .painel-corpo'); if (novo) novo.scrollTop = scroll;
+}
+
+/* =========================================================
+   Eventos
+   ========================================================= */
+document.addEventListener('click', e => {
+  const el = e.target.closest('[data-tab],[data-abrir],[data-filtro],[data-acao],[data-envio],[data-card],[data-ir-col],[data-auto],[data-switch-auto],[data-tag],[data-seg-envios],[data-seg-auto],[data-var],[data-var-ds]');
+  if (!el) return;
+  const d = el.dataset;
+
+  if (d.switchAuto) { e.stopPropagation(); const a = autoPorId(d.switchAuto); a.ativa = !a.ativa; if (!a.ativa) { const n = S.fila.length; S.fila = S.fila.filter(x => x.autoId !== a.id); const k = n - S.fila.length; toast(`${a.nome} pausada.${k ? ` ${k} ${plural(k, 'envio saiu', 'envios saíram')} da fila.` : ''}`); } else toast(`${a.nome} ligada. Vale para quem entrar daqui em diante.`, { bolt:true }); render(); return; }
+  if (d.tab) { S.tab = d.tab; if (!ehDesktop()) { $('#app').classList.remove('chat-aberto'); fecharCamada('chat'); } render(); return; }
+  if (d.abrir) { if ($('#sheet').classList.contains('on')) fecharSheet(); if (S.fichaId) fecharFicha(); abrirChat(d.abrir); return; }
+  if (d.filtro) { S.filtro = S.filtro === d.filtro && d.filtro !== 'todas' ? 'todas' : d.filtro; renderConversas(); return; }
+  if (d.envio) { sheetEnvio(d.envio); return; }
+  if (d.card && !e.target.closest('button')) { sheetCard(d.card); return; }
+  if (d.irCol) { const col = $('#col-' + d.irCol); const box = $('#colunas'); box.scrollTo({ left: col.offsetLeft - 16, behavior: 'smooth' }); $('#navFunil').dataset.ativo = d.irCol; $$('#navFunil .chip').forEach(b => b.setAttribute('aria-pressed', b.dataset.irCol === d.irCol)); return; }
+  if (d.auto && !d.acao) { if ($('#sheet').classList.contains('on')) fecharSheet(); abrirEditor(d.auto); return; }
+  if (d.tag) { sheetTag(d.tag); return; }
+  if (d.segEnvios) { S.segEnvios = d.segEnvios; renderEnvios(); $('#listaEnvios').scrollTop = 0; return; }
+  if (d.segAuto) { S.segAuto = d.segAuto; renderAutomacoes(); $('#listaAuto').scrollTop = 0; return; }
+  if (d.var) { const ta = $(`#editor textarea[data-i="${d.i}"]`); inserir(ta, d.var); S.rascunho.passos[+d.i].texto = ta.value; return; }
+  if (d.varDs) { inserir($('#dsTexto'), d.varDs); return; }
+
+  const c = contato(S.ctx.cid || S.chatId);
+  switch (d.acao) {
+    case 'voltar-chat': if (camadas.includes('chat')) history.back(); else fecharChat(); break;
+    case 'ficha': if ($('#sheet').classList.contains('on')) fecharSheet(); abrirFicha(S.chatId); break;
+    case 'fechar-ficha': fecharFicha(); break;
+    case 'menu-chat': sheetMenuChat(S.chatId); break;
+    case 'menu-conversas': sheetMenuConversas(); break;
+    case 'ligar': toast('A ligação fica para a versão conectada ao WhatsApp.'); break;
+    case 'anexo': toast('Anexos ficam para a versão conectada ao WhatsApp.'); break;
+    case 'mover': sheetMover(S.fichaId || S.chatId); break;
+    case 'mover-para': { const cid = S.ctx.cid; fecharSheet(); setTimeout(() => moverEtapa(cid, d.id), 60); break; }
+    case 'etiquetas': sheetEtiquetas(S.fichaId || S.chatId); break;
+    case 'toggle-tag': alternarTag(contato(S.ctx.cid), d.id); sheetEtiquetas(S.ctx.cid); break;
+    case 'fechar-sheet': fecharSheet(); break;
+    case 'programar': { const t = $('#texto').value; sheetProgramar(S.chatId, t); break; }
+    case 'programar-ficha': sheetProgramar(S.fichaId, ''); break;
+    case 'simular': { const cid = S.ctx.cid; fecharSheet(); setTimeout(() => simularResposta(cid), 250); break; }
+    case 'rapidas': alternarRapidas(); break;
+    case 'usar-rapida': { const ta = $('#texto'); ta.value = RAPIDAS[+d.i].texto; $('#rapidas').hidden = true; autoAltura(); ta.focus(); break; }
+    case 'enviar': {
+      const ta = $('#texto');
+      if (!ta.value.trim()) { toast('Áudio fica para a versão conectada ao WhatsApp.'); break; }
+      enviarManual(ta.value); ta.value = ''; autoAltura(); $('#rapidas').hidden = true; ta.focus(); break;
+    }
+    case 'aval-preset': S.ctx.data = S.ctx.op[+d.i]; $$('[data-acao=aval-preset]').forEach(b => b.setAttribute('aria-pressed', b === el)); $('#avalData').value = ''; $('#avalOk').disabled = false; break;
+    case 'aval-ok': { const { cid, data } = S.ctx; if (!data) break; fecharSheet(); setTimeout(() => moverEtapa(cid, 'avaliacao', { avaliacao:data }), 60); break; }
+    case 'pg-preset': S.ctx.data = S.ctx.op[+d.i]; $$('[data-acao=pg-preset]').forEach(b => b.setAttribute('aria-pressed', b === el)); $('#pgData').value = ''; break;
+    case 'pg-reenvio': S.ctx.reenvio = !S.ctx.reenvio; el.setAttribute('aria-checked', S.ctx.reenvio); $('#pgReenvio').hidden = !S.ctx.reenvio; break;
+    case 'pg-dias': S.ctx.dias = +d.d; $$('[data-acao=pg-dias]').forEach(b => b.setAttribute('aria-pressed', b === el)); break;
+    case 'pg-ok': {
+      const texto = $('#pgTexto').value.trim();
+      if (!texto) { toast('Escreva a mensagem antes de programar.'); $('#pgTexto').focus(); break; }
+      const { cid, data, reenvio, dias } = S.ctx;
+      if (!data || data < agora()) { toast('Escolha um horário no futuro.'); break; }
+      S.fila.push({ id:uid('e'), cid, autoId:null, autoNome:null, texto, quando:data, cond:false });
+      if (reenvio) S.fila.push({ id:uid('e'), cid, autoId:null, autoNome:null, texto:$('#pgTexto2').value.trim() || texto, quando:somaDias(data, dias), cond:true });
+      if (S.chatId === cid) { $('#texto').value = ''; autoAltura(); }
+      fecharSheet(); render(true);
+      toast(`Mensagem programada para ${quando(data)}${reenvio ? `, com reenvio ${dias} ${plural(dias, 'dia', 'dias')} depois se ela não responder` : ''}.`);
+      break;
+    }
+    case 'env-agora': { const it = S.fila.find(x => x.id === S.ctx.id); if (!it) break; it.texto = $('#envTexto').value.trim() || it.texto; fecharSheet(); enviarItem(it); break; }
+    case 'env-salvar': { const it = S.fila.find(x => x.id === S.ctx.id); if (!it) break; it.texto = $('#envTexto').value.trim() || it.texto; fecharSheet(); render(); toast('Texto salvo.'); break; }
+    case 'env-adiar': { const it = S.fila.find(x => x.id === S.ctx.id); if (!it) break; it.quando = somaDias(it.quando, 1); fecharSheet(); render(); toast(`Adiado para ${quando(it.quando)}.`); break; }
+    case 'env-conversa': { const it = S.fila.find(x => x.id === S.ctx.id); fecharSheet(); if (it) abrirChat(it.cid); break; }
+    case 'env-cancelar': { const it = S.fila.find(x => x.id === S.ctx.id); S.fila = S.fila.filter(x => x.id !== S.ctx.id); fecharSheet(); render(); if (it) toast('Envio cancelado.', { acao:'Desfazer', fn:() => { S.fila.push(it); render(); } }); break; }
+    case 'card-abrir': { const cid = S.ctx.cid; fecharSheet(); abrirChat(cid); break; }
+    case 'card-ficha': { const cid = S.ctx.cid; fecharSheet(); abrirFicha(cid); break; }
+    case 'card-tags': sheetEtiquetas(S.ctx.cid); break;
+    case 'filtro-etiquetas': sheetFiltroEtiquetas(); break;
+    case 'filtrar-tag': S.filtro = 'tag:' + d.id; fecharSheet(); renderConversas(); break;
+    case 'filtrar-etapa': S.filtro = 'etapa:' + d.id; fecharSheet(); renderConversas(); break;
+    case 'ir-etiquetas': fecharSheet(); S.tab = 'automacoes'; S.segAuto = 'tags'; render(); break;
+    case 'ir-automacoes': fecharSheet(); S.tab = 'automacoes'; S.segAuto = 'auto'; render(); break;
+    case 'sobre': sheetSobre(); break;
+    case 'recomecar': location.reload(); break;
+    case 'ver-tag': S.filtro = 'tag:' + S.ctx.tagId; fecharSheet(); S.tab = 'conversas'; render(); break;
+    case 'disparo': sheetDisparo(S.ctx.tagId); break;
+    case 'ds-quando': S.ctx.agoraSim = d.q === 'agora'; $$('[data-acao=ds-quando]').forEach(b => b.setAttribute('aria-pressed', b === el)); break;
+    case 'ds-ok': {
+      const t = tag(S.ctx.tagId); const base = $('#dsTexto').value.trim(); if (!base) break;
+      const cs = S.contatos.filter(x => x.tags.includes(t.id));
+      cs.forEach((x, i) => S.fila.push({ id:uid('e'), cid:x.id, autoId:null, autoNome:`Mensagem para ${t.nome}`, texto:preencher(base, x), quando:S.ctx.agoraSim ? new Date(Date.now() + 2500 + i * 900) : T(1,9,0), cond:false }));
+      fecharSheet(); render();
+      toast(S.ctx.agoraSim ? `Enviando para ${cs.length} ${plural(cs.length, 'contato', 'contatos')}…` : `Programado para amanhã às 9h para ${cs.length} ${plural(cs.length, 'contato', 'contatos')}.`, { bolt:true });
+      break;
+    }
+    case 'novo-contato': sheetNovoContato(); break;
+    case 'nc-ok': {
+      const nome = $('#ncNome').value.trim().replace(/\s+/g, ' ');
+      if (!nome) { toast('Escreva o nome para adicionar.'); $('#ncNome').focus(); break; }
+      const dpp = $('#ncDpp').value ? new Date($('#ncDpp').value + 'T12:00:00') : null;
+      const origem = $('#ncOrigem').value;
+      const nc = { id:uid('c'), nome:nome.split(' ').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' '), tel:$('#ncTel').value.trim() || '(83) 9 0000-0000', etapa:'novo', entrou:new Date(), dpp, avaliacao:null, tags:['gestante', origem], notas:'', naoLidas:0,
+        msgs:[{ id:uid('m'), de:'sis', t:new Date(), texto:`Contato adicionado (${tag(origem).nome})` }] };
+      if (dpp) nc.tags.unshift(garantirTagMes(dpp).id);
+      S.contatos.push(nc);
+      let n = programarAuto(autoDaEtapa('novo'), nc, new Date());
+      if (dpp) autosDaTag(tagMesDe(nc).id).forEach(a => { n += programarAuto(a, nc, new Date()); });
+      fecharSheet();
+      setTimeout(() => { abrirChat(nc.id); toast(`${primeiro(nc.nome)} entrou em Novo contato. A boas-vindas sai em segundos${n > 1 ? ` e mais ${n - 1} ${plural(n - 1, 'mensagem ficou programada', 'mensagens ficaram programadas')}` : ''}.`, { bolt:true, dur:5200 }); }, 120);
+      break;
+    }
+    case 'nova-tag': sheetNovaTag(); break;
+    case 'nt-cor': S.ctx.cor = d.c; $$('[data-acao=nt-cor]').forEach(b => b.setAttribute('aria-pressed', b === el)); break;
+    case 'nt-ok': {
+      const nome = $('#ntNome').value.trim(); if (!nome) { toast('Dê um nome para a etiqueta.'); break; }
+      TAGS.push({ id:uid('t'), nome, grupo:$('#ntGrupo').value, cor:S.ctx.cor });
+      fecharSheet(); render(); toast(`Etiqueta ${nome} criada.`);
+      break;
+    }
+    case 'nova-auto': abrirEditor(null); break;
+    case 'fechar-editor': fecharEditor(); break;
+    case 'ed-ativa': S.rascunho.ativa = !S.rascunho.ativa; el.setAttribute('aria-checked', S.rascunho.ativa); break;
+    case 'add-passo': S.rascunho.passos.push({ qtd:1, un:'dia', ref:'entrada', cond:true, texto:'Oi, {nome}! ' }); renderEditor(); { const pc = $('#editor .painel-corpo'); pc.scrollTop = pc.scrollHeight; } break;
+    case 'rm-passo': S.rascunho.passos.splice(+d.i, 1); renderEditor(); break;
+    case 'salvar-auto': {
+      const r = S.rascunho;
+      r.nome = $('#edNome').value.trim() || 'Automação sem nome';
+      if (r.passos.some(p => !p.texto.trim())) { toast('Tem mensagem vazia. Escreva o texto ou remova o passo.'); break; }
+      if (r.id) { const i = AUTOS.findIndex(a => a.id === r.id); AUTOS[i] = r; }
+      else {
+        r.id = uid('a');
+        if (r.gatilho.tipo === 'etapa' && autoDaEtapa(r.gatilho.valor)) { const old = autoDaEtapa(r.gatilho.valor); toast(`${etapa(r.gatilho.valor).nome} já tem a automação ${old.nome}. Edite essa ou escolha outra etapa.`, { dur:5600 }); r.id = null; break; }
+        AUTOS.push(r);
+      }
+      fecharEditor(); render(); toast(`${r.nome} salva.`, { bolt:true });
+      break;
+    }
+  }
+});
+
+document.addEventListener('keydown', e => {
+  const card = e.target.closest?.('[data-card],[data-auto][role=button]');
+  if (card && (e.key === 'Enter' || e.key === ' ')) { e.preventDefault(); card.click(); }
+});
+document.addEventListener('input', e => {
+  const t = e.target;
+  if (t.id === 'busca') { S.busca = t.value; renderConversas(); return; }
+  if (t.dataset && t.dataset.ed && S.rascunho) {
+    const p = S.rascunho.passos[+t.dataset.i];
+    if (t.dataset.ed === 'qtd') p.qtd = Math.max(0, parseInt(t.value || '0', 10));
+    else if (t.dataset.ed === 'cond') p.cond = t.checked;
+    else p[t.dataset.ed] = t.value;
+    const ds = $('#desc-' + t.dataset.i); if (ds) ds.textContent = descPasso(p, S.rascunho);
+  }
+});
+document.addEventListener('change', e => {
+  const t = e.target;
+  if (t.id === 'edGatilho' && S.rascunho) { const [tipo, valor] = t.value.split(':'); S.rascunho.gatilho = { tipo, valor }; S.rascunho.passos.forEach((p, i) => { const ds = $('#desc-' + i); if (ds) ds.textContent = descPasso(p, S.rascunho); }); }
+  if (t.dataset && t.dataset.ed === 'cond' && S.rascunho) { S.rascunho.passos[+t.dataset.i].cond = t.checked; const ds = $('#desc-' + t.dataset.i); if (ds) ds.textContent = descPasso(S.rascunho.passos[+t.dataset.i], S.rascunho); }
+});
+$('#scrim').addEventListener('click', () => fecharSheet());
+
+function inserir(ta, txt) {
+  const s = ta.selectionStart ?? ta.value.length, f = ta.selectionEnd ?? ta.value.length;
+  ta.value = ta.value.slice(0, s) + txt + ta.value.slice(f);
+  ta.focus(); ta.selectionStart = ta.selectionEnd = s + txt.length;
+}
+
+/* composer */
+const ta = $('#texto');
+function autoAltura() {
+  ta.style.height = 'auto';
+  ta.style.height = Math.min(ta.scrollHeight, 132) + 'px';
+  $('#btnEnviar').innerHTML = ta.value.trim() ? ic('send') : ic('mic');
+  $('#btnEnviar').setAttribute('aria-label', ta.value.trim() ? 'Enviar' : 'Gravar áudio');
+}
+function alternarRapidas(filtro) {
+  const box = $('#rapidas');
+  if (filtro === undefined && !box.hidden) { box.hidden = true; return; }
+  const q = (filtro || '').toLowerCase();
+  const lista = RAPIDAS.map((r, i) => ({ r, i })).filter(({ r }) => !q || r.atalho.includes(q) || r.titulo.toLowerCase().includes(q));
+  if (!lista.length) { box.hidden = true; return; }
+  box.innerHTML = `<h3>Respostas rápidas</h3>` + lista.map(({ r, i }) => `<button class="rapida" data-acao="usar-rapida" data-i="${i}"><b>${esc(r.titulo)}<span>/${r.atalho}</span></b><span class="p">${esc(r.texto)}</span></button>`).join('');
+  box.hidden = false;
+}
+ta.addEventListener('input', () => {
+  autoAltura();
+  if (ta.value.startsWith('/')) alternarRapidas(ta.value.slice(1).trim());
+  else if (!$('#rapidas').hidden && ta.value) $('#rapidas').hidden = true;
+});
+ta.addEventListener('keydown', e => {
+  if (e.key === 'Enter' && !e.shiftKey && matchMedia('(pointer:fine)').matches) { e.preventDefault(); $('#btnEnviar').click(); }
+});
+
+/* funil: chip ativo acompanha a rolagem; arrastar e soltar no computador */
+let rafCol = 0;
+$('#colunas').addEventListener('scroll', () => {
+  cancelAnimationFrame(rafCol);
+  rafCol = requestAnimationFrame(() => {
+    const box = $('#colunas'); const cols = $$('.col', box);
+    if (!cols.length) return;
+    let melhor = cols[0], dist = Infinity;
+    cols.forEach(c => { const dd = Math.abs(c.offsetLeft - 16 - box.scrollLeft); if (dd < dist) { dist = dd; melhor = c; } });
+    const id = melhor.dataset.etapa;
+    if ($('#navFunil').dataset.ativo !== id) {
+      $('#navFunil').dataset.ativo = id;
+      $$('#navFunil .chip').forEach(b => b.setAttribute('aria-pressed', b.dataset.irCol === id));
+      const chip = $(`#navFunil [data-ir-col="${id}"]`);
+      if (chip) $('#navFunil').scrollTo({ left: chip.offsetLeft - 16, behavior:'smooth' });
+    }
+  });
+}, { passive:true });
+document.addEventListener('dragstart', e => { const card = e.target.closest?.('[data-card]'); if (!card) return; e.dataTransfer.setData('text/plain', card.dataset.card); e.dataTransfer.effectAllowed = 'move'; card.classList.add('arrastando'); });
+document.addEventListener('dragend', () => { $$('.arrastando').forEach(x => x.classList.remove('arrastando')); $$('.col.alvo').forEach(x => x.classList.remove('alvo')); });
+document.addEventListener('dragover', e => { const col = e.target.closest?.('.col'); if (!col) return; e.preventDefault(); $$('.col.alvo').forEach(x => x !== col && x.classList.remove('alvo')); col.classList.add('alvo'); });
+document.addEventListener('drop', e => { const col = e.target.closest?.('.col'); if (!col) return; e.preventDefault(); col.classList.remove('alvo'); const id = e.dataTransfer.getData('text/plain'); if (id) moverEtapa(id, col.dataset.etapa); });
+
+/* relógio da fila: o que venceu, sai */
+setInterval(() => {
+  const now = Date.now();
+  S.fila.filter(x => x.quando.getTime() <= now).forEach(it => enviarItem(it));
+}, 1000);
+setInterval(() => render(), 60000);
+let eraDesktop = ehDesktop();
+addEventListener('resize', () => {
+  if (ehDesktop() === eraDesktop) return;
+  eraDesktop = ehDesktop();
+  if (eraDesktop) { $('#app').classList.remove('chat-aberto'); fecharCamada('chat'); }
+  else if (S.chatId && S.tab === 'conversas') { $('#app').classList.add('chat-aberto'); abrirCamada('chat'); }
+  render();
+});
+
+/* início */
+$$('[data-ic]').forEach(el => { el.innerHTML = ic(el.dataset.ic); });
+semear();
+autoAltura();
+render();
+setTimeout(() => toast('Demonstração com dados fictícios. Nada é enviado de verdade.', { acao:'Saiba mais', fn:sheetSobre, dur:6000 }), 600);
+</script>
+</body>
+</html>
