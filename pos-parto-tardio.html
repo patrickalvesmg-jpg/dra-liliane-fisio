@@ -83,13 +83,15 @@
     }
     img { display: block; max-width: 100%; }
     h1, h2, h3, h4 { font-family: 'Outfit', sans-serif; line-height: 1.18; }
+    h1, h2, h3, .hero-quote, .hero-subtitle, .lead-frase, .plan-nota, .enc-italic { text-wrap: balance; }
+    p, li { text-wrap: pretty; }
     strong { font-weight: 600; }
 
     .wrap { width: 100%; max-width: 1060px; margin: 0 auto; padding: 0 20px; }
-    section { padding: 76px 0; overflow-x: clip; }
+    section { padding: 64px 0; overflow-x: clip; }
 
     /* ---------- Cabeçalho de seção (padrão do portfólio) ---------- */
-    .cab { text-align: center; max-width: 760px; margin: 0 auto 40px; }
+    .cab { text-align: center; max-width: 760px; margin: 0 auto 34px; }
     .section-tag {
       display: inline-block;
       font-family: 'Outfit', sans-serif; font-size: 0.7rem; font-weight: 700;
@@ -265,10 +267,10 @@
     .para-quem { background: var(--creme); padding-top: 64px; }
     .sinais { list-style: none; display: grid; gap: 14px; max-width: 760px; margin: 0 auto; }
     .sinal {
-      display: flex; align-items: center; gap: 18px;
+      display: flex; flex-direction: column; align-items: center; text-align: center; gap: 14px;
       background: var(--branco);
       border: 1px solid rgba(176,144,165,0.18);
-      border-radius: 18px; padding: 18px 20px 18px 18px;
+      border-radius: 18px; padding: 24px 22px 22px;
       box-shadow: var(--shadow-warm);
       font-family: 'Outfit', sans-serif; font-weight: 600; font-size: 1.06rem; line-height: 1.35;
       color: var(--texto-escuro);
@@ -310,7 +312,7 @@
     .diag-texto span { grid-area: 1 / 1; font-size: 0.95rem; line-height: 1.6; color: var(--texto-medio); transition: opacity 0.4s ease; }
     .diag-texto strong { color: var(--texto-escuro); }
     .diag-dica {
-      margin-top: 6px; text-align: center;
+      display: block; margin-top: 8px; text-align: center;
       font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 1rem; color: var(--roxo-principal);
       transition: opacity 0.4s ease;
     }
@@ -331,6 +333,7 @@
     }
     .diag-lado .boa-noticia { margin-top: 44px; }
     .boa-noticia.so-celular { margin-top: 34px; }
+    .so-desktop { display: none; }
 
     /* ============================================================
        COMO FUNCIONA — linha do tempo do portfólio
@@ -378,7 +381,7 @@
     .metodo-grade { display: grid; gap: 0; max-width: 900px; margin: 0 auto; justify-items: center; }
     .metodo-card {
       width: 100%; background: var(--branco); border: 1px solid rgba(176,144,165,0.18);
-      border-radius: 20px; padding: 16px 16px 24px; box-shadow: var(--shadow-warm);
+      border-radius: 20px; padding: 16px 16px 24px; box-shadow: var(--shadow-warm); text-align: center;
       position: relative; overflow: hidden;
     }
     .metodo-card::before {
@@ -425,7 +428,8 @@
     .sobre-photo::after { content: ''; position: absolute; inset: 0; border-radius: inherit; box-shadow: inset 0 0 28px 14px var(--roxo-bg); pointer-events: none; }
     .sobre-text { font-size: 1.02rem; line-height: 1.85; color: var(--texto-escuro); margin-top: 18px; }
     .sobre-negrito { font-family: 'Outfit', sans-serif; font-weight: 800; color: var(--roxo-principal); font-size: 1.2rem; margin-top: 18px; line-height: 1.4; }
-    .sobre .section-title { text-align: left; }
+    .sobre-copy { text-align: center; }
+    .sobre-copy .ornament-line.left { margin-left: auto; }
 
     /* ============================================================
        PLANOS (cards do portfólio, sem botão)
@@ -436,7 +440,7 @@
       border: 1px solid rgba(176,144,165,0.22); border-radius: 18px;
       box-shadow: 0 6px 28px rgba(123,94,146,0.09); overflow: hidden; height: 100%;
     }
-    .plan-header { background: var(--roxo-bg); padding: 22px 22px 18px; border-bottom: 1px solid rgba(176,144,165,0.18); }
+    .plan-header { text-align: center; background: var(--roxo-bg); padding: 24px 22px 20px; border-bottom: 1px solid rgba(176,144,165,0.18); }
     .sec-lilas .plan-header { background: linear-gradient(135deg, #EFE4EC 0%, #E6D6E1 100%); }
     .plan-header.destaque, .sec-lilas .plan-header.destaque { background: linear-gradient(135deg, #7B5EA7 0%, #B090A5 100%); border-bottom: 0; }
     .nw { white-space: nowrap; }
@@ -451,12 +455,12 @@
     .plan-header.destaque .plan-name, .plan-header.destaque .plan-duracao, .plan-header.destaque .plan-tagline { color: #fff; }
     .plan-header.destaque .plan-tagline { opacity: 0.9; }
 
-    .plan-pricing { padding: 18px 22px 18px; border-bottom: 1px solid var(--creme-escuro); }
+    .plan-pricing { padding: 20px 22px; border-bottom: 1px solid var(--creme-escuro); text-align: center; }
     .plan-price-label {
       font-family: 'Outfit', sans-serif; font-size: 0.64rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase;
       color: var(--roxo-principal); margin-bottom: 2px;
     }
-    .plan-pricing-row { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+    .plan-pricing-row { display: flex; align-items: center; justify-content: center; gap: 12px; flex-wrap: wrap; }
     .plan-price-por { font-family: 'Outfit', sans-serif; font-weight: 900; font-size: 2.3rem; color: var(--roxo-titulo); letter-spacing: -0.04em; line-height: 1; }
     .plan-economy-pill {
       display: inline-flex; align-items: center; background: #E8F5E9; color: #2E7D32;
@@ -470,13 +474,13 @@
     .plan-sessao { font-family: 'Outfit', sans-serif; font-size: 0.8rem; color: var(--texto-cinza); margin-top: 4px; }
     .plan-sessao strong { color: var(--texto-escuro); font-weight: 700; }
 
-    .plan-body { padding: 18px 22px 22px; flex: 1; display: flex; flex-direction: column; }
+    .plan-body { padding: 20px 20px 24px; flex: 1; display: flex; flex-direction: column; text-align: center; }
     .plan-section-label {
       font-family: 'Outfit', sans-serif; font-size: 0.63rem; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase;
       color: var(--roxo-principal); margin-bottom: 10px;
     }
     .mapa { margin-bottom: 20px; }
-    .sessoes { display: flex; gap: 5px; }
+    .sessoes { display: flex; justify-content: center; gap: 5px; }
     .semana { flex: 1 1 0; max-width: 24px; display: flex; flex-direction: column; align-items: center; gap: 5px; padding: 5px 0; border-radius: 999px; }
     .semana.reav { box-shadow: 0 0 0 1.5px var(--roxo-titulo); background: rgba(123,94,167,0.06); }
     .ponto { width: 11px; height: 11px; border-radius: 50%; background: var(--roxo-principal); }
@@ -484,7 +488,7 @@
     .js .visible .ponto { transform: scale(1); }
     .js .semana.reav { box-shadow: 0 0 0 1.5px transparent; background: transparent; transition: box-shadow 0.6s ease, background 0.6s ease; }
     .js .plan-card.visible .semana.reav { box-shadow: 0 0 0 1.5px var(--roxo-titulo); background: rgba(123,94,167,0.06); }
-    .mapa-leg { display: flex; flex-wrap: wrap; gap: 4px 14px; margin-top: 8px; font-size: 0.74rem; color: var(--texto-cinza); }
+    .mapa-leg { display: flex; flex-wrap: wrap; justify-content: center; gap: 4px 14px; margin-top: 8px; font-size: 0.74rem; color: var(--texto-cinza); }
     .mapa-leg span { position: relative; padding-left: 15px; }
     .mapa-leg span::before { content: ""; position: absolute; left: 0; top: 50%; border-radius: 50%; }
     .mapa-leg .k-sessao::before { width: 9px; height: 9px; margin-top: -4.5px; background: var(--roxo-principal); }
@@ -492,32 +496,32 @@
 
     .plan-items { list-style: none; margin-bottom: 16px; }
     .plan-items li {
-      font-size: 0.9rem; padding: 7px 0 7px 24px; position: relative; color: var(--texto-escuro);
-      line-height: 1.5; border-bottom: 1px solid rgba(0,0,0,0.04);
+      font-size: 0.92rem; padding: 8px 6px; color: var(--texto-escuro);
+      line-height: 1.5; border-bottom: 1px solid rgba(176,144,165,0.14);
     }
     .plan-items li:last-child { border-bottom: none; }
-    .plan-items li::before { content: '✓'; position: absolute; left: 0; top: 7px; color: var(--roxo-principal); font-weight: 900; font-size: 0.82rem; line-height: 1.8; }
+    .plan-items li::before { content: '✓'; display: inline-block; margin-right: 7px; color: var(--roxo-principal); font-weight: 900; font-size: 0.85rem; }
     .plan-items li.item-destaque {
-      background: linear-gradient(90deg, rgba(176,144,165,0.18) 0%, rgba(176,144,165,0.06) 100%);
-      border-left: 3px solid var(--roxo-principal); border-radius: 0 8px 8px 0;
-      padding: 8px 10px 8px 28px; font-weight: 600; color: #5a3f6e; border-bottom: none; margin: 4px 0;
+      background: linear-gradient(90deg, rgba(176,144,165,0.08) 0%, rgba(176,144,165,0.2) 50%, rgba(176,144,165,0.08) 100%);
+      border-radius: 10px; padding: 9px 12px; font-weight: 600; color: #5a3f6e; border-bottom: none; margin: 4px 0;
     }
-    .plan-items li.item-destaque::before { left: 10px; top: 8px; }
     .plan-nota {
       margin-top: auto; font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 1.08rem; line-height: 1.45;
       color: var(--roxo-escuro); padding-top: 14px; border-top: 1px dashed rgba(176,144,165,0.3);
     }
 
     .duvida {
-      max-width: 860px; margin: 26px auto 0;
-      background: var(--branco); border-left: 3px solid var(--roxo-principal);
-      border-radius: 0 16px 16px 0; padding: 20px 22px; box-shadow: var(--shadow-warm);
+      max-width: 860px; margin: 26px auto 0; text-align: center;
+      background: var(--branco); border: 1px solid rgba(176,144,165,0.2);
+      border-radius: 18px; padding: 26px 22px 24px; box-shadow: var(--shadow-warm);
     }
+    .duvida .pq-icon { margin: 0 auto 14px; width: 46px; height: 46px; }
+    .duvida .pq-icon svg { width: 22px; height: 22px; }
     .duvida h3 { font-weight: 800; font-size: 1.1rem; color: var(--texto-escuro); }
     .duvida p { margin-top: 6px; font-size: 0.97rem; color: var(--texto-medio); line-height: 1.72; }
     .condicoes { display: grid; gap: 14px; max-width: 860px; margin: 18px auto 0; }
     .condicao {
-      display: flex; gap: 16px; align-items: flex-start;
+      display: flex; flex-direction: column; align-items: center; text-align: center; gap: 12px;
       background: rgba(255,255,255,0.6); border: 1px solid rgba(176,144,165,0.22); border-radius: 16px; padding: 18px;
     }
     .condicao .pq-icon { width: 44px; height: 44px; box-shadow: 0 0 0 4px var(--branco), 0 0 0 5px rgba(176,144,165,0.28); }
@@ -549,6 +553,22 @@
     /* ============================================================
        TELAS MAIORES
     ============================================================ */
+    @media (max-width: 719px) {
+      body::before { display: none; }
+      .tl-linha { left: 50%; margin-left: -1.5px; }
+      .tl-step { flex-direction: column; align-items: center; gap: 0; margin-bottom: 34px; text-align: center; }
+      .tl-circle { margin-bottom: -26px; z-index: 2; }
+      .tl-content { width: 100%; padding: 42px 20px 22px; z-index: 1; }
+      .tl-content::before { display: none; }
+    }
+    @media (max-width: 719px) and (max-height: 700px) {
+      .hero h1 { font-size: clamp(2.7rem, 12.5vw, 3.5rem); }
+      .hero-texto { padding-bottom: calc(50px + env(safe-area-inset-bottom)); }
+      .hero-tag { margin-bottom: 10px; }
+      .hero-subtitle { margin-top: 10px; font-size: 0.8rem; }
+      .hero-quote { font-size: 1.22rem; }
+      .scroll-indicator-text { display: none; }
+    }
     @media (min-width: 720px) {
       section { padding: 100px 0; }
       .wrap { padding: 0 32px; }
@@ -581,6 +601,10 @@
       .scroll-indicator { left: 8vw; }
       @keyframes scroll-bounce { 0%, 100% { transform: translateY(0); opacity: 1; } 50% { transform: translateY(8px); opacity: 0.5; } }
       .diag-grade { grid-template-columns: 1fr 1fr; gap: 64px; }
+      .so-desktop { display: block; }
+      .so-celular { display: none; }
+      .sobre-copy { text-align: left; }
+      .sobre-copy .ornament-line.left { margin-left: 0; }
       .diag-lado .cab { text-align: left; margin-bottom: 0; }
       .diag-lado .ornament-line { margin-left: 0; }
       .diag-lado .boa-noticia { text-align: left; padding-left: 0; }
@@ -644,7 +668,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       <span class="section-tag">Para quem é</span>
       <h2 class="section-title" id="t-para-quem">Ainda sente a barriga diferente?</h2>
       <svg class="ornament-line" viewBox="0 0 64 16" fill="none" aria-hidden="true"><path d="M2 8 Q16 2, 32 8 T62 8" stroke="#B090A5" stroke-width="1.4" stroke-linecap="round"/><circle cx="32" cy="8" r="2" fill="#B090A5"/></svg>
-      <p class="section-subtexto">Para você que já passou dos primeiros meses depois do parto e ainda sente a barriga diferente:</p>
+      <p class="section-subtexto">Para você que já passou dos primeiros meses depois do parto e ainda percebe:</p>
     </div>
     <ul class="sinais">
       <li class="sinal fade-in">
@@ -747,10 +771,9 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       </svg>
 
       <p class="diag-texto" aria-live="off">
-        <span id="tA"><strong>Músculos juntos:</strong> os dois retos do abdômen ficam lado a lado, unidos no meio pela linha alba.</span>
+        <span id="tA"><strong>Músculos juntos:</strong> os dois retos do abdômen ficam lado a lado, unidos no meio pela linha alba.<em class="diag-dica" id="dica" aria-hidden="true">Continue rolando para ver o que acontece</em></span>
         <span id="tB" style="opacity:0"><strong>Com diástase:</strong> a linha alba se alonga e os músculos se afastam, principalmente na altura do umbigo.</span>
       </p>
-      <p class="diag-dica" id="dica" aria-hidden="true">Continue rolando para ver o que acontece</p>
       <ul class="legenda" aria-hidden="true">
         <li class="l-musculo">Músculos retos do abdômen</li>
         <li class="l-alba">Linha alba</li>
@@ -853,7 +876,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         <img src="img/lp/dra-liliane-estetoscopio.webp" width="820" height="820" loading="lazy" alt="Dra. Liliane Araújo segurando o estetoscópio" />
       </div>
     </div>
-    <div class="fade-in d1">
+    <div class="sobre-copy fade-in d1">
       <span class="section-tag">Quem sou eu</span>
       <h2 class="section-title" id="t-sobre">Olá! Eu sou a Liliane.</h2>
       <svg class="ornament-line left" viewBox="0 0 64 16" fill="none" aria-hidden="true"><path d="M2 8 Q16 2, 32 8 T62 8" stroke="#B090A5" stroke-width="1.4" stroke-linecap="round"/><circle cx="32" cy="8" r="2" fill="#B090A5"/></svg>
@@ -941,6 +964,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     </div>
 
     <aside class="duvida fade-in">
+      <span class="pq-icon"><svg class="icon-svg" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M9.6 9.4a2.5 2.5 0 1 1 3.4 2.3c-.6.3-1 .8-1 1.5v.5"/><circle cx="12" cy="16.6" r="0.5"/></svg></span>
       <h3>Na dúvida entre os dois?</h3>
       <p>Na avaliação eu te mostro o tamanho da sua diástase e te indico o plano que faz mais sentido para o seu caso. Sem pressa e sem pressão.</p>
     </aside>
@@ -995,14 +1019,6 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 (function () {
   var reduz = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   var raf = window.requestAnimationFrame || function (f) { return setTimeout(f, 16); };
-
-  /* ---------- Frase "boa notícia": uma versão por tamanho de tela ---------- */
-  function ajustaBoaNoticia() {
-    var largo = window.innerWidth >= 940;
-    document.querySelectorAll('.so-desktop').forEach(function (el) { el.style.display = largo ? '' : 'none'; });
-    document.querySelectorAll('.so-celular').forEach(function (el) { el.style.display = largo ? 'none' : ''; });
-  }
-  ajustaBoaNoticia();
 
   /* ---------- Mapa de sessões (2 por semana) ---------- */
   document.querySelectorAll('.sessoes').forEach(function (box) {
@@ -1225,7 +1241,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   }
   function pedir() { if (!pedido) { pedido = true; raf(quadro); } }
   window.addEventListener('scroll', pedir, { passive: true });
-  window.addEventListener('resize', function () { ajustaBoaNoticia(); pedir(); });
+  window.addEventListener('resize', pedir);
   quadro();
 })();
 </script>
