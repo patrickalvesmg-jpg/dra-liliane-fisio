@@ -4,17 +4,17 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <meta name="format-detection" content="telephone=no" />
-  <title>Pós-parto tardio — Dra. Liliane Araújo, Fisioterapeuta | João Pessoa</title>
-  <meta name="description" content="Reabilitação da diástase abdominal, no seu tempo e com acompanhamento de perto. Exercícios terapêuticos com eletroestimulação, em João Pessoa." />
+  <title>Reabilitação da diástase abdominal — Dra. Liliane Araújo, Fisioterapeuta | João Pessoa</title>
+  <meta name="description" content="Reabilitação da diástase abdominal com avaliação completa e protocolo individualizado: exercícios terapêuticos com eletroestimulação, em João Pessoa." />
   <meta name="robots" content="noindex, follow" />
   <meta name="theme-color" content="#F4EEF2" />
 
   <!-- Prévia do link no WhatsApp -->
   <meta property="og:type" content="website" />
   <meta property="og:url" content="https://lilianearaujofisio.com.br/pos-parto-tardio" />
-  <meta property="og:title" content="Pós-parto tardio — Dra. Liliane Araújo" />
-  <meta property="og:description" content="Reabilitação da diástase abdominal, no seu tempo e com acompanhamento de perto." />
-  <meta property="og:image" content="https://lilianearaujofisio.com.br/img/pos-parto-tardio/og.jpg?v=2" />
+  <meta property="og:title" content="Reabilitação da diástase abdominal — Dra. Liliane Araújo" />
+  <meta property="og:description" content="Avaliação completa, protocolo individualizado e tratamento baseado em evidência científica." />
+  <meta property="og:image" content="https://lilianearaujofisio.com.br/img/pos-parto-tardio/og.jpg?v=3" />
   <meta property="og:image:width" content="1200" />
   <meta property="og:image:height" content="630" />
   <meta property="og:locale" content="pt_BR" />
@@ -44,6 +44,7 @@
       --roxo-principal: #B090A5;
       --roxo-escuro:    #7B5E92;
       --roxo-titulo:    #7B5EA7;
+      --marsala:        #8E4A5A; /* lilás acerejado (marsala) do título da abertura */
       --roxo-claro:     #C9AEC0;
       --roxo-bg:        #F4EEF2;
       --creme:          #FBF6EE;
@@ -216,19 +217,14 @@
       padding: 5px 16px; border-radius: 20px; margin-bottom: 14px;
     }
     .hero h1 {
-      font-size: clamp(3.1rem, 14.5vw, 5.6rem);
-      font-weight: 900; color: var(--roxo-titulo);
+      font-size: clamp(2.5rem, 11.4vw, 4.4rem);
+      font-weight: 900; color: var(--marsala);
       letter-spacing: -0.035em; line-height: 0.98;
     }
     .hero h1 .linha { display: block; overflow: hidden; padding: 0 0.04em 0.06em; margin-bottom: -0.06em; }
     .hero h1 .linha > span { display: inline-block; }
-    .hero-subtitle {
-      margin-top: 14px;
-      font-family: 'Outfit', sans-serif; font-size: 0.86rem; font-weight: 600;
-      color: var(--texto-cinza); letter-spacing: 0.1em; text-transform: uppercase; line-height: 1.5;
-    }
     .hero-quote {
-      margin-top: 8px;
+      margin-top: 14px;
       font-family: 'Cormorant Garamond', serif; font-style: italic; font-weight: 500;
       font-size: clamp(1.3rem, 5.4vw, 1.75rem); line-height: 1.4; color: var(--texto-escuro);
     }
@@ -257,14 +253,13 @@
     .hero.pronto .hero-tag { opacity: 1; transform: none; transition: opacity 0.8s ease 0.5s, transform 0.8s var(--ease-soft) 0.5s; }
     .hero.pronto h1 .linha > span { transform: none; transition: transform 1s var(--ease-soft) 0.68s; }
     .hero.pronto h1 .linha:nth-child(2) > span { transition-delay: 0.8s; }
-    .hero.pronto .hero-subtitle { opacity: 1; transform: none; transition: opacity 0.8s ease 1.1s, transform 0.8s var(--ease-soft) 1.1s; }
+    .hero.pronto h1 .linha:nth-child(3) > span { transition-delay: 0.92s; }
     .hero.pronto .hero-quote { opacity: 1; transform: none; transition: opacity 0.9s ease 1.3s, transform 0.9s var(--ease-soft) 1.3s; }
     .hero.pronto .scroll-indicator { opacity: 1; transition: opacity 1s ease 1.9s; }
 
     /* ============================================================
        PARA QUEM É
     ============================================================ */
-    .para-quem { background: var(--creme); padding-top: 64px; }
     .sinais { list-style: none; display: grid; gap: 14px; max-width: 760px; margin: 0 auto; }
     .sinal {
       display: flex; flex-direction: column; align-items: center; text-align: center; gap: 14px;
@@ -282,6 +277,24 @@
        O QUE É A DIÁSTASE — desenho anatômico
     ============================================================ */
     .sec-lilas { background: var(--roxo-bg); }
+    .diastase { background: var(--creme); padding-top: 64px; }
+
+    /* As duas partes da diástase: afastamento + frouxidão */
+    .partes { list-style: none; display: grid; gap: 12px; max-width: 460px; margin: 0 auto; }
+    .parte {
+      display: flex; flex-direction: column; align-items: center; text-align: center; gap: 10px;
+      background: var(--branco); border: 1px solid rgba(176,144,165,0.18);
+      border-radius: 16px; padding: 18px 18px 20px; box-shadow: var(--shadow-warm);
+    }
+    .parte-n {
+      width: 34px; height: 34px; flex-shrink: 0; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      background: linear-gradient(135deg, var(--roxo-principal) 0%, var(--roxo-escuro) 100%);
+      color: #fff; font-family: 'Outfit', sans-serif; font-weight: 800; font-size: 1rem; line-height: 1;
+      box-shadow: 0 0 0 4px var(--branco), 0 0 0 5px rgba(176,144,165,0.28);
+    }
+    .parte h3 { font-weight: 700; font-size: 1.06rem; color: var(--texto-escuro); letter-spacing: -0.01em; }
+    .parte p { margin-top: 3px; font-size: 0.94rem; color: var(--texto-medio); line-height: 1.62; }
     .diag-grade { display: grid; gap: 28px; align-items: center; max-width: 980px; margin: 0 auto; }
     .diag-card {
       background: var(--branco);
@@ -434,7 +447,7 @@
     /* ============================================================
        PLANOS (cards do portfólio, sem botão)
     ============================================================ */
-    .planos-grid { display: grid; gap: 22px; max-width: 860px; margin: 0 auto; }
+    .planos-grid { display: grid; gap: 22px; max-width: 460px; margin: 0 auto; }
     .plan-card {
       display: flex; flex-direction: column; background: var(--branco);
       border: 1px solid rgba(176,144,165,0.22); border-radius: 18px;
@@ -519,7 +532,7 @@
     .duvida .pq-icon svg { width: 22px; height: 22px; }
     .duvida h3 { font-weight: 800; font-size: 1.1rem; color: var(--texto-escuro); }
     .duvida p { margin-top: 6px; font-size: 0.97rem; color: var(--texto-medio); line-height: 1.72; }
-    .condicoes { display: grid; gap: 14px; max-width: 860px; margin: 18px auto 0; }
+    .condicoes { display: grid; gap: 14px; max-width: 460px; margin: 18px auto 0; }
     .condicao {
       display: flex; flex-direction: column; align-items: center; text-align: center; gap: 12px;
       background: rgba(255,255,255,0.6); border: 1px solid rgba(176,144,165,0.22); border-radius: 16px; padding: 18px;
@@ -562,11 +575,10 @@
       .tl-content::before { display: none; }
     }
     @media (max-width: 719px) and (max-height: 700px) {
-      .hero h1 { font-size: clamp(2.7rem, 12.5vw, 3.5rem); }
+      .hero h1 { font-size: clamp(2.3rem, 10.4vw, 3rem); }
       .hero-texto { padding-bottom: calc(50px + env(safe-area-inset-bottom)); }
       .hero-tag { margin-bottom: 10px; }
-      .hero-subtitle { margin-top: 10px; font-size: 0.8rem; }
-      .hero-quote { font-size: 1.22rem; }
+      .hero-quote { margin-top: 10px; font-size: 1.22rem; }
       .scroll-indicator-text { display: none; }
     }
     @media (min-width: 720px) {
@@ -577,8 +589,6 @@
       .sinal { flex-direction: column; text-align: center; padding: 30px 22px; gap: 20px; }
       .metodo-grade { grid-template-columns: 1fr auto 1fr; align-items: center; }
       .soma { margin: 0 -12px; }
-      .planos-grid { grid-template-columns: 1fr 1fr; }
-      .condicoes { grid-template-columns: 1fr 1fr; }
       .tl-step { gap: 32px; margin-bottom: 36px; }
       .tl-circle { width: 80px; height: 80px; }
       .tl-circle svg { width: 34px; height: 34px; }
@@ -597,7 +607,7 @@
       .hero-arc-1, .hero-arc-2, .hero-arc-spin { left: 72%; }
       .hero::after { background: linear-gradient(90deg, var(--creme) 0%, rgba(251,246,238,0.88) 36%, rgba(251,246,238,0) 58%); }
       .hero-texto { left: 8vw; right: auto; bottom: auto; top: 50%; transform: translateY(-50%); max-width: 560px; padding: 0; text-align: left; }
-      .hero h1 { font-size: 5.6rem; }
+      .hero h1 { font-size: 4.5rem; }
       .scroll-indicator { left: 8vw; }
       @keyframes scroll-bounce { 0%, 100% { transform: translateY(0); opacity: 1; } 50% { transform: translateY(8px); opacity: 0.5; } }
       .diag-grade { grid-template-columns: 1fr 1fr; gap: 64px; }
@@ -607,6 +617,8 @@
       .sobre-copy .ornament-line.left { margin-left: 0; }
       .diag-lado .cab { text-align: left; margin-bottom: 0; }
       .diag-lado .ornament-line { margin-left: 0; }
+      .diag-lado .partes { margin: 26px 0 0; }
+      .parte { flex-direction: row; align-items: flex-start; text-align: left; gap: 16px; }
       .diag-lado .boa-noticia { text-align: left; padding-left: 0; }
       .diag-lado .boa-noticia::before { left: -8px; transform: none; }
       .sobre-inner { grid-template-columns: 1fr 1.6fr; gap: 72px; }
@@ -647,8 +659,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   </div>
   <div class="hero-texto" id="heroTexto">
     <span class="hero-tag">Dra. Liliane Araújo</span>
-    <h1><span class="linha"><span>Pós-parto</span></span><span class="linha"><span>tardio</span></span></h1>
-    <p class="hero-subtitle">Reabilitação da diástase abdominal</p>
+    <h1><span class="linha"><span>Reabilitação</span></span><span class="linha"><span>da diástase</span></span><span class="linha"><span>abdominal</span></span></h1>
     <p class="hero-quote">No seu tempo e com acompanhamento de perto.</p>
   </div>
   <div class="scroll-indicator" aria-hidden="true">
@@ -660,45 +671,33 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <main>
 
 <!-- ====================================================
-     PARA QUEM É
+     O QUE É A DIÁSTASE (primeira seção)
 ==================================================== -->
-<section class="para-quem" data-rotulo="Para quem é" aria-labelledby="t-para-quem">
-  <div class="wrap">
-    <div class="cab fade-in">
-      <span class="section-tag">Para quem é</span>
-      <h2 class="section-title" id="t-para-quem">Ainda sente a barriga diferente?</h2>
-      <svg class="ornament-line" viewBox="0 0 64 16" fill="none" aria-hidden="true"><path d="M2 8 Q16 2, 32 8 T62 8" stroke="#B090A5" stroke-width="1.4" stroke-linecap="round"/><circle cx="32" cy="8" r="2" fill="#B090A5"/></svg>
-      <p class="section-subtexto">Para você que já passou dos primeiros meses depois do parto e ainda percebe:</p>
-    </div>
-    <ul class="sinais">
-      <li class="sinal fade-in">
-        <span class="pq-icon"><svg class="icon-svg" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5v14M15 5v14"/><path d="M6 12H2.8M2.8 12l1.8-1.8M2.8 12l1.8 1.8M18 12h3.2M21.2 12l-1.8-1.8M21.2 12l-1.8 1.8"/></svg></span>
-        Aquela sensação de abdômen “aberto”
-      </li>
-      <li class="sinal fade-in d1">
-        <span class="pq-icon"><svg class="icon-svg" viewBox="0 0 24 24" aria-hidden="true"><ellipse cx="12" cy="11" rx="2" ry="2.6"/><path d="M3.5 17.5c2.8-1.7 5.7-1.7 8.5 0s5.7 1.7 8.5 0"/><path d="M3.5 5.5c2.8 1.2 5.7 1.2 8.5 0s5.7-1.2 8.5 0"/></svg></span>
-        Flacidez na região do umbigo
-      </li>
-      <li class="sinal fade-in d2">
-        <span class="pq-icon"><svg class="icon-svg" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><circle cx="12" cy="12" r="4.5"/><circle cx="12" cy="12" r="1"/></svg></span>
-        Dificuldade de sentir o centro do corpo firme
-      </li>
-    </ul>
-  </div>
-</section>
-
-<!-- ====================================================
-     O QUE É A DIÁSTASE
-==================================================== -->
-<section class="sec-lilas" data-rotulo="A diástase" aria-labelledby="t-diastase">
+<section class="diastase" data-rotulo="A diástase" aria-labelledby="t-diastase">
   <div class="wrap diag-grade">
     <div class="diag-lado">
       <div class="cab fade-in">
         <span class="section-tag">Entenda a diástase</span>
-        <h2 class="section-title" id="t-diastase">O que acontece com a sua barriga</h2>
+        <h2 class="section-title" id="t-diastase">Diástase não é só afastamento</h2>
         <svg class="ornament-line" viewBox="0 0 64 16" fill="none" aria-hidden="true"><path d="M2 8 Q16 2, 32 8 T62 8" stroke="#B090A5" stroke-width="1.4" stroke-linecap="round"/><circle cx="32" cy="8" r="2" fill="#B090A5"/></svg>
-        <p class="section-subtexto">A diástase é o afastamento dos músculos retos do abdômen, algo muito comum depois da gestação.</p>
+        <p class="section-subtexto">Depois da gestação, ela é formada por duas coisas que acontecem juntas:</p>
       </div>
+      <ul class="partes">
+        <li class="parte fade-in">
+          <span class="parte-n" aria-hidden="true">1</span>
+          <div>
+            <h3>Afastamento</h3>
+            <p>Os músculos retos do abdômen se afastam um do outro, principalmente na altura do umbigo.</p>
+          </div>
+        </li>
+        <li class="parte fade-in d1">
+          <span class="parte-n" aria-hidden="true">2</span>
+          <div>
+            <h3>Frouxidão muscular</h3>
+            <p>A musculatura do abdômen fica frouxa e perde a firmeza para sustentar o centro do corpo.</p>
+          </div>
+        </li>
+      </ul>
       <p class="boa-noticia lead-frase fade-in d1 so-desktop">A boa notícia: mesmo meses ou anos depois, dá para trabalhar essa musculatura com segurança.</p>
     </div>
 
@@ -772,7 +771,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
       <p class="diag-texto" aria-live="off">
         <span id="tA"><strong>Músculos juntos:</strong> os dois retos do abdômen ficam lado a lado, unidos no meio pela linha alba.<em class="diag-dica" id="dica" aria-hidden="true">Continue rolando para ver o que acontece</em></span>
-        <span id="tB" style="opacity:0"><strong>Com diástase:</strong> a linha alba se alonga e os músculos se afastam, principalmente na altura do umbigo.</span>
+        <span id="tB" style="opacity:0"><strong>Com diástase:</strong> a linha alba se alonga, os músculos se afastam (principalmente na altura do umbigo) e ficam mais frouxos.</span>
       </p>
       <ul class="legenda" aria-hidden="true">
         <li class="l-musculo">Músculos retos do abdômen</li>
@@ -782,6 +781,34 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     </figure>
 
     <p class="boa-noticia lead-frase fade-in so-celular">A boa notícia: mesmo meses ou anos depois, dá para trabalhar essa musculatura com segurança.</p>
+  </div>
+</section>
+
+<!-- ====================================================
+     PARA QUEM É
+==================================================== -->
+<section class="sec-lilas" data-rotulo="Para quem é" aria-labelledby="t-para-quem">
+  <div class="wrap">
+    <div class="cab fade-in">
+      <span class="section-tag">Para quem é</span>
+      <h2 class="section-title" id="t-para-quem">Ainda sente a barriga diferente?</h2>
+      <svg class="ornament-line" viewBox="0 0 64 16" fill="none" aria-hidden="true"><path d="M2 8 Q16 2, 32 8 T62 8" stroke="#B090A5" stroke-width="1.4" stroke-linecap="round"/><circle cx="32" cy="8" r="2" fill="#B090A5"/></svg>
+      <p class="section-subtexto">Para você que já passou dos primeiros meses depois do parto e ainda percebe:</p>
+    </div>
+    <ul class="sinais">
+      <li class="sinal fade-in">
+        <span class="pq-icon"><svg class="icon-svg" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5v14M15 5v14"/><path d="M6 12H2.8M2.8 12l1.8-1.8M2.8 12l1.8 1.8M18 12h3.2M21.2 12l-1.8-1.8M21.2 12l-1.8 1.8"/></svg></span>
+        Aquela sensação de abdômen “aberto”
+      </li>
+      <li class="sinal fade-in d1">
+        <span class="pq-icon"><svg class="icon-svg" viewBox="0 0 24 24" aria-hidden="true"><ellipse cx="12" cy="11" rx="2" ry="2.6"/><path d="M3.5 17.5c2.8-1.7 5.7-1.7 8.5 0s5.7 1.7 8.5 0"/><path d="M3.5 5.5c2.8 1.2 5.7 1.2 8.5 0s5.7-1.2 8.5 0"/></svg></span>
+        Flacidez na região do umbigo
+      </li>
+      <li class="sinal fade-in d2">
+        <span class="pq-icon"><svg class="icon-svg" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><circle cx="12" cy="12" r="4.5"/><circle cx="12" cy="12" r="1"/></svg></span>
+        Dificuldade de sentir o centro do corpo firme
+      </li>
+    </ul>
   </div>
 </section>
 
@@ -801,16 +828,16 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         <div class="tl-circle" aria-hidden="true"><svg class="icon-svg" viewBox="0 0 24 24"><rect x="2.5" y="8" width="19" height="8" rx="2"/><path d="M6.5 8v3M10 8v4.5M13.5 8v3M17 8v4.5"/></svg></div>
         <div class="tl-content">
           <span class="tl-tag">Etapa 1</span>
-          <h3 class="tl-title">Avaliação</h3>
-          <p class="tl-text">Eu meço a sua diástase, avalio a força do abdômen e do assoalho pélvico e escuto o que mais te incomoda.</p>
+          <h3 class="tl-title">Avaliação da diástase</h3>
+          <p class="tl-text">Eu não confiro só a medida do afastamento dos músculos. Também faço testes para saber a sua competência muscular: o quanto o seu abdômen consegue contrair e sustentar o corpo.</p>
         </div>
       </div>
       <div class="tl-step fade-in">
         <div class="tl-circle" aria-hidden="true"><svg class="icon-svg" viewBox="0 0 24 24"><rect x="5" y="4" width="14" height="17" rx="2"/><path d="M9 4h6v3H9z"/><path d="M8.5 12.5l1.6 1.6 3.2-3.2M8.5 17.5h7"/></svg></div>
         <div class="tl-content">
           <span class="tl-tag">Etapa 2</span>
-          <h3 class="tl-title">Seu protocolo</h3>
-          <p class="tl-text">Com base na avaliação, preparo um protocolo de tratamento só seu, com metas claras para cada fase.</p>
+          <h3 class="tl-title">Protocolo individualizado</h3>
+          <p class="tl-text">Depois da avaliação, eu traço um protocolo de tratamento individualizado, direcionado para o seu caso e com metas claras para cada fase.</p>
         </div>
       </div>
       <div class="tl-step fade-in">
@@ -828,12 +855,13 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <!-- ====================================================
      O MÉTODO
 ==================================================== -->
-<section class="sec-lilas" data-rotulo="O método" aria-labelledby="t-metodo">
+<section class="sec-lilas" data-rotulo="Evidência científica" aria-labelledby="t-metodo">
   <div class="wrap">
     <div class="cab fade-in">
-      <span class="section-tag">O método</span>
-      <h2 class="section-title" id="t-metodo">Por que exercícios + eletroestimulação?</h2>
+      <span class="section-tag">Evidência científica</span>
+      <h2 class="section-title" id="t-metodo">Exercícios + eletroestimulação: o padrão-ouro</h2>
       <svg class="ornament-line" viewBox="0 0 64 16" fill="none" aria-hidden="true"><path d="M2 8 Q16 2, 32 8 T62 8" stroke="#B090A5" stroke-width="1.4" stroke-linecap="round"/><circle cx="32" cy="8" r="2" fill="#B090A5"/></svg>
+      <p class="section-subtexto">O meu tratamento é baseado em evidência científica. E as evidências mostram que a eletroestimulação, associada aos exercícios, é o padrão-ouro na reabilitação da diástase.</p>
     </div>
     <div class="metodo-grade">
       <article class="metodo-card fade-in">
@@ -890,49 +918,19 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <!-- ====================================================
      PLANOS E VALORES
 ==================================================== -->
-<section class="sec-lilas" data-rotulo="Planos e valores" aria-labelledby="t-planos">
+<section class="sec-lilas" data-rotulo="Investimento" aria-labelledby="t-planos">
   <div class="wrap">
     <div class="cab fade-in">
-      <span class="section-tag">Planos de tratamento</span>
-      <h2 class="section-title" id="t-planos">Escolha o caminho que cabe na sua rotina</h2>
+      <span class="section-tag">Investimento</span>
+      <h2 class="section-title" id="t-planos">12 semanas de tratamento, como indica a ciência</h2>
       <svg class="ornament-line" viewBox="0 0 64 16" fill="none" aria-hidden="true"><path d="M2 8 Q16 2, 32 8 T62 8" stroke="#B090A5" stroke-width="1.4" stroke-linecap="round"/><circle cx="32" cy="8" r="2" fill="#B090A5"/></svg>
-      <p class="section-subtexto">Os dois planos começam pela avaliação e seguem o mesmo cuidado. O que muda é o tempo que temos juntas para consolidar os resultados.</p>
+      <p class="section-subtexto">As evidências científicas e a literatura mostram que o tratamento da diástase precisa de, no mínimo, 12 semanas. Por isso, eu trabalho com um único plano.</p>
     </div>
 
     <div class="planos-grid">
       <article class="plan-card fade-in">
-        <div class="plan-header">
-          <p class="plan-name">Plano Essencial</p>
-          <p class="plan-duracao">6 semanas</p>
-          <p class="plan-tagline">12 sessões · 2x por semana</p>
-        </div>
-        <div class="plan-pricing">
-          <p class="plan-price-label">À vista · Pix ou dinheiro</p>
-          <div class="plan-pricing-row"><span class="plan-price-por">R$ 1.728</span><span class="plan-economy-pill">10% off</span></div>
-          <p class="plan-price-parcela">ou <strong>6x de R$ 320</strong> sem juros no cartão <span class="nw">(total R$ 1.920)</span></p>
-          <p class="plan-sessao">Valor por sessão: <strong>a partir de R$ 144</strong></p>
-        </div>
-        <div class="plan-body">
-          <p class="plan-section-label">Suas 12 sessões</p>
-          <div class="mapa">
-            <div class="sessoes" data-semanas="6" data-reav="6" role="img" aria-label="12 sessões ao longo de 6 semanas, com reavaliação ao final"></div>
-            <p class="mapa-leg" aria-hidden="true"><span class="k-sessao">sessão</span><span class="k-reav">semana com reavaliação</span></p>
-          </div>
-          <p class="plan-section-label">O que está incluso</p>
-          <ul class="plan-items">
-            <li>Avaliação completa inicial</li>
-            <li>Protocolo de tratamento personalizado</li>
-            <li class="item-destaque">Exercícios terapêuticos + eletroestimulação</li>
-            <li>Orientações para o dia a dia</li>
-            <li>Reavaliação ao final</li>
-          </ul>
-          <p class="plan-nota">Ideal para diástases menores ou para quem quer um primeiro ciclo de reabilitação.</p>
-        </div>
-      </article>
-
-      <article class="plan-card fade-in d1">
         <div class="plan-header destaque">
-          <span class="plan-badge">Mais completo</span>
+          <span class="plan-badge">Mínimo indicado pela literatura</span>
           <p class="plan-name">Plano Completo</p>
           <p class="plan-duracao">12 semanas</p>
           <p class="plan-tagline">24 sessões · 2x por semana</p>
@@ -952,32 +950,19 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
           <p class="plan-section-label">O que está incluso</p>
           <ul class="plan-items">
             <li>Avaliação completa inicial</li>
-            <li>Protocolo de tratamento personalizado</li>
+            <li>Protocolo de tratamento individualizado</li>
             <li class="item-destaque">Exercícios terapêuticos + eletroestimulação</li>
             <li>Orientações para o dia a dia</li>
             <li class="item-destaque">Reavaliação na 6ª semana com ajuste do protocolo</li>
             <li>Reavaliação final</li>
           </ul>
-          <p class="plan-nota">Ideal para diástases maiores ou para quem busca fortalecer e manter os resultados a longo prazo.</p>
+          <p class="plan-nota">Do primeiro ao último dia, com acompanhamento de perto.</p>
         </div>
       </article>
     </div>
 
-    <aside class="duvida fade-in">
-      <span class="pq-icon"><svg class="icon-svg" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M9.6 9.4a2.5 2.5 0 1 1 3.4 2.3c-.6.3-1 .8-1 1.5v.5"/><circle cx="12" cy="16.6" r="0.5"/></svg></span>
-      <h3>Na dúvida entre os dois?</h3>
-      <p>Na avaliação eu te mostro o tamanho da sua diástase e te indico o plano que faz mais sentido para o seu caso. Sem pressa e sem pressão.</p>
-    </aside>
-
     <div class="condicoes">
       <div class="condicao fade-in">
-        <span class="pq-icon"><svg class="icon-svg" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M8 12.3l2.6 2.6L16.2 9.3"/></svg></span>
-        <div>
-          <h3>Incluído nos dois planos</h3>
-          <p>Avaliação inicial, protocolo personalizado, sessões de exercícios com eletroestimulação e reavaliação.</p>
-        </div>
-      </div>
-      <div class="condicao fade-in d1">
         <span class="pq-icon"><svg class="icon-svg" viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="5" width="17" height="15" rx="2"/><path d="M3.5 9.5h17M8 3v4M16 3v4"/><path d="M9.5 15.5a2.6 2.6 0 1 0 .8-2.4M10 11.6v1.6h1.6"/></svg></span>
         <div>
           <h3>Reposição de sessões</h3>
