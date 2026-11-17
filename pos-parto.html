@@ -1,0 +1,1076 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>Fisioterapia pós-parto na maternidade | Dra. Liliane Araújo · João Pessoa</title>
+  <meta name="description" content="A fisioterapeuta vai até você na maternidade e fica, em média, 2 horas: avaliação, taping, laser, exercícios e todas as orientações. Depois, os retornos são na sua casa. João Pessoa, PB." />
+  <!-- Página de anúncio: fora do Google para não competir com o /portfolio e a página de SEO -->
+  <meta name="robots" content="noindex, follow" />
+
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://lilianearaujofisio.com.br/pos-parto" />
+  <meta property="og:title" content="Fisioterapia pós-parto na maternidade e na sua casa" />
+  <meta property="og:description" content="Fisioterapia pós-parto em João Pessoa: em média 2 horas de atendimento na maternidade e os retornos na sua casa." />
+  <meta property="og:image" content="https://lilianearaujofisio.com.br/og-preview-cereja.png" />
+  <meta property="og:image:width" content="1589" />
+  <meta property="og:image:height" content="883" />
+  <meta property="og:locale" content="pt_BR" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="theme-color" content="#FAF6F2" />
+  <link rel="icon" type="image/png" href="Logo-cereja.png" />
+  <link rel="apple-touch-icon" href="Logo-cereja.png" />
+  <link rel="preload" as="image" href="img/lp/dra-liliane-recorte.webp" fetchpriority="high" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@500;600;700;800&family=Inter:wght@400;500;600;700&family=Cormorant+Garamond:ital,wght@1,500;1,600&display=swap" rel="stylesheet" />
+  <!-- Biblioteca: Swiper 14.4.0 (carrosséis de antes e depois e de depoimentos) -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@14.4.0/swiper-bundle.min.css" />
+
+  <!-- Google Tag Manager (mesmo container do /acompanhamento e da landing de taping: é o que tem o Pixel do Meta) -->
+  <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+  new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+  j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+  'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+  })(window,document,'script','dataLayer','GTM-W8N43S2W');</script>
+  <!-- End Google Tag Manager -->
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      /* Paleta cereja (Bordô Elegante) — a mesma do site inteiro */
+      --cor-principal: #8E4A5A;
+      --cor-escuro:    #5A1F2E;
+      --cor-forte:     #6E2638;
+      --cor-claro:     #CFA3AB;
+      --cor-bg:        #F2E3E4;
+      --creme:         #FAF6F2;
+      --creme-suave:   #F5EEE7;
+      --creme-escuro:  #EAE0D8;
+      --texto:         #241517;
+      --texto-medio:   #46333A;
+      --texto-suave:   #6B575C;
+      --branco:        #FFFFFF;
+      --wpp:           #138A43;
+      --wpp-hover:     #0F7537;
+      --wpp-bolha:     #D9FDD3;
+
+      --sombra:        0 18px 50px -18px rgba(90,31,46,.28);
+      --sombra-leve:   0 2px 18px rgba(90,31,46,.07);
+      --raio:          18px;
+      --ease:          cubic-bezier(0.22, 1, 0.36, 1);
+      --gutter:        20px;
+      --largura:       1120px;
+
+      /* transitions.dev: acordeão e check */
+      --acc-expand: 280ms; --acc-collapse: 240ms; --acc-chevron: 250ms;
+      --check-box: 150ms; --check-draw: 380ms; --check-uncheck: 150ms;
+    }
+
+    html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: var(--creme);
+      color: var(--texto);
+      font-size: 1rem;
+      line-height: 1.65;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+    img, video { max-width: 100%; display: block; }
+    a { color: inherit; }
+    button { font: inherit; color: inherit; background: none; border: 0; cursor: pointer; }
+    h1, h2, h3 { font-family: 'Outfit', sans-serif; line-height: 1.12; color: var(--cor-forte); letter-spacing: -0.01em; text-wrap: balance; }
+    p { text-wrap: pretty; }
+    .serif { font-family: 'Cormorant Garamond', Georgia, serif; font-style: italic; font-weight: 600; letter-spacing: 0; }
+
+    .wrap { width: 100%; max-width: var(--largura); margin: 0 auto; padding: 0 var(--gutter); }
+    section { position: relative; }
+    .sec { padding: 72px 0; }
+
+    .tag {
+      display: inline-flex; align-items: center; gap: 8px;
+      font-family: 'Outfit', sans-serif; font-weight: 600; font-size: .78rem;
+      letter-spacing: .14em; text-transform: uppercase; color: var(--cor-principal);
+      margin-bottom: 14px;
+    }
+    .tag::before { content: ""; width: 22px; height: 1.5px; background: currentColor; }
+    .titulo { font-size: clamp(1.75rem, 6.6vw, 2.7rem); font-weight: 800; margin-bottom: 16px; }
+    .lead { font-size: 1.06rem; color: var(--texto-medio); max-width: 60ch; }
+    .centro { text-align: center; }
+    .centro .tag::after { content: ""; width: 22px; height: 1.5px; background: currentColor; }
+    .centro .lead { margin-left: auto; margin-right: auto; }
+
+    /* ---------- Botões ---------- */
+    .btn-wpp {
+      display: flex; align-items: center; justify-content: center; gap: 12px;
+      width: 100%; min-height: 60px; padding: 14px 22px;
+      background: var(--wpp); color: #fff; text-decoration: none;
+      font-family: 'Outfit', sans-serif; font-weight: 700; font-size: 1.08rem; letter-spacing: .005em;
+      border-radius: 16px; box-shadow: 0 14px 30px -12px rgba(19,138,67,.7);
+      transition: transform .25s var(--ease), background .25s var(--ease), box-shadow .25s var(--ease);
+      -webkit-tap-highlight-color: transparent;
+    }
+    .btn-wpp:hover { background: var(--wpp-hover); transform: translateY(-2px); }
+    .btn-wpp:active { transform: scale(.98); }
+    .btn-wpp svg { width: 24px; height: 24px; flex: none; fill: #fff; }
+    .micro { margin-top: 12px; font-size: .86rem; color: var(--texto-suave); text-align: center; display: flex; align-items: center; justify-content: center; gap: 6px; }
+    .micro svg { width: 15px; height: 15px; flex: none; stroke: var(--cor-principal); fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+    .cta-bloco { max-width: 440px; margin: 36px auto 0; }
+
+    /* ---------- Revelar ao rolar ---------- */
+    .rv { opacity: 0; transform: translateY(18px); transition: opacity .7s var(--ease), transform .7s var(--ease); }
+    .rv.on { opacity: 1; transform: none; }
+
+    /* ============ TOPO ============ */
+    .topo {
+      display: flex; flex-direction: column;
+      min-height: 100vh; min-height: 100svh; /* a primeira seção cabe numa tela */
+      background:
+        radial-gradient(120% 60% at 100% 0%, rgba(207,163,171,.30) 0%, transparent 60%),
+        radial-gradient(90% 50% at 0% 30%, rgba(242,227,228,.9) 0%, transparent 70%),
+        var(--creme);
+      overflow: hidden;
+    }
+    .marca { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+    .marca img { height: 40px; width: auto; }
+    .marca b { display: block; font-family: 'Outfit', sans-serif; font-weight: 700; font-size: .95rem; color: var(--cor-forte); line-height: 1.1; }
+    .marca span { display: block; font-size: .74rem; color: var(--texto-suave); line-height: 1.2; }
+
+    .hero { flex: 1; display: flex; flex-direction: column; padding-top: 30px; padding-bottom: 20px; text-align: center; }
+    .hero h1 { font-size: clamp(1.95rem, 8.6vw, 3.6rem); font-weight: 800; }
+    .hero h1 .serif { display: block; color: var(--cor-principal); font-size: 1.1em; line-height: 1.02; margin-top: 4px; }
+    .hero .sub { font-size: .98rem; line-height: 1.55; color: var(--texto-medio); margin: 12px auto 0; max-width: 30em; }
+    .hero .sub strong { color: var(--cor-forte); }
+    .hero-visual { flex: 1; display: flex; flex-direction: column; min-height: 0; }
+
+    .foto-arco {
+      position: relative; flex: 1 1 auto; min-height: 210px; max-height: 460px;
+      width: min(100%, 340px); margin: 48px auto 0;
+      border-radius: 200px 200px 28px 28px;
+      background: linear-gradient(180deg, #E9CBD0 0%, var(--cor-claro) 55%, #B98490 100%);
+      isolation: isolate;
+    }
+    .foto-arco::before { /* anel fino decorativo */
+      content: ""; position: absolute; inset: 14px 14px 0; border-radius: 190px 190px 20px 20px;
+      border: 1px solid rgba(255,255,255,.45); border-bottom: 0; z-index: -1;
+    }
+    .foto-arco img {
+      position: absolute; left: 50%; bottom: 0; transform: translateX(-50%);
+      height: 112%; width: auto; max-width: none; filter: drop-shadow(0 18px 24px rgba(90,31,46,.25));
+    }
+    .hero-cta { position: relative; z-index: 3; width: min(100%, 400px); margin: -30px auto 0; }
+    .hero-cta .micro { margin-top: 10px; }
+
+    @media (prefers-reduced-motion: no-preference) {
+      .entra { animation: entra .9s var(--ease) both; }
+      .entra.d1 { animation-delay: .08s; } .entra.d2 { animation-delay: .18s; }
+      .entra.d3 { animation-delay: .3s; }  .entra.d4 { animation-delay: .42s; }
+      @keyframes entra { from { opacity: 0; transform: translateY(22px); } to { opacity: 1; transform: none; } }
+    }
+
+    /* ============ MATERNIDADES ============ */
+    .maternidades { background: var(--cor-escuro); color: #fff; padding: 30px 0 32px; }
+    .maternidades p.rot { font-size: .82rem; letter-spacing: .12em; text-transform: uppercase; color: var(--cor-claro); font-weight: 600; text-align: center; margin-bottom: 16px; font-family: 'Outfit', sans-serif; }
+    .mat-lista { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; list-style: none; max-width: 760px; margin: 0 auto; }
+    .mat-lista li {
+      display: flex; align-items: center; gap: 10px; padding: 12px 14px; border-radius: 14px;
+      background: rgba(255,255,255,.07); border: 1px solid rgba(255,255,255,.12);
+      font-family: 'Outfit', sans-serif; font-weight: 600; font-size: .95rem; line-height: 1.2;
+    }
+    .mat-lista svg { width: 22px; height: 22px; flex: none; stroke: var(--cor-claro); fill: none; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+    .maternidades .obs { text-align: center; font-size: .86rem; color: rgba(255,255,255,.72); margin-top: 12px; }
+    .onde { display: grid; gap: 12px; max-width: 920px; margin: 0 auto; }
+    .onde-bloco { padding: 18px 14px; border-radius: 18px; background: rgba(255,255,255,.05); border: 1px solid rgba(255,255,255,.12); }
+    .onde-tit { display: flex; align-items: center; justify-content: center; gap: 9px; color: #fff; font-size: 1.15rem; font-weight: 700; margin-bottom: 12px; }
+    .onde-tit svg { width: 24px; height: 24px; flex: none; stroke: var(--cor-claro); fill: none; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+    .onde .mat-lista li { justify-content: center; text-align: center; }
+    .onde-casa { background: rgba(207,163,171,.16); border-color: rgba(207,163,171,.4); text-align: center; }
+    .onde-casa p { color: rgba(255,255,255,.88); font-size: .98rem; max-width: 34ch; margin: 0 auto; }
+    .onde-casa strong { color: #fff; }
+
+    /* ============ CENA ============ */
+    .cena { background: var(--creme); }
+    .duvidas { display: flex; flex-wrap: wrap; gap: 10px; margin: 26px 0 26px; }
+    .duvidas span {
+      position: relative; padding: 11px 16px; border-radius: 18px 18px 18px 4px; background: var(--branco);
+      box-shadow: var(--sombra-leve); font-size: .98rem; color: var(--texto-medio); font-weight: 500;
+    }
+    .duvidas span:nth-child(even) { border-radius: 18px 18px 4px 18px; background: var(--cor-bg); }
+    .cena .txt { color: var(--texto-medio); font-size: 1.04rem; max-width: 60ch; }
+    .virada {
+      margin-top: 30px; padding: 26px 24px; border-radius: var(--raio);
+      background: linear-gradient(135deg, var(--cor-bg), #fff);
+      border: 1px solid rgba(142,74,90,.14);
+    }
+    .virada .serif { font-size: clamp(1.9rem, 8vw, 2.6rem); color: var(--cor-forte); line-height: 1.05; }
+    .virada p { margin-top: 10px; color: var(--texto-medio); }
+    .prova { margin-top: 14px; padding: 18px 20px; border-radius: var(--raio); background: var(--branco); box-shadow: var(--sombra-leve); }
+    .prova blockquote { font-family: 'Cormorant Garamond', Georgia, serif; font-style: italic; font-weight: 600; font-size: 1.3rem; line-height: 1.3; color: var(--cor-forte); margin: 6px 0 10px; }
+    .prova figcaption { display: flex; align-items: center; gap: 8px; font-size: .82rem; font-weight: 600; color: var(--texto-suave); }
+    .prova figcaption svg { width: 16px; height: 16px; flex: none; }
+
+    /* ============ 2 HORAS ============ */
+    .duas-horas { background: var(--branco); }
+    .relogio {
+      display: flex; align-items: center; gap: 18px; margin: 8px 0 34px;
+      padding: 18px 20px; border-radius: var(--raio); background: var(--creme-suave);
+    }
+    .relogio .num { font-family: 'Outfit', sans-serif; font-weight: 800; font-size: 3.6rem; line-height: .9; color: var(--cor-forte); letter-spacing: -.03em; }
+    .relogio .num small { font-size: .45em; margin-left: 2px; letter-spacing: 0; }
+    .relogio p { font-size: .95rem; color: var(--texto-medio); line-height: 1.45; }
+    .relogio p b { color: var(--cor-forte); }
+
+    .trilha { position: relative; list-style: none; padding-left: 50px; }
+    .trilha::before, .trilha::after {
+      content: ""; position: absolute; left: 17px; top: 8px; bottom: 8px; width: 2px; border-radius: 2px;
+      background: var(--creme-escuro);
+    }
+    .trilha::after { background: var(--cor-principal); transform-origin: top; transform: scaleY(var(--prog, 0)); transition: transform .15s linear; }
+    .trilha li { position: relative; padding-bottom: 30px; }
+    .trilha li:last-child { padding-bottom: 0; }
+    .trilha::before, .trilha::after { z-index: 0; }
+    .trilha .pt {
+      position: absolute; z-index: 1; left: -50px; top: 0; width: 36px; height: 36px; border-radius: 50%;
+      display: grid; place-items: center; font-family: 'Outfit', sans-serif; font-weight: 700; font-size: .95rem;
+      background: var(--branco); color: var(--cor-principal); border: 2px solid var(--creme-escuro);
+      transition: background .4s var(--ease), color .4s var(--ease), border-color .4s var(--ease);
+    }
+    .trilha li.passou .pt { background: var(--cor-principal); color: #fff; border-color: var(--cor-principal); }
+    .trilha h3 { font-size: 1.2rem; font-weight: 700; margin-bottom: 6px; padding-top: 5px; }
+    .trilha p { color: var(--texto-medio); font-size: 1rem; }
+    .chips { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
+    .chips span { font-size: .78rem; font-weight: 600; color: var(--cor-forte); background: var(--cor-bg); padding: 5px 10px; border-radius: 999px; }
+
+    /* ============ JORNADA ============ */
+    .jornada { background: var(--creme-suave); }
+    .etapas { display: grid; gap: 16px; margin-top: 30px; }
+    .etapa {
+      position: relative; background: var(--branco); border-radius: var(--raio); padding: 22px 20px 22px;
+      box-shadow: var(--sombra-leve); border: 1px solid rgba(142,74,90,.08);
+    }
+    .etapa .quando {
+      display: inline-flex; align-items: center; gap: 8px; font-size: .76rem; font-weight: 700;
+      letter-spacing: .08em; text-transform: uppercase; color: var(--cor-principal); margin-bottom: 10px;
+    }
+    .etapa .quando b { display: grid; place-items: center; width: 24px; height: 24px; border-radius: 50%; background: var(--cor-principal); color: #fff; font-size: .78rem; letter-spacing: 0; }
+    .etapa h3 { font-size: 1.22rem; font-weight: 700; margin-bottom: 8px; display: flex; align-items: center; gap: 10px; }
+    .etapa h3 svg { width: 26px; height: 26px; flex: none; stroke: var(--cor-principal); fill: none; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+    .etapa p { color: var(--texto-medio); }
+    .etapa-destaque { background: linear-gradient(160deg, #fff 0%, var(--cor-bg) 140%); }
+
+    .checklist { margin-top: 18px; padding: 18px 16px; border-radius: 14px; background: var(--creme); border: 1px dashed rgba(142,74,90,.35); }
+    .checklist .cab { font-family: 'Outfit', sans-serif; font-weight: 700; color: var(--cor-forte); font-size: .98rem; margin-bottom: 10px; }
+    .checklist ul { list-style: none; display: grid; gap: 9px; }
+    .checklist li { display: flex; gap: 11px; align-items: flex-start; font-size: .97rem; color: var(--texto-medio); line-height: 1.45; }
+    .t-check {
+      flex: none; width: 22px; height: 22px; border-radius: 7px; margin-top: 1px;
+      display: grid; place-items: center; background: var(--branco); box-shadow: inset 0 0 0 1.5px var(--cor-claro);
+      transition: background var(--check-box) var(--ease), box-shadow var(--check-box) var(--ease);
+    }
+    .t-check svg { width: 11px; height: 11px; overflow: visible; }
+    .t-check svg path { fill: none; stroke: #fff; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round;
+      stroke-dasharray: 15; stroke-dashoffset: 15; transition: stroke-dashoffset var(--check-uncheck) var(--ease); }
+    .t-check[aria-checked="true"] { background: var(--cor-principal); box-shadow: inset 0 0 0 1.5px var(--cor-principal); }
+    .t-check[aria-checked="true"] svg path { stroke-dashoffset: 0; transition: stroke-dashoffset var(--check-draw) var(--ease) 90ms; }
+
+    /* ============ VÍDEO ============ */
+    .video-sec { background: var(--cor-escuro); color: #fff; overflow: hidden; }
+    .video-sec .tag { color: var(--cor-claro); }
+    .video-sec .titulo { color: #fff; }
+    .video-sec .lead { color: rgba(255,255,255,.8); }
+    .video-grid { display: grid; gap: 28px; align-items: center; grid-template-areas: "texto" "video" "passos"; }
+    .vg-texto { grid-area: texto; } .vg-video { grid-area: video; } .vg-passos { grid-area: passos; margin-top: 0; }
+    .moldura {
+      position: relative; width: min(100%, 320px); aspect-ratio: 9 / 16; margin: 0 auto;
+      border-radius: 28px; overflow: hidden; background: #2b0f17;
+      box-shadow: 0 30px 70px -20px rgba(0,0,0,.6), 0 0 0 6px rgba(255,255,255,.06);
+    }
+    .moldura video { width: 100%; height: 100%; object-fit: cover; }
+    .play {
+      position: absolute; inset: 0; display: grid; place-items: center; align-content: end; gap: 12px; padding-bottom: 16%;
+      background: linear-gradient(180deg, rgba(36,12,18,0) 45%, rgba(36,12,18,.6) 100%);
+      transition: opacity .35s var(--ease);
+    }
+    .play .bola {
+      width: 76px; height: 76px; border-radius: 50%; display: grid; place-items: center;
+      background: rgba(255,255,255,.95); box-shadow: 0 10px 30px rgba(0,0,0,.35);
+      transition: transform .3s var(--ease);
+    }
+    .play:hover .bola { transform: scale(1.06); }
+    .play .bola svg { width: 28px; height: 28px; fill: var(--cor-forte); margin-left: 4px; }
+    .play .rot { font-family: 'Outfit', sans-serif; font-weight: 600; font-size: .92rem; color: #fff; text-shadow: 0 2px 10px rgba(0,0,0,.4); }
+    .moldura.tocando .play { opacity: 0; pointer-events: none; }
+    .passos-video { list-style: none; display: grid; gap: 10px; margin-top: 22px; }
+    .passos-video li { display: flex; gap: 12px; align-items: baseline; color: rgba(255,255,255,.88); font-size: .98rem; }
+    .passos-video li b { font-family: 'Outfit', sans-serif; color: var(--cor-claro); font-size: .85rem; min-width: 22px; }
+
+    /* ============ ANTES E DEPOIS ============ */
+    .resultados { background: var(--creme); }
+    .abas { display: flex; gap: 8px; overflow-x: auto; margin: 26px calc(var(--gutter) * -1) 18px; padding: 2px var(--gutter) 6px; scrollbar-width: none; }
+    .abas::-webkit-scrollbar { display: none; }
+    .aba {
+      flex: none; padding: 10px 16px; border-radius: 999px; font-size: .9rem; font-weight: 600;
+      background: var(--branco); color: var(--texto-medio); border: 1px solid var(--creme-escuro);
+      transition: background .3s var(--ease), color .3s var(--ease), border-color .3s var(--ease);
+    }
+    .aba[aria-selected="true"] { background: var(--cor-forte); color: #fff; border-color: var(--cor-forte); }
+    .swiper { overflow: visible; }
+    .carrossel-wrap { overflow: hidden; margin: 0 calc(var(--gutter) * -1); padding: 4px var(--gutter) 8px; }
+    .ad-slide { width: 82%; max-width: 360px; }
+    .ad-card { border-radius: var(--raio); overflow: hidden; background: var(--branco); box-shadow: var(--sombra-leve); aspect-ratio: 4 / 5; }
+    .ad-card > img { width: 100%; height: 100%; object-fit: cover; }
+    .ad-par { display: grid; grid-template-rows: 1fr 1fr; gap: 3px; height: 100%; background: var(--creme-escuro); }
+    .ad-par figure { position: relative; overflow: hidden; background: var(--creme-suave); }
+    .ad-par img { width: 100%; height: 100%; object-fit: cover; }
+    .ad-par.contem img { object-fit: contain; }
+    .ad-par figcaption {
+      position: absolute; left: 10px; top: 10px; padding: 3px 10px; border-radius: 999px;
+      font-size: .74rem; font-weight: 700; color: #fff; background: rgba(90,31,46,.82);
+    }
+    .ad-par figure:last-child figcaption { background: var(--cor-principal); }
+    .ad-legenda { font-size: .84rem; color: var(--texto-suave); margin-top: 10px; padding: 0 4px; }
+    .nav-car { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-top: 18px; }
+    .nav-car .dica { font-size: .84rem; color: var(--texto-suave); }
+    .nav-car .botoes { display: flex; gap: 8px; }
+    .nav-car button {
+      width: 44px; height: 44px; border-radius: 50%; display: grid; place-items: center;
+      background: var(--branco); border: 1px solid var(--creme-escuro); transition: background .25s, border-color .25s;
+    }
+    .nav-car button:hover { background: var(--cor-bg); border-color: var(--cor-claro); }
+    .nav-car button svg { width: 18px; height: 18px; stroke: var(--cor-forte); fill: none; stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; }
+    .nav-car button.swiper-button-disabled { opacity: .4; }
+    .aviso-res { font-size: .8rem; color: var(--texto-suave); margin-top: 14px; }
+
+    /* ============ DEPOIMENTOS ============ */
+    .depo { background: var(--cor-bg); }
+    #car-depo .swiper-wrapper { align-items: flex-start; }
+    .dp-slide { width: 82%; max-width: 360px; height: auto; }
+    .dp-card {
+      background: var(--branco); border-radius: var(--raio); padding: 12px 12px 14px;
+      box-shadow: var(--sombra-leve); display: flex; flex-direction: column; gap: 8px;
+    }
+    .dp-card img { border-radius: 10px; width: 100%; height: auto; }
+    .dp-card .fonte { display: flex; align-items: center; gap: 7px; margin-top: auto; padding-top: 4px; font-size: .78rem; font-weight: 600; color: var(--texto-suave); }
+    .dp-card .fonte svg { width: 15px; height: 15px; flex: none; }
+    .estrelas { color: #C9973A; letter-spacing: 2px; font-size: .9rem; }
+
+    /* ============ QUEM SOU EU ============ */
+    .sobre { background: var(--creme); }
+    .sobre-grid { display: grid; gap: 28px; align-items: center; }
+    .sobre-foto {
+      position: relative; width: min(100%, 360px); aspect-ratio: 1; margin: 0 auto; border-radius: 50%;
+      background: radial-gradient(circle at 50% 40%, var(--cor-bg), var(--cor-claro));
+      overflow: hidden;
+    }
+    .sobre-foto img { position: absolute; bottom: -2%; left: 50%; transform: translateX(-50%); width: 100%; height: auto; }
+    .sobre h2 { font-size: clamp(1.75rem, 6.6vw, 2.5rem); font-weight: 800; margin-bottom: 14px; }
+    .sobre p { color: var(--texto-medio); margin-bottom: 12px; }
+    .credenciais { list-style: none; display: grid; gap: 8px; margin: 18px 0 20px; }
+    .credenciais li { display: flex; gap: 10px; align-items: flex-start; font-size: .97rem; color: var(--texto-medio); }
+    .credenciais svg { width: 20px; height: 20px; flex: none; margin-top: 2px; stroke: var(--cor-principal); fill: none; stroke-width: 1.9; stroke-linecap: round; stroke-linejoin: round; }
+    blockquote.frase {
+      border-left: 3px solid var(--cor-principal); padding: 4px 0 4px 18px; margin-top: 8px;
+      font-family: 'Cormorant Garamond', Georgia, serif; font-style: italic; font-weight: 600;
+      font-size: 1.32rem; line-height: 1.35; color: var(--cor-forte);
+    }
+
+    /* ============ AGENDA (CTA) ============ */
+    .agenda { background: linear-gradient(180deg, var(--cor-forte), var(--cor-escuro)); color: #fff; overflow: hidden; }
+    .agenda::before {
+      content: ""; position: absolute; width: 520px; height: 520px; right: -220px; top: -220px; border-radius: 50%;
+      background: radial-gradient(circle, rgba(207,163,171,.28), transparent 65%);
+    }
+    .agenda .wrap { position: relative; }
+    .agenda .tag { color: var(--cor-claro); }
+    .agenda .titulo { color: #fff; }
+    .agenda .lead { color: rgba(255,255,255,.84); }
+    .garantias { list-style: none; display: grid; gap: 10px; margin: 26px auto 0; max-width: 520px; text-align: left; }
+    .garantias li {
+      display: flex; gap: 12px; align-items: center; padding: 13px 16px; border-radius: 14px;
+      background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.12); font-size: .98rem;
+    }
+    .garantias svg { width: 22px; height: 22px; flex: none; stroke: var(--cor-claro); fill: none; stroke-width: 1.9; stroke-linecap: round; stroke-linejoin: round; }
+    .agenda .micro { color: rgba(255,255,255,.75); }
+    .agenda .micro svg { stroke: var(--cor-claro); }
+
+    /* ============ FAQ (transitions.dev: accordion) ============ */
+    .faq { background: var(--creme); }
+    .faq-lista { max-width: 760px; margin: 28px auto 0; display: grid; gap: 10px; }
+    .t-acc { background: var(--branco); border-radius: 14px; border: 1px solid var(--creme-escuro); }
+    .t-acc-head {
+      width: 100%; display: flex; align-items: center; justify-content: space-between; gap: 14px;
+      padding: 18px 18px; text-align: left; font-family: 'Outfit', sans-serif; font-weight: 600;
+      font-size: 1.04rem; color: var(--cor-forte); line-height: 1.3; min-height: 56px;
+    }
+    .t-acc-chevron {
+      flex: none; width: 30px; height: 30px; border-radius: 50%; display: inline-grid; place-items: center;
+      background: var(--cor-bg); transform: scaleY(1); transition: transform var(--acc-chevron) var(--ease);
+    }
+    .t-acc-chevron svg { width: 16px; height: 16px; }
+    .t-acc-chevron path { fill: none; stroke: var(--cor-forte); stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; vector-effect: non-scaling-stroke; }
+    .t-acc[data-open="true"] .t-acc-chevron { transform: scaleY(-1); }
+    .t-acc-panel { display: grid; grid-template-rows: 0fr; transition: grid-template-rows var(--acc-collapse) var(--ease); }
+    .t-acc[data-open="true"] .t-acc-panel { grid-template-rows: 1fr; transition: grid-template-rows var(--acc-expand) var(--ease); }
+    .t-acc-panel-inner { overflow: hidden; opacity: 0; filter: blur(2px); transition: opacity var(--acc-collapse) var(--ease), filter var(--acc-collapse) var(--ease); }
+    .t-acc[data-open="true"] .t-acc-panel-inner { opacity: 1; filter: blur(0); transition: opacity var(--acc-expand) var(--ease), filter var(--acc-expand) var(--ease); }
+    .t-acc-panel-inner p { padding: 0 18px 18px; color: var(--texto-medio); }
+
+    /* ============ RODAPÉ ============ */
+    .rodape { background: var(--creme-suave); padding: 36px 0 100px; text-align: center; font-size: .88rem; color: var(--texto-suave); }
+    .rodape .marca { justify-content: center; margin-bottom: 14px; }
+    .rodape a { text-decoration: none; color: var(--cor-forte); font-weight: 600; }
+    .rodape p + p { margin-top: 4px; }
+
+    /* ============ BOTÃO FLUTUANTE DO WHATSAPP ============ */
+    .flutuante {
+      position: fixed; z-index: 40; right: 18px; bottom: calc(18px + env(safe-area-inset-bottom));
+      width: 62px; height: 62px; border-radius: 50%; display: grid; place-items: center;
+      background: #25D366; box-shadow: 0 10px 28px -6px rgba(18,140,70,.55), 0 2px 6px rgba(0,0,0,.12);
+      transform: scale(0); opacity: 0; transition: transform .4s var(--ease), opacity .3s var(--ease);
+      -webkit-tap-highlight-color: transparent;
+    }
+    .flutuante svg { width: 34px; height: 34px; fill: #fff; }
+    .flutuante.visivel { transform: scale(1); opacity: 1; }
+    .flutuante:active { transform: scale(.94); }
+    .flutuante::after { /* anel que pulsa de leve */
+      content: ""; position: absolute; inset: 0; border-radius: 50%; border: 2px solid #25D366; opacity: 0;
+    }
+    @media (prefers-reduced-motion: no-preference) {
+      .flutuante.visivel::after { animation: pulso 2.6s ease-out 1s infinite; }
+      @keyframes pulso { 0% { transform: scale(1); opacity: .7; } 80%, 100% { transform: scale(1.45); opacity: 0; } }
+    }
+
+    /* Aviso de cookies do CRM (quando o lp.js estiver ligado): acima do botão flutuante */
+    body:has(.flutuante.visivel) #vertice-aviso-cookies { bottom: 96px !important; }
+
+    :focus-visible { outline: 3px solid rgba(142,74,90,.55); outline-offset: 2px; }
+
+    /* ============ CELULAR: todo o texto centralizado ============ */
+    @media (max-width: 699px) {
+      .sec, .maternidades { text-align: center; }
+      .tag { justify-content: center; }
+      .tag::after { content: ""; width: 22px; height: 1.5px; background: currentColor; }
+      .lead, .cena .txt { margin-left: auto; margin-right: auto; }
+      .duvidas { justify-content: center; }
+      .duvidas span, .duvidas span:nth-child(even) { border-radius: 18px; }
+      .mat-lista li { flex-direction: column; justify-content: center; text-align: center; gap: 6px; }
+      .relogio { flex-direction: column; gap: 8px; }
+      /* trilha das 2 horas: número em cima e a linha passando pelo meio, entre um passo e outro */
+      .trilha { padding-left: 0; }
+      .trilha::before, .trilha::after { left: 50%; margin-left: -1px; }
+      .trilha li { z-index: 1; background: var(--branco); padding: 46px 0 0; margin-bottom: 30px; }
+      .trilha li:last-child { margin-bottom: 0; }
+      .trilha .pt { left: 50%; margin-left: -18px; }
+      .chips { justify-content: center; }
+      .etapa h3 { justify-content: center; }
+      .checklist li { display: block; }
+      .checklist .t-check { display: inline-grid; vertical-align: -5px; margin-right: 8px; }
+      .passos-video li { flex-direction: column; align-items: center; gap: 2px; }
+      .abas { justify-content: center; flex-wrap: wrap; overflow: visible; margin-left: 0; margin-right: 0; padding: 0; }
+      .nav-car { flex-direction: column; justify-content: center; gap: 10px; }
+      .dp-card .fonte { justify-content: center; }
+      .credenciais li { flex-direction: column; align-items: center; gap: 4px; }
+      blockquote.frase { border-left: 0; padding: 0; }
+      .garantias li { flex-direction: column; justify-content: center; text-align: center; gap: 6px; }
+      .t-acc-head { text-align: center; }
+      .t-acc-head::before { content: ""; width: 30px; flex: none; }
+      .prova figcaption { justify-content: center; }
+    }
+
+    /* ============ TELAS MAIORES ============ */
+    @media (min-width: 700px) {
+      :root { --gutter: 32px; }
+      .sec { padding: 96px 0; }
+      .onde { grid-template-columns: 1.35fr 1fr; align-items: stretch; }
+      .onde-casa { display: flex; flex-direction: column; justify-content: center; }
+      .etapas { grid-template-columns: 1fr 1fr; }
+      .etapa-destaque { grid-row: span 2; }
+      .ad-slide, .dp-slide { width: 340px; }
+    }
+    @media (min-width: 960px) {
+      .hero { display: grid; grid-template-columns: 1.08fr .92fr; align-items: center; gap: 48px; padding-top: 50px; padding-bottom: 60px; text-align: left; }
+      .hero .sub { margin-left: 0; font-size: 1.1rem; }
+      .foto-arco { flex: none; height: 520px; max-height: none; width: 100%; margin-top: 40px; }
+      .hero-cta { margin-top: -34px; max-width: 420px; }
+      .dh-grid { display: grid; grid-template-columns: .85fr 1.15fr; gap: 64px; align-items: start; }
+      .duas-horas .fixo { position: sticky; top: 40px; }
+      .video-grid { grid-template-columns: 1fr 1fr; grid-template-areas: "texto video" "passos video"; column-gap: 64px; row-gap: 22px; align-items: end; }
+      .vg-passos { align-self: start; }
+      .sobre-grid { grid-template-columns: .9fr 1.1fr; gap: 64px; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation: none !important; transition: none !important; }
+      .rv { opacity: 1; transform: none; }
+      html { scroll-behavior: auto; }
+    }
+  </style>
+</head>
+<body>
+  <!-- Google Tag Manager (noscript) -->
+  <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-W8N43S2W" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+
+  <!-- Ícones (traço no estilo Lucide; WhatsApp = ícone oficial do Simple Icons) -->
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <defs>
+      <symbol id="i-wpp" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></symbol>
+      <symbol id="i-relogio" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></symbol>
+      <symbol id="i-casa" viewBox="0 0 24 24"><path d="M3 10.5 12 3l9 7.5"/><path d="M5 9.5V20h14V9.5"/><path d="M10 20v-5h4v5"/></symbol>
+      <symbol id="i-hospital" viewBox="0 0 24 24"><path d="M4 21V5a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v16"/><path d="M2 21h20"/><path d="M12 7v6M9 10h6"/><path d="M10 21v-3h4v3"/></symbol>
+      <symbol id="i-video" viewBox="0 0 24 24"><rect x="3" y="5" width="13" height="14" rx="2"/><path d="m16 10 5-3v10l-5-3"/></symbol>
+      <symbol id="i-chat" viewBox="0 0 24 24"><path d="M21 12a8 8 0 0 1-11.6 7.1L4 20.5l1.4-4.9A8 8 0 1 1 21 12Z"/></symbol>
+      <symbol id="i-escudo" viewBox="0 0 24 24"><path d="M12 3 4.5 6v5.5c0 4.6 3.2 8.4 7.5 9.5 4.3-1.1 7.5-4.9 7.5-9.5V6L12 3Z"/><path d="m9 12 2 2 4-4"/></symbol>
+      <symbol id="i-capelo" viewBox="0 0 24 24"><path d="M2 9.5 12 5l10 4.5-10 4.5L2 9.5Z"/><path d="M6 11.5V16c0 1.5 2.7 3 6 3s6-1.5 6-3v-4.5"/></symbol>
+      <symbol id="i-coracao" viewBox="0 0 24 24"><path d="M12 20s-7.5-4.4-7.5-10A4.5 4.5 0 0 1 12 7a4.5 4.5 0 0 1 7.5 3c0 5.6-7.5 10-7.5 10Z"/></symbol>
+      <symbol id="i-calendario" viewBox="0 0 24 24"><rect x="3.5" y="5" width="17" height="15.5" rx="2"/><path d="M3.5 10h17M8 3v4M16 3v4"/></symbol>
+      <symbol id="i-cartao" viewBox="0 0 24 24"><rect x="2.5" y="5.5" width="19" height="13" rx="2"/><path d="M2.5 10h19M6.5 15h4"/></symbol>
+      <symbol id="i-pin" viewBox="0 0 24 24"><path d="M12 21s-7-6.2-7-11.5a7 7 0 0 1 14 0C19 14.8 12 21 12 21Z"/><circle cx="12" cy="9.5" r="2.5"/></symbol>
+      <symbol id="i-direita" viewBox="0 0 24 24"><path d="m9 6 6 6-6 6"/></symbol>
+      <symbol id="i-esquerda" viewBox="0 0 24 24"><path d="m15 6-6 6 6 6"/></symbol>
+      <symbol id="i-play" viewBox="0 0 24 24"><path d="M7 4.5v15l13-7.5-13-7.5Z"/></symbol>
+      <symbol id="i-google" viewBox="0 0 24 24"><path fill="#4285F4" d="M23.5 12.3c0-.8-.1-1.6-.2-2.3H12v4.5h6.5a5.6 5.6 0 0 1-2.4 3.6v3h3.9c2.3-2.1 3.5-5.2 3.5-8.8Z"/><path fill="#34A853" d="M12 24c3.2 0 6-1.1 8-2.9l-3.9-3c-1.1.7-2.5 1.2-4.1 1.2-3.1 0-5.8-2.1-6.7-5H1.3v3.1A12 12 0 0 0 12 24Z"/><path fill="#FBBC05" d="M5.3 14.3a7.2 7.2 0 0 1 0-4.6V6.6H1.3a12 12 0 0 0 0 10.8l4-3.1Z"/><path fill="#EA4335" d="M12 4.8c1.8 0 3.3.6 4.6 1.8l3.4-3.4A12 12 0 0 0 1.3 6.6l4 3.1c.9-2.9 3.6-4.9 6.7-4.9Z"/></symbol>
+    </defs>
+  </svg>
+
+  <!-- ===================================================== TOPO -->
+  <header class="topo">
+    <div class="wrap hero">
+        <div class="hero-texto">
+          <h1 class="entra d1">Fisioterapia pós-parto <span class="serif">na maternidade e na sua casa</span></h1>
+          <p class="sub entra d2">
+            Logo após o parto, eu fico <strong>em média 2 horas com você</strong>. Depois,
+            <strong>vou até a sua casa</strong> para continuar o tratamento.
+          </p>
+        </div>
+
+        <div class="hero-visual entra d3">
+          <div class="foto-arco">
+            <img src="img/lp/dra-liliane-recorte.webp" alt="Dra. Liliane Araújo, fisioterapeuta, de jaleco" width="640" height="1130" fetchpriority="high" />
+          </div>
+          <div class="hero-cta" id="cta-topo">
+            <a class="btn-wpp js-whats" target="_blank" rel="noopener" data-origem="Topo" data-jornada-clique="Topo: quero esse atendimento"
+               href="https://wa.me/5583999254499?text=Ol%C3%A1%2C%20Dra.%20Liliane!%20Vi%20a%20p%C3%A1gina%20do%20atendimento%20p%C3%B3s-parto%20e%20quero%20saber%20como%20funciona.">
+              <svg><use href="#i-wpp"/></svg>Quero esse atendimento
+            </a>
+            <p class="micro"><svg><use href="#i-chat"/></svg>Você fala direto com a Dra. Liliane</p>
+          </div>
+        </div>
+    </div>
+  </header>
+
+  <!-- ===================================================== MATERNIDADES -->
+  <section class="maternidades" aria-label="Onde eu atendo">
+    <div class="wrap">
+      <p class="rot">Onde eu atendo em João Pessoa</p>
+      <div class="onde">
+        <div class="onde-bloco">
+          <h2 class="onde-tit"><svg><use href="#i-hospital"/></svg>Na maternidade</h2>
+          <ul class="mat-lista">
+            <li>Hospital Nossa Senhora das Neves</li>
+            <li>Clinepa</li>
+            <li>Hapvida</li>
+            <li>Unimed</li>
+          </ul>
+          <p class="obs">Também atendo pacientes de maternidades públicas.</p>
+        </div>
+        <div class="onde-bloco onde-casa">
+          <h2 class="onde-tit"><svg><use href="#i-casa"/></svg>Na sua casa</h2>
+          <p>Depois do parto, <strong>eu vou até o seu domicílio</strong> para continuar o tratamento. Você não precisa sair com o recém-nascido.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================================================== CENA -->
+  <section class="sec cena">
+    <div class="wrap">
+      <div class="rv">
+        <span class="tag">Depois do parto</span>
+        <h2 class="titulo">O bebê nasce. E as dúvidas começam ali mesmo, no quarto.</h2>
+      </div>
+      <div class="duvidas rv" aria-label="Dúvidas comuns depois do parto">
+        <span>Posso levantar sozinha?</span>
+        <span>Como sento pra amamentar sem doer?</span>
+        <span>Esse inchaço é normal?</span>
+        <span>E a cicatriz, como cuido?</span>
+        <span>Quando posso fazer exercício?</span>
+      </div>
+      <p class="txt rv">
+        Na correria da maternidade, quase nunca tem alguém com tempo pra sentar do seu lado e explicar com calma.
+        E muito atendimento de pós-parto acaba sendo assim também: chega, aplica a fita e vai embora.
+      </p>
+      <div class="virada rv">
+        <p class="serif">O meu não. Eu fico com você.</p>
+        <p>Faço, explico e te ensino, até você se sentir segura pra cuidar de você nos próximos dias.</p>
+      </div>
+      <figure class="prova rv">
+        <span class="estrelas" aria-label="5 estrelas">★★★★★</span>
+        <blockquote>“Me tirou muitas dúvidas e esclareceu muito sobre o processo do parto e pós-parto.”</blockquote>
+        <figcaption><svg><use href="#i-google"/></svg>Paciente da Dra. Liliane, avaliação no Google</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <!-- ===================================================== 2 HORAS -->
+  <section class="sec duas-horas" id="na-maternidade">
+    <div class="wrap dh-grid">
+      <div class="fixo rv">
+        <span class="tag">Na maternidade</span>
+        <h2 class="titulo">O que eu faço nessas 2 horas com você</h2>
+        <p class="lead">Não é uma visita rápida. É um atendimento feito com calma, do jeito que esse momento pede, nas primeiras 24 horas depois do parto.</p>
+        <div class="relogio">
+          <div class="num">2<small>h</small></div>
+          <p><b>Em média, só pra você.</b><br />Uma paciente por vez, sem pressa pra ir pra próxima.</p>
+        </div>
+      </div>
+
+      <ol class="trilha" id="trilha">
+        <li class="rv">
+          <span class="pt">1</span>
+          <h3>Eu te avalio com calma</h3>
+          <p>Seu corpo, a cicatriz da cesárea ou do períneo, o inchaço e como você está se movimentando. Tudo o que eu faço depois parte dessa avaliação.</p>
+        </li>
+        <li class="rv">
+          <span class="pt">2</span>
+          <h3>Começo o tratamento ali mesmo</h3>
+          <p>Taping contensivo pra dar firmeza ao abdômen e reduzir o inchaço, laser na cicatriz e os primeiros exercícios, que ajudam a prevenir trombose e a desinchar.</p>
+          <div class="chips"><span>Taping</span><span>Laser</span><span>Exercícios</span></div>
+        </li>
+        <li class="rv">
+          <span class="pt">3</span>
+          <h3>Te ensino a se movimentar</h3>
+          <p>Como levantar da cama, sentar pra amamentar, caminhar e segurar o seu bebê com mais conforto e segurança.</p>
+        </li>
+        <li class="rv">
+          <span class="pt">4</span>
+          <h3>Respondo todas as suas dúvidas</h3>
+          <p>O que é normal, o que não é e quando me chamar. Pode perguntar tudo: eu estou ali pra isso.</p>
+        </li>
+        <li class="rv">
+          <span class="pt">5</span>
+          <h3>Deixo tudo por escrito</h3>
+          <p>Você recebe um guia de orientações e exercícios em PDF. E eu continuo no seu WhatsApp.</p>
+        </li>
+      </ol>
+    </div>
+    <div class="wrap">
+      <div class="cta-bloco rv">
+        <a class="btn-wpp js-whats" target="_blank" rel="noopener" data-origem="Duas horas" data-jornada-clique="Duas horas: quero na minha maternidade"
+           href="https://wa.me/5583999254499?text=Ol%C3%A1%2C%20Dra.%20Liliane!%20Vi%20a%20p%C3%A1gina%20do%20atendimento%20p%C3%B3s-parto%20e%20quero%20saber%20como%20funciona.">
+          <svg><use href="#i-wpp"/></svg>Quero você na minha maternidade
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================================================== JORNADA -->
+  <section class="sec jornada" id="como-funciona">
+    <div class="wrap">
+      <div class="centro rv">
+        <span class="tag">Do pré-parto até a sua casa</span>
+        <h2 class="titulo">Você não fica sozinha em nenhuma etapa</h2>
+        <p class="lead">O cuidado começa antes do bebê nascer e continua depois que você vai pra casa.</p>
+      </div>
+
+      <div class="etapas">
+        <article class="etapa etapa-destaque rv">
+          <span class="quando"><b>1</b>Ainda na gravidez</span>
+          <h3><svg><use href="#i-video"/></svg>Consulta online, bem explicada</h3>
+          <p>A gente conversa antes do parto, você de onde estiver. Eu te explico o que fazer até o grande dia e o que esperar do seu corpo depois. Você chega na maternidade preparada, e não assustada.</p>
+          <div class="checklist" id="checklist">
+            <p class="cab">O que a gente vê nessa consulta:</p>
+            <ul>
+              <li><span class="t-check" aria-hidden="true" aria-checked="false"><svg viewBox="0 0 10.1668 10.1668"><path d="M1 5.52L3.92 9.17L9.17 1"/></svg></span>O que levar para a maternidade</li>
+              <li><span class="t-check" aria-hidden="true" aria-checked="false"><svg viewBox="0 0 10.1668 10.1668"><path d="M1 5.52L3.92 9.17L9.17 1"/></svg></span>Qual calcinha pós-parto (órtese) é a ideal pra você</li>
+              <li><span class="t-check" aria-hidden="true" aria-checked="false"><svg viewBox="0 0 10.1668 10.1668"><path d="M1 5.52L3.92 9.17L9.17 1"/></svg></span>Meias de compressão: quando e como usar</li>
+              <li><span class="t-check" aria-hidden="true" aria-checked="false"><svg viewBox="0 0 10.1668 10.1668"><path d="M1 5.52L3.92 9.17L9.17 1"/></svg></span>Itens que facilitam o dia a dia em casa</li>
+              <li><span class="t-check" aria-hidden="true" aria-checked="false"><svg viewBox="0 0 10.1668 10.1668"><path d="M1 5.52L3.92 9.17L9.17 1"/></svg></span>O que acontece com o seu corpo nos primeiros dias</li>
+              <li><span class="t-check" aria-hidden="true" aria-checked="false"><svg viewBox="0 0 10.1668 10.1668"><path d="M1 5.52L3.92 9.17L9.17 1"/></svg></span>Todas as dúvidas que você tiver</li>
+            </ul>
+          </div>
+        </article>
+
+        <article class="etapa rv">
+          <span class="quando"><b>2</b>Primeiras 24 horas</span>
+          <h3><svg><use href="#i-hospital"/></svg>Atendimento na maternidade</h3>
+          <p>Eu vou até você e fico, em média, 2 horas. Avaliação, taping, laser, exercícios e todas as orientações, com calma.</p>
+        </article>
+
+        <article class="etapa rv">
+          <span class="quando"><b>3</b>Nos retornos</span>
+          <h3><svg><use href="#i-casa"/></svg>Atendimento domiciliar, na sua casa</h3>
+          <p>Você não precisa sair com um recém-nascido: eu vou até você. Retiro e troco o taping, reavalio, faço o laser e avanço os exercícios. Os retornos são no 7º e no 15º dia, conforme o acompanhamento que você escolher.</p>
+        </article>
+
+        <article class="etapa rv">
+          <span class="quando"><b>4</b>Do início ao fim</span>
+          <h3><svg><use href="#i-chat"/></svg>Suporte no WhatsApp</h3>
+          <p>Bateu uma dúvida? Me chama. Eu respondo e te mando as orientações e os exercícios que você precisar.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================================================== VÍDEO -->
+  <section class="sec video-sec" id="video">
+    <div class="wrap video-grid">
+      <div class="vg-texto rv">
+        <span class="tag">Veja na prática</span>
+        <h2 class="titulo">Um retorno em casa, do começo ao fim</h2>
+        <p class="lead">Sete dias depois do parto. Repare em como o abdômen desinchou desde a maternidade.</p>
+      </div>
+      <ol class="passos-video vg-passos rv">
+        <li><b>01</b>Retiro o taping que coloquei na maternidade, com cuidado com a pele</li>
+        <li><b>02</b>Preparo a pele e aplico o taping novo, de acordo com a avaliação</li>
+        <li><b>03</b>Laser na cicatriz da cesárea</li>
+        <li><b>04</b>Exercícios orientados, que ela continua fazendo em casa</li>
+      </ol>
+      <div class="vg-video rv">
+        <div class="moldura" id="moldura">
+          <video id="video-atendimento" playsinline controls preload="none" poster="video/atendimento-em-casa-capa.webp" width="540" height="960">
+            <source src="video/atendimento-em-casa.mp4" type="video/mp4" />
+          </video>
+          <button class="play" id="play" aria-label="Assistir ao vídeo do atendimento">
+            <span class="bola"><svg><use href="#i-play"/></svg></span>
+            <span class="rot">Toque para assistir · 1:45 · com som</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================================================== ANTES E DEPOIS -->
+  <section class="sec resultados" id="resultados">
+    <div class="wrap">
+      <div class="rv">
+        <span class="tag">Resultados</span>
+        <h2 class="titulo">Antes e depois de pacientes reais</h2>
+        <p class="lead">Mães que eu acompanhei aqui em João Pessoa. Arraste para o lado para ver mais.</p>
+      </div>
+
+      <div class="abas rv" role="tablist" aria-label="Tipo de resultado">
+        <button class="aba" role="tab" aria-selected="true" data-ir="0">Abdômen</button>
+        <button class="aba" role="tab" aria-selected="false" data-ir="10">Cicatriz</button>
+        <button class="aba" role="tab" aria-selected="false" data-ir="14">Inchaço</button>
+      </div>
+
+      <div class="carrossel-wrap rv">
+        <div class="swiper" id="car-resultados">
+          <div class="swiper-wrapper">
+            <div class="swiper-slide ad-slide"><div class="ad-card"><img src="img/lp/taping-01.webp" alt="Abdômen antes e depois do taping pós-parto" width="820" height="1025" loading="lazy" /></div></div>
+            <div class="swiper-slide ad-slide"><div class="ad-card"><img src="img/lp/taping-02.webp" alt="Abdômen antes e depois do taping pós-parto" width="820" height="1025" loading="lazy" /></div></div>
+            <div class="swiper-slide ad-slide"><div class="ad-card"><img src="img/lp/taping-03.webp" alt="Abdômen antes e depois do taping pós-parto" width="820" height="1025" loading="lazy" /></div></div>
+            <div class="swiper-slide ad-slide"><div class="ad-card"><img src="img/lp/taping-04.webp" alt="Abdômen antes e depois do taping pós-parto" width="820" height="1025" loading="lazy" /></div></div>
+            <div class="swiper-slide ad-slide"><div class="ad-card"><img src="img/lp/taping-05.webp" alt="Abdômen antes e depois do taping pós-parto" width="820" height="1025" loading="lazy" /></div></div>
+            <div class="swiper-slide ad-slide"><div class="ad-card"><img src="img/lp/taping-06.webp" alt="Abdômen antes e depois do taping pós-parto" width="820" height="1025" loading="lazy" /></div></div>
+            <div class="swiper-slide ad-slide"><div class="ad-card"><img src="img/lp/taping-07.webp" alt="Abdômen antes e depois do taping pós-parto" width="820" height="1025" loading="lazy" /></div></div>
+            <div class="swiper-slide ad-slide"><div class="ad-card"><img src="img/lp/taping-08.webp" alt="Abdômen antes e depois do taping pós-parto" width="820" height="1025" loading="lazy" /></div></div>
+            <div class="swiper-slide ad-slide"><div class="ad-card"><img src="img/lp/taping-09.webp" alt="Abdômen antes e depois do taping pós-parto" width="820" height="1025" loading="lazy" /></div></div>
+            <div class="swiper-slide ad-slide"><div class="ad-card"><img src="img/lp/taping-10.webp" alt="Abdômen antes e depois do taping pós-parto" width="820" height="1025" loading="lazy" /></div></div>
+
+            <div class="swiper-slide ad-slide"><div class="ad-card"><img src="img/lp/cicatriz-01.webp" alt="Cicatriz de cesárea antes e depois do laser" width="820" height="1025" loading="lazy" /></div></div>
+            <div class="swiper-slide ad-slide"><div class="ad-card"><img src="img/lp/cicatriz-02.webp" alt="Cicatriz de cesárea antes e depois do laser" width="820" height="1025" loading="lazy" /></div></div>
+            <div class="swiper-slide ad-slide"><div class="ad-card"><div class="ad-par">
+              <figure><img src="img/lp/laser-11-antes.webp" alt="Cicatriz antes do laser" width="900" height="582" loading="lazy" /><figcaption>Antes</figcaption></figure>
+              <figure><img src="img/lp/laser-11-depois.webp" alt="Cicatriz depois do laser" width="900" height="533" loading="lazy" /><figcaption>Depois</figcaption></figure>
+            </div></div></div>
+            <div class="swiper-slide ad-slide"><div class="ad-card"><div class="ad-par">
+              <figure><img src="img/lp/laser-12-antes.webp" alt="Cicatriz antes do laser" width="900" height="417" loading="lazy" /><figcaption>Antes</figcaption></figure>
+              <figure><img src="img/lp/laser-12-depois.webp" alt="Cicatriz depois do laser" width="900" height="356" loading="lazy" /><figcaption>Depois</figcaption></figure>
+            </div></div></div>
+
+            <div class="swiper-slide ad-slide"><div class="ad-card"><div class="ad-par contem">
+              <figure><img src="img/lp/drenagem-13-antes.webp" alt="Pé inchado antes da drenagem linfática" width="640" height="640" loading="lazy" /><figcaption>Antes</figcaption></figure>
+              <figure><img src="img/lp/drenagem-13-depois.webp" alt="Pé depois da drenagem linfática" width="640" height="640" loading="lazy" /><figcaption>Depois</figcaption></figure>
+            </div></div></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="nav-car">
+        <span class="dica" id="contador-res" aria-live="polite">1 de 15</span>
+        <div class="botoes">
+          <button class="ant-res" aria-label="Anterior"><svg><use href="#i-esquerda"/></svg></button>
+          <button class="prox-res" aria-label="Próximo"><svg><use href="#i-direita"/></svg></button>
+        </div>
+      </div>
+      <p class="aviso-res">Cada corpo responde de um jeito. O seu acompanhamento é montado a partir da sua avaliação.</p>
+    </div>
+  </section>
+
+  <!-- ===================================================== DEPOIMENTOS -->
+  <section class="sec depo" id="depoimentos">
+    <div class="wrap">
+      <div class="rv">
+        <span class="tag">O que elas dizem</span>
+        <h2 class="titulo">Não precisa acreditar só em mim</h2>
+        <p class="lead">Mensagens que recebi das minhas pacientes no WhatsApp e avaliações no Google.</p>
+      </div>
+
+      <div class="carrossel-wrap rv" style="margin-top:26px">
+        <div class="swiper" id="car-depo">
+          <div class="swiper-wrapper">
+            <div class="swiper-slide dp-slide"><div class="dp-card"><img src="img/lp/depoimento-01.webp" alt="Depoimento de paciente no WhatsApp" width="720" height="697" loading="lazy" /><span class="fonte"><svg style="fill:#25D366"><use href="#i-wpp"/></svg>Depoimento no WhatsApp</span></div></div>
+            <div class="swiper-slide dp-slide"><div class="dp-card"><img src="img/lp/depoimento-02.webp" alt="Depoimento de paciente no WhatsApp" width="720" height="692" loading="lazy" /><span class="fonte"><svg style="fill:#25D366"><use href="#i-wpp"/></svg>Depoimento no WhatsApp</span></div></div>
+            <div class="swiper-slide dp-slide"><div class="dp-card"><img src="img/lp/depoimento-15.webp" alt="Avaliação de paciente no Google" width="720" height="589" loading="lazy" /><span class="fonte"><svg><use href="#i-google"/></svg>Avaliação no Google <span class="estrelas" aria-label="5 estrelas">★★★★★</span></span></div></div>
+            <div class="swiper-slide dp-slide"><div class="dp-card"><img src="img/lp/depoimento-04.webp" alt="Depoimento de paciente no WhatsApp" width="720" height="546" loading="lazy" /><span class="fonte"><svg style="fill:#25D366"><use href="#i-wpp"/></svg>Depoimento no WhatsApp</span></div></div>
+            <div class="swiper-slide dp-slide"><div class="dp-card"><img src="img/lp/depoimento-05.webp" alt="Depoimento de paciente no WhatsApp" width="720" height="536" loading="lazy" /><span class="fonte"><svg style="fill:#25D366"><use href="#i-wpp"/></svg>Depoimento no WhatsApp</span></div></div>
+            <div class="swiper-slide dp-slide"><div class="dp-card"><img src="img/lp/depoimento-11.webp" alt="Depoimento de paciente no WhatsApp" width="720" height="866" loading="lazy" /><span class="fonte"><svg style="fill:#25D366"><use href="#i-wpp"/></svg>Depoimento no WhatsApp</span></div></div>
+            <div class="swiper-slide dp-slide"><div class="dp-card"><img src="img/lp/depoimento-16.webp" alt="Avaliação de paciente no Google" width="720" height="339" loading="lazy" /><span class="fonte"><svg><use href="#i-google"/></svg>Avaliação no Google <span class="estrelas" aria-label="5 estrelas">★★★★★</span></span></div></div>
+            <div class="swiper-slide dp-slide"><div class="dp-card"><img src="img/lp/depoimento-03.webp" alt="Depoimento de paciente no WhatsApp" width="720" height="311" loading="lazy" /><img src="img/lp/depoimento-06.webp" alt="Depoimento de paciente no WhatsApp" width="720" height="419" loading="lazy" /><span class="fonte"><svg style="fill:#25D366"><use href="#i-wpp"/></svg>Depoimentos no WhatsApp</span></div></div>
+            <div class="swiper-slide dp-slide"><div class="dp-card"><img src="img/lp/depoimento-12.webp" alt="Depoimento de paciente no WhatsApp" width="720" height="970" loading="lazy" /><span class="fonte"><svg style="fill:#25D366"><use href="#i-wpp"/></svg>Depoimento no WhatsApp</span></div></div>
+            <div class="swiper-slide dp-slide"><div class="dp-card"><img src="img/lp/depoimento-07.webp" alt="Depoimento de paciente no WhatsApp" width="720" height="194" loading="lazy" /><img src="img/lp/depoimento-08.webp" alt="Depoimento de paciente no WhatsApp" width="720" height="292" loading="lazy" /><span class="fonte"><svg style="fill:#25D366"><use href="#i-wpp"/></svg>Depoimentos no WhatsApp</span></div></div>
+            <div class="swiper-slide dp-slide"><div class="dp-card"><img src="img/lp/depoimento-17.webp" alt="Avaliação de paciente no Google" width="720" height="484" loading="lazy" /><span class="fonte"><svg><use href="#i-google"/></svg>Avaliação no Google <span class="estrelas" aria-label="5 estrelas">★★★★★</span></span></div></div>
+            <div class="swiper-slide dp-slide"><div class="dp-card"><img src="img/lp/depoimento-09.webp" alt="Depoimento de paciente no WhatsApp" width="720" height="316" loading="lazy" /><img src="img/lp/depoimento-10.webp" alt="Depoimento de paciente no WhatsApp" width="591" height="275" loading="lazy" /><span class="fonte"><svg style="fill:#25D366"><use href="#i-wpp"/></svg>Depoimentos no WhatsApp</span></div></div>
+            <div class="swiper-slide dp-slide"><div class="dp-card"><img src="img/lp/depoimento-13.webp" alt="Depoimento de paciente no WhatsApp" width="720" height="411" loading="lazy" /><img src="img/lp/depoimento-14.webp" alt="Depoimento de paciente no WhatsApp" width="720" height="246" loading="lazy" /><span class="fonte"><svg style="fill:#25D366"><use href="#i-wpp"/></svg>Depoimentos no WhatsApp</span></div></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="nav-car">
+        <span class="dica" id="contador-depo" aria-live="polite">1 de 13</span>
+        <div class="botoes">
+          <button class="ant-depo" aria-label="Anterior"><svg><use href="#i-esquerda"/></svg></button>
+          <button class="prox-depo" aria-label="Próximo"><svg><use href="#i-direita"/></svg></button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================================================== QUEM SOU EU -->
+  <section class="sec sobre" id="sobre">
+    <div class="wrap sobre-grid">
+      <div class="sobre-foto rv">
+        <img src="img/lp/dra-liliane-estetoscopio.webp" alt="Dra. Liliane Araújo com estetoscópio" width="820" height="820" loading="lazy" />
+      </div>
+      <div class="rv">
+        <span class="tag">Quem vai cuidar de você</span>
+        <h2>Olá! Eu sou a Liliane.</h2>
+        <p>Escolhi cuidar de gestantes e de mães no pós-parto porque essa fase merece atenção de verdade, e não um atendimento corrido.</p>
+        <ul class="credenciais">
+          <li><svg><use href="#i-capelo"/></svg>Fisioterapeuta formada pela Universidade Federal da Paraíba (UFPB)</li>
+          <li><svg><use href="#i-capelo"/></svg>Pós-graduada em Fisioterapia Dermatofuncional e Obstétrica</li>
+          <li><svg><use href="#i-escudo"/></svg>Tape qualquer um aplica. Avaliar, tratar e acompanhar a sua recuperação é trabalho de fisioterapeuta.</li>
+        </ul>
+        <blockquote class="frase">“Sua recuperação acontece uma vez só por bebê. Eu quero estar ao seu lado nesse momento, com o preparo técnico e o cuidado que você merece.”</blockquote>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================================================== AGENDA / CTA -->
+  <section class="sec agenda" id="agenda">
+    <div class="wrap centro">
+      <div class="rv">
+        <span class="tag">Agenda</span>
+        <h2 class="titulo">Me conta quando o seu bebê vai nascer</h2>
+        <p class="lead">Como eu vou pessoalmente até cada paciente, as vagas de cada mês são limitadas. Por isso vale garantir a sua ainda na gravidez.</p>
+      </div>
+      <ul class="garantias rv">
+        <li><svg><use href="#i-calendario"/></svg>Reserva sem pagamento prévio</li>
+        <li><svg><use href="#i-cartao"/></svg>Pagamento só no dia do atendimento, à vista ou em até 3x sem juros no cartão</li>
+        <li><svg><use href="#i-pin"/></svg>Hospital Nossa Senhora das Neves, Clinepa, Hapvida e Unimed</li>
+        <li><svg><use href="#i-casa"/></svg>Retornos no seu domicílio: você não precisa sair de casa com o bebê</li>
+      </ul>
+      <div class="cta-bloco rv" id="cta-final">
+        <a class="btn-wpp js-whats" target="_blank" rel="noopener" data-origem="Agenda" data-jornada-clique="Agenda: garantir minha vaga"
+           href="https://wa.me/5583999254499?text=Ol%C3%A1%2C%20Dra.%20Liliane!%20Vi%20a%20p%C3%A1gina%20do%20atendimento%20p%C3%B3s-parto%20e%20quero%20saber%20como%20funciona.">
+          <svg><use href="#i-wpp"/></svg>Quero garantir a minha vaga
+        </a>
+        <p class="micro"><svg><use href="#i-chat"/></svg>Você fala direto com a Dra. Liliane</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================================================== FAQ -->
+  <section class="sec faq" id="duvidas">
+    <div class="wrap">
+      <div class="centro rv">
+        <span class="tag">Dúvidas comuns</span>
+        <h2 class="titulo">Antes de você me chamar</h2>
+      </div>
+      <div class="faq-lista">
+        <div class="t-acc rv" data-open="false">
+          <button class="t-acc-head" aria-expanded="false">Em quais maternidades você atende?<span class="t-acc-chevron"><svg viewBox="0 0 16 16"><path d="M4 6.5L8 10.5L12 6.5"/></svg></span></button>
+          <div class="t-acc-panel"><div class="t-acc-panel-inner"><p>Nas maternidades particulares de João Pessoa: Hospital Nossa Senhora das Neves, Clinepa, Hapvida e Unimed. Também atendo pacientes de maternidades públicas, sem problema nenhum. E depois do parto, os retornos são no seu domicílio.</p></div></div>
+        </div>
+        <div class="t-acc rv" data-open="false">
+          <button class="t-acc-head" aria-expanded="false">Quanto tempo dura o atendimento na maternidade?<span class="t-acc-chevron"><svg viewBox="0 0 16 16"><path d="M4 6.5L8 10.5L12 6.5"/></svg></span></button>
+          <div class="t-acc-panel"><div class="t-acc-panel-inner"><p>Em média, 2 horas. É o tempo de te avaliar, fazer o taping, o laser e os exercícios, te ensinar a se movimentar e responder todas as suas dúvidas com calma.</p></div></div>
+        </div>
+        <div class="t-acc rv" data-open="false">
+          <button class="t-acc-head" aria-expanded="false">Quando eu devo te chamar?<span class="t-acc-chevron"><svg viewBox="0 0 16 16"><path d="M4 6.5L8 10.5L12 6.5"/></svg></span></button>
+          <div class="t-acc-panel"><div class="t-acc-panel-inner"><p>Ainda na gravidez. A consulta online acontece antes do parto, pra você chegar na maternidade sabendo o que fazer. E como as vagas de cada mês são limitadas, quanto antes você me chamar, mais fácil garantir a sua.</p></div></div>
+        </div>
+        <div class="t-acc rv" data-open="false">
+          <button class="t-acc-head" aria-expanded="false">Vou precisar sair de casa com o bebê?<span class="t-acc-chevron"><svg viewBox="0 0 16 16"><path d="M4 6.5L8 10.5L12 6.5"/></svg></span></button>
+          <div class="t-acc-panel"><div class="t-acc-panel-inner"><p>Não. Eu vou até você na maternidade, nas primeiras 24 horas depois do parto. E nos retornos eu vou até a sua casa.</p></div></div>
+        </div>
+        <div class="t-acc rv" data-open="false">
+          <button class="t-acc-head" aria-expanded="false">Serve para parto normal e cesárea?<span class="t-acc-chevron"><svg viewBox="0 0 16 16"><path d="M4 6.5L8 10.5L12 6.5"/></svg></span></button>
+          <div class="t-acc-panel"><div class="t-acc-panel-inner"><p>Sim. Antes de qualquer técnica, eu avalio, e o que eu aplico é escolhido para o seu corpo e para o seu parto. O laser, por exemplo, atua na cicatriz da cesárea, nas lesões do períneo e nas fissuras do mamilo.</p></div></div>
+        </div>
+        <div class="t-acc rv" data-open="false">
+          <button class="t-acc-head" aria-expanded="false">Posso usar cinta no lugar do taping?<span class="t-acc-chevron"><svg viewBox="0 0 16 16"><path d="M4 6.5L8 10.5L12 6.5"/></svg></span></button>
+          <div class="t-acc-panel"><div class="t-acc-panel-inner"><p>O uso de cinta não é recomendado no pós-parto. O taping contensivo é a alternativa clínica mais adequada, e os resultados aparecem em poucos dias.</p></div></div>
+        </div>
+        <div class="t-acc rv" data-open="false">
+          <button class="t-acc-head" aria-expanded="false">Quanto custa?<span class="t-acc-chevron"><svg viewBox="0 0 16 16"><path d="M4 6.5L8 10.5L12 6.5"/></svg></span></button>
+          <div class="t-acc-panel"><div class="t-acc-panel-inner"><p>Depende do acompanhamento que você escolher: só a maternidade, ou a maternidade com os retornos em casa. Eu te passo os valores no WhatsApp, junto com as vagas para a data do seu parto. A reserva é sem pagamento prévio, e você paga só no dia do atendimento.</p></div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================================================== RODAPÉ -->
+  <footer class="rodape">
+    <div class="wrap">
+      <a class="marca" href="#" aria-label="Voltar ao topo">
+        <img src="Logo-cereja.png" alt="" width="38" height="38" loading="lazy" />
+        <div style="text-align:left"><b>Dra. Liliane Araújo</b><span>Fisioterapeuta · João Pessoa, PB</span></div>
+      </a>
+      <p><a class="js-whats" target="_blank" rel="noopener" href="https://wa.me/5583999254499?text=Ol%C3%A1%2C%20Dra.%20Liliane!%20Vi%20a%20p%C3%A1gina%20do%20atendimento%20p%C3%B3s-parto%20e%20quero%20saber%20como%20funciona." data-origem="Rodapé">(83) 9 9925-4499</a> · <a href="https://instagram.com/lilianearaujofisio_" target="_blank" rel="noopener">@lilianearaujofisio_</a></p>
+      <p>© 2026 Dra. Liliane Araújo · Fisioterapia na gestação e no pós-parto</p>
+    </div>
+  </footer>
+
+  <!-- ===================================================== BOTÃO FLUTUANTE DO WHATSAPP -->
+  <a class="flutuante js-whats" target="_blank" rel="noopener" id="flutuante" data-origem="Botão flutuante" data-jornada-clique="Botão flutuante do WhatsApp"
+     aria-label="Falar com a Dra. Liliane no WhatsApp" tabindex="-1"
+     href="https://wa.me/5583999254499?text=Ol%C3%A1%2C%20Dra.%20Liliane!%20Vi%20a%20p%C3%A1gina%20do%20atendimento%20p%C3%B3s-parto%20e%20quero%20saber%20como%20funciona.">
+    <svg><use href="#i-wpp"/></svg>
+  </a>
+
+  <script src="https://cdn.jsdelivr.net/npm/swiper@14.4.0/swiper-bundle.min.js" defer></script>
+  <script>
+  (function () {
+    window.dataLayer = window.dataLayer || [];
+    var reduz = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    /* ---------- Evento de conversão: botão de WhatsApp ----------
+       O GTM (GTM-W8N43S2W) escuta o evento "WhatsApp Click" e manda para o Pixel do Meta
+       (1157697825898887) o evento personalizado "Botão Whatsapp", junto com o Lead e a
+       conversão do Google Ads. Vai UMA vez por visita, no primeiro toque em qualquer botão
+       de WhatsApp da página (topo, meio, agenda, flutuante, rodapé), para não contar a mesma
+       pessoa duas vezes. Não chamar fbq aqui: o GTM já faz isso e contaria em dobro. */
+    var whatsContado = false;
+    function eventoWhats(origem) {
+      if (whatsContado) return;
+      whatsContado = true;
+      window.dataLayer.push({ event: 'WhatsApp Click', botao_whatsapp: origem });
+    }
+
+    /* ---------- Revelar ao rolar ---------- */
+    var rv = document.querySelectorAll('.rv');
+    if ('IntersectionObserver' in window && !reduz) {
+      var io = new IntersectionObserver(function (es) {
+        es.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add('on'); io.unobserve(e.target); } });
+      }, { rootMargin: '0px 0px -8% 0px', threshold: 0.08 });
+      rv.forEach(function (el) { io.observe(el); });
+    } else { rv.forEach(function (el) { el.classList.add('on'); }); }
+
+    /* ---------- Trilha das 2 horas: a linha enche conforme a rolagem ---------- */
+    var trilha = document.getElementById('trilha');
+    var itens = trilha.querySelectorAll('li');
+    var pedido = false;
+    function atualizaTrilha() {
+      pedido = false;
+      var r = trilha.getBoundingClientRect();
+      var meio = window.innerHeight * 0.6;
+      var prog = Math.min(1, Math.max(0, (meio - r.top) / r.height));
+      trilha.style.setProperty('--prog', prog.toFixed(3));
+      itens.forEach(function (li) {
+        var t = li.getBoundingClientRect().top + 18;
+        li.classList.toggle('passou', t < meio);
+      });
+    }
+    window.addEventListener('scroll', function () { if (!pedido) { pedido = true; requestAnimationFrame(atualizaTrilha); } }, { passive: true });
+    atualizaTrilha();
+
+    /* ---------- Checklist da consulta: marca um item de cada vez ---------- */
+    var checks = document.querySelectorAll('#checklist .t-check');
+    function marcar() { checks.forEach(function (c, i) { setTimeout(function () { c.setAttribute('aria-checked', 'true'); }, reduz ? 0 : 160 + i * 230); }); }
+    if ('IntersectionObserver' in window) {
+      var ioC = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { marcar(); ioC.disconnect(); } }, { threshold: 0.45 });
+      ioC.observe(document.getElementById('checklist'));
+    } else { marcar(); }
+
+    /* ---------- Vídeo ---------- */
+    var video = document.getElementById('video-atendimento');
+    var moldura = document.getElementById('moldura');
+    document.getElementById('play').addEventListener('click', function () {
+      moldura.classList.add('tocando');
+      var p = video.play(); if (p && p.catch) p.catch(function () {});
+      window.dataLayer.push({ event: 'Video Play', video: 'Retorno em casa' });
+    });
+    video.addEventListener('play', function () { moldura.classList.add('tocando'); });
+
+    /* ---------- FAQ (transitions.dev: accordion) ---------- */
+    document.querySelectorAll('.t-acc-head').forEach(function (b) {
+      b.addEventListener('click', function () {
+        var item = b.closest('.t-acc');
+        var abrir = item.getAttribute('data-open') !== 'true';
+        item.setAttribute('data-open', abrir ? 'true' : 'false');
+        b.setAttribute('aria-expanded', abrir ? 'true' : 'false');
+      });
+    });
+
+    /* ---------- Carrosséis (Swiper) ---------- */
+    function iniciaCarrosseis() {
+      if (!window.Swiper) return;
+      var abas = document.querySelectorAll('.aba');
+      var contRes = document.getElementById('contador-res');
+      var res = new Swiper('#car-resultados', {
+        slidesPerView: 'auto', spaceBetween: 14, grabCursor: true,
+        navigation: { prevEl: '.ant-res', nextEl: '.prox-res' },
+        on: { slideChange: marcaRes, reachEnd: marcaRes, fromEdge: marcaRes }
+      });
+      function marcaRes(s) {
+        var total = s.slides.length;
+        var i = s.isEnd ? total - 1 : s.activeIndex;
+        contRes.textContent = (i + 1) + ' de ' + total;
+        var grupo = i >= 14 ? 2 : (i >= 10 ? 1 : 0);
+        abas.forEach(function (a, k) { a.setAttribute('aria-selected', k === grupo ? 'true' : 'false'); });
+      }
+      abas.forEach(function (a) { a.addEventListener('click', function () { res.slideTo(+a.getAttribute('data-ir')); }); });
+      var contDepo = document.getElementById('contador-depo');
+      function marcaDepo(s) { var t = s.slides.length; contDepo.textContent = (s.isEnd ? t : s.activeIndex + 1) + ' de ' + t; }
+      new Swiper('#car-depo', {
+        slidesPerView: 'auto', spaceBetween: 14, grabCursor: true,
+        navigation: { prevEl: '.ant-depo', nextEl: '.prox-depo' },
+        on: { slideChange: marcaDepo, reachEnd: marcaDepo, fromEdge: marcaDepo }
+      });
+    }
+    if (window.Swiper) iniciaCarrosseis(); else window.addEventListener('load', iniciaCarrosseis);
+
+    /* ---------- Botão flutuante do WhatsApp: some quando um botão grande de WhatsApp está na tela ---------- */
+    var flutuante = document.getElementById('flutuante');
+    function mostraFlutuante(sim) {
+      flutuante.classList.toggle('visivel', sim);
+      flutuante.setAttribute('tabindex', sim ? '0' : '-1');
+    }
+    var grandes = document.querySelectorAll('#cta-topo, .cta-bloco');
+    var naTela = new Set();
+    if ('IntersectionObserver' in window) {
+      var ioF = new IntersectionObserver(function (es) {
+        es.forEach(function (e) { if (e.isIntersecting) naTela.add(e.target); else naTela.delete(e.target); });
+        mostraFlutuante(naTela.size === 0);
+      });
+      grandes.forEach(function (g) { ioF.observe(g); });
+    } else { mostraFlutuante(true); }
+
+    /* ---------- Botões de WhatsApp: vão direto pro WhatsApp (as perguntas a Dra. faz lá, na conversa) ---------- */
+    document.addEventListener('click', function (ev) {
+      var a = ev.target.closest && ev.target.closest('.js-whats');
+      if (a) eventoWhats(a.getAttribute('data-origem') || 'WhatsApp');
+    }, true);
+  })();
+  </script>
+
+  <!-- CRM Vértice: clique do anúncio + botões de WhatsApp + jornada do lead.
+       DESLIGADO até confirmar o apelido da conta da Dra. Liliane no CRM (e a política de privacidade).
+       Para ligar, tirar o comentário e trocar CONTA e o link da política:
+  <script src="https://crm.averticeassessoria.com.br/lp.js" data-conta="CONTA" data-jornada data-politica="https://lilianearaujofisio.com.br/privacidade" defer></script>
+  -->
+</body>
+</html>
